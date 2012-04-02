@@ -2,12 +2,8 @@ class ImageProcessingRequest < ActiveRecord::Base
   include Hydra::AssetsControllerHelper
   include Hydra::FileAssetsHelper  
   include Hydra::RepositoryController  
-  include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper
   
-  #before_filter :require_fedora
-  #before_filter :require_solr
- 
   require "net/http"
   require "uri"
 
