@@ -1,0 +1,74 @@
+<%
+=begin %>
+<%= form_for @multiresimage do |f|%>
+  <div>
+    PID: <%= @multiresimage.id %>
+  </div>
+  <br/>
+  <div>
+    <%= f.label :titleset_display %>
+    <%= f.text_field :titleset_display %>
+  </div>
+  <br/>
+  <div>
+    Image: <img src="http://localhost:8983/fedora/get/<%= @multiresimage.id %>/inu:sdef-image/getWithLongSide?length=100"/></p>
+  </div>
+  <br/>
+  <%= f.submit "Save changes test"%>
+<%end%>
+<%
+=end %>
+
+<% stylesheet_links << "/stylesheets/listexpander/styles.css" %>
+<% stylesheet_links << "/stylesheets/listexpander/listexpander.css" %>
+<% javascript_includes << "/javascripts/listexpander/listexpander.js" %>
+
+<!-- for crop tool -->
+		<% stylesheet_links << "/stylesheets/croptool/style.css" %>
+		<% stylesheet_links << "/stylesheets/croptool/colorpicker.css" %>
+		
+		<% javascript_includes << "/javascripts/croptool/raphael-min.js" %>
+		<%# javascript_includes << "/javascripts/croptool/jquery-1.4.2.min.js" %>
+		<% javascript_includes << "http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" %>
+		<% javascript_includes << "/javascripts/croptool/jquery.corner.js" %>
+		<% javascript_includes << "/javascripts/croptool/jquery.mousewheel.js" %>
+		<% javascript_includes << "/javascripts/croptool/md5.js" %>
+		<% javascript_includes << "/javascripts/croptool/colorpicker.js" %>
+		<% javascript_includes << "/javascripts/croptool/site.js" %>
+		
+		<% javascript_includes << "/javascripts/croptool/coordinate-manager.js" %>
+		<% javascript_includes << "/javascripts/croptool/svg-persistence-manager.js" %>
+ 		<% javascript_includes << "/javascripts/croptool/nu-image-server.js" %>
+		<% javascript_includes << "/javascripts/croptool/metadata-manager.js" %>
+		<% javascript_includes << "/javascripts/croptool/crop-manager.js" %>
+		<% javascript_includes << "/javascripts/croptool/tile-manager.js" %>
+		<% javascript_includes << "/javascripts/croptool/control-manager.js" %>
+		<% javascript_includes << "/javascripts/croptool/ct-utils.js" %>
+		<% javascript_includes << "/javascripts/croptool/crop-tool.js" %>
+		
+		
+		<script type="text/javascript">
+			$(document).ready(function()
+			{
+				CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"));
+			});
+		</script>
+
+<!-- crop tool above -->
+	<div id="crop-tool" style="background-color:#000000; width:100%; height: 500px; border: thin solid blue;">
+			<div id="metadata" style="display:none">
+				<div id="crop-details"></div>
+			</div>
+			<div id="collection"  style="display:none">
+				<div id="crop-list">
+					<ul id="sortable">
+
+					</ul>
+				</div>
+			</div>
+		</div>      
+
+     
+    <h2 class="section-title"><a href="#">Description</a></h2>
+    <%= render :partial => 'multiresimages/show_description' %>
+

@@ -1,0 +1,207 @@
+ 	<% unless @multiresimage.datastreams["VRA"].vra_image.empty? %>
+		<%# vra_image = @multiresimage.datastreams["VRA"].vra_image %>
+		<% vra_image = @vra_image %>
+		<% preferred_related_work = @multiresimage.datastreams["VRA"].find_by_terms(:vra_image, :relation_set, :preferred_related_work, :preferred_related_work_pid).text %>
+		
+		<% if preferred_related_work == nil or preferred_related_work.empty? %>
+			<table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
+			   <tbody>
+	
+					  <%# Display preferred titles for image %>
+					  <tr>
+						 <td class="Elements" height="30" width="70">Title:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+						 <!-- preferred title from image -->
+						 <% image_title = vra_image.xpath('.//vra:titleSet/vra:title[@pref="true"]', { 'vra' => 'http://www.vraweb.org/vracore4.htm' })  %>
+						 <% unless image_title.empty? %><%= image_title %>
+						 <% end %>
+						 </td>
+					  </tr>
+					  
+					  <%# Display dates for image %>
+					  <% image_date =  vra_image.xpath('.//vra:dateSet/vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %>
+						 <% unless image_date.empty? %><%= image_date %>
+						  <tr>
+							 <td class="Elements" height="30" width="70">Date:</td>
+							 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+							 <!-- date from image -->
+							 <% image_date =  vra_image.xpath('.//vra:dateSet/vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %>
+							 </td>
+						  </tr>
+					  <% end %>
+	
+					  <%# Display subjects for image %>
+						<% vra_image.xpath('.//vra:subjectSet/vra:subject/vra:term', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).each do |vra_image_subject| %>
+						  <tr>
+							 <td class="Elements" height="30" width="70">Subject:</td>
+							 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+							 <%= vra_image_subject %>
+							 </td>
+						  </tr>
+						<% end %>
+	
+					  <%# Include its identifier %>
+					  <tr>
+						 <td class="Elements" height="30" width="70">Identifier:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%=  @document[:id] %></td>
+					  </tr>
+			   </tbody>
+			</table>
+		<% else %>
+			<%# vra_work = get_preferred_work(preferred_related_work) %>
+			<%# vra_work = @vra_work.datastreams["VRA"] %>
+			<% vra_work = @vra_work_ds %>
+			<table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
+			   <tbody>
+	
+					  <%# Display preferred titles for work and image %>
+					  <tr>
+						 <td class="Elements" height="30" width="70">Title:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+						 <!-- preferred title from work -->
+						 <%= vra_work.xpath('.//vra:titleSet/vra:title[@pref="true"]', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %> 
+						 <!-- preferred title from image -->
+						 <% image_title = vra_image.xpath('.//vra:titleSet/vra:title[@pref="true"]', { 'vra' => 'http://www.vraweb.org/vracore4.htm' })  %>
+						 <% unless image_title.empty? %>, <%= image_title %>
+						 <% end %>
+						 </td>
+					  </tr>
+					  
+					<%# Display any other titles from the work %>
+					<% vra_work.xpath('.//vra:titleSet/vra:title[not(@pref="true")]', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).each do |vra_work_title| %>
+					  <tr>
+						 <td class="Elements" height="30" width="70">Other Title:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+						 <%= vra_work_title %>, 
+						 </td>
+					  </tr>
+					<% end %>
+	
+					  <%# Display dates for work and image %>
+					  <tr>
+						 <td class="Elements" height="30" width="70">Date:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+						 <!-- date from work -->
+						 <%= vra_work.xpath('.//vra:dateSet/vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %> 
+						 <!-- date from image -->
+						 <% image_date =  vra_image.xpath('.//vra:dateSet/vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %>
+						 <% unless image_date.empty? %> , <%= image_date %>
+						 <% end %>
+						 </td>
+					  </tr>
+	
+					  <%# Display subjects for work %>
+						<% vra_work.xpath('.//vra:subjectSet/vra:subject/vra:term', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).each do |vra_work_subject| %>
+						  <tr>
+							 <td class="Elements" height="30" width="70">Subject:</td>
+							 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+							 <%= vra_work_subject %> 
+							 </td>
+						  </tr>
+						<% end %>
+	
+					  <%# Display subjects for image %>
+						<% vra_image.xpath('.//vra:subjectSet/vra:subject/vra:term', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).each do |vra_image_subject| %>
+						  <tr>
+							 <td class="Elements" height="30" width="70">Subject:</td>
+							 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+							 <%= vra_image_subject %>
+							 </td>
+						  </tr>
+						<% end %>
+	
+					  <%# Display other *Set/display fields %>
+	
+						<% vra_work.xpath("vra:*[name() !='vra:titleSet' and name() !='vra:dateSet' and name() !='vra:subjectSet' and name() !='vra:relationSet']", { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).each do |vraset| %>
+						  <tr>
+							 <td class="Elements" height="30" width="70"><%= vraset.name.partition("Set")[0] %>:</td>
+							 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+							 <%= vraset.xpath('vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %> 
+							 </td>
+						  </tr>
+						<% end %>
+	
+					  <%# Include its identifier %>
+					  <tr>
+						 <td class="Elements" height="30" width="70">Identifier:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%=  @document[:id] %></td>
+					  </tr>
+			   </tbody>
+			</table>
+		 <% end %>
+	 <% end %>
+	 
+	<ul class="listexpander">
+	
+    <% if preferred_related_work == nil or preferred_related_work.empty? %>
+		<%# Check for other related works (not preferred) %>
+		
+		<% unless vra_image == nil or vra_image.xpath("vra:relationSet/vra:relation[not(@pref='true')]", { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).empty? %>
+			   <li>Related Works
+					  <ul>
+						 <li></li>
+						 <li>
+							<table >
+							   <tbody>
+								<% vra_image.xpath("vra:relationSet/vra:relation[not(@pref='true')]", { 'vra' => 'http://www.vraweb.org/vracore4.htm' }).each do |related_work_pid| %>
+								<%  related_work = get_work(related_work_pid) %>
+								<%	related_work.children.each do |vraset| %>
+									<% if ! vraset.name.partition("Set")[1].empty? %>
+									<% display = vraset.xpath('.//vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %>
+									  <tr>
+										 <td class="Elements" height="30" width="70"><%= vraset.name.partition("Set")[0] %>:</td>
+										 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%= vraset.xpath('.//vra:display', { 'vra' => 'http://www.vraweb.org/vracore4.htm' }) %></td>
+									  </tr>
+									<% end %>
+								<% end %>
+								  <tr>
+									 <td class="Elements" height="30" width="70">Identifier:</td>
+									 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%=  related_work[:relids] %></td>
+								  </tr>
+							<% end %>
+						   </tbody>
+						</table>
+					 </li>
+				  </ul>
+			   </li>
+		 <% end %>
+	<% end %>
+	
+	<% unless get_values_from_datastream(@document_fedora,"VRA", [:vra_image, :relation_set, :related_work]).first.empty? %>
+	   <li>Related Images
+		  <ul>
+			 <div class="gallery_container">
+				<% @document_fedora.datastreams_in_memory["VRA"].find_by_terms(:vra_image, :relation_set, :related_work, :related_work_pid).each do |work_pid| %>
+		  			<% (solr_response, @image_doc_list) = get_related_images(work_pid.text()) %>
+					  <% unless @image_doc_list.empty? %>
+						<% @image_doc_list.each do |image_doc,counter| %>
+							<% image_pid = image_doc[:id] %>
+							<div class="listing"><a href="/catalog/<%= image_doc[:id] %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= image_doc[:id] %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
+						<% end %>
+					  <% end %>
+				<% end %>
+			 </div>
+		  </ul>
+		</li>
+		
+	<% end %>
+
+	<% unless @document_fedora.datastreams_in_memory["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
+	   <li>Downloads
+		  <ul>
+			 <li>
+				<table>
+				   <tbody>
+					  <tr>
+					  	 <% image_max = get_longside_max(@document_fedora) %>
+						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @document[:id] %>/inu:sdef-image/getWithLongSide?length=<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
+						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @document[:id] %>/inu:sdef-image/getWithLongSide?length=<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
+						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @document[:id] %>/inu:sdef-image/getWithLongSide?length=<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
+					  </tr>
+				   </tbody>
+				</table>
+			 </li>
+		  </ul>
+	   </li>
+	<% end %>
+ </ul>

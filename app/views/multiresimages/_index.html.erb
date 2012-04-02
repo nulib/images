@@ -1,0 +1,2 @@
+<% display_type = params[:display_type].nil? ? 'grid' : params[:display_type] %>
+<%= render :partial => "multiresimages/index_#{display_type}", :locals => {:document => document, :counter => counter } %>

@@ -1,0 +1,76 @@
+<% journal = show_journal %>
+<% journal_counter = show_journal_counter %>
+<% base_id = "journal_#{journal_counter}" %>
+
+  <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter}, :title_info, :main_title]).first.empty? %>
+    <dt>
+      <%= fedora_field_label("descMetadata", [{:journal => journal_counter}, :title_info, :main_title], "Journal Title:") %>
+    </dt>
+    <dd class="journal">
+      <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter}, :title_info, :main_title]) %>
+    </dd>
+  <% end %>
+
+  <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:origin_info, :publisher]).first.empty? %>
+    <dt>
+      <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:origin_info, :publisher], "Publisher:") %>
+    </dt>
+    <dd class="publisher">
+      <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:origin_info, :publisher]) %>
+    </dd>
+  <% end %>
+
+  <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter}, :issn]).first.empty? %>
+    <dt>
+      <%= fedora_field_label("descMetadata", [{:journal => journal_counter}, :issn], "ISSN:") %>
+    </dt>
+    <dd class="issn">
+      <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter}, :issn]) %>
+    </dd>
+  <% end %>
+
+  <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:publication_date]).first.empty? %>
+    <dt>
+      <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:publication_date], "Publication Date:") %>
+    </dt>
+    <dd class="publication_date">
+      <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:publication_date]) %>
+    </dd>
+  <% end %>
+
+
+    <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:volume]).first.strip.empty? %>
+
+  <dt>Citation</dt>
+  <dd class="multi_inline citation">
+    <ul>
+    <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:volume]).first.empty? %>
+      <li class="citation_volume">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:volume], "Volume:") %>
+        <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:volume]) %>
+      </li>
+    <% end %>
+
+    <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:level]).first.empty? %>
+      <li class="citation_issue">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:level], "(Issue):") %>
+        <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:level]) %>
+      </li>
+    <% end %>
+
+    <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:start_page]).first.empty? %>
+      <li class="start_page">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:start_page], "Start Page") %>
+        <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:start_page]) %>
+      </li>
+    <% end %>
+
+    <% unless get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:end_page]).first.empty? %>
+      <li class="end_page">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:end_page], "End Page") %>
+        <%= get_values_from_datastream(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:end_page]) %>
+      </li>
+    <% end %>
+    </ul>
+  </dd>
+<% end %>

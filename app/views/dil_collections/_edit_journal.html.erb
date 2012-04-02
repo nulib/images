@@ -1,0 +1,50 @@
+<% journal = edit_journal %>
+<% journal_counter = edit_journal_counter %>
+<% base_id = "journal_#{journal_counter}" %>
+<dl>
+  <dt>
+    <%= fedora_field_label("descMetadata", [{:journal => journal_counter}, :title_info, :main_title], "Journal Title:") %>
+  </dt>
+  <dd class="journal">
+    <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter}, :title_info, :main_title], :multiple=>false) %>
+  </dd>
+  <dt>
+    <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:origin_info, :publisher], "Publisher:") %>
+  </dt>
+  <dd class="publisher">
+    <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter},:origin_info, :publisher], :multiple=>false) %>
+  </dd>
+  <dt>
+    <%= fedora_field_label("descMetadata", [{:journal => journal_counter}, :issn], "ISSN:") %>
+  </dt>
+  <dd class="issn">
+    <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter}, :issn], :multiple=>false) %>
+  </dd>
+  <dt>
+    <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:publication_date], "Publication Date:") %>
+  </dt>
+  <dd class="publication_date">
+    <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:publication_date], :multiple=>false) %>
+  </dd>
+  <dt>Citation</dt>
+  <dd class="multi_inline citation">
+    <ul>
+      <li class="citation_volume">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:volume], "Volume:") %>
+        <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:volume], :multiple=>false) %>
+      </li>
+      <li class="citation_issue">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:level], "(Issue):") %>
+        <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:level], :multiple=>false) %>
+      </li>
+      <li class="start_page">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:start_page], "Start Page") %>
+        <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:start_page], :multiple=>false) %>
+      </li>
+      <li class="end_page">
+        <%= fedora_field_label("descMetadata", [{:journal => journal_counter},:issue,:end_page], "End Page") %>
+        <%= fedora_text_field(@document_fedora,"descMetadata", [{:journal => journal_counter},:issue,:end_page], :multiple=>false) %>
+      </li>
+    </ul>
+  </dd>
+</dl>

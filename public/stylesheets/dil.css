@@ -1,0 +1,22 @@
+.listing
+{
+        float: left;
+        margin: 10px 10px 10px 10px;
+        padding: 8px;
+         border: 1px dotted #cccccc;
+        width: 150px;
+        height: 180px;
+}
+
+.listing img { background-color: #FFFFFF;}
+
+.gallery_container {
+clear:both;
+<!--margin: 10px 10px 10px 75px;-->
+/** margin: 20px 20px 20px 275px; **/
+}
+
+.member-remove 
+{ 
+	vertical-align:top;
+}

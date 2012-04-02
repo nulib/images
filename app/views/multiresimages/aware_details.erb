@@ -1,0 +1,3 @@
+<%- @res = Net::HTTP.get_response(URI.parse(@aware_details_url)) %>
+<%= @res.body %>
+

@@ -1,0 +1,20 @@
+<% stylesheet_links << "/stylesheets/dil.css" %>
+<% display_type = params[:display_type].nil? ? 'grid' : params[:display_type] %>
+<% unless display_type == 'list' || display_type == 'grid'  %>
+  <table>
+    <tr>
+      <th class="title">Title</th>
+      <th class="creator">Author</th>
+      <th class="journal">Work</th>
+      <th class="deposited">Deposited</th>
+      <th class="files">Files</th>
+    </tr>
+  <% end %>
+  
+<% docs.each_with_index do |document,counter| %>
+  <%= render_document_partial document, 'index', :counter => counter %>
+<%end%>
+  
+<% unless display_type == 'list' || display_type == 'grid'  %>
+  </table>
+<% end %>

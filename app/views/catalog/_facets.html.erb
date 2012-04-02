@@ -1,0 +1,121 @@
+<% # main container for facets/limits menu -%>
+
+<!--Begin JQuery code -->
+    <style>
+	h1 { padding: .2em; margin: 0; }
+	<!--#products { float:left; width: 300px; margin-right: 2em; } -->
+	#imageCollection { width: 174px; float: left; }
+	/* style the list to maximize the droppable hitarea */
+	#imageCollection ol { margin: 0; padding: 1em 0 1em 3em; }
+	</style>
+	<script>
+	$(function() {
+		<!--$( "#imageCollection" ).accordion(); -->
+		$( "#images li" ).draggable({
+			appendTo: "body",
+			helper: "clone"
+		});
+		$( "#imageCollection ol" ).droppable({
+			activeClass: "ui-state-default",
+			hoverClass: "ui-state-hover",
+			accept: ":not(.ui-sortable-helper)",
+			drop: function( event, ui ) {
+				$( this ).find( ".placeholder" ).remove();
+				
+				//get id attribute for draggable <li> item (image)
+				var imageID = $(ui.draggable).attr("pid");
+				
+				//get title attribute for draggable <li> item (image)
+				var titleID = $(ui.draggable).attr("title");
+
+				//get id attribute for droppable <li> item (collection)
+				var collectionID = $( this ).find("li").attr("id");
+				
+				$( "<li></li>" ).text(ui.draggable.attr("title")+" added!").appendTo(this);
+				
+				$.ajax({
+				type: "POST",
+				url: "dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
+				//data: "id=10",
+				async: false,
+				success: function(msg){
+				}
+				});//end ajax
+				
+			}//end droppable
+		}).sortable({
+			items: "li:not(.placeholder)",
+			sort: function() {
+				// gets added unintentionally by droppable interacting with sortable
+				// using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+				$( this ).removeClass( "ui-state-default" );
+			}
+		});
+	});
+	</script>
+	
+	<!--End JQuery code -->
+	
+	
+<div id="facets" class="facets">
+  
+  <% facet_field_names.each do |solr_fname| %>
+    <div>
+      <% display_facet = @response.facets.detect {|f| f.name == solr_fname} -%>
+      <% if display_facet.items.length > 0 %>
+        <h3><%= facet_field_labels[solr_fname] -%></h3>
+        <ul>
+          <% paginator =    
+              Blacklight::Solr::FacetPaginator.new(display_facet.items,        
+                :limit => facet_limit_for(solr_fname))
+          %>
+          <% paginator.items.each do |item| -%>
+            <li>
+            <% if facet_in_params?( solr_fname, item.value ) %>              
+                <%= render_selected_facet_value(solr_fname, item) %>              
+              <% else %>              
+                <%= render_facet_value(solr_fname, item) %>         
+            <% end -%>
+            </li>
+          <% end %>
+          
+          <% if(paginator.has_next?)  %>
+            <li class="more_facets_link"><%= link_to('more »', params.merge(:id => solr_fname, :action=>"facet"), :class => "more_facets_link") %></li>
+          <% end %>
+          
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+	
+
+  	  <%# Below added by BP %>
+	  <% if @current_user %>
+	  
+		  <div>
+		  <hr/>
+		  <h3>Collections</h3>
+		  <% form_tag url_for(:action=>"new", :controller=>"dil_collections"), :method => :get do %>
+		  	<input name="title" size="25"/>
+		  <% end %>
+          <br/>
+		  <% (collection_response, @collection_list) = get_users_collections(@current_user.login) %>
+		  <% unless @collection_list.empty? %>
+			<!-- Each collection row is a JQuery UI droppable -->
+			    <div id="imageCollection">
+				<% @collection_list.each_with_index do |collection,counter| %>
+					<div class="ui-widget-content">
+		             <ol> 
+		                <li id=<%=collection.get(:id)%>><b><a href="/dil_collections/<%=collection.get(:id)%>"><%=collection.get(:title_t)%></a></b></li>
+		            </ol>
+		            </div>
+				<% end %>
+				</div>
+			  </ol>
+			  </div>
+		  <% end %>
+	  <% end %>
+	  <%# Above added by BP %>
+</div>
+
+  
