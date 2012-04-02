@@ -1,0 +1,27 @@
+	<%# unless @collection.datastreams["members"].nil? %>
+		<div class="gallery_container" id="<%= params[:id] %>">
+		
+		<% @collection.datastreams["members"].find_by_terms(:mods).each_with_index do |mods, index| %>
+			<% unless mods.search('relatedItem/identifier').empty? %>
+				<%	pid = mods.search('relatedItem/identifier').first.text() %>
+				<div class="listing">
+				<table>
+				<tr valign="center">
+				<td><a href="<%= catalog_path(pid) %>"><img src="http://<%= request.host %>:8983/fedora/get/<%=  pid %>/inu:sdef-image/getWithLongSide?length=120"></a>
+				<a href="/dil_collections/remove/<%= @collection.pid %>/<%= index %>"><img src="/images/remove.gif" class="member-remove"/></a></td>
+				</tr>
+				<% unless mods.search('titleInfo/title').empty? %>
+					<%	title = mods.search('titleInfo/title').first.text() %>
+					<tr>
+					<td><font size="-2"><%= link_to(title, catalog_path(pid)) %><%#= fedora_text_field(@document_fedora,"members", [{:mods => index}, :title_info, :main_title], :multiple=>false) %></font>
+					</td>
+					</tr>
+				<% end %>
+				</table>
+				</div>
+		 	<% end %>
+		 <% end %>
+		 </div>
+	 <%# end %>
+
+

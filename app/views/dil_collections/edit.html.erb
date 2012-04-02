@@ -1,0 +1,60 @@
+
+<% stylesheet_links << "/stylesheets/dil.css" %>
+
+<script language="javascript">
+	start_index='';
+	$(document).ready(function(){
+		$('.gallery_container').sortable({
+			start: function(event, ui) {
+			    start_index=$(this).children().index(ui.item)
+			}
+		});
+		$('.gallery_container').sortable({
+			update: function(event, ui) {
+				//var fruitOrder = $(this).sortable('toArray').toString();
+				var collection_id= $(this).attr('id');
+				// Note: ui.item.attr('id') is id of dragged item 
+				var url='/dil_collections/move/' + collection_id + '/' + start_index + '/' + $(this).children().index(ui.item);
+				//$.get('update-sort.cfm', {fruitOrder:fruitOrder});
+
+				$.ajax({
+				type: "POST",
+				url: url,
+				async: false,
+				success: function(msg){
+				}
+				});//end ajax
+			}
+		});
+	});
+</script>
+
+<div class="document_viewer" id="cover_container">
+  <div class="multipleEdit">
+   
+<!--	<form action="<%= url_for(:action=>'update', :controller=>'assets', :content_type=>'hydrangea_collection')%>" method="post" data-resourceType="hydrangea_collection" accept-charset="utf-8">
+	<h1><%#= fedora_text_field(@document_fedora,"descMetadata", [:title_info, :main_title], :multiple=>false) %></h1>
+	</form>
+	-->
+  <div id="accordion"  style="height:600px;">
+    <a href="/catalog?f[object_type_facet][]=Collection&display_type=grid">← Return to Collections</a>
+    <span class="edit-browse">
+      <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit
+    </span>
+	<% unless @collection.datastreams["members"].nil? %>
+		<h2 class="section-title"><a href="#">Collection</a></h2>
+		<%= render :partial => 'dil_collections/edit_members' %>
+	<% end %>
+	
+   <!--Description, permissions-->
+   
+  </div>
+  
+  </div>
+</div>
+<% sidebar_items << capture do %>
+  <%#= render :partial=>"catalog/_show_partials/facets", :locals=>{:document=>document, :facets_display_heading => "This document refers to:"} %>
+  <%#= render :partial=>'facets' %>
+  <%= delete_asset_link(params[:id], "collection") %>
+<% end %>
+

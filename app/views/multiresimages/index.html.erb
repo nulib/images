@@ -1,0 +1,7 @@
+<% @multiresimages.each do |multiresimage| %>
+  <p>PID: <%= multiresimage.pid %></p>
+  <p>Title: <%= multiresimage.titleset_display %></p>
+  <p><img src="http://localhost:8983/fedora/get/<%= multiresimage.id %>/inu:sdef-image/getWithLongSide?length=100"/></p>
+  <p><%= document.get(:creator_t) %></p>
+  <hr/>
+<% end %>

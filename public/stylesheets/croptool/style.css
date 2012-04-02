@@ -1,0 +1,282 @@
+body
+{
+	background-color: #212121;
+}
+
+canvas
+{
+	background-color: #eaeaea;
+	border: thin dotted #d5d5d5;
+}
+
+img.source-image
+{
+	visibility: hidden;
+}
+
+div#croptool_metadata
+{
+	position: absolute;
+	width: 272px;
+	height: 272px;
+	background-color: #444;
+	border: thin solid #000;
+	padding: 10px;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #eaeaea; 
+	z-index: 99;
+}
+
+div#croptool_list
+{
+	overflow: auto;
+
+	background-color: #eaeaea;
+	color: #212121;
+	padding: 0;
+	border: thin solid #000;
+}
+
+div#croptool_collection
+{
+	position: absolute;
+	width: 128px;
+	height: 128px;
+	background-color: #444;
+	border: thin solid #000;
+	padding: 10px;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #eaeaea;
+	z-index: 99;
+}
+
+svg
+{
+	position: absolute;
+}
+
+div#croptool_details
+{
+	background-color: #888;
+	padding: 5px;
+	border: thin solid #000;
+}
+
+td.metadata-value
+{
+	text-align: left;
+	font-size: small;
+}
+
+td.metadata-label
+{
+	text-align: right;
+	font-size: small;
+}
+
+td.splitter
+{
+	border-bottom: thin dotted #212121;
+}
+
+table.metadata
+{
+	width: 100%;
+}
+
+#croptool_sortable 
+{
+	list-style-type: none; 
+	margin: 0; 
+	padding: 0; 
+	width: 100%; 
+}
+
+#croptool_sortable li 
+{
+	margin: 0; 
+	padding: 2px; 
+	font-size: small;
+}
+
+.crop-list-selected
+{
+	background-color: #5e5e5e;
+	color: #fffeff;
+}
+
+.dirty
+{
+	color: #990806;
+}
+
+.dirty.crop-list-selected
+{
+	background-color: #990806;
+	color: #fffeff;
+}
+
+div#color_selector 
+{
+   z-index: 0; 
+}
+
+#crop-color
+{
+	position: relative;
+}
+
+#colorSelector2 {
+
+	position: absolute;
+
+	top: 0;
+
+	left: 0;
+
+	width: 36px;
+
+	height: 36px;
+
+	background: url(images/select2.png);
+
+}
+
+#colorSelector2 div {
+
+	position: absolute;
+
+	top: 4px;
+
+	left: 4px;
+
+	width: 28px;
+
+	height: 28px;
+
+	background: url(images/select2.png) center;
+
+}
+
+#colorpickerHolder2 {
+
+	top: 32px;
+
+	left: 0;
+
+	width: 356px;
+
+	height: 0;
+
+	overflow: hidden;
+
+	position: absolute;
+
+}
+
+#colorpickerHolder2 .colorpicker {
+
+	background-image: url(images/custom_background.png);
+
+	position: absolute;
+
+	bottom: 0;
+
+	left: 0;
+
+}
+
+#colorpickerHolder2 .colorpicker_hue div {
+
+	background-image: url(images/custom_indic.gif);
+
+}
+
+#colorpickerHolder2 .colorpicker_hex {
+
+	background-image: url(images/custom_hex.png);
+
+}
+
+#colorpickerHolder2 .colorpicker_rgb_r {
+
+	background-image: url(images/custom_rgb_r.png);
+
+}
+
+#colorpickerHolder2 .colorpicker_rgb_g {
+
+	background-image: url(images/custom_rgb_g.png);
+
+}
+
+#colorpickerHolder2 .colorpicker_rgb_b {
+
+	background-image: url(images/custom_rgb_b.png);
+
+}
+
+#colorpickerHolder2 .colorpicker_hsb_s {
+
+	background-image: url(images/custom_hsb_s.png);
+
+	display: none;
+
+}
+
+#colorpickerHolder2 .colorpicker_hsb_h {
+
+	background-image: url(images/custom_hsb_h.png);
+
+	display: none;
+
+}
+
+#colorpickerHolder2 .colorpicker_hsb_b {
+
+	background-image: url(images/custom_hsb_b.png);
+
+	display: none;
+
+}
+
+#colorpickerHolder2 .colorpicker_submit {
+
+	background-image: url(images/custom_submit.png);
+
+}
+
+#colorpickerHolder2 .colorpicker input {
+
+	color: #778398;
+
+}
+
+#customWidget {
+
+	position: relative;
+
+	height: 36px;
+
+}
+
+#yui-main  {
+    position: relative;
+    width: 100%;
+}
+
+#doc1, #doc2, #doc1, #doc4 {
+    width: 100%;
+}
+
+#doc4 {
+    width: 100%;
+}
+
+#doc, #doc2, #doc3, #doc4, .yui-t1, .yui-t2, .yui-t3, .yui-t4, .yui-t5, .yui-t6, .yui-t7 {
+    margin: auto;
+    min-width: 750px;
+    text-align: left;
+    width: 100%;
+}
+

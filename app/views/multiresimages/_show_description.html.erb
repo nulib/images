@@ -1,0 +1,151 @@
+ 	<%# Make sure VRA datastream isn't empty %>
+ 	<% unless @multiresimage.datastreams["VRA"].vra.empty? %>
+ 	    
+ 	    <%#
+ 	      The names of the sets we will output from the VRA xml are stored in this array.  Since we only display data from
+ 	      the 'display' node for each set, there's a loop that uses this array to figure out which 
+ 	      set to look for.  This ends up saving a bunch of space because we don't need to repeat Ruby and HTML for
+ 	      each set.
+ 	     %>
+ 	     
+ 	    <% vraSetArray = ["agent", "title", "date", "subject", "location", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"] %>
+		
+		<%# So we don't have to make these calls again when showing the values for images in non-preferred works, store in variables %>
+		<% image_agent = @multiresimage.datastreams["VRA"].find_by_terms(:image, :agentSet, :agentSet_display).text %>
+		<% image_title = @multiresimage.datastreams["VRA"].find_by_terms(:image, :titleSet, :titleSet_display).text %>
+		<% image_date = @multiresimage.datastreams["VRA"].find_by_terms(:image, :dateSet, :dateSet_display).text %>
+		<% image_subject = @multiresimage.datastreams["VRA"].find_by_terms(:image, :subjectSet, :subjectSet_display).text %>
+		<% image_location = @multiresimage.datastreams["VRA"].find_by_terms(:image, :locationSet, :locationSet_display).text %>
+		<% image_material = @multiresimage.datastreams["VRA"].find_by_terms(:image, :materialSet, :materialSet_display).text %>
+		<% image_measurements = @multiresimage.datastreams["VRA"].find_by_terms(:image, :measurementsSet, :measurementsSet_display).text %>
+		<% image_stylePeriod = @multiresimage.datastreams["VRA"].find_by_terms(:image, :stylePeriodSet, :stylePeriodSet_display).text %>
+		<% image_inscription = @multiresimage.datastreams["VRA"].find_by_terms(:image, :inscriptionSet, :inscriptionSet_display).text %>
+		<% image_description = @multiresimage.datastreams["VRA"].find_by_terms(:image, :descriptionSet, :descriptionSet_display).text %>
+		<% image_worktype = @multiresimage.datastreams["VRA"].find_by_terms(:image, :worktypeSet, :worktypeSet_display).text %>
+		
+		<%# So we can get the value for the sets from the variables above in the loop %>
+		<% imageSetDisplayValues = [{"agent"=>image_agent}, {"title"=>image_title}, {"date"=>image_date}, {"subject"=>image_subject}, {"location"=>image_location}, {"material"=>image_material}, {"measurements"=>image_measurements}, {"stylePeriod"=>image_stylePeriod}, {"inscription"=>image_inscription}, {"description"=>image_description}, {"worktype"=>image_worktype}] %>
+		
+		<%# the pid for the preferred work %>
+		<% preferred_related_work_pid = @multiresimage.datastreams["VRA"].find_by_terms(:image, :relationSet, :imageOf_preferred, :relation_relids).text %>
+		
+		<%# if preferred work exists %>
+		<% if preferred_related_work_pid != nil or !preferred_related_work_pid.empty? %>
+			<% vra_work = get_preferred_work_object(preferred_related_work_pid) %>
+			<table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
+			   <tbody>
+				  				  
+					  <%# Display sets for work and image %>
+					  <% vraSetArray.each.with_index do |setName, index| %>
+					    <%# Get the preferred work's set value from the VRA datastream.  Using to_sym to covert Strings into Symbols %> 
+					    <% pref_work_display_value = vra_work.datastreams["VRA"].find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
+						  <% unless pref_work_display_value.empty? %>
+							  <tr>
+								 <td class="Elements"><%=setName%></td>
+								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+								 <!-- from preferred work -->
+								 	<%= pref_work_display_value %> 
+								 <!-- from image -->
+								 	<% unless imageSetDisplayValues[index][setName].empty? %> ; <%= imageSetDisplayValues[index][setName] %>
+								 	<% end %>
+								 </td>
+							  </tr>
+							<%end%>
+					  <%end%>
+	
+					  <%# Include its identifier (pid) %>
+					  <tr>
+						 <td class="Elements">Identifier:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%=vra_work.pid%> ; <%= @multiresimage.pid %></td>
+					  </tr>
+			   </tbody>
+			</table>
+			
+			
+			
+  <ul class="listexpander">
+	<% unless @multiresimage.datastreams["VRA"].find_by_terms(:image, :relationSet, :relation).text.empty? %>
+	   <li>Related Images
+		  <ul>
+			 <div class="gallery_container">
+				<% @multiresimage.datastreams["VRA"].find_by_terms(:image, :relationSet, :imageOf, :relation_relids).each do |work_pid| %>
+		  			<% (solr_response, image_doc_list) = get_related_images(work_pid.text) %>
+					  <% unless image_doc_list.empty? %>
+						<% image_doc_list.each do |image_doc,counter| %>
+							<% image_pid = image_doc[:id] %>
+							<div class="listing"><a href="/catalog/<%= image_doc[:id] %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= image_doc[:id] %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
+						<% end %>
+					  <% end %>
+				<% end %>
+			 </div>
+		  </ul>
+		</li>
+		
+	<% end %>
+
+	<% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
+	   <li>Downloads
+		  <ul>
+			 <li>
+				<table>
+				   <tbody>
+					  <tr>
+					  	 <% image_max = get_longside_max(@multiresimage) %>
+						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
+						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
+						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
+					  </tr>
+				   </tbody>
+				</table>
+			 </li>
+		  </ul>
+	   </li>
+	<% end %>
+ </ul>
+		 <% end %>
+	 
+        <br/><br/>
+
+		<%# Check for other related works (not preferred) %>
+		<% unless @multiresimage == nil or @multiresimage.datastreams["VRA"].find_by_terms("//vra:relationSet/vra:relation[not(@pref='true')]").empty? %>
+		
+			<ul class="listexpander">		
+			  <li>Related Works
+			  <ul>
+			  <li>
+			  <% @multiresimage.datastreams["VRA"].find_by_terms("//vra:relationSet/vra:relation[not(@pref='true')]").each do |related_work_pid| %>
+			  	<% related_work = get_work_object(related_work_pid.attr("relids")) %>
+			  <table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
+			   <tbody>
+			   
+			   		<%# Display sets for non-pref work and image %>
+					  <% vraSetArray.each.with_index do |setName, index| %>
+					    <% related_work_display_value = related_work.datastreams["VRA"].find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
+						  <% unless related_work_display_value.empty? %>
+							  <tr>
+								 <td class="Elements"><%=setName%></td>
+								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+								 <!-- from preferred work -->
+								 	<%= related_work_display_value %> 
+								 <!-- from image -->
+								 	<% unless imageSetDisplayValues[index][setName].empty? %> ; <%= imageSetDisplayValues[index][setName] %>
+								 	<% end %>
+								 </td>
+							  </tr>
+							<%end%>
+					  <%end%>
+	
+					  <%# Include its identifier %>
+					  <tr>
+						 <td class="Elements">Identifier:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%= related_work.pid %> ; <%= @multiresimage.pid %></td>
+					  </tr>
+			   </tbody>
+			</table>
+			</li>
+			</ul>
+			</li>
+	<%end%>
+	</ul>
+  <%end%>
+<%end%>

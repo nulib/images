@@ -1,0 +1,25 @@
+	<% unless @collection.nil? %>
+		<div class="gallery_container">
+		<% @collection.datastreams["members"].find_by_terms(:mods).each do |mods| %>
+			<% unless mods.search('relatedItem/identifier').empty? %>
+				<%	pid = mods.search('relatedItem/identifier').first.text() %>
+				<div class="listing">
+				<table>
+				<tr valign="center">
+				<td><a href="<%= catalog_path(pid) %>"><img src="http://<%= request.host %>:8983/fedora/get/<%=  pid %>/inu:sdef-image/getWithLongSide?length=120"></a></td>
+				</tr>
+				<% unless mods.search('titleInfo/title').empty? %>
+					<%	title = mods.search('titleInfo/title').first.text() %>
+					<tr>
+					<td><font size="-2"><%= link_to(title, catalog_path(pid)) %></font></td>
+					</tr>
+				<% end %>
+				</table>
+				</div>
+		 	<% end %>
+		 <% end %>
+		 </div>
+	 <% end %>
+<!--    </dl> 
+  </fieldset>
+</form> -->

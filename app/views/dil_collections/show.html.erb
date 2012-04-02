@@ -1,0 +1,12 @@
+<% stylesheet_links << "/stylesheets/dil.css" %>
+<div id="accordion"  style="height:600px;">
+  <a href="/catalog?f[object_type_facet][]=Collection&display_type=grid">← Return to Collections</a>
+    <span class="edit-browse">
+      Browse | <a href="/dil_collections/<%=@collection.id%>/edit">Edit</a>
+    </span>
+    <h2 class="section-title"><a href="#">Collection</a></h2>
+    <%= render :partial => 'dil_collections/show_members' %>
+    <br/>
+   <!--<h2 class="section-title"><a href="#">Description</a></h2>-->
+	</div>
+  </div>
