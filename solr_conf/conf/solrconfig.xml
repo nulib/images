@@ -90,20 +90,12 @@
 
   <requestHandler name="search" class="solr.SearchHandler" default="true">
     <lst name="defaults">
-      <!-- Making defType lucene to exclude file assets -->
-      <str name="defType">lucene</str>
-      <!-- lucene params -->
-      <str name="df">has_model_s</str>
-      <str name="q.op">AND</str>
+      <str name="defType">dismax</str>
       <!-- dismax params -->
       <str name="mm"> 2&lt;-1 5&lt;-2 6&lt;90% </str>
       <str name="q.alt">*:*</str>
-      <str name="qf_dismax">id^0.8 id_t^0.8 title_t^0.3 mods_t^0.2</str>
-      <str name="pf_dismax">id^0.9  id_t^0.9 title_t^0.5 mods_t^0.2</str>
-      <int name="ps">100</int>
-      <float name="tie">0.01</float>
       <!-- general -->
-      <str name="facet">on</str>
+      <str name="facet">true</str>
       <str name="facet.mincount">1</str>
 	    <str name="echoParams">explicit</str>
       <str name="fl">
