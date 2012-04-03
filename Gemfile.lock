@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/projecthydra/hydra-head.git
-  revision: bf7381bf5b0455f9cbf69c438c4e1ba7d1afc0c8
-  ref: bf7381b
+  revision: 382d2b6e0c6573008ab97cc6804c2b0c29be0a04
+  ref: 382d2b6
   specs:
     hydra-head (4.0.0.rc5)
       RedCloth (= 4.2.9)
