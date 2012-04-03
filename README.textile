@@ -15,11 +15,14 @@ rake db:migrate
 
 h3. Configuration
 
-rake hydra:jetty:config
+rake jetty:config
 
 h2. To run the application
 
 <pre>
 rake jetty:start
-rails server
+rake hydra:fixtures:refresh
+unicorn_rails
 </pre>
+
+The server will be started on port 8080 by default.
