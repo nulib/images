@@ -1,5 +1,3 @@
-require "active_fedora"
-
 class DILCollection < ActiveFedora::Base
   
   include Hydra::ModelMethods
