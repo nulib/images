@@ -1,9 +1,9 @@
-<% unless file_assets.hits.empty? %>
+<% unless file_assets.empty? %>
     <table class='multipleEdit' id='file_assets'>
       <tr>
         <th colspan="2">File</th>
       </tr>
-      <%= render :partial=>'file_assets/result', :collection=> file_assets.hits %>
+      <%= render :partial=>'file_assets/result', :collection=> file_assets %>
 			</table>
 <% end %>
 <% if !@document.nil? && editor? && params[:number_of_files].to_i >= 0 %>

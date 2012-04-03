@@ -20,3 +20,8 @@ clear:both;
 { 
 	vertical-align:top;
 }
+
+#hd {
+  overflow: visible;
+}
+
