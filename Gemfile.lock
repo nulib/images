@@ -1,3 +1,18 @@
+GIT
+  remote: git://github.com/projecthydra/hydra-head.git
+  revision: 90a323ed224b453c35838e5f82848b9a14bd11d4
+  ref: 90a323e
+  specs:
+    hydra-head (4.0.0.rc5)
+      RedCloth (= 4.2.9)
+      active-fedora (~> 4.0.0.rc20)
+      blacklight (~> 3.3.1)
+      block_helpers
+      cancan
+      devise
+      rails (= 3.2.2)
+      sanitize
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -113,15 +128,6 @@ GEM
     hike (1.2.1)
     httpi (0.9.6)
       rack
-    hydra-head (4.0.0.rc5)
-      RedCloth (= 4.2.9)
-      active-fedora (~> 4.0.0.rc20)
-      blacklight (~> 3.3.1)
-      block_helpers
-      cancan
-      devise
-      rails (= 3.2.2)
-      sanitize
     i18n (0.6.0)
     jettywrapper (1.2.1)
       activesupport (>= 3.0.0)
@@ -230,7 +236,6 @@ GEM
       ffi (~> 1.0)
       multi_json (~> 1.0)
       rubyzip
-    solr-ruby (0.0.8)
     solrizer (1.2.0)
       daemons
       mediashelf-loggable (~> 0.4.7)
@@ -238,14 +243,6 @@ GEM
       om (>= 1.5.0)
       stomp
       xml-simple
-    solrizer-fedora (1.2.3)
-      active-fedora (>= 3.1.0)
-      activesupport
-      fastercsv
-      jettywrapper (>= 1.1.0)
-      rsolr
-      solr-ruby (>= 0.0.6)
-      solrizer (>= 1.0.0)
     sprockets (2.1.2)
       hike (~> 1.2)
       rack (~> 1.0)
@@ -278,9 +275,8 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   devise
-  hydra-head (= 4.0.0.rc5)
+  hydra-head!
   jettywrapper
   rails (= 3.2.2)
   rspec-rails (>= 2.9.0)
-  solrizer-fedora
   sqlite3
