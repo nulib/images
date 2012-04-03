@@ -13,7 +13,7 @@ source 'http://rubygems.org'
   group :development, :test do 
          gem 'jettywrapper'
          gem 'rspec-rails', '>=2.9.0'
-         gem 'cucumber-rails'
+         gem 'cucumber-rails', :require=>false
          gem 'database_cleaner'
          gem 'capybara'
          gem 'bcrypt-ruby'
