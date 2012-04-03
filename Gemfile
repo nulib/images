@@ -11,7 +11,6 @@ source 'http://rubygems.org'
 
   # For testing.  You will probably want to use all of these to run the tests you write for your hydra head
   group :development, :test do 
-         #gem 'solrizer-fedora', ">=1.2.5"
          gem 'jettywrapper'
          gem 'rspec-rails', '>=2.9.0'
          gem 'cucumber-rails'
@@ -19,3 +18,5 @@ source 'http://rubygems.org'
          gem 'capybara'
          gem 'bcrypt-ruby'
   end
+
+  gem 'unicorn'
