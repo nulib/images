@@ -1,4 +1,3 @@
-
 <div class="document_viewer" id="cover_container">
   <div class="multipleEdit">
 		<h2 class="section-title">Describe the Multires Image - Test</h2>
@@ -6,6 +5,8 @@
 		
     <h2 class="section-title">Upload Content</h2>
     <div id="uploads">
+      <%= render :partial=>'multiresimages/multiupload' %>
+
       <%= form_tag(upload_url, :class => "step") do -%>
         <%= label_tag "number_of_files", "Number of files add" %>
         <%= select_tag("number_of_files", options_for_select((0...11).to_a) ) -%>
