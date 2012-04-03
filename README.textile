@@ -1,0 +1,25 @@
+h2. Developer prereqs
+
+rvm 1.10 or later
+git 1.7 or later
+
+h2. Installation
+
+h3. Clone & migrate
+
+<pre>
+git clone --recursive <git repo URL>
+bundle install
+rake db:migrate
+</pre>
+
+h3. Configuration
+
+rake hydra:jetty:config
+
+h2. To run the application
+
+<pre>
+rake jetty:start
+rails server
+</pre>
