@@ -4,7 +4,7 @@ DIL::Application.routes.draw do
 
   root :to => "catalog#index"
 
-  devise_for :users
+  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   
   resources :multiresimages do
     collection do
