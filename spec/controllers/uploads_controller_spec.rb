@@ -21,4 +21,23 @@ describe UploadsController do
       response.should be_success
     end
   end
+
+  describe "create" do
+    before do
+      sign_in FactoryGirl.find_or_create(:archivist)
+    end
+    it "should store uploaded files and return JSON" do
+      before_count = Multiresimage.count
+      session[:files].should be_nil
+      post :create, :files=>[fixture_file_upload('/images/The_Tilled_Field.jpg', 'image/jpeg')], :format=>:json
+      
+      json = JSON.parse(response.body)
+      json["name"].should == "The_Tilled_Field.jpg"
+      json["size"].should == 98982
+      json["delete_type"].should == "DELETE"
+      json.should have_key "delete_url"
+      Multiresimage.count.should == before_count + 1
+      
+    end
+  end
 end
