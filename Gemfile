@@ -19,6 +19,8 @@ group :assets do
   gem 'compass-rails', '~> 1.0.0'
   gem 'compass-susy-plugin', '~> 0.9.0', :require => 'susy'
   # gem 'therubyracer'
+  gem 'jquery-ui-rails'
+
 end
 
 gem 'jquery-rails'
