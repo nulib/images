@@ -36,7 +36,10 @@ describe UploadsController do
       json["size"].should == 98982
       json["delete_type"].should == "DELETE"
       json.should have_key "delete_url"
+      pid = json["delete_url"].sub(/^\/\w+\//, '')
       Multiresimage.count.should == before_count + 1
+      obj = Multiresimage.find(pid)
+      obj.raw.mimeType.should == 'image/jpeg'
       
     end
   end

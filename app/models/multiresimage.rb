@@ -48,6 +48,7 @@ class Multiresimage < ActiveFedora::Base
     files = params.delete(:files)
     obj = self.new
     obj.raw.content = files.first.read
+    obj.raw.mimeType = files.first.content_type
     obj.file_name = files.first.original_filename
     obj.save
     obj
