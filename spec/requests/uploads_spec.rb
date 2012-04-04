@@ -14,9 +14,9 @@ describe "Uploading files" do
   end
 
   describe "as a user who is not logged in" do
-    it "should redirect to root" do
+    it "should redirect to sign in" do
       get uploads_path
-      response.should redirect_to('/')
+      response.should redirect_to(new_user_session_path)
     end
   end
 
