@@ -127,6 +127,11 @@ GEM
     erubis (2.7.0)
     execjs (1.3.0)
       multi_json (~> 1.0)
+    factory_girl (3.0.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (3.0.0)
+      factory_girl (~> 3.0.0)
+      railties (>= 3.0.0)
     fastercsv (1.5.4)
     ffi (1.0.11)
     fssm (0.2.8.1)
@@ -300,6 +305,7 @@ DEPENDENCIES
   cucumber-rails
   database_cleaner
   devise
+  factory_girl_rails
   hydra-head!
   jettywrapper
   jquery-rails

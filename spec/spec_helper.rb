@@ -9,14 +9,9 @@ require 'rspec/autorun'
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
 RSpec.configure do |config|
-  # == Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
   config.mock_with :rspec
+  config.include Devise::TestHelpers, :type => :controller
+
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -31,3 +26,20 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 end
+
+module FactoryGirl
+  def self.find_or_create(handle, by=:email)
+    tmpl = FactoryGirl.build(handle)
+    tmpl.class.send("find_by_#{by}".to_sym, tmpl.send(by)) || FactoryGirl.create(handle)
+  end
+end
+
+# for request specs
+def login(user)
+  visit '/'
+  click_link "Login"
+  fill_in 'user_email', :with => user.email
+  fill_in 'user_password', :with => 'archivist1'
+  click_on('Sign in')
+end
+
