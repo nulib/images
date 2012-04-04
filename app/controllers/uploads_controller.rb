@@ -6,16 +6,37 @@ class UploadsController < ApplicationController
   include Blacklight::SolrHelper
  
   skip_before_filter :verify_authenticity_token #TODO Bad idea. Just restrict this to the methods that need it (update_status?).
-  before_filter :authenticate_user!, :only=>[:index]
+  before_filter :authenticate_user!, :only=>[:index, :create]
   #TODO ensure that only our script is calling update_status
 
-  def test
-    debugger
-    test = "test"
-  end
-  
-  # called from upload form for multiresimage
   def create
+    session[:files] ||= []
+    uploaded_io = params[:files].first
+    # filename = temp_filename(uploaded_io.original_filename)
+    # data = {:name => uploaded_io.original_filename, :filename=>filename}
+    # File.open(filename, 'wb') do |file|
+    #   file.write(uploaded_io.read)
+    # end
+    image = Multiresimage.create(params)
+    session[:files] << image.pid 
+    respond_to do |format|
+      format.json {  
+        render :json => image.to_jq_upload.to_json			
+      }
+    end
+
+  end
+
+  def temp_filename(basename, tmpdir='/tmp')
+    n = 0
+    begin
+      tmpname = File.join(tmpdir, sprintf('%s%d.%d', basename, $$, n))
+      lock = tmpname + '.lock'
+      n += 1
+    end while File.exist?(tmpname)
+    tmpname
+  end
+=begin
     logger.debug("Entering create method")
     logger.debug("Before IPR row created")
     
@@ -75,7 +96,7 @@ class UploadsController < ApplicationController
      
      render :nothing => true
      
-  end
+=end
   
   #def update_status
   #  logger.debug("Calling ImageProcessingRequest.update_status")
