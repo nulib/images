@@ -13,6 +13,9 @@ describe UploadsController do
   end
 
   describe "index" do
+    before do
+      sign_in FactoryGirl.find_or_create(:archivist)
+    end
     it "should be successful" do
       get :index
       response.should be_success
