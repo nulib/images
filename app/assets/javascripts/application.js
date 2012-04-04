@@ -6,9 +6,9 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
 //
 // Required by Blacklight
-//= require jquery-ui
 //= require blacklight/blacklight
 //= require_tree .
 

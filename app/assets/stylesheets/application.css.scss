@@ -9,6 +9,8 @@
  * Required by Hydra
  *= require 'hydra/styles'   
 
+ *= require jquery.ui.all
+
  *= require_tree .
  *= require_self
 */
