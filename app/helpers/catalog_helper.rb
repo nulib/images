@@ -1,6 +1,5 @@
 module CatalogHelper
   include Blacklight::CatalogHelperBehavior
-  #include Blacklight::SolrHelper
   def get_users_collections(current_user_login)
 #    query="_query_:\"{!dismax qf=$qf_dismax pf=$pf_dismax}\"" 
 #    query="_query_:\"has_model_s:info\\\\:fedora/afmodel\\\\:HydrangeaCollection\"" 

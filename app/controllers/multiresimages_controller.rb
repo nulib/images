@@ -1,13 +1,7 @@
-require 'mediashelf/active_fedora_helper'
-
 class MultiresimagesController < ApplicationController
-
-  include MediaShelf::ActiveFedoraHelper
   include Hydra::AssetsControllerHelper
   include Blacklight::SolrHelper
   include MultiresimageHelper
-  
-  before_filter :require_solr, :require_fedora #, :set_format
   
   respond_to :html, :xml
   
