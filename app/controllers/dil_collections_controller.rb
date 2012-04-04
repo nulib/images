@@ -1,12 +1,6 @@
-require 'mediashelf/active_fedora_helper'
-
 class DilCollectionsController < ApplicationController
-
-  include MediaShelf::ActiveFedoraHelper
   include Hydra::AssetsControllerHelper
   
-  before_filter :require_solr, :require_fedora
- 
   def new
 	  #af_model = retrieve_af_model('hydrangea_collection')
 	  #if af_model

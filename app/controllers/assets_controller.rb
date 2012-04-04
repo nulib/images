@@ -1,7 +1,4 @@
-require 'mediashelf/active_fedora_helper'
-
 class AssetsController < ApplicationController
-    include MediaShelf::ActiveFedoraHelper
     include Blacklight::SolrHelper
     include Hydra::RepositoryController
     include Hydra::AssetsControllerHelper
@@ -13,7 +10,6 @@ class AssetsController < ApplicationController
     helper :hydra
     
     before_filter :search_session, :history_session
-    before_filter :require_solr, :require_fedora
 
     # need to include this after the :require_solr/fedora before filters because of the before filter that the workflow provides.
     include Hydra::SubmissionWorkflow

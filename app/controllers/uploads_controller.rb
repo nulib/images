@@ -1,18 +1,12 @@
-#require 'mediashelf/active_fedora_helper'
-
 class UploadsController < ApplicationController
 
   include Hydra::AssetsControllerHelper
   include Hydra::FileAssetsHelper  
   include Hydra::RepositoryController  
-  include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper
  
   skip_before_filter :verify_authenticity_token
-  
-  before_filter :require_fedora
-  before_filter :require_solr
-  
+
   def test
     debugger
     test = "test"

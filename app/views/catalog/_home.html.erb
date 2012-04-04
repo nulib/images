@@ -1,0 +1,7 @@
+<%= render :partial=>'search_form' %>
+<%= render :partial=>'home_text' %>
+
+<% sidebar_items << capture do %>
+  <%= link_to "Upload Images", uploads_path %>
+  <%= render :partial=>'facets' %>
+<% end %>
