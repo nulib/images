@@ -6,7 +6,7 @@ class DILCollection < ActiveFedora::Base
   has_relationship "parts", :is_part_of, :inbound => true
   
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
-  has_metadata :name => "rightsMetadata", :type => Hydra::RightsMetadata 
+  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
   
   # Uses the Hydra MODS Article profile for tracking most of the descriptive metadata
   has_metadata :name => "descMetadata", :type => Hydra::ModsCollection 
