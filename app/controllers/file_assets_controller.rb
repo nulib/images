@@ -4,13 +4,8 @@ class FileAssetsController < ApplicationController
   include Hydra::AssetsControllerHelper
   include Hydra::FileAssetsHelper  
   include Hydra::RepositoryController  
-  include MediaShelf::ActiveFedoraHelper
   include Blacklight::SolrHelper
   
-  
-  before_filter :require_fedora
-  before_filter :require_solr, :only=>[:index, :create, :show, :destroy]
-
   # need to include this after the :require_solr/fedora before filters because of the before filter that the workflow provides.
   include Hydra::SubmissionWorkflow
 
