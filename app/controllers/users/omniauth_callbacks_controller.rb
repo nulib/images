@@ -1,16 +1,18 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def ldap
     ldap_result = request.env["omniauth.auth"]["extra"]["raw_info"]
-    username = ldap_result.sAMAccountName[0].to_s
-    email = ldap_result.proxyaddresses[0][5..-1].to_s
+    puts ldap_result
+    username = ldap_result.uid[0].to_s
+    email = ldap_result.mail[0].to_s
 
-    if @user = User.find_by_username(username)
-      puts "*** blah ***"
+    puts "uid: " + username
+    puts "email: " + email
+
+    if @user = User.find_by_email(email)
       sign_in_and_redirect @user
     else
-      puts "*** asdf ***"
-      @user = User.create(:username => username,
-                          :password => User.generate_random_password)
+      @user = User.create(:email => email,
+                          :password => 'foo')
       sign_in_and_redirect @user
     end
   end

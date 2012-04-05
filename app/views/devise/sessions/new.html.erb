@@ -1,6 +1,11 @@
 <h2>Sign in</h2>
 
-<%= link_to "Sign in with LDAP", user_omniauth_authorize_path(:ldap) %>
+LDAP
+<% if user_signed_in? %>
+    Welcome <%= current_user.email %> (<%= link_to "logout", destroy_user_session_path,  :method => :delete %>)
+<% else %>
+    Nobody logged in.  <%= link_to "log in here", user_omniauth_authorize_path(:ldap) %>
+<% end %>
 
 <hr>
 
