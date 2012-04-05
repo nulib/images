@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Multiresimage do
+  describe "a new instance with a file name" do
+    subject { Multiresimage.new(:file_name=>'readme.txt') }
+    its(:file_name) { should  == 'readme.txt' }
+  end
   describe "created with a file" do
     before do
       @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')
