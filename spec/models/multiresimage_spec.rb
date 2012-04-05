@@ -6,7 +6,9 @@ describe Multiresimage do
       @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')
       @file.stub(:original_filename => "The_Tilled_Field.jpg")
       @file.stub(:content_type =>"image/jpeg")
-      @subject = Multiresimage.create(:files=>[@file])
+      @subject = Multiresimage.new
+      @subject.attach_file([@file])
+      @subject.save!
       @file.rewind
     end
 

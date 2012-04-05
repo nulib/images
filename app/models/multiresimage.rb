@@ -44,16 +44,12 @@ class Multiresimage < ActiveFedora::Base
   delegate :culturalContextSet_display, :to=>:VRA, :unique=>true
   delegate :file_name, :to=>:properties, :unique=>true
 
-  def self.create(params={})
-    files = params.delete(:files)
-    obj = self.new
+  def attach_file(files)
     if files.present?
-      obj.raw.content = files.first.read
-      obj.raw.mimeType = files.first.content_type
-      obj.file_name = files.first.original_filename
+      raw.content = files.first.read
+      raw.mimeType = files.first.content_type
+      self.file_name = files.first.original_filename
     end
-    obj.save
-    obj
   end
 
   # return a hash of values for jQuery upload
