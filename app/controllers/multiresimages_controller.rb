@@ -4,6 +4,14 @@ class MultiresimagesController < ApplicationController
   include MultiresimageHelper
   
   respond_to :html, :xml
+
+  def destroy
+    obj = Multiresimage.find(params[:id])
+    if can?(:delete, obj)
+      obj.delete
+    end
+    redirect_to catalog_index_path, :notice=>"Image has been deleted"
+  end
   
 	def set_format
 	  request.format = 'xml'
