@@ -20,8 +20,5 @@ describe ImageProcessingRequest do
     end
   end
 
-  describe "update_status" do
-    it "should work"
-  end
 end
 
