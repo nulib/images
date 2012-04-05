@@ -23,11 +23,6 @@ class UploadsController < ApplicationController
   def create
     session[:files] ||= []
     uploaded_io = params[:files].first
-    # filename = temp_filename(uploaded_io.original_filename)
-    # data = {:name => uploaded_io.original_filename, :filename=>filename}
-    # File.open(filename, 'wb') do |file|
-    #   file.write(uploaded_io.read)
-    # end
     image = Multiresimage.create(params)
     session[:files] << image.pid 
     respond_to do |format|
@@ -38,67 +33,31 @@ class UploadsController < ApplicationController
 
   end
 
-=begin
-    logger.debug("Entering create method")
+  def enqueue
+    logger.debug("Entering enqueue method")
     logger.debug("Before IPR row created")
     
-    if !params[:container_id].nil? && params[:Filedata]
+
+    selected_files.each do |pid|
+      
       #logger.debug("current object pid: " + params[:container_id])
       logger.debug("image filename: " + params[:Filedata][0].original_filename)
       logger.debug("temp image path: " + params[:Filedata][0].path)
       
-      #rename and move file
-      new_filepath = "/usr/local/rails_uploaded_images/"+ params[:Filedata][0].original_filename
-      logger.debug("New filepath:" + new_filepath)
-      FileUtils.mv(params[:Filedata][0].path, new_filepath)
-      FileUtils.chmod(0755, new_filepath)
+      @image_processing_request = ImageProcessingRequest.new(:status => 'NEW', :pid=>pid, :email => 'm-stroming@northwestern.edu')
       
-      @image_processing_request = ImageProcessingRequest.new(:status => 'NEW',:image_filename => params[:Filedata][0].original_filename, :email => 'm-stroming@northwestern.edu')
-      
-       if(@image_processing_request.save())
-         logger.debug("Row saved to database")
-       else
-         logger.debug("Row NOT saved to database")
-       end
-       
-       # call CGI script with file location (path, name and id)
-      # CGI on msg server will pull file from app server
-      cgi_url = "http://www.example.com/cgi-bin/hydra/hydra-jms.cgi?image_path=" + new_filepath + "&request_id=" + @image_processing_request.id().to_s
-	  logger.debug("cgi url: " + cgi_url)
-	  # response will be status of script that puts JMS message in queue
-	  logger.debug("Before CGI call")
-	  cgi_response = Net::HTTP.get_response(URI.parse(cgi_url)).body
-	  logger.debug("After CGI call")
-	  #logger.debug("response:" + cgi_response)
-	 
-	  cgi_response = nil
-	  if(!cgi_response.nil?)
-	   status = "JMS" + cgi_response
-	   logger.debug("Update status to: " + status)
-	   #update status column in table
-	   @image_processing_request.update_attributes(:status=>status)
-	  else
-       logger.debug("cgi_response is null")
-       #update_status
+      if(@image_processing_request.save())
+        logger.debug("Row saved to database")
+      else
+        logger.debug("Row NOT saved to database")
       end
-      
-     # if current_user.nil?
-     # 	logger.debug("current_user is null")
-     # end
-     
-     # Create new image_processing_request row
-     #ImageProcessingRequest.new_request('NEW', params[:Filedata].path, params[:Filename], "m-stroming@northwestern.edu")
-      
-    else
-      logger.debug("container_id or Filedata null")
+       
+
+      @image_processing_request.enqueue
     end
-     
-     #testing call
-     #update_status(1, "OK", 1, 2, "path")
-     
-     render :nothing => true
-     
-=end
+      
+    render :nothing => true
+  end
   
   #def update_status
   #  logger.debug("Calling ImageProcessingRequest.update_status")
@@ -170,14 +129,5 @@ class UploadsController < ApplicationController
     session[:files] ||= []
   end
   
-  def temp_filename(basename, tmpdir='/tmp')
-    n = 0
-    begin
-      tmpname = File.join(tmpdir, sprintf('%s%d.%d', basename, $$, n))
-      lock = tmpname + '.lock'
-      n += 1
-    end while File.exist?(tmpname)
-    tmpname
-  end
   
 end

@@ -4,11 +4,12 @@ describe UploadsController do
   it "should route" do 
     {:get=>'/uploads'}.should route_to(:controller=>'uploads', :action=>'index')
     {:post=>'/uploads/create'}.should route_to(:controller=>'uploads', :action=>'create')
-    {:get=>'/uploads/test'}.should route_to(:controller=>'uploads', :action=>'test')
     {:post=>'/uploads/update_status'}.should route_to(:controller=>'uploads', :action=>'update_status')
+    {:post=>'/uploads/enqueue'}.should route_to(:controller=>'uploads', :action=>'enqueue')
   end
   it "should have paths helpers" do
     uploads_create_path.should == '/uploads/create'
+    enqueue_uploads_path.should == '/uploads/enqueue'
     uploads_path.should == '/uploads'
   end
 
@@ -49,5 +50,10 @@ describe UploadsController do
       session[:files].should == [pid]
       
     end
+  end
+
+  describe "enqueue" do
+    it "should create one image_processing_request for ever file uploaded"
+    it "should enqueue each image_processing_request"
   end
 end

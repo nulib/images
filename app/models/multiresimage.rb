@@ -44,19 +44,44 @@ class Multiresimage < ActiveFedora::Base
   delegate :culturalContextSet_display, :to=>:VRA, :unique=>true
   delegate :file_name, :to=>:properties, :unique=>true
 
-  def self.create(params)
+  def self.create(params={})
     files = params.delete(:files)
     obj = self.new
-    obj.raw.content = files.first.read
-    obj.raw.mimeType = files.first.content_type
-    obj.file_name = files.first.original_filename
+    if files.present?
+      obj.raw.content = files.first.read
+      obj.raw.mimeType = files.first.content_type
+      obj.file_name = files.first.original_filename
+    end
     obj.save
     obj
   end
-
 
   # return a hash of values for jQuery upload
   def to_jq_upload
     {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
   end
+
+  def write_out_raw
+    new_filepath = temp_filename(file_name, DIL::Application.config.processing_file_path)
+    File.open(new_filepath, 'wb') do |f|
+      f.write raw.content
+    end
+    logger.debug("New filepath:" + new_filepath)
+    FileUtils.chmod(0644, new_filepath)
+    new_filepath
+  end
+
+  private
+
+  ## Produce a unique filename that doesn't already exist.
+  def temp_filename(basename, tmpdir='/tmp')
+    n = 0
+    begin
+      tmpname = File.join(tmpdir, sprintf('%s%d.%d', basename, $$, n))
+      lock = tmpname + '.lock'
+      n += 1
+    end while File.exist?(tmpname)
+    tmpname
+  end
+  
 end
