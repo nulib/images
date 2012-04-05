@@ -18,8 +18,8 @@ describe Multiresimage do
     file.should_receive(:original_filename).and_return("The_Tilled_Field.jpg")
     file.should_receive(:content_type).and_return("image/jpeg")
     img = Multiresimage.create(:files=>[file])
-    img.should_receive(:pid).and_return('my:pid')
-    img.to_jq_upload.should == { :name=> "The_Tilled_Field.jpg", :size=>98982, :delete_url=>'/multiresimages/my:pid', :delete_type=>'DELETE'}
+    img.should_receive(:pid).twice.and_return('my:pid')
+    img.to_jq_upload.should == { :name=> "The_Tilled_Field.jpg", :size=>98982, :delete_url=>'/multiresimages/my:pid', :delete_type=>'DELETE', :url=>'/multiresimages/my:pid'}
     
   end
 

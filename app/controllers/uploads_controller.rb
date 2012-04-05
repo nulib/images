@@ -9,6 +9,17 @@ class UploadsController < ApplicationController
   before_filter :authenticate_user!, :only=>[:index, :create]
   #TODO ensure that only our script is calling update_status
 
+  def index
+    respond_to do |format|
+      format.json {
+        #TODO find_by_solr could be faster 
+        @multiresimages = selected_files.map {|pid| Multiresimage.find(pid)}
+        render :json=>@multiresimages.map(&:to_jq_upload)
+      }
+      format.html
+    end
+  end
+
   def create
     session[:files] ||= []
     uploaded_io = params[:files].first
@@ -21,21 +32,12 @@ class UploadsController < ApplicationController
     session[:files] << image.pid 
     respond_to do |format|
       format.json {  
-        render :json => image.to_jq_upload.to_json			
+        render :json => [image.to_jq_upload].to_json			
       }
     end
 
   end
 
-  def temp_filename(basename, tmpdir='/tmp')
-    n = 0
-    begin
-      tmpname = File.join(tmpdir, sprintf('%s%d.%d', basename, $$, n))
-      lock = tmpname + '.lock'
-      n += 1
-    end while File.exist?(tmpname)
-    tmpname
-  end
 =begin
     logger.debug("Entering create method")
     logger.debug("Before IPR row created")
@@ -160,6 +162,22 @@ class UploadsController < ApplicationController
   
   render :nothing => true
   end
+
+
+  private 
+
+  def selected_files
+    session[:files] ||= []
+  end
   
+  def temp_filename(basename, tmpdir='/tmp')
+    n = 0
+    begin
+      tmpname = File.join(tmpdir, sprintf('%s%d.%d', basename, $$, n))
+      lock = tmpname + '.lock'
+      n += 1
+    end while File.exist?(tmpname)
+    tmpname
+  end
   
 end

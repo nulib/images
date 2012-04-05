@@ -53,13 +53,6 @@ class MultiresimagesController < ApplicationController
 
    end
    
-   def index
-     @multiresimages = Multiresimage.find(:all)
-     #respond_to do |format|
-      #format.html
-      #format.xml {render :xml=>@multiresimages.to_xml}
-     #end
-   end
    
    def edit
      @multiresimage = Multiresimage.find(params[:id]) 
