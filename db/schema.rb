@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111205202322) do
+ActiveRecord::Schema.define(:version => 20120405155715) do
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",     :null => false
@@ -24,11 +24,12 @@ ActiveRecord::Schema.define(:version => 20111205202322) do
 
   create_table "image_processing_requests", :force => true do |t|
     t.string   "image_pid",      :limit => 50
-    t.string   "image_filename", :limit => 50,                 :null => false
-    t.string   "email",                        :default => "", :null => false
-    t.string   "status",         :limit => 25,                 :null => false
-    t.datetime "created_at",                                   :null => false
-    t.datetime "updated_at",                                   :null => false
+    t.string   "image_filename", :limit => 50
+    t.string   "email",                        :default => "",         :null => false
+    t.string   "status",         :limit => 25,                         :null => false
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
+    t.string   "pid",                          :default => "migrated", :null => false
   end
 
   create_table "searches", :force => true do |t|

@@ -1,4 +1,4 @@
-MyHydraHead::Application.routes.draw do
+DIL::Application.routes.draw do
   Blacklight.add_routes(self)
   HydraHead.add_routes(self)
 
@@ -29,9 +29,12 @@ MyHydraHead::Application.routes.draw do
   match "dil_collections/new" => "dil_collections#new"
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
 
-  resources :uploads, :only => [:index]
+  resources :uploads, :only => [:index] do
+    collection do
+      post :enqueue
+    end
+  end
   match "uploads/create" => "uploads#create"
-  match "uploads/test" => "uploads#test"
   match "uploads/update_status" => "uploads#update_status"
   
 end
