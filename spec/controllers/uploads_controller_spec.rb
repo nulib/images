@@ -53,7 +53,31 @@ describe UploadsController do
   end
 
   describe "enqueue" do
-    it "should create one image_processing_request for ever file uploaded"
-    it "should enqueue each image_processing_request"
+    it "should create one image_processing_request for ever file uploaded and enqueue it" do
+      req1 = stub('request')
+      req2 = stub('request')
+      req1.should_receive(:enqueue)
+      req2.should_receive(:enqueue)
+      controller.stub(:selected_files=>['pid:one', 'pid:two'])
+      ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'm-stroming@northwestern.edu').and_return(req1)
+      ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
+      post :enqueue
+      response.should be_success
+    end
+  end
+
+  describe "update_status" do
+    before do
+      @image = Multiresimage.new
+      @image.update_attributes(:file_name =>'foo.jpg')
+      @req = ImageProcessingRequest.create!(:pid=>@image.pid, :email=>'test@example.com', :status=>'NEW')
+    end
+    it "should update the record" do
+       post :update_status, :request_id =>@req.id, :image_path=>'', :width=>'w', :height=>'', :status=>"OK"
+       req = ImageProcessingRequest.find(@req.id)
+       req.status.should == "VALIDATEDOK"
+    
+       response.should be_success
+    end
   end
 end

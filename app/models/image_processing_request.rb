@@ -13,8 +13,6 @@ class ImageProcessingRequest < ActiveRecord::Base
 
 
   def enqueue
-
-puts "finding: #{pid}"
     image = Multiresimage.find(pid)
     new_filepath = image.write_out_raw
       
@@ -37,56 +35,6 @@ puts "finding: #{pid}"
       update_attribute(:status, status)
     else
       logger.debug("cgi_response is null")
-      #update_status
     end
   end
-  
-  def self.update_status(id, status, imageWidth, imageHeight, imagePath)
-    logger.debug("Entering update_status")
-    
-    logger.debug("Retrieve af model")
-    af_model = retrieve_af_model('Multiresimage')
-    logger.debug("Create new image")
-    new_image = af_model.new
-    logger.debug("Apply depositor")
-    apply_depositor_metadata(new_image)
-    logger.debug("Set collection type")
-    set_collection_type(new_image, 'Multiresimage')
-
-    # Get  SVG datastream
-    logger.debug("Get svg datastream")
-    new_svg_ds = new_image.datastreams_in_memory["DELIV-OPS"] 
-    logger.debug("Add image params")
-    new_svg_ds.add_image_parameters(imagePath,imageWidth,imageHeight)
-	
-    # Add image and VRA behavior via their cmodels
-    logger.debug("Add VRACModel relationship")
-    new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
-    logger.debug("Add imageCModel relationship")
-    new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
-    logger.debug("Save new image")
-    new_image.save()
-     
-    #  logger.debug("Creating new fedora object")
-    #  af_model = retrieve_af_model("multiresimage")
-    #    if af_model
-    #      @asset = af_model.new
-    #     apply_depositor_metadata(@asset)
-    #     set_collection_type(@asset, params[:content_type])
-    #     @asset.save
-    #     logger.debug("new object pid: " + @asset.pid)
-    #   end
-    
-    # update status in table
-    
-    #make sure row exists, if so, update
-    image_processing_request = self.find(id)
-    if !image_processing_request.nil?
-      status = "VALIDATED" + status
-      logger.debug("image_processing_request is not null")
-      self.update(id, {:status=>status, :image_pid=>"pid"})
-    end
-    
-  end
-
 end
