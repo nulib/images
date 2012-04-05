@@ -22,12 +22,14 @@ class UploadsController < ApplicationController
 
   def create
     session[:files] ||= []
-    uploaded_io = params[:files].first
-    image = Multiresimage.create(params)
-    session[:files] << image.pid 
+    @image = Multiresimage.create()
+    @image.attach_file(params[:files])
+    @image.apply_depositor_metadata(current_user.email)
+    @image.save!
+    session[:files] << @image.pid 
     respond_to do |format|
       format.json {  
-        render :json => [image.to_jq_upload].to_json			
+        render :json => [@image.to_jq_upload].to_json			
       }
     end
 
@@ -49,12 +51,6 @@ class UploadsController < ApplicationController
     image_processing_request = ImageProcessingRequest.find(params[:request_id])
 
     image = Multiresimage.find(image_processing_request.pid)
-    logger.debug("Apply depositor")
-    # TODO move to create
-    image.apply_depositor_metadata("archivist1")
-
-    logger.debug("Set collection type")
-
     # Get  SVG datastream
     logger.debug("Get svg datastream")
     new_svg_ds = image.datastreams["DELIV-OPS"] 

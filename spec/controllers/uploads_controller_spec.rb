@@ -30,25 +30,31 @@ describe UploadsController do
 
   describe "create" do
     before do
+      @before_count = Multiresimage.count
       sign_in FactoryGirl.find_or_create(:archivist)
-    end
-    it "should store uploaded files and return JSON" do
-      before_count = Multiresimage.count
-      session[:files].should be_nil
       post :create, :files=>[fixture_file_upload('/images/The_Tilled_Field.jpg', 'image/jpeg')], :format=>:json
-      
+    end
+    it "should create a new Multiresimage" do
+      Multiresimage.count.should == @before_count + 1
+    end
+    it "should store uploaded files in session" do
+      session[:files].should == [assigns[:image].pid]
+    end
+    it "should return JSON for jquery-file-uploader" do
       json = JSON.parse(response.body)
       json.size.should == 1
       json.first["name"].should == "The_Tilled_Field.jpg"
       json.first["size"].should == 98982
       json.first["delete_type"].should == "DELETE"
       json.first.should have_key "delete_url"
-      pid = json.first["delete_url"].sub(/^\/\w+\//, '')
-      Multiresimage.count.should == before_count + 1
-      obj = Multiresimage.find(pid)
+    end
+    it "should set the mime type on the saved object" do
+      obj = Multiresimage.find(assigns[:image].pid)
       obj.raw.mimeType.should == 'image/jpeg'
-      session[:files].should == [pid]
-      
+    end
+    it "should set user metadata" do
+      obj = Multiresimage.find(assigns[:image].pid)
+      obj.rightsMetadata.individuals.should == {"archivist1@example.com"=>"edit"}
     end
   end
 
@@ -63,6 +69,8 @@ describe UploadsController do
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
       post :enqueue
       response.should be_success
+    end
+    it "should clear the files stored in the session" do
     end
   end
 
