@@ -30,7 +30,7 @@ class Multiresimage < ActiveFedora::Base
   #has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   
   # A place to put extra metadata values
-  has_metadata :name => "properties", :type => ActiveFedora::MetadataDatastream do |m|
+  has_metadata :name => "properties", :type => ActiveFedora::QualifiedDublinCoreDatastream do |m|
     m.field 'collection', :string
     m.field 'depositor', :string
     m.field 'file_name', :string
