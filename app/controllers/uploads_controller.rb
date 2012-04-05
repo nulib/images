@@ -40,8 +40,9 @@ class UploadsController < ApplicationController
       @image_processing_request = ImageProcessingRequest.create!(:status => 'NEW', :pid=>pid, :email => 'm-stroming@northwestern.edu')
       @image_processing_request.enqueue
     end
+    self.selected_files = []
       
-    render :nothing => true
+    redirect_to catalog_index_path, :notice=>'Your files are now being processed'
   end
   
   def update_status
@@ -78,6 +79,9 @@ class UploadsController < ApplicationController
 
   def selected_files
     session[:files] ||= []
+  end
+  def selected_files= val
+    session[:files] = val
   end
   
   

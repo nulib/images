@@ -59,18 +59,22 @@ describe UploadsController do
   end
 
   describe "enqueue" do
-    it "should create one image_processing_request for ever file uploaded and enqueue it" do
+    before do
       req1 = stub('request')
       req2 = stub('request')
       req1.should_receive(:enqueue)
       req2.should_receive(:enqueue)
-      controller.stub(:selected_files=>['pid:one', 'pid:two'])
+      session[:files] = ['pid:one', 'pid:two']
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'm-stroming@northwestern.edu').and_return(req1)
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
       post :enqueue
-      response.should be_success
+    end
+    it "should create one image_processing_request for ever file uploaded and enqueue it" do
+      flash[:notice].should == "Your files are now being processed"
+      response.should redirect_to(catalog_index_path)
     end
     it "should clear the files stored in the session" do
+      session[:files].should == []
     end
   end
 
