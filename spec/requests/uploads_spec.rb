@@ -8,8 +8,13 @@ describe "Uploading files" do
     end
     it "should have upload form and a list of files" do
       visit uploads_path
-      page.should have_selector("form#fileupload")
+      page.should have_selector("form#fileupload[action='#{uploads_create_path}']")
       page.should have_selector("table > tbody.files")
+
+      attach_file('files[]', Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"))
+      click_on('Start upload')
+      # Can't get this to work. even with :js =>true
+      #wait_until{ page.has_selector?('tbody.files tr .name')}    
     end
   end
 

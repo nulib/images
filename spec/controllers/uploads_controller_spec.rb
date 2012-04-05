@@ -16,9 +16,14 @@ describe UploadsController do
     before do
       sign_in FactoryGirl.find_or_create(:archivist)
     end
-    it "should be successful" do
+    it "should respond to html" do
       get :index
       response.should be_success
+    end
+    it "should respond to json" do
+      get :index, :format=>:json
+      json = JSON.parse(response.body)
+      json.should == []
     end
   end
 
@@ -32,14 +37,16 @@ describe UploadsController do
       post :create, :files=>[fixture_file_upload('/images/The_Tilled_Field.jpg', 'image/jpeg')], :format=>:json
       
       json = JSON.parse(response.body)
-      json["name"].should == "The_Tilled_Field.jpg"
-      json["size"].should == 98982
-      json["delete_type"].should == "DELETE"
-      json.should have_key "delete_url"
-      pid = json["delete_url"].sub(/^\/\w+\//, '')
+      json.size.should == 1
+      json.first["name"].should == "The_Tilled_Field.jpg"
+      json.first["size"].should == 98982
+      json.first["delete_type"].should == "DELETE"
+      json.first.should have_key "delete_url"
+      pid = json.first["delete_url"].sub(/^\/\w+\//, '')
       Multiresimage.count.should == before_count + 1
       obj = Multiresimage.find(pid)
       obj.raw.mimeType.should == 'image/jpeg'
+      session[:files].should == [pid]
       
     end
   end

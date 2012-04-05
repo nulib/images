@@ -57,6 +57,6 @@ class Multiresimage < ActiveFedora::Base
 
   # return a hash of values for jQuery upload
   def to_jq_upload
-    {:size => self.raw.size, :name=>file_name, :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
+    {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
   end
 end
