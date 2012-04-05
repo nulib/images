@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.2'
 gem 'blacklight', '3.3.1'
-gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git', :ref=>'bd45d01'# > 4.0.0.rc5 
+gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git', :ref=>'41f10bc'# > 4.0.0.rc5 
 gem 'sqlite3'
 
 #  We will assume you're using devise in tutorials/documentation. 
@@ -20,6 +20,7 @@ group :assets do
   gem 'compass-susy-plugin', '~> 0.9.0', :require => 'susy'
   # gem 'therubyracer'
   gem 'jquery-ui-rails'
+  gem "bootstrap-sass-rails", "~> 2.0.2.2"
 
 end
 
