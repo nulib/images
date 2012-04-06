@@ -17,4 +17,23 @@ class User < ActiveRecord::Base
   def to_s
     email
   end
+
+  # Find an existing user by email or create one with a random password otherwise
+  def self.find_for_ldap_oauth(access_token, signed_in_resource=nil)
+    data = access_token[:info]
+    if user = User.where(:email => data[:email]).first
+      user
+    else # Create a user with a stub password.
+      User.create!(:email => data[:email], :password => Devise.friendly_token[0,20])
+    end
+  end
+
+  # Copy data from session whenever a user is initialized before sign up
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["devise.ldap_data"] && session["devise.ldap_data"]["info"]
+        user.email = data["email"]
+      end
+    end
+  end
 end
