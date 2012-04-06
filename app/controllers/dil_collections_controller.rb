@@ -47,7 +47,7 @@ class DilCollectionsController < ApplicationController
     
     collection = DILCollection.find(params[:id])
     ds = collection.datastreams["members"]
-    ds.remove_member(params[:member_index])
+    ds.remove_member_by_pid(params[:pid])
     collection.save
     
     redirect_to url_for(:action=>"edit", :controller=>"dil_collections", :id=>collection_id)
