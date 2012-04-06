@@ -13,7 +13,12 @@ class UploadsController < ApplicationController
     respond_to do |format|
       format.json {
         #TODO find_by_solr could be faster 
-        @multiresimages = selected_files.map {|pid| Multiresimage.find(pid)}
+        @multiresimages = selected_files.map do |pid|
+          begin
+            Multiresimage.find(pid)
+          rescue ActiveFedora::ObjectNotFoundError
+          end
+        end.compact
         render :json=>@multiresimages.map(&:to_jq_upload)
       }
       format.html
@@ -75,14 +80,5 @@ class UploadsController < ApplicationController
   end
 
 
-  private 
-
-  def selected_files
-    session[:files] ||= []
-  end
-  def selected_files= val
-    session[:files] = val
-  end
-  
   
 end
