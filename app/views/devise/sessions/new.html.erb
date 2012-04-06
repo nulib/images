@@ -1,5 +1,17 @@
 <h2>Sign in</h2>
 
+<hr>
+
+LDAP Authentication:
+
+<% if user_signed_in? %>
+    Welcome <%= current_user.email %> (<%= link_to "logout", destroy_user_session_path,  :method => :delete %>)
+<% else %>
+    <%= link_to "sign in with LDAP", user_omniauth_authorize_path(:ldap) %>
+<% end %>
+
+<hr>
+
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
   <div><%= f.label :email %><br />
   <%= f.email_field :email %></div>

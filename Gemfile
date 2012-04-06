@@ -1,13 +1,14 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.2'
-gem 'blacklight', '3.3.1'
-gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git', :ref=>'41f10bc'# > 4.0.0.rc5 
-gem 'sqlite3'
-
-#  We will assume you're using devise in tutorials/documentation. 
-# You are free to implement your own User/Authentication solution in its place.
-gem 'devise'
+  gem 'rails', '3.2.2'
+  gem 'blacklight', '3.3.1'
+gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git', :ref=>'2524af7'# > 4.0.0.rc5 
+  gem 'sqlite3'
+  
+  #  We will assume you're using devise in tutorials/documentation. 
+  # You are free to implement your own User/Authentication solution in its place.
+  gem 'devise'
+  gem 'omniauth-ldap'
 
 
 # Gems used only for assets and not required
@@ -20,7 +21,7 @@ group :assets do
   gem 'compass-susy-plugin', '~> 0.9.0', :require => 'susy'
   # gem 'therubyracer'
   gem 'jquery-ui-rails'
-  gem "bootstrap-sass-rails", "~> 2.0.2.2"
+  gem "bootstrap-sass-rails", :git=>'https://github.com/yabawock/bootstrap-sass-rails.git', :ref=>"3c68b13fff0d51406b73658869a39bb88fa1cd83" # due to pull request #12 which isn't in 2.0.2.2
 
 end
 
@@ -28,15 +29,15 @@ gem 'jquery-rails'
 gem 'jquery.fileupload-rails'
 
 
-# For testing.  You will probably want to use all of these to run the tests you write for your hydra head
-group :development, :test do 
-  gem 'jettywrapper'
-  gem 'rspec-rails', '>=2.9.0'
-  gem 'cucumber-rails', :require=>false
+  # For testing.  You will probably want to use all of these to run the tests you write for your hydra head
+  group :development, :test do 
+         gem 'jettywrapper'
+         gem 'rspec-rails', '>=2.9.0'
+         gem 'cucumber-rails', :require=>false
   gem 'factory_girl_rails'
-  gem 'database_cleaner'
-  gem 'capybara'
-  gem 'bcrypt-ruby'
-end
+         gem 'database_cleaner'
+         gem 'capybara'
+         gem 'bcrypt-ruby'
+  end
 
-gem 'unicorn'
+  gem 'unicorn'

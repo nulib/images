@@ -9,6 +9,7 @@ class MultiresimagesController < ApplicationController
     obj = Multiresimage.find(params[:id])
     if can?(:delete, obj)
       obj.delete
+      selected_files.delete(params[:id])
     end
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end

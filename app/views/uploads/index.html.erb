@@ -1,3 +1,6 @@
-      <%= render :partial=>'multiupload' %>
-      <%= button_to "Process", enqueue_uploads_path %>
+  <%= render :partial=>'multiupload' %>
+  <%= button_to "Process", enqueue_uploads_path %>
+  <% sidebar_items << capture do %>
+    <%= link_to 'Search', catalog_index_path  %>
+  <% end %>
 

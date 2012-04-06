@@ -13,7 +13,12 @@ class ImageProcessingRequest < ActiveRecord::Base
 
 
   def enqueue
-    image = Multiresimage.find(pid)
+    image = begin
+      Multiresimage.find(pid)
+    rescue ActiveFedora::ObjectNotFoundError
+      update_attribute(:status, "Not found")
+      return
+    end
     new_filepath = image.write_out_raw
       
     # TODO Can we replace the cgi-bin with stomp?
