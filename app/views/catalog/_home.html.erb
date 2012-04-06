@@ -2,6 +2,13 @@
 <%= render :partial=>'home_text' %>
 
 <% sidebar_items << capture do %>
-  <%= link_to_if user_signed_in?, "Upload Images", uploads_path %>
+  <% if user_signed_in? %>
+    <nav>
+      <ul>
+        <li><%= link_to "Upload Images", uploads_path %></li>
+        <li><%= link_to "Groups", groups_path %></li>
+      </ul>
+    </nav>
+  <% end %>
   <%= render :partial=>'facets' %>
 <% end %>

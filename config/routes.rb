@@ -36,5 +36,7 @@ DIL::Application.routes.draw do
   end
   match "uploads/create" => "uploads#create"
   match "uploads/update_status" => "uploads#update_status"
+
+  resources :groups
   
 end

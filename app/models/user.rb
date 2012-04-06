@@ -11,6 +11,11 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
+
+  # Groups this user owns.  
+  # TODO = move to ldap.  Not sure if LDAP has group ownership
+  has_many :groups, :foreign_key=>'owner_id'
+
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
   # the account. 
