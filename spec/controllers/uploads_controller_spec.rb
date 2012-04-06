@@ -67,6 +67,7 @@ describe UploadsController do
       session[:files] = ['pid:one', 'pid:two']
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'm-stroming@northwestern.edu').and_return(req1)
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
+      sign_in FactoryGirl.find_or_create(:archivist)
       post :enqueue
     end
     it "should create one image_processing_request for ever file uploaded and enqueue it" do

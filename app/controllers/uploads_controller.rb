@@ -5,8 +5,8 @@ class UploadsController < ApplicationController
   include Hydra::RepositoryController  
   include Blacklight::SolrHelper
  
-  skip_before_filter :verify_authenticity_token #TODO Bad idea. Just restrict this to the methods that need it (update_status?).
-  before_filter :authenticate_user!, :only=>[:index, :create]
+  skip_before_filter :verify_authenticity_token, :only=>[:update_status]
+  before_filter :authenticate_user!, :except=>[:update_status]
   #TODO ensure that only our script is calling update_status
 
   def index
