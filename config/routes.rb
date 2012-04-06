@@ -25,7 +25,7 @@ DIL::Application.routes.draw do
   match "multiresimages/aware_details" => "multiresimages#aware_details"
   match "external_search/search_hydra" => "external_search#index"
   match "dil_collections/add/:id/:member_id" => "dil_collections#add"
-  match "dil_collections/remove/:id/:member_index" => "dil_collections#remove"
+  match "dil_collections/remove/:id/:pid" => "dil_collections#remove"
   match "dil_collections/new" => "dil_collections#new"
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
 
