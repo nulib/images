@@ -1,22 +1,13 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def ldap
+    @user = User.find_for_ldap_oauth(request.env["omniauth.auth"], current_user)
 
-    # the OmniAuth Auth Hash, see: https://github.com/intridea/omniauth/wiki/Auth-Hash-Schema
-    auth_hash = request.env["omniauth.auth"]
-
-    #dn = auth_hash['uid']
-    #uid = auth_hash['info']['nickname']
-    email = auth_hash['info']['email']
-    #name = auth_hash['info']['name']
-    #first_name = auth_hash['info']['first_name']
-    #last_name = auth_hash['info']['last_name']
-
-    if @user = User.find_by_email(email)
-      sign_in_and_redirect @user
+    if @user.persisted?
+      flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Ldap"
+      sign_in_and_redirect @user, :event => :authentication
     else
-      @user = User.create(:email => email,
-                          :password => 'foo')
-      sign_in_and_redirect @user
+      session["devise.ldap_data"] = request.env["omniauth.auth"]
+      redirect_to new_user_registration_url
     end
   end
 end
