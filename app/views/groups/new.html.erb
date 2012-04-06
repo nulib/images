@@ -1,0 +1,12 @@
+<%= form_for @group do |f| %>
+  <%= f.label :name, "Group Name:"  %>
+  <%= f.text_field :name %>
+  <%= f.label :users, "Net Ids:" %>
+  <%= f.text_area :users %>
+  <br />
+  <%= f.submit %>
+<% end %>
+
+<% sidebar_items << capture do %>
+  <%= link_to 'Search', catalog_index_path  %>
+<% end %>

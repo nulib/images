@@ -1,0 +1,10 @@
+<ul>
+  <% @groups.each do |g| %>
+    <li class="group"><%= g.name %></li>
+  <% end %>
+</ul>
+<%= link_to "Add a group", new_group_path %>
+<% sidebar_items << capture do %>
+  <%= link_to 'Search', catalog_index_path  %>
+<% end %>
+
