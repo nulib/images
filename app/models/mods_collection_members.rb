@@ -56,9 +56,15 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
       return node
      end
     
-    # Remove the mods entry identified by @index
-	  def remove_member(member_index)
+      # Remove the mods entry identified by @index
+	  def remove_member_by_index(member_index)
 		self.find_by_terms({:mods=>member_index.to_i}).first.remove
+		self.dirty = true
+	  end
+	  
+	# Remove the mods entry identified by pid
+	  def remove_member_by_pid(pid)
+		self.ng_xml.xpath('//mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
 		self.dirty = true
 	  end
 	  
@@ -69,7 +75,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
 	    #get node at to_index
 	    to_node = self.find_by_terms({:mods=>to_index.to_i}).first()
 	    #remove the node to be moved at it's original index
-	    remove_member(from_index)
+	    remove_member_by_index(from_index)
 	
 	    #if moving node from left to right, add moving node after the to_index node
 	    if (from_index < to_index)
