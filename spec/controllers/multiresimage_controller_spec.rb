@@ -18,6 +18,11 @@ describe MultiresimagesController do
         flash[:notice].should == "Image has been deleted"
         response.should redirect_to(catalog_index_path)
       end
+      it "should be removed from the session too"do
+        session[:files] = [@img.pid]
+        delete :destroy, :id=>@img.pid
+        session[:files].should == []
+      end
     end
     describe "an image that I don't have edit permissions on" do
       it "should not be destroyed" do

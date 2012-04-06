@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/projecthydra/hydra-head.git
-  revision: 41f10bc7184839970bc0a07640dc1a954402951e
-  ref: 41f10bc
+  revision: 2524af71badafabb9750058f0c722a6f603f2ab7
+  ref: 2524af7
   specs:
     hydra-head (4.0.0.rc5)
       RedCloth (= 4.2.9)
@@ -12,6 +12,15 @@ GIT
       devise
       rails (= 3.2.2)
       sanitize
+
+GIT
+  remote: https://github.com/yabawock/bootstrap-sass-rails.git
+  revision: 3c68b13fff0d51406b73658869a39bb88fa1cd83
+  ref: 3c68b13fff0d51406b73658869a39bb88fa1cd83
+  specs:
+    bootstrap-sass-rails (2.0.2.2)
+      rails (~> 3.1)
+      sass-rails (~> 3.1)
 
 GEM
   remote: http://rubygems.org/
@@ -77,9 +86,6 @@ GEM
       unicode
     block_helpers (0.3.3)
       activesupport (>= 2.0)
-    bootstrap-sass-rails (2.0.2.2)
-      rails (~> 3.1)
-      sass-rails (~> 3.1)
     builder (3.0.0)
     cancan (1.6.7)
     capybara (1.1.2)
@@ -304,7 +310,7 @@ PLATFORMS
 DEPENDENCIES
   bcrypt-ruby
   blacklight (= 3.3.1)
-  bootstrap-sass-rails (~> 2.0.2.2)
+  bootstrap-sass-rails!
   capybara
   coffee-rails (~> 3.2.1)
   compass-rails (~> 1.0.0)
