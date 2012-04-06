@@ -10,8 +10,10 @@
  *= require 'hydra/styles'   
 
  *= require jquery.ui.all
-
- *= require_tree .
+ *= require jquery.fileupload-ui.css
+ *= require dil
+ *= require twitter/bootstrap
+ *= require blacklight_overrides
  *= require_self
 */
 

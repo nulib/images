@@ -11,4 +11,14 @@ class ApplicationController < ActionController::Base
   # these methods in order to perform user specific actions. 
 
   protect_from_forgery
+
+  protected
+  def selected_files
+    session[:files] ||= []
+  end
+  def selected_files= val
+    session[:files] = val
+  end
+  
+
 end

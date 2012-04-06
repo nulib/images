@@ -43,3 +43,13 @@ def login(user)
   click_on('Sign in')
 end
 
+# for OmniAuth specs
+OmniAuth.config.test_mode = true
+OmniAuth.config.mock_auth[:ldap] = {
+    :provider => 'ldap',
+    :uid => 'uid=vanessa,ou=people,dc=example,dc=com',
+    :info => {
+        :name => 'Vanessa Smith',
+        :email => 'vanessa@example.com'
+    }
+}
