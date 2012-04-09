@@ -2,7 +2,8 @@ source 'http://rubygems.org'
 
   gem 'rails', '3.2.2'
   gem 'blacklight', '3.3.1'
-gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git', :ref=>'2524af7'# > 4.0.0.rc5 
+  gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'8a5309b'
+  gem 'active-fedora', :git=>'git://github.com/projecthydra/active_fedora.git', :ref=>'90129f4'# > 4.0.0.rc20 
   gem 'sqlite3'
   
   #  We will assume you're using devise in tutorials/documentation. 
@@ -27,6 +28,8 @@ end
 
 gem 'jquery-rails'
 gem 'jquery.fileupload-rails'
+
+gem 'uuid'
 
 
   # For testing.  You will probably want to use all of these to run the tests you write for your hydra head

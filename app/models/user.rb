@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
 
   # Groups this user owns.  
   # TODO = move to ldap.  Not sure if LDAP has group ownership
-  has_many :groups, :foreign_key=>'owner_id'
+  has_many :owned_groups, :class_name=>'Group', :foreign_key=>'owner_id'
 
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
@@ -29,6 +29,7 @@ class User < ActiveRecord::Base
     if user = User.where(:email => data[:email]).first
       user
     else # Create a user with a stub password.
+puts "Data: #{data.inspect}"
       User.create!(:email => data[:email], :password => Devise.friendly_token[0,20])
     end
   end
@@ -40,5 +41,9 @@ class User < ActiveRecord::Base
         user.email = data["email"]
       end
     end
+  end
+
+  def groups 
+    Group.all.select { |g| g.users.include?(email)}
   end
 end
