@@ -1,30 +1,33 @@
 require 'spec_helper'
 
 describe Group do
-  describe "an instance" do
+  describe "a new instance " do
     subject { Group.new }
-    describe "with an owner and name" do
+    it "should require a name" do
+      subject.save.should be_false
+      subject.errors[:name].should == ["can't be blank"]
+    end
+  end
+
+  describe "a valid instance" do 
+    subject { FactoryGirl.build(:user_group) }
+    its(:owner) { should be_kind_of User} 
+    its(:name) { should == "Factory Group"} 
+
+    context "with users" do
       before do
-        @u = FactoryGirl.find_or_create(:archivist)
-        subject.owner = @u
-        subject.name = "My Group"
-      end
-      its(:owner) { should == @u} 
-      its(:name) { should == "My Group"} 
-    end
-    describe "without a name" do
-      it "should require a name" do
-        subject.save.should be_false
-        subject.errors[:name].should == ["can't be blank"]
-      end
-    end
-    describe "with users" do
-      subject do
-        g = Group.new(:name=>"My Group")
-        g.users = ['vanessa', 'kacey']
-        g
+        subject.users = ['vanessa', 'kacey']
       end 
       its(:users) { should == ['vanessa', 'kacey']}
+    end
+
+    context "that is saved" do
+      before do 
+        subject.save!
+      end
+      it "should have internal_uri" do
+        subject.internal_uri.should == "ldap://northwestern/groups/#{subject.code}"
+      end
     end
   end
 
@@ -35,8 +38,8 @@ describe Group do
       g.owner_id = @u.id
       g.save!
       
-      @system1 = Group.create!(:name=>"System1")
-      @system2 = Group.create!(:name=>"System2")
+      @system1 = Group.create!(:name=>"System1", :code=>'faculty')
+      @system2 = Group.create!(:name=>"System2", :code=>'students')
     end
     it "should return groups with nil as the owner" do
       Group.system_groups.should == [@system1, @system2]

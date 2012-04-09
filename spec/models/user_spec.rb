@@ -23,7 +23,19 @@ describe User do
     g3 = Group.new(:name=>'three')
     g3.owner = FactoryGirl.create(:user)
     g3.save!
-    @user.groups.should == [g1, g2]
+    @user.owned_groups.should == [g1, g2]
+  end
+
+  describe "#groups" do
+    before do
+      @group = FactoryGirl.build(:user_group)
+      @user = FactoryGirl.create(:user)
+      @group.users = [@user.email]
+      @group.save
+    end
+    it "should return a list" do
+      @user.groups.should == [@group]
+    end
   end
 
 end
