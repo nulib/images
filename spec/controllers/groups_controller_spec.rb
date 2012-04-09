@@ -7,9 +7,12 @@ describe GroupsController do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
         sign_in @user
-        @g1 = Group.create!(:owner=>@user, :name=>'foo')
-        @g2 = Group.create!(:owner=>User.create, :name=>'bar')
-        @g3 = Group.create!(:name=>'bax')
+        # owned by me
+        @g1 = FactoryGirl.create(:user_group, :owner=>@user)
+        # not owned by me
+        @g2 = FactoryGirl.create(:user_group)
+        ## This represents a system group (e.g. no owner)
+        @g3 = FactoryGirl.create(:user_group, :owner=>nil)
       end
       it "should be successful" do
         get :index
@@ -39,10 +42,17 @@ describe GroupsController do
         sign_in FactoryGirl.find_or_create(:archivist)
       end
       it "should be successful" do
-        post :create, :group=>{:name=>'my group', :users=>'justin alicia,eddie'}
+        post :create, :group=>{:name=>'my group', :users_text=>'justin alicia,eddie'}
         assigns[:group].users.should == ['justin', 'alicia', 'eddie']
         flash[:notice].should == "Group created"
         response.should redirect_to(groups_path)
+      end
+      it "should handle errors" do
+        post :create, :group=>{:name=>'', :users_text=>'justin alicia,eddie'}
+        assigns[:group].users.should == ['justin', 'alicia', 'eddie']
+        assigns[:group].users_text.should == 'justin alicia,eddie'
+        assigns[:group].errors[:name].should == ["can't be blank"]
+        response.should be_success
       end
     end
     describe "when not logged in" do
