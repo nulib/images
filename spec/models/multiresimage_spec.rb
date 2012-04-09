@@ -5,6 +5,14 @@ describe Multiresimage do
     subject { Multiresimage.new(:file_name=>'readme.txt') }
     its(:file_name) { should  == 'readme.txt' }
   end
+  describe "should belong to a collection" do
+    before do
+      @collection = FactoryGirl.create(:collection)
+    end
+    subject { Multiresimage.new(:collection=>@collection) }
+    its(:collection) { should == @collection } 
+  end
+  
   describe "created with a file" do
     before do
       @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')

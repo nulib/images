@@ -13,7 +13,7 @@ describe "Create a group" do
 
       page.should have_selector("#sidebar a[href='#{catalog_index_path}']", :text=>'Search')
       fill_in("group_name", :with=>"My Group")
-      fill_in("group_users", :with=>"fred,wilma barney")
+      fill_in("group_users_text", :with=>"fred,wilma barney")
       click_on('Create Group')
       page.should have_selector("li.group", :text=>'My Group')
       
