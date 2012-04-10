@@ -192,11 +192,11 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <machine></machine>
   </access>
   <access type="read">
-    <human></human>
+    <human>vanessa</human>
     <machine></machine>
   </access>
   <access type="edit">
-    <human></human>
+    <human>vanessa</human>
     <machine></machine>
   </access>
   <embargo>

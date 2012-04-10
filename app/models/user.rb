@@ -8,8 +8,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
+  validates :uid, :presence => true
+
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me
+  attr_accessible :uid, :email, :password, :password_confirmation, :remember_me
 
 
   # Groups this user owns.  
@@ -30,7 +32,7 @@ class User < ActiveRecord::Base
       user
     else # Create a user with a stub password.
 puts "Data: #{data.inspect}"
-      User.create!(:email => data[:email], :password => Devise.friendly_token[0,20])
+      User.create!(:uid => data[:nickname], :email => data[:email], :password => Devise.friendly_token[0,20])
     end
   end
 

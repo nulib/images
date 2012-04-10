@@ -50,6 +50,7 @@ OmniAuth.config.mock_auth[:ldap] = {
     :uid => 'uid=vanessa,ou=people,dc=example,dc=com',
     :info => {
         :name => 'Vanessa Smith',
-        :email => 'vanessa@example.com'
+        :email => 'vanessa@example.com',
+        :nickname => 'vanessa'
     }
 }
