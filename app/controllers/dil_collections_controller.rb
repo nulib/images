@@ -1,80 +1,46 @@
 class DilCollectionsController < ApplicationController
   include Hydra::AssetsControllerHelper
-  
-  def new
-	  #af_model = retrieve_af_model('hydrangea_collection')
-	  #if af_model
-		asset = DILCollection.new()
-		if asset.respond_to?(:apply_depositor_metadata) && current_user.respond_to?(:login)
-		  asset.apply_depositor_metadata(current_user.login)
-		end
-		set_collection_type(@asset, 'dil_collection')
-		
-		descMetadata = asset.datastreams_in_memory["descMetadata"];
-		descMetadata.update_indexed_attributes([:title_info, :main_title]=>params[:title]);
-		descMetadata.dirty = true
-		asset.save
-	  #end
-	  #redirect_to url_for(:action=>"edit", :controller=>"catalog", :id=>asset.pid)
-	  redirect_to url_for(:action=>"index", :controller=>"catalog")
+
+  def create
+    authorize!(:create, DILCollection)
+		@dil_collection = DILCollection.new()
+		@dil_collection.apply_depositor_metadata(current_user.uid)
+		set_collection_type(@dil_collection, 'dil_collection')
+		@dil_collection.descMetadata.title = params[:dil_collection][:title]
+		@dil_collection.save!
+	  redirect_to catalog_index_path
   end
  
   def add
-	collection_id = params[:id];
-	member_id = params[:member_id];
-	member_title = params[:member_title];
-	
-    #af_model = retrieve_af_model(params[:content_type], :default=>HydrangeaCollection)
-    #@document_fedora = af_model.find(collection_id)
-    collection = DILCollection.find(collection_id)
-    #inserted_node, new_node_index = @document_fedora.insert_member({ :member_id => member_id, :member_title => member_title})
-    inserted_node, new_node_index = collection.insert_member({ :member_id => member_id, :member_title => member_title})
-    #@document_fedora.save
-    collection.save
+    collection = DILCollection.find(params[:id])
+    collection.insert_member({ :member_id => params[:member_id], :member_title => params[:member_title]})
+    collection.save!
     render :nothing => true
-	#redirect_to url_for(:action=>"index", :controller=>"catalog")
   end
   
   def remove
-	collection_id = params[:id];
-	member_index = params[:member_index];
-	
-    #af_model = retrieve_af_model(params[:content_type], :default=>HydrangeaCollection)
-    #document_fedora = af_model.find(collection_id)
-	#ds = document_fedora.datastreams_in_memory["members"]   
-    #ds.remove_member(member_index)
-    #document_fedora.save
-    
+    collection_id = params[:id];
+    member_index = params[:member_index];
     collection = DILCollection.find(params[:id])
     ds = collection.datastreams["members"]
     ds.remove_member_by_pid(params[:pid])
-    collection.save
+    collection.save!
     
-    redirect_to url_for(:action=>"edit", :controller=>"dil_collections", :id=>collection_id)
+    redirect_to edit_dil_collection_path(collection)
   end
   
   #move a member item in a collection from original position to new position
-   def move
-	#collection_id = params[:id]
-	#from_index = params[:from_index]
-	#to_index = params[:from_index]
-
-    #af_model = retrieve_af_model(params[:content_type], :default=>HydrangeaCollection)
-    #document_fedora = af_model.find(collection_id)
-	collection = DILCollection.find(params[:id])
-	#ds = document_fedora.datastreams_in_memory["members"]
-	ds = collection.datastreams["members"]
+  def move
+    collection = DILCollection.find(params[:id])
+	  ds = collection.members
     #call the move_member method within mods_collection_members
     ds.move_member(params[:from_index], params[:to_index])
-    #document_fedora.save
-    collection.save
-	#redirect_to url_for(:action=>"show", :controller=>"catalog", :id=>collection_id)
-	render :nothing => true
+    collection.save!
+	  render :nothing => true
   end
   
   def show
     @collection = DILCollection.find(params[:id])
-	#redirect_to url_for(:action=>"show", :controller=>"catalog", :id=>params[:id])
   end
   
    def edit

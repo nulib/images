@@ -1,0 +1,23 @@
+<% if current_user %>
+
+  <div>
+    <hr/>
+    <h3>Collections</h3>
+    <%= form_for DILCollection.new do |f| %>
+      <%= f.label :title%>
+      <%= f.text_field :title %>
+    <% end %>
+    <br/>
+    <!-- Each collection row is a JQuery UI droppable -->
+    <div id="imageCollection">
+      <% current_user.collections.each do |collection| %>
+        <div class="ui-widget-content">
+          <ul> 
+            <li id="collection-<%=collection['id']%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t']%></a></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+

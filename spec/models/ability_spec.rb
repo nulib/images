@@ -48,5 +48,8 @@ describe "a user" do
       end
     end
   end
+  it "should be able to create DILCollections" do
+    subject.can?(:create, DILCollection).should be_true
+  end
 end
 

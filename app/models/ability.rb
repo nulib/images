@@ -4,8 +4,6 @@ class Ability
 
   ## You can override this method if you are using a different AuthZ (such as LDAP)
   def user_groups(user, session)
-#puts "Call to user_groups with #{user}: #{user.groups.inspect}"
-#raise if user.nil?
     return @user_groups if @user_groups
     @user_groups = user.groups.map(&:code) + default_user_groups
     @user_groups << 'registered' unless user.new_record?
@@ -13,6 +11,8 @@ class Ability
   end
 
   def custom_permissions(user, session)
+    can :create, DILCollection unless user.new_record?
+
     ### Delegate Multiresimage permissions to the collection
     can :read, Multiresimage do |obj|
       test_read(obj.pid, user,session) || can_read_collection?(obj, user, session)
