@@ -27,7 +27,6 @@
     <h2 class="section-title"><a href="#">Description</a></h2>
     <%= render :partial => 'multiresimages/show_description' %>
 
-    Can: <%= can?(:edit, @multiresimage) %>
     <% if can?(:edit, @multiresimage) %>
       <%= link_to "Edit", edit_multiresimage_path(@multiresimage) %>
     <% end %>

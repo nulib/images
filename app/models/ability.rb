@@ -15,11 +15,11 @@ class Ability
   def custom_permissions(user, session)
     ### Delegate Multiresimage permissions to the collection
     can :read, Multiresimage do |obj|
-      test_read(user,session) || can_read_collection?(obj, user, session)
+      test_read(obj.pid, user,session) || can_read_collection?(obj, user, session)
     end
 
     can [:edit, :destroy], Multiresimage do |obj|
-      test_edit(user,session) || can_edit_collection?(obj, user, session)
+      test_edit(obj.pid, user,session) || can_edit_collection?(obj, user, session)
     end
     can :destroy, ActiveFedora::Base do |obj|
       obj.rightsMetadata.individuals[user.email] == 'edit'
@@ -30,13 +30,13 @@ class Ability
   def can_edit_collection?(obj, user, session)
     pid = obj.collection_id
     return false unless pid
-    @response, @permissions_solr_document = get_permissions_solr_response_for_doc_id(pid)
-    test_edit(user, session)
+    @permissions_solr_document = nil # force reload
+    test_edit(pid, user, session)
   end
   def can_read_collection?(obj, user, session)
     pid = obj.collection_id
     return false unless pid
-    @response, @permissions_solr_document = get_permissions_solr_response_for_doc_id(pid)
-    test_read(user, session)
+    @permissions_solr_document = nil # force reload
+    test_read(pid, user, session)
   end
 end
