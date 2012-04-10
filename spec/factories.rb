@@ -1,13 +1,14 @@
 FactoryGirl.define do
-  factory :archivist, :class=>User do |u|
-    email 'archivist1@example.com'
+  factory :archivist, :parent=>:user do |u|
+    uid 'archivist1'
     password 'archivist1'
   end
   factory :user, :aliases => [:owner] do |u|
-    sequence :email do |n|
-      "person#{n}@example.com"
+    sequence :uid do |n|
+      "person#{n}"
     end
-    password 'password'
+    email { "#{uid}@example.com" }
+    password { uid } 
   end
 
   factory :user_group, :class=>Group do |g|
