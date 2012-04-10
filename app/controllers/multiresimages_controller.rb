@@ -1,17 +1,14 @@
 require 'dil/multiresimage_service'
 class MultiresimagesController < ApplicationController
-  # include Hydra::AssetsControllerHelper
-  # include Blacklight::SolrHelper
   include DIL::MultiresimageService
-  
+
   respond_to :html, :xml
 
   def destroy
     obj = Multiresimage.find(params[:id])
-    if can?(:delete, obj)
-      obj.delete
-      selected_files.delete(params[:id])
-    end
+    authorize! :destroy, obj
+    obj.delete
+    selected_files.delete(params[:id])
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
   
@@ -37,6 +34,7 @@ class MultiresimagesController < ApplicationController
    
   def edit
     @multiresimage = Multiresimage.find(params[:id]) 
+    authorize! :destroy, @multiresimage
   end
    
   def show
