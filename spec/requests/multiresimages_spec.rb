@@ -11,6 +11,7 @@ describe "View a multiresimage" do
       page.should have_selector("#sidebar a[href='#{catalog_index_path}']", :text=>'Search')
       page.should have_selector("a[href='#{edit_multiresimage_path('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')}']", :text=>'Edit')
       click_on("Edit")
+      page.should have_selector("#sidebar a[href='#{catalog_index_path}']", :text=>'Search')
     end
   end
 end
