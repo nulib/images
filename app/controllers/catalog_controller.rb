@@ -50,7 +50,7 @@ class CatalogController < ApplicationController
     config.add_facet_field 'agent_name_facet', :label => 'Agent', :limit=>5 
     config.add_facet_field 'culturalContext_facet', :label => 'Cultural Context', :limit=>5 
     config.add_facet_field 'date_display_facet', :label => 'Date', :limit=>5 
-    config.add_facet_field 'stylePeriod_facet', :label => 'Style/Period, :limit=>5'
+    config.add_facet_field 'stylePeriod_facet', :label => 'Style/Period', :limit=>5
     config.add_facet_field 'subject_term_facet', :label => 'Subject', :limit=>5 
     config.add_facet_field 'technique_facet', :label => 'Technique' 
     config.add_facet_field 'worktype_facet', :label => 'Work Type', :limit=>5  

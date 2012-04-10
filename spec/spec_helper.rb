@@ -38,9 +38,11 @@ end
 def login(user)
   visit '/'
   click_link "Login"
-  fill_in 'user_email', :with => user.email
+  fill_in 'user_uid', :with => user.uid
   fill_in 'user_password', :with => 'archivist1'
   click_on('Sign in')
+  page.should have_selector("a[href='/users/edit']", :text=>'archivist1@example.com')
+  
 end
 
 # for OmniAuth specs

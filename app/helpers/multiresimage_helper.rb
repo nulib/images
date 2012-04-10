@@ -37,16 +37,9 @@ module MultiresimageHelper
 
   #use this method instead of get_related_images when being invoked from the helper from a view
   def get_related_images(work_pid)
-#    escaped_pid=work_pid.gsub(/:/, '\\\\\:') # escape the colon found in PIDS for the solr query
     escaped_pid=work_pid.gsub(/:/, '\\\\:') # escape the colon found in PIDS for the solr query
-	#puts "QUERY:" + build_related_image_query("imageOf_t:#{escaped_pid}")
-	#(solr_response, document_list) = get_search_results(:q=>build_related_image_query("imageOf_t:#{escaped_pid}"))
 	(solr_response, document_list) = controller.get_solr_search_results(escaped_pid)
-#	(solr_response, document_list) = get_search_results(:q=>build_lucene_query("imageOf_t:#{escaped_pid}"))
 
-#	query="_query_:\"imageOf_t:#{escaped_pid}\"" # search for images that are imageOf this work
-#	solr_response = Blacklight.solr.find({:q=>query, :fl=>'id has_model_s title_t'})
-#	document_list = solr_response.docs.collect {|doc| SolrDocument.new(doc)}
     return [solr_response, document_list]
   end
   
