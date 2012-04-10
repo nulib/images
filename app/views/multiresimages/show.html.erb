@@ -1,23 +1,6 @@
-<%
-=begin %>
-<%= form_for @multiresimage do |f|%>
-  <div>
-    PID: <%= @multiresimage.id %>
-  </div>
-  <br/>
-  <div>
-    <%= f.label :titleset_display %>
-    <%= f.text_field :titleset_display %>
-  </div>
-  <br/>
-  <div>
-    Image: <img src="http://localhost:8983/fedora/get/<%= @multiresimage.id %>/inu:sdef-image/getWithLongSide?length=100"/></p>
-  </div>
-  <br/>
-  <%= f.submit "Save changes test"%>
-<%end%>
-<%
-=end %>
+<% sidebar_items << capture do %>
+  <%= render :partial=>'shared/menu' %>
+<% end %>
 
 <% stylesheet_links << "/stylesheets/listexpander/styles.css" %>
 <% stylesheet_links << "/stylesheets/listexpander/listexpander.css" %>
