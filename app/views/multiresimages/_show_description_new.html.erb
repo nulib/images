@@ -171,7 +171,7 @@
 	   <li>Related Images
 		  <ul>
 			 <div class="gallery_container">
-				<% @document_fedora.datastreams_in_memory["VRA"].find_by_terms(:vra_image, :relation_set, :related_work, :related_work_pid).each do |work_pid| %>
+				<% @document_fedora.datastreams["VRA"].find_by_terms(:vra_image, :relation_set, :related_work, :related_work_pid).each do |work_pid| %>
 		  			<% (solr_response, @image_doc_list) = get_related_images(work_pid.text()) %>
 					  <% unless @image_doc_list.empty? %>
 						<% @image_doc_list.each do |image_doc,counter| %>
@@ -186,7 +186,7 @@
 		
 	<% end %>
 
-	<% unless @document_fedora.datastreams_in_memory["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
+	<% unless @document_fedora.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
 	   <li>Downloads
 		  <ul>
 			 <li>

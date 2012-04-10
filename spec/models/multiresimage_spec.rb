@@ -49,5 +49,13 @@ describe Multiresimage do
 
     end
   end
+
+  context "with a vra datastream" do
+    subject { Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26') }
+    it "should have related" do
+      pending
+      subject.related_ids.should == []
+    end
+  end
 end
 
