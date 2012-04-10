@@ -1,5 +1,7 @@
 module DIL
   module MultiresimageService
+    # include Hydra::AssetsControllerHelper
+    # include Blacklight::SolrHelper
 
     # This method/web service is called from other applications (Orbeon VRA Editor, migration scripts).
     # The URL to call this method/web service is http://localhost:3000/multiresimages/create_update_fedora_object.xml
