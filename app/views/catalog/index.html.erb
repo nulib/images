@@ -1,12 +1,5 @@
 <% sidebar_items << capture do %>
-  <% if user_signed_in? %>
-    <nav>
-      <ul>
-        <li><%= link_to "Upload Images", uploads_path %></li>
-        <li><%= link_to "Groups", groups_path %></li>
-      </ul>
-    </nav>
-  <% end %>
+  <%= render :partial=>'shared/menu' %>
   <%= render :partial=>'facets' %>
 <% end %>
 
