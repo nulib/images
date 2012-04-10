@@ -1,4 +1,3 @@
-#module Hydra
 class ModsCollection < ActiveFedora::NokogiriDatastream       
   include Hydra::Datastream::CommonModsIndexMethods
 
@@ -9,6 +8,8 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
       t.main_title(:path=>"title", :label=>"title")
       t.language(:index_as=>[:facetable],:path=>{:attribute=>"lang"})
     } 
+    t.title(:proxy=>[:mods, :title_info, :main_title])
+    
     
     t.language{
       t.lang_code(:index_as=>[:facetable], :path=>"languageTerm", :attributes=>{:type=>"code"})
@@ -474,23 +475,8 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
 
       def to_solr(solr_doc=Hash.new)
         super(solr_doc)
-        #extract_title.each {|title| solr_doc << title }
-        #extract_title.each_pair{|n,v| ::Solrizer::Extractor.insert_solr_field_value(solr_doc, n, v) }
-        solr_doc.merge!(extract_title)
         ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
         solr_doc
       end
 
-	  def extract_title
-#		self.find_by_terms(:title_info,:main_title).map { |title| Solr::Field.new({:title_t=>title.text}) unless title.text.empty? }
-		#self.find_by_terms(:title_info,:main_title).map { |title| Solr::Field.new({:title_t=>title.text}) }
-		titles = {}
-		self.find_by_terms(:title_info,:main_title).each do |title|
-		  ::Solrizer::Extractor.insert_solr_field_value(titles, "title_t", title.text)
-		end
-		
-		return titles
-	  end
-
-    end
-#end
+end

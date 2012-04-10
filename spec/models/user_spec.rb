@@ -38,4 +38,27 @@ describe User do
     end
   end
 
+  describe "#collections" do
+    before :all do
+      DILCollection.find(:all, :rows=>200).each do |d|
+        d.delete
+      end
+    end
+    before do
+      @user = FactoryGirl.find_or_create(:archivist)
+      @c1 = DILCollection.new
+      @c1.apply_depositor_metadata(@user.uid)
+      @c1.save!
+        
+      @c2 = DILCollection.new
+      @c2.apply_depositor_metadata(@user.uid)
+      @c2.save!
+
+      @c3 = DILCollection.create #not mine
+    end
+    it "should return the list" do
+      @user.collections.should == [{"id"=>@c1.pid}, {"id"=>@c2.pid}]
+    end
+  end
+
 end

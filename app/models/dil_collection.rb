@@ -16,11 +16,8 @@ class DILCollection < ActiveFedora::Base
   # Uses the Hydra modsCollection profile for collection list
   has_metadata :name => "members", :type => Hydra::ModsCollectionMembers 
 
-  # A place to put extra metadata values
-  has_metadata :name => "properties", :type => ActiveFedora::MetadataDatastream do |m|
-    m.field 'collection', :string
-    m.field 'depositor', :string
-  end
+
+  delegate :title, :to=>'descMetadata', :unique=>true
 
   def insert_member(pid)
     ds = self.datastreams["members"]   

@@ -48,4 +48,9 @@ puts "Data: #{data.inspect}"
   def groups 
     Group.all.select { |g| g.users.include?(email)}
   end
+
+  def collections
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
+  end
 end
