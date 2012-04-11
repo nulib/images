@@ -69,7 +69,7 @@ describe MultiresimagesController do
         @img.save
       end
       it "should save changes" do
-        put :update, :id=>@img.pid, :titleSet_display =>"New title"
+        put :update, :id=>@img.pid, :multiresimage=>{:titleSet_display =>"New title"}
         response.should redirect_to(edit_multiresimage_path(@img))
         assigns[:multiresimage].titleSet_display.should == "New title"
         flash[:notice].should == "Saved changes to #{@img.pid}"
