@@ -18,7 +18,7 @@ class Ability
       test_read(obj.pid, user,session) || can_read_collection?(obj, user, session)
     end
 
-    can [:edit, :destroy], Multiresimage do |obj|
+    can [:edit, :update, :destroy], Multiresimage do |obj|
       test_edit(obj.pid, user,session) || can_edit_collection?(obj, user, session)
     end
     can :destroy, ActiveFedora::Base do |obj|

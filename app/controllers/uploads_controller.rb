@@ -29,7 +29,7 @@ class UploadsController < ApplicationController
     session[:files] ||= []
     @image = Multiresimage.create()
     @image.attach_file(params[:files])
-    @image.apply_depositor_metadata(current_user.email)
+    @image.apply_depositor_metadata(current_user.uid)
     @image.save!
     session[:files] << @image.pid 
     respond_to do |format|

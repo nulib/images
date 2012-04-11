@@ -54,7 +54,7 @@ describe UploadsController do
     end
     it "should set user metadata" do
       obj = Multiresimage.find(assigns[:image].pid)
-      obj.rightsMetadata.individuals.should == {"archivist1@example.com"=>"edit"}
+      obj.rightsMetadata.individuals.should == {"archivist1"=>"edit"}
     end
   end
 
