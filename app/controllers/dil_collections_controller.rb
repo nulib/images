@@ -10,6 +10,23 @@ class DilCollectionsController < ApplicationController
 		@dil_collection.save!
 	  redirect_to catalog_index_path
   end
+
+  def update
+    @collection = DILCollection.find(params[:id])
+    authorize! :update, @collection
+    read_groups = params[:dil_collection].delete(:read_groups)
+    if read_groups.present?
+      eligible = current_user.owned_groups.map(&:code)
+      @collection.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
+    end
+    @collection.update_attributes(params[:dil_collection])
+    if @collection.save
+      flash[:notice] = "Saved changes to #{@collection.title}"
+    else
+      flash[:alert] = "Failed to save your changes!"
+    end
+    redirect_to edit_dil_collection_path(@collection)
+  end
  
   def add
     collection = DILCollection.find(params[:id])
@@ -43,7 +60,7 @@ class DilCollectionsController < ApplicationController
     @collection = DILCollection.find(params[:id])
   end
   
-   def edit
+  def edit
     @collection = DILCollection.find(params[:id])
     authorize! :edit, @collection
   end
