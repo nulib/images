@@ -60,6 +60,9 @@ describe Multiresimage do
   context "with rightsMetadata" do
     subject do
       m = Multiresimage.new()
+      @u = 
+      @g1 = FactoryGirl.create(:user_group, :owner=>@u)
+      @g2 = FactoryGirl.create(:user_group)
       m.rightsMetadata.update_permissions("person"=>{"person1"=>"read","person2"=>"discover"}, "group"=>{"group-7"=>'read', 'group-8'=>'edit'})
       m.save
       m
@@ -72,6 +75,7 @@ describe Multiresimage do
       subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
       subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
     end
+    it "should not remove groups owned by other users"
   end
 end
 

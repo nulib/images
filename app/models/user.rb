@@ -45,6 +45,7 @@ puts "Data: #{data.inspect}"
     end
   end
 
+  # Groups that user is a member of
   def groups 
     ## "cn=admin,dc=example,dc=com"
     ## simple77
