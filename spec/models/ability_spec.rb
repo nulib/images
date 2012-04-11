@@ -44,7 +44,10 @@ describe "a user" do
         subject.can?(:destroy, @image).should be_true
       end
       it "should be able to edit the image" do
-        subject.can?(:destroy, @image).should be_true
+        subject.can?(:edit, @image).should be_true
+      end
+      it "should be able to update the image" do
+        subject.can?(:update, @image).should be_true
       end
     end
   end

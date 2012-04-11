@@ -43,11 +43,13 @@ class MultiresimagesController < ApplicationController
    
   def update
     @multiresimage = Multiresimage.find(params[:id])
+    authorize! :update, @multiresimage
+puts "HERE2"
     @multiresimage.update_attributes(params[:multiresimage])
     if @multiresimage.save
       flash[:notice] = "Saved changes to #{@multiresimage.id}"
     else
-      flash[:error] = "Failed to save your changes!"
+      flash[:alert] = "Failed to save your changes!"
     end
     redirect_to edit_multiresimage_path(@multiresimage)
   end

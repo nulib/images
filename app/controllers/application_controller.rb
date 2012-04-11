@@ -23,6 +23,15 @@ class ApplicationController < ActionController::Base
   def selected_files= val
     session[:files] = val
   end
+
+  def enforce_show_permissions
+puts "IN show perms"
+    #nop
+  end
+  def enforce_edit_permissions
+puts "IN edit perms"
+    #nop
+  end
   
 
 end
