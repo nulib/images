@@ -44,6 +44,11 @@ class MultiresimagesController < ApplicationController
   def update
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :update, @multiresimage
+    read_groups = params[:multiresimage].delete(:read_groups)
+    if read_groups.present?
+      eligible = current_user.owned_groups.map(&:code)
+      @multiresimage.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
+    end
     @multiresimage.update_attributes(params[:multiresimage])
     if @multiresimage.save
       flash[:notice] = "Saved changes to #{@multiresimage.id}"
