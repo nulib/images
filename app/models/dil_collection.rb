@@ -19,6 +19,8 @@ class DILCollection < ActiveFedora::Base
 
   delegate :title, :to=>'descMetadata', :unique=>true
 
+  validates :title, :presence => true
+
   def insert_member(pid)
     ds = self.datastreams["members"]   
     node, index = ds.insert_member(pid)

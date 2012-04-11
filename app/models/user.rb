@@ -46,6 +46,16 @@ puts "Data: #{data.inspect}"
   end
 
   def groups 
+    ## "cn=admin,dc=example,dc=com"
+    ## simple77
+    ## ldapsearch -h ec2-107-20-53-121.compute-1.amazonaws.com -p 389 -x -b dc=example,dc=com -D "cn=admin,dc=example,dc=com" -W "uid=vanessa"
+    ## dn: cn=instructors,ou=Groups,dc=example,dc=com
+    ## objectClass: groupofnames
+    ## cn: instructors
+    ## member: uid=nate
+    ## member: uid=penelope
+    ## member: uid=rhonda
+    ## ldapsearch -h ec2-107-20-53-121.compute-1.amazonaws.com -p 389 -x -b dc=example,dc=com 'cn=hist212-winter2013' cn member
     Group.all.select { |g| g.users.include?(email)}
   end
 

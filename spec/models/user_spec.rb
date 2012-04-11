@@ -46,18 +46,18 @@ describe User do
     end
     before do
       @user = FactoryGirl.find_or_create(:archivist)
-      @c1 = DILCollection.new
+      @c1 = FactoryGirl.build(:collection)
       @c1.apply_depositor_metadata(@user.uid)
       @c1.save!
         
-      @c2 = DILCollection.new
+      @c2 = FactoryGirl.build(:collection)
       @c2.apply_depositor_metadata(@user.uid)
       @c2.save!
 
-      @c3 = DILCollection.create #not mine
+      @c3 = FactoryGirl.create(:collection) #not mine
     end
     it "should return the list" do
-      @user.collections.should == [{"id"=>@c1.pid}, {"id"=>@c2.pid}]
+      @user.collections.should == [{"id"=>@c1.pid, "title_t"=>[@c1.title]}, {"id"=>@c2.pid, "title_t"=>[@c2.title]}]
     end
   end
 

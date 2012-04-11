@@ -11,7 +11,7 @@ describe "a user" do
       @group.users = [@user.email]
       @group.save!
 
-      @collection = DILCollection.new()
+      @collection = FactoryGirl.build(:collection)
       
       @image = Multiresimage.new()
       @image.collection=@collection
