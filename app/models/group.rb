@@ -9,7 +9,7 @@ class Group < ActiveRecord::Base
 
   attr_accessor :users_text
 
-  before_save :assign_code
+  before_save :assign_code, :ldapify
 
   def assign_code
     if code.nil?
@@ -17,8 +17,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-
-  def internal_uri
-    "ldap://northwestern/groups/#{code}"
+  def ldapify
   end
+
 end
