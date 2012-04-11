@@ -45,6 +45,7 @@ class DilCollectionsController < ApplicationController
   
    def edit
     @collection = DILCollection.find(params[:id])
+    authorize! :edit, @collection
   end
 
 end
