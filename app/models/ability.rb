@@ -12,11 +12,15 @@ class Ability
 
   def custom_permissions(user, session)
     can :create, DILCollection unless user.new_record?
+    can :update, DILCollection do |obj|
+      test_edit(obj.pid, user,session)
+    end
 
     ### Delegate Multiresimage permissions to the collection
     can :read, Multiresimage do |obj|
       test_read(obj.pid, user,session) || can_read_collection?(obj, user, session)
     end
+
 
     can [:edit, :update, :destroy], Multiresimage do |obj|
       test_edit(obj.pid, user,session) || can_edit_collection?(obj, user, session)
