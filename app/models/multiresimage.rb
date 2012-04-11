@@ -47,6 +47,19 @@ class Multiresimage < ActiveFedora::Base
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
 
+  def read_groups
+    rightsMetadata.groups.map {|k, v| k if v == 'read'}.compact
+  end
+  def read_groups=(groups)
+    g = rightsMetadata.groups.select {|k, v| v == 'edit'}
+    (read_groups - groups).each do |group_name|
+      #Strip permissions from groups not privided
+      g[group_name] = 'none'
+    end
+    groups.each { |name| g[name] = 'read'}
+    rightsMetadata.update_permissions("group"=>g)
+  end
+
   def attach_file(files)
     if files.present?
       raw.content = files.first.read
