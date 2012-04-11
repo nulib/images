@@ -44,7 +44,6 @@ class MultiresimagesController < ApplicationController
   def update
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :update, @multiresimage
-puts "HERE2"
     @multiresimage.update_attributes(params[:multiresimage])
     if @multiresimage.save
       flash[:notice] = "Saved changes to #{@multiresimage.id}"
