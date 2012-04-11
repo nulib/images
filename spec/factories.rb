@@ -17,6 +17,9 @@ FactoryGirl.define do
   end
 
   factory :collection, :class=>DILCollection do |g|
+    sequence :title do |n|
+      "Title #{n}"
+    end
   end
 end
 
