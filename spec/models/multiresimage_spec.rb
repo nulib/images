@@ -60,9 +60,6 @@ describe Multiresimage do
   context "with rightsMetadata" do
     subject do
       m = Multiresimage.new()
-      @u = 
-      @g1 = FactoryGirl.create(:user_group, :owner=>@u)
-      @g2 = FactoryGirl.create(:user_group)
       m.rightsMetadata.update_permissions("person"=>{"person1"=>"read","person2"=>"discover"}, "group"=>{'group-6' => 'read', "group-7"=>'read', 'group-8'=>'edit'})
       m.save
       m
