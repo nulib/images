@@ -62,7 +62,7 @@
       <div class="control-group">
         <%= f.label :read_groups, :class=>"control-label" %>
         <div class="controls">
-          <%= f.select :read_groups, current_user.owned_groups, {}, :multiple=>true %>
+          <%= f.select :read_groups, current_user.owned_groups.map{|x| [x.name, x.code]}, {}, :multiple=>true %>
         </div>
       </div>
       
