@@ -25,6 +25,11 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  config.before(:suite) do
+    puts "before suite"
+    DILCollection.find(:all, :rows=>1000).each(&:delete)
+  end
 end
 
 module FactoryGirl
@@ -38,9 +43,11 @@ end
 def login(user)
   visit '/'
   click_link "Login"
-  fill_in 'user_email', :with => user.email
+  fill_in 'user_uid', :with => user.uid
   fill_in 'user_password', :with => 'archivist1'
   click_on('Sign in')
+  page.should have_selector("a[href='/users/edit']", :text=>'archivist1@example.com')
+  
 end
 
 # for OmniAuth specs

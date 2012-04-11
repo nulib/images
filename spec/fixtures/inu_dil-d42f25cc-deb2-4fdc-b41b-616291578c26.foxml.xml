@@ -355,6 +355,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <human></human>
     <machine>
       <person>vanessa</person>
+      <person>archivist1</person>
     </machine>
   </access>
   <embargo>

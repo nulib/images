@@ -45,6 +45,7 @@ class Multiresimage < ActiveFedora::Base
   delegate :subjectSet_display, :to=>:VRA, :unique=>true
   delegate :culturalContextSet_display, :to=>:VRA, :unique=>true
   delegate :file_name, :to=>:properties, :unique=>true
+  delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
 
   def attach_file(files)
     if files.present?

@@ -1,0 +1,11 @@
+<% if user_signed_in? %>
+  <nav>
+    <ul>
+      <li><%= link_to_unless_current "Search", catalog_index_path %></li>
+      <li><%= link_to_unless_current "Collections", dil_collections_path %></li>
+      <li><%= link_to_unless_current "Upload Images", uploads_path %></li>
+      <li><%= link_to_unless_current "User Groups", groups_path %></li>
+    </ul>
+  </nav>
+<% end %>
+
