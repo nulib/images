@@ -25,6 +25,11 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  config.before(:suite) do
+    puts "before suite"
+    DILCollection.find(:all, :rows=>1000).each(&:delete)
+  end
 end
 
 module FactoryGirl

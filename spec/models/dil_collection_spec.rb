@@ -7,6 +7,10 @@ describe DILCollection do
       subject.title = 'foo'
       subject.title.should == 'foo'
     end
+    it "should require a title" do
+      subject.save.should be_false
+      subject.errors[:title].should == ["can't be blank"]
+    end
   end
   describe "a saved instance" do
     before do
