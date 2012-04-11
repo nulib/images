@@ -29,6 +29,28 @@ describe DILCollection do
       end
     end
   end
+  context "with rightsMetadata" do
+    subject do
+      m = DILCollection.new(:title=>"My title")
+      m.rightsMetadata.update_permissions("person"=>{"person1"=>"read","person2"=>"discover"}, "group"=>{'group-6' => 'read', "group-7"=>'read', 'group-8'=>'edit'})
+      m.save
+      m
+    end
+    it "should have read groups accessor" do
+      subject.read_groups.should == ['group-6', 'group-7']
+    end
+    it "should have read groups writer" do
+      subject.read_groups = ['group-2', 'group-3']
+      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
+      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+    end
+    it "should only revoke eligible groups" do
+      subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
+      # 'group-7' is not eligible to be revoked
+      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'}
+      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+    end
+  end
 end
   
 
