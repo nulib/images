@@ -21,14 +21,6 @@ describe Group do
       its(:users) { should == ['vanessa', 'kacey']}
     end
 
-    context "that is saved" do
-      before do 
-        subject.save!
-      end
-      it "should have internal_uri" do
-        subject.internal_uri.should == "ldap://northwestern/groups/#{subject.code}"
-      end
-    end
   end
 
   describe "system_groups" do
