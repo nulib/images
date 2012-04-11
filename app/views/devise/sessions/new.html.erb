@@ -13,8 +13,8 @@ LDAP Authentication:
 <hr>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :email %><br />
-  <%= f.email_field :email %></div>
+  <div><%= f.label :uid, 'Username' %><br />
+  <%= f.text_field :uid %></div>
 
   <div><%= f.label :password %><br />
   <%= f.password_field :password %></div>

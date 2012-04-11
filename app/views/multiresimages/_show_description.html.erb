@@ -68,14 +68,8 @@
 	   <li>Related Images
 		  <ul>
 			 <div class="gallery_container">
-				<% @multiresimage.datastreams["VRA"].find_by_terms(:image, :relationSet, :imageOf, :relation_relids).each do |work_pid| %>
-		  			<% (solr_response, image_doc_list) = get_related_images(work_pid.text) %>
-					  <% unless image_doc_list.empty? %>
-						<% image_doc_list.each do |image_doc,counter| %>
-							<% image_pid = image_doc[:id] %>
-							<div class="listing"><a href="/catalog/<%= image_doc[:id] %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= image_doc[:id] %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
-						<% end %>
-					  <% end %>
+				<% @multiresimage.related_ids.each do |work_pid| %>
+							<div class="listing"><a href="/catalog/<%= work_pid %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= work_pid %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
 				<% end %>
 			 </div>
 		  </ul>
