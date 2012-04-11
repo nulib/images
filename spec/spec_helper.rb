@@ -27,7 +27,11 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
 
   config.before(:suite) do
-    puts "before suite"
+    ## Clean out the repository
+    Multiresimage.find(:all, :rows=>1000).each do |m|
+      ### Delete everything except the fixture
+      m.delete unless m.pid =='inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26'
+    end
     DILCollection.find(:all, :rows=>1000).each(&:delete)
   end
 end

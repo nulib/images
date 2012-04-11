@@ -56,5 +56,22 @@ describe Multiresimage do
       subject.related_ids.should == ["inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b"]
     end
   end
+
+  context "with rightsMetadata" do
+    subject do
+      m = Multiresimage.new()
+      m.rightsMetadata.update_permissions("person"=>{"person1"=>"read","person2"=>"discover"}, "group"=>{"group-7"=>'read', 'group-8'=>'edit'})
+      m.save
+      m
+    end
+    it "should have read groups accessor" do
+      subject.read_groups.should == ['group-7']
+    end
+    it "should have read groups writer" do
+      subject.read_groups = ['group-2', 'group-3']
+      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
+      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+    end
+  end
 end
 
