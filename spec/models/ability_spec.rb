@@ -21,6 +21,9 @@ describe "a user" do
       it "should be able to edit the collection" do
         subject.can?(:edit, @collection).should be_true
       end
+      it "should be able to update the collection" do
+        subject.can?(:update, @collection).should be_true
+      end
 
       context "that has an image" do
         before do
