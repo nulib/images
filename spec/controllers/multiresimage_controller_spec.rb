@@ -74,6 +74,20 @@ describe MultiresimagesController do
         assigns[:multiresimage].titleSet_display.should == "New title"
         flash[:notice].should == "Saved changes to #{@img.pid}"
       end
+
+      describe "setting group access" do
+        before do
+          @g1 = FactoryGirl.create(:user_group, :owner=>@user)
+          @g2 = FactoryGirl.create(:user_group, :owner=>@user)
+          @g3 = FactoryGirl.create(:user_group)
+          @img.read_groups = [@g1.code, @g3.code]
+          @img.save!
+          put :update, :id=>@img.pid, :multiresimage=>{:read_groups =>[@g2.code]}
+        end
+        it "should set read access to groups I specify and not remove groups that I don't own" do
+          assigns[:multiresimage].read_groups.should == [@g3.code, @g2.code]
+        end
+      end
     end
     describe "that I don't have edit permissions on" do
       it "should redirect to catalog" do
