@@ -3,6 +3,11 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
   end
+
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    render :file => "#{Rails.root}/public/404.html", :status => 404, :layout => false
+  end
+
   # Adds a few additional behaviors into the application controller 
    include Blacklight::Controller  
 # Adds Hydra behaviors into the application controller 
