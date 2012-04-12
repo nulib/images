@@ -5,26 +5,30 @@ module Dil
     class GroupNotFound < StandardError; end
 
     def self.connection
-      @ldap_conn ||= Net::LDAP.new(ldap_config) 
+      @ldap_conn ||= Net::LDAP.new(ldap_connection_config) 
+    end
+
+    def self.ldap_connection_config
+      return @ldap_connection_config if @ldap_connection_config
+      @ldap_connection_config = {:auth=>{:method=>:simple}}
+      yml = ldap_config
+      @ldap_connection_config[:host] = yml[:host]
+      @ldap_connection_config[:port] = yml[:port]
+      @ldap_connection_config[:auth][:username] = yml[:username]
+      @ldap_connection_config[:auth][:password] = yml[:password]
+      @ldap_connection_config
     end
 
     def self.ldap_config
-      return @ldap_config if @ldap_config
-      @ldap_config = {:auth=>{:method=>:simple}}
-      yml = YAML.load_file(File.join(Rails.root, 'config', 'ldap.yml'))[Rails.env].with_indifferent_access
-      @ldap_config[:host] = yml[:host]
-      @ldap_config[:port] = yml[:port]
-      @ldap_config[:auth][:username] = yml[:username]
-      @ldap_config[:auth][:password] = yml[:password]
-      @ldap_config
+      @ldap_config ||= YAML.load_file(File.join(Rails.root, 'config', 'ldap.yml'))[Rails.env].with_indifferent_access
     end
 
     def self.base
-      "ou=Groups,#{treebase}"
+      "ou=#{ldap_config[:ou]},#{treebase}"
     end
 
     def self.treebase
-      "dc=example,dc=com"
+      ldap_config[:base]
     end
 
     def self.dn(code)
@@ -84,7 +88,6 @@ module Dil
       users.each do |u|
         ops << [:delete, :member, "uid=#{u}"]
       end
-puts "ops #{ops.inspect}"
       connection.modify(:dn=>dn(group_code), :operations=>ops)
     end
 
