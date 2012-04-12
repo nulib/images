@@ -1,6 +1,6 @@
 <ul>
   <% @groups.each do |g| %>
-    <li class="group"><%= g.name %></li>
+    <li class="group"><%= link_to g.name, edit_group_path(g) %></li>
   <% end %>
 </ul>
 <%= link_to "Add a group", new_group_path %>

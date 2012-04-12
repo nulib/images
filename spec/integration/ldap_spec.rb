@@ -1,19 +1,15 @@
 require 'spec_helper'
 
-# member: uid=larry
-# member: uid=quentin
-# member: uid=theresa
-# owner: uid=penelope
 describe 'Ldap service' do 
   before do
     # If this line isn't true, there was a problem creating (probably already exists.
-    Dil::LDAP.create_group('justin1', 'quentin', ['kacey', 'larry']).should be_true
+    Dil::LDAP.create_group('justin1', 'quentin', ['kacey', 'larry', 'ursula']).should be_true
   end
   after do
     Dil::LDAP.delete_group('justin1').should be_true
   end
   it "should have users and owners of a group" do
-    Dil::LDAP.users_for_group('justin1').should == ['kacey', 'larry']
+    Dil::LDAP.users_for_group('justin1').should == ['kacey', 'larry', 'ursula']
     Dil::LDAP.owner_for_group('justin1').should == 'quentin'
   end
 
@@ -33,7 +29,13 @@ describe 'Ldap service' do
   describe "#adding_members" do
     it "should have users and owners of a group" do
       Dil::LDAP.add_users_to_group('justin1', ['theresa', 'penelope']).should be_true
-      Dil::LDAP.users_for_group('justin1').should == ['kacey', 'larry', 'theresa', 'penelope']
+      Dil::LDAP.users_for_group('justin1').should == ['kacey', 'larry', 'ursula', 'theresa', 'penelope']
+    end
+  end
+  describe "#removing_members" do
+    it "should remove users from the group" do
+      Dil::LDAP.remove_users_from_group('justin1', ['kacey', 'larry']).should be_true
+      Dil::LDAP.users_for_group('justin1').should == ['ursula']
     end
   end
 end
