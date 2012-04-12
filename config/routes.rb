@@ -37,6 +37,9 @@ DIL::Application.routes.draw do
   match "uploads/create" => "uploads#create"
   match "uploads/update_status" => "uploads#update_status"
 
-  resources :groups
+  resources :groups do
+    resources :users, :only=>[:create, :destroy]
+  end
+
   
 end
