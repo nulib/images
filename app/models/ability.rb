@@ -16,6 +16,10 @@ class Ability
       test_edit(obj.pid, user,session)
     end
 
+    can :edit, Group do |obj|
+      obj.owner_uid == user.uid
+    end
+
     ### Delegate Multiresimage permissions to the collection
     can :read, Multiresimage do |obj|
       test_read(obj.pid, user,session) || can_read_collection?(obj, user, session)
