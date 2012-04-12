@@ -1,6 +1,8 @@
 module Dil
   module LDAP
     class NoUsersError < StandardError; end
+    class MissingOwnerError < StandardError; end
+
     def self.connection
       @ldap_conn ||= Net::LDAP.new(ldap_config) 
     end
@@ -28,12 +30,14 @@ module Dil
       dn = "cn=#{code},#{Dil::LDAP.base}"
     end
 
-    def self.create_group(code, users)
+    def self.create_group(code, owner, users)
       raise NoUsersError, "Unable to persist a group without users" unless users.present?
+      raise MissingOwnerError, "Unable to persist a group without owner" unless owner
       attributes = {
         :cn => code,
         :objectclass => "groupofnames",
-        :member=>users.map {|u| "uid=#{u}"}
+        :member=>users.map {|u| "uid=#{u}"},
+        :owner=>"uid=#{owner}"
       }
       connection.add(:dn=>dn(code), :attributes=>attributes)
     end
@@ -48,9 +52,27 @@ module Dil
       result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(member=uid=#{uid}))"), :attributes=>['cn'])
       result.map{|r| r[:cn].first}
     end
+
     def self.users_for_group(group_code)
-      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['cn'])
-      result.map{|r| r[:cn].first}
+      result = find_group(group_code)
+      result[:member].map { |v| v.sub(/^uid=/, '') }
+    end
+
+    def self.owner_for_group(group_code)
+      result = find_group(group_code)
+      result[:owner].first.sub(/^uid=/, '')
+    end
+
+    def self.find_group(group_code)
+      @cache ||= {}
+      return @cache[group_code] if @cache[group_code]
+      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner'])
+      val = {}
+      result.first.each do |k, v|
+        val[k] = v
+      end
+puts "Val is: #{val}"
+      @cache[group_code] = val
     end
 
   end
