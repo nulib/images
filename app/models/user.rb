@@ -51,9 +51,9 @@ puts "Data: #{data.inspect}"
   # Groups that user is a member of
   def groups 
     codes = Dil::LDAP.groups_for_user(uid)
-puts "codes for #{uid} are #{codes}"
+#puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)
-puts "res: #{res}"
+#puts "res: #{res}"
     res
   end
 
