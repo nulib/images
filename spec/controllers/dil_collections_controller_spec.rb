@@ -4,6 +4,23 @@ describe DilCollectionsController do
   before do
     Group.any_instance.stub :persist_to_ldap
   end
+  describe "#add an image to the collection" do
+    describe "as a logged in user with edit permission on the collection and read on the image" do
+      before do
+        @user = FactoryGirl.find_or_create(:archivist)
+        @collection = FactoryGirl.build(:collection)
+        @collection.edit_users = [@user.uid]
+        @collection.save
+        sign_in @user
+      end
+      it "should be successful" do
+        post :add, :id=>@collection.pid, :member_id=>'inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b', :member_title=>'foo'
+        response.should be_success
+        assigns[:collection].members.mods.title_info.main_title.should == ['foo']
+        assigns[:collection].members.mods.relatedItem.identifier.should == ['inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b']
+      end
+    end
+  end
   describe "#create" do
     describe "as a logged in user" do
       before do
