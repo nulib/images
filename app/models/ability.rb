@@ -5,7 +5,7 @@ class Ability
   ## You can override this method if you are using a different AuthZ (such as LDAP)
   def user_groups(user, session)
     return @user_groups if @user_groups
-    @user_groups = user.groups.map(&:code) + default_user_groups
+    @user_groups = Dil::LDAP.groups_for_user(user.uid) + default_user_groups
     @user_groups << 'registered' unless user.new_record?
     @user_groups
   end

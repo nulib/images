@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe User do
+  before do
+    Group.any_instance.stub :persist_to_ldap
+  end
   it "should require an email" do
     u = User.new
     u.save.should be_false
@@ -14,13 +17,13 @@ describe User do
 
   it "should have many groups that they own" do
     @user = FactoryGirl.find_or_create(:archivist)
-    g1 = Group.new(:name=>'one')
+    g1 = Group.new(:name=>'one', :users=>['vanessa'])
     g1.owner = @user
     g1.save!
-    g2 = Group.new(:name=>'two')
+    g2 = Group.new(:name=>'two', :users=>['vanessa'])
     g2.owner = @user
     g2.save!
-    g3 = Group.new(:name=>'three')
+    g3 = Group.new(:name=>'three', :users=>['vanessa'])
     g3.owner = FactoryGirl.create(:user)
     g3.save!
     @user.owned_groups.should == [g1, g2]
@@ -30,8 +33,9 @@ describe User do
     before do
       @group = FactoryGirl.build(:user_group)
       @user = FactoryGirl.create(:user)
-      @group.users = [@user.email]
+      @group.users = [@user.uid]
       @group.save
+      Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
     end
     it "should return a list" do
       @user.groups.should == [@group]

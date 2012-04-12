@@ -1,10 +1,14 @@
 require 'spec_helper'
 
 describe MultiresimagesController do
+  before do
+    Group.any_instance.stub :persist_to_ldap
+  end
   describe "destroy" do
     before do
       @img = Multiresimage.create
       @user = FactoryGirl.find_or_create(:archivist)
+      Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
       sign_in @user
     end
     describe "an image that I have edit permissions on" do
@@ -36,6 +40,7 @@ describe MultiresimagesController do
     before do
       @img = Multiresimage.create
       @user = FactoryGirl.find_or_create(:archivist)
+      Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
       sign_in @user
     end
     describe "that I have edit permissions on" do
@@ -61,6 +66,7 @@ describe MultiresimagesController do
     before do
       @img = Multiresimage.create
       @user = FactoryGirl.find_or_create(:archivist)
+      Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
       sign_in @user
     end
     describe "that I have edit permissions on" do
