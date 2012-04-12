@@ -78,6 +78,16 @@ module Dil
       connection.modify(:dn=>dn(group_code), :operations=>ops)
     end
 
+    def self.remove_users_from_group(group_code, users)
+      invalidate_cache(group_code)
+      ops = []
+      users.each do |u|
+        ops << [:delete, :member, "uid=#{u}"]
+      end
+puts "ops #{ops.inspect}"
+      connection.modify(:dn=>dn(group_code), :operations=>ops)
+    end
+
     def self.invalidate_cache(group_code)
       @cache ||= {}
       @cache[group_code] = nil
