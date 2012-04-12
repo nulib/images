@@ -1,9 +1,8 @@
 class Group < ActiveRecord::Base
-  belongs_to :owner, :class_name=>"User"
+  ## TODO delete owner and users from the database
+#  belongs_to :owner, :class_name=>"User"
 
   validates :name, :presence => true
-
- # serialize :users, Array # TODO this should come from LDAP
 
   scope :system_groups, where(:owner_id => nil)
 
@@ -19,7 +18,7 @@ class Group < ActiveRecord::Base
   end
 
   def persist_to_ldap
-    Dil::LDAP.create_group(code, @users)
+    Dil::LDAP.create_group(code, owner.uid, @users)
   end
 
   def delete_from_ldap
@@ -32,6 +31,14 @@ class Group < ActiveRecord::Base
 
   def users
     @users ||= Dil::LDAP.users_for_group(self.code)
+  end
+
+  def owner=(u)
+    @owner = u
+  end
+
+  def owner
+    @owner ||= Dil::LDAP.owner_for_group(self.code)
   end
 
 
