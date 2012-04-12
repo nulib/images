@@ -15,6 +15,7 @@ describe GroupsController do
         @g2 = FactoryGirl.create(:user_group)
         ## This represents a system group (e.g. no owner)
         @g3 = FactoryGirl.create(:user_group, :owner=>nil)
+        Dil::LDAP.stub(:groups_owned_by_user).with(@user.uid).and_return([@g1.code])
       end
       it "should be successful" do
         get :index

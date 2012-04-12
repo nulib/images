@@ -26,6 +26,7 @@ describe User do
     g3 = Group.new(:name=>'three', :users=>['vanessa'])
     g3.owner = FactoryGirl.create(:user)
     g3.save!
+    Dil::LDAP.should_receive(:groups_owned_by_user).with(@user.uid).and_return([g1.code, g2.code])
     @user.owned_groups.should == [g1, g2]
   end
 
