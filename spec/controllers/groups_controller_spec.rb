@@ -65,5 +65,30 @@ describe GroupsController do
       end
     end
   end
+  describe "#edit" do
+    describe "when logged in" do
+      before do
+        @user = FactoryGirl.find_or_create(:archivist)
+        @g = Group.create(:name=>'Foo', :owner=>@user, :users=>['alicia'])
+        Dil::LDAP.should_receive(:owner_for_group).with(@g.code).and_return(@user.uid)
+        Dil::LDAP.should_receive(:users_for_group).with(@g.code).and_return(@g.users)
+        sign_in @user
+      end
+      it "should be successful" do
+        get :edit, :id=>@g.id
+        assigns[:group].users.should == ['alicia']
+        response.should be_success
+      end
+    end
+    describe "when not logged in" do
+      before do
+        @g = Group.create
+      end
+      it "should redirect to signin" do
+        get :edit, :id=>@g.id
+        response.should redirect_to(new_user_session_path)
+      end
+    end
+  end
 
 end
