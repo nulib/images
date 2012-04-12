@@ -88,6 +88,7 @@ describe MultiresimagesController do
           @g3 = FactoryGirl.create(:user_group)
           @img.read_groups = [@g1.code, @g3.code]
           @img.save!
+          Dil::LDAP.stub(:groups_owned_by_user).with(@user.uid).and_return([@g1.code, @g2.code])
           put :update, :id=>@img.pid, :multiresimage=>{:read_groups =>[@g2.code]}
         end
         it "should set read access to groups I specify and not remove groups that I don't own" do

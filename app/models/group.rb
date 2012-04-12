@@ -1,10 +1,5 @@
 class Group < ActiveRecord::Base
-  ## TODO delete owner and users from the database
-#  belongs_to :owner, :class_name=>"User"
-
   validates :name, :presence => true
-
-  scope :system_groups, where(:owner_id => nil)
 
   attr_accessor :users_text
 
@@ -18,7 +13,7 @@ class Group < ActiveRecord::Base
   end
 
   def persist_to_ldap
-    Dil::LDAP.create_group(code, owner.uid, @users)
+    Dil::LDAP.create_group(code, owner_uid, @users)
   end
 
   def delete_from_ldap
@@ -37,8 +32,18 @@ class Group < ActiveRecord::Base
     @owner = u
   end
 
+  def owner_uid
+    return @owner_uid if @owner_uid
+    if @owner
+      @owner_uid = @owner.uid
+    elsif !new_record?
+      @owner_uid = Dil::LDAP.owner_for_group(self.code)
+    end
+    @owner_uid
+  end
+
   def owner
-    @owner ||= Dil::LDAP.owner_for_group(self.code)
+    @owner ||= User.find_by_uid(owner_uid)
   end
 
 

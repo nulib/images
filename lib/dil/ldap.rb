@@ -2,6 +2,7 @@ module Dil
   module LDAP
     class NoUsersError < StandardError; end
     class MissingOwnerError < StandardError; end
+    class GroupNotFound < StandardError; end
 
     def self.connection
       @ldap_conn ||= Net::LDAP.new(ldap_config) 
@@ -53,6 +54,11 @@ module Dil
       result.map{|r| r[:cn].first}
     end
 
+    def self.groups_owned_by_user(uid)
+      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(owner=uid=#{uid}))"), :attributes=>['cn'])
+      result.map{|r| r[:cn].first}
+    end
+
     def self.users_for_group(group_code)
       result = find_group(group_code)
       result[:member].map { |v| v.sub(/^uid=/, '') }
@@ -63,11 +69,20 @@ module Dil
       result[:owner].first.sub(/^uid=/, '')
     end
 
+    def self.add_users_to_group(group_code, users)
+      ops = []
+      users.each do |u|
+        ops << [:add, :member, "uid=#{u}"]
+      end
+      connection.modify(:dn=>dn(group_code), :operations=>ops)
+    end
+
     def self.find_group(group_code)
       @cache ||= {}
-      return @cache[group_code] if @cache[group_code]
+      #return @cache[group_code] if @cache[group_code]
       result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner'])
       val = {}
+      raise GroupNotFound, "Can't find group '#{group_code}' in ldap" unless result.first
       result.first.each do |k, v|
         val[k] = v
       end
