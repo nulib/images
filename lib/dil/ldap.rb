@@ -92,7 +92,7 @@ module Dil
       result.first.each do |k, v|
         val[k] = v
       end
-puts "Val is: #{val}"
+      #puts "Val is: #{val}"
       @cache[group_code] = val
     end
 
