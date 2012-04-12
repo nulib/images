@@ -47,7 +47,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
 		     
     # Inserts a new MODS record into a modsCollection, representing a collection member
     def insert_member(parms)
-	  node = ModsCollectionMembers.mods_template({:title => parms[:member_title] , :pid => parms[:member_id]}).root()
+	  node = Hydra::ModsCollectionMembers.mods_template({:title => parms[:member_title] , :pid => parms[:member_id]}).root()
 	  nodeset = self.find_by_terms(:modsCollection)
       unless nodeset.nil?
 		self.ng_xml.root.add_child(node)
