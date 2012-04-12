@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :uid, :email, :password, :password_confirmation, :remember_me
 
+  # eduPersonAffiliation
+  serialize :affiliations, Array
 
   # Groups this user owns.  
   def owned_groups
@@ -30,12 +32,12 @@ class User < ActiveRecord::Base
 
   # Find an existing user by email or create one with a random password otherwise
   def self.find_for_ldap_oauth(access_token, signed_in_resource=nil)
-    data = access_token[:info]
-    if user = User.where(:email => data[:email]).first
+    info = access_token[:info]
+    if user = User.where(:email => info[:email]).first
       user
     else # Create a user with a stub password.
-puts "Data: #{data.inspect}"
-      User.create!(:uid => data[:nickname], :email => data[:email], :password => Devise.friendly_token[0,20])
+#puts "Info: #{info.inspect}"
+      User.create!(:uid => info[:nickname], :email => info[:email], :password => Devise.friendly_token[0,20])
     end
   end
 
@@ -54,7 +56,8 @@ puts "Data: #{data.inspect}"
 #puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)
 #puts "res: #{res}"
-    res
+    # add eduPersonAffiliation (e.g. student, faculty, staff) to groups that the user is a member of
+    res.push(*affiliations)
   end
 
   def collections
