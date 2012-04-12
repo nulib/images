@@ -29,9 +29,11 @@ class DilCollectionsController < ApplicationController
   end
  
   def add
-    collection = DILCollection.find(params[:id])
-    collection.insert_member({ :member_id => params[:member_id], :member_title => params[:member_title]})
-    collection.save!
+    @collection = DILCollection.find(params[:id])
+    authorize! :edit, @collection
+    authorize! :show, params[:member_id]
+    @collection.insert_member({ :member_id => params[:member_id], :member_title => params[:member_title]})
+    @collection.save!
     render :nothing => true
   end
   
