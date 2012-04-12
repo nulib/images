@@ -15,8 +15,11 @@ class User < ActiveRecord::Base
 
 
   # Groups this user owns.  
-  # TODO = move to ldap.  Not sure if LDAP has group ownership
-  has_many :owned_groups, :class_name=>'Group', :foreign_key=>'owner_id'
+  def owned_groups
+    codes = Dil::LDAP.groups_owned_by_user(uid)
+    #puts "codes: #{codes}"
+    Group.find_all_by_code(codes)
+  end
 
   # Method added by Blacklight; Blacklight uses #to_s on your
   # user class to get a user-displayable login/identifier for
