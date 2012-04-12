@@ -70,6 +70,7 @@ module Dil
     end
 
     def self.add_users_to_group(group_code, users)
+      invalidate_cache(group_code)
       ops = []
       users.each do |u|
         ops << [:add, :member, "uid=#{u}"]
@@ -77,9 +78,14 @@ module Dil
       connection.modify(:dn=>dn(group_code), :operations=>ops)
     end
 
+    def self.invalidate_cache(group_code)
+      @cache ||= {}
+      @cache[group_code] = nil
+    end
+    
     def self.find_group(group_code)
       @cache ||= {}
-      #return @cache[group_code] if @cache[group_code]
+      return @cache[group_code] if @cache[group_code]
       result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner'])
       val = {}
       raise GroupNotFound, "Can't find group '#{group_code}' in ldap" unless result.first
