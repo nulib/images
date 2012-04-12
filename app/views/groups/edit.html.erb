@@ -1,0 +1,35 @@
+<% sidebar_items << capture do %>
+  <%= render :partial=>'shared/menu' %>
+<% end %>
+
+<div class="page-header">
+  <h1><%= @group.name %></h1>
+</div>
+<h3>Members</h3>
+<ul>
+  <% @group.users.each do |u| %>
+    <li><%=u %>
+      <% unless @group.users.count == 1 %>
+        <%# Don't show the delete button if there's only one user. (delete only user causes ldap error %>
+        <%= link_to "Remove", group_user_path(@group, u), :method=>:delete %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<%= form_tag group_users_path(@group) do  %>
+  <fieldset>
+    <legend>Add members to the group</legend>
+    <div class="control-group">
+      <%= label_tag :id, 'Net id', :class=>"control-label" %>
+      <div class="controls">
+        <%= text_field_tag :id %>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <%= submit_tag "Save changes", :class=>'btn btn-primary'%>
+    </div>
+  </fieldset>
+<%end %>
+
