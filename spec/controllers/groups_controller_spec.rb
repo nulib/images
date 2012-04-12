@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe GroupsController do
-
+  before do
+    Group.any_instance.stub :persist_to_ldap
+  end
   describe "#index" do
     describe "when logged in" do
       before do
