@@ -21,10 +21,10 @@ class DILCollection < ActiveFedora::Base
 
   validates :title, :presence => true
 
-  def insert_member(pid)
-    ds = self.datastreams["members"]   
-    node, index = ds.insert_member(pid)
-    return node, index
+  def insert_member(image)
+    image.collection = self
+    image.save!
+    members.insert_member(:member_id=>image.pid, :member_title=>image.titleSet_display)
   end
   
 end
