@@ -4,6 +4,11 @@ describe GroupsController do
   before do
     Group.any_instance.stub :persist_to_ldap
   end
+  describe "routes" do
+    it "should have user_group_path" do
+      group_user_path(2, 'ken').should == '/groups/2/users/ken'
+    end
+  end
   describe "#index" do
     describe "when logged in" do
       before do
