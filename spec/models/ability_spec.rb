@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "a user" do
   before do
     @user = FactoryGirl.create(:user)
+    Group.any_instance.stub :persist_to_ldap
   end
   subject { Ability.new(@user) }
   context "who is a member of a group" do
@@ -10,6 +11,8 @@ describe "a user" do
         @group = FactoryGirl.build(:user_group)
         @group.users = [@user.email]
         @group.save!
+        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
+        @user.stub(:groups=>[@group])
     end
     
     context "that has edit permission on a collection" do
@@ -72,6 +75,7 @@ describe "a user" do
     end
   end
   it "should be able to create DILCollections" do
+    Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
     subject.can?(:create, DILCollection).should be_true
   end
 end
