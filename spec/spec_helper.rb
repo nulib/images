@@ -52,9 +52,9 @@ def login(user)
   visit '/'
   click_link "Login"
   fill_in 'user_uid', :with => user.uid
-  fill_in 'user_password', :with => 'archivist1'
+  fill_in 'user_password', :with => user.password
   click_on('Sign in')
-  page.should have_selector("a[href='/users/edit']", :text=>'archivist1@example.com')
+  page.should have_selector("a[href='/users/edit']", :text=> user.email)
   
 end
 
@@ -67,5 +67,10 @@ OmniAuth.config.mock_auth[:ldap] = {
         :name => 'Vanessa Smith',
         :email => 'vanessa@example.com',
         :nickname => 'vanessa'
+    },
+    :extra => {
+      :raw_info => {
+          :edupersonaffiliation => ["staff", "student"]
+      }
     }
 }
