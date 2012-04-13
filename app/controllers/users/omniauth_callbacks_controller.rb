@@ -3,7 +3,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
     @user = User.find_for_ldap_oauth(request.env["omniauth.auth"], current_user)
 
     # eduPersonAffiliation (e.g. "staff, student, faculty")
-    @user.affiliations = request.env["omniauth.auth"]["extra"]["raw_info"]["edupersonaffiliation"]
+    @user.affiliations = request.env["omniauth.auth"][:extra][:raw_info][:edupersonaffiliation]
 
     if @user.persisted?
       flash[:notice] = I18n.t "devise.omniauth_callbacks.success", :kind => "Ldap"
