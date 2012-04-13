@@ -5,12 +5,14 @@ describe Multiresimage do
     subject { Multiresimage.new(:file_name=>'readme.txt') }
     its(:file_name) { should  == 'readme.txt' }
   end
-  describe "should belong to a collection" do
+  describe "should belong to multiple collections" do
     before do
-      @collection = FactoryGirl.create(:collection)
+      @collection1 = FactoryGirl.create(:collection)
+      @collection2 = FactoryGirl.create(:collection)
+      @collection3 = FactoryGirl.create(:collection)
     end
-    subject { Multiresimage.new(:collection=>@collection) }
-    its(:collection) { should == @collection } 
+    subject { Multiresimage.new(:collections=>[@collection1, @collection2]) }
+    its(:collections) { should == [@collection1, @collection2] } 
   end
   
   describe "created with a file" do

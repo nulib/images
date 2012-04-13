@@ -31,7 +31,7 @@ describe "a user" do
       context "that has an image" do
         before do
           @image = Multiresimage.new()
-          @image.collection=@collection
+          @image.collections=[@collection]
           @image.save
         end
 
@@ -58,7 +58,7 @@ describe "a user" do
       context "that has an image" do
         before do
           @image = Multiresimage.new()
-          @image.collection=@collection
+          @image.collections=[@collection]
           @image.save
         end
 

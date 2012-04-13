@@ -21,7 +21,7 @@ describe DilCollectionsController do
         response.should be_success
         assigns[:collection].members.mods.title_info.main_title.should == ['foo']
         assigns[:collection].members.mods.relatedItem.identifier.should == ['inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26']
-        Multiresimage.find(@img.pid).collection_id.should == assigns[:collection].pid
+        Multiresimage.find(@img.pid).collection_ids.should include assigns[:collection].pid
         
       end
     end
