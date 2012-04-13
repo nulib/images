@@ -34,8 +34,8 @@ describe DILCollection do
         @img = Multiresimage.create
         @c.insert_member(@img)
       end
-      it "should set the collection_id on the image" do
-        @img.collection.should == @c
+      it "should set the collection_ids on the image" do
+        @img.collections.should == [@c]
       end
     end
   end

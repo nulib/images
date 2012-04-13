@@ -18,7 +18,7 @@ class DILCollection < ActiveFedora::Base
   validates :title, :presence => true
 
   def insert_member(image)
-    image.collection = self
+    image.collections << self
     image.save!
     members.insert_member(:member_id=>image.pid, :member_title=>image.titleSet_display)
   end
