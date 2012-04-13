@@ -16,7 +16,7 @@ class CatalogController < ApplicationController
   configure_blacklight do |config|
     config.default_solr_params = { 
       :qt => 'search',
-      :qf => 'title_display_t', # List all the fields you want to search here
+      :qf => 'title_display_t,search_field_t', # List all the fields you want to search here
       :rows => 10 
     }
 
