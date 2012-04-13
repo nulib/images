@@ -1,14 +1,11 @@
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMixins::CommonMetadata
   include Hydra::ModelMethods
-  include ActiveFedora::Relationships
   include Rails.application.routes.url_helpers
   include Dil::RightsMetadata
   
   belongs_to :collection, :class_name=> "DILCollection", :property=> :is_governed_by
 
-  has_relationship "parts", :is_part_of, :inbound => true
-  
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
 

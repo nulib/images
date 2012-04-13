@@ -497,7 +497,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 			imageOf_work = Vrawork.find(imageOf_pid.text)
 			#debugger
 			#puts "got past find for " + imageOf_pid
-			imageOf_work = Vrawork.load_instance(imageOf_pid.text)
+			imageOf_work = Vrawork.find(imageOf_pid.text)
 			#debugger
 			imageOf_work_vra = imageOf_work.datastreams["VRA"]
 			#debugger

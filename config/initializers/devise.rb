@@ -198,12 +198,12 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   config.omniauth :ldap, :title => 'DIL local ldap',
-    :host => 'ec2-107-20-53-121.compute-1.amazonaws.com',
-    :base => 'dc=example,dc=com',
-    :uid => 'uid',
-    :port => 389,
-    :bind_dn => 'uid=vanessa,ou=people,dc=example,dc=com',
-    :password => 'vanessa1'
+    :host => Dil::LDAP.ldap_config[:host],
+    :base => Dil::LDAP.ldap_config[:base],
+    :uid => Dil::LDAP.ldap_config[:uid],
+    :port => Dil::LDAP.ldap_config[:port]
+    # :bind_dn => 'uid=vanessa,ou=people,dc=example,dc=com',
+    # :password => 'vanessa1'
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or

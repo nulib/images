@@ -33,7 +33,7 @@ class DilCollectionsController < ApplicationController
     authorize! :edit, @collection
     @image = Multiresimage.find(params[:member_id])
     authorize! :show, @image
-  puts "Inserting #{@image.pid} to #{@collection.pid}"
+#  puts "Inserting #{@image.pid} to #{@collection.pid}"
     @collection.insert_member(@image)
     @collection.save!
     render :nothing => true
