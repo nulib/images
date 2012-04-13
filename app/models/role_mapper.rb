@@ -1,8 +1,8 @@
 class RoleMapper
-  def self.roles(email)
-    u = User.find_by_email(email)
+  def self.roles(uid)
+    u = User.find_by_uid(uid)
     return [] unless u
-    u.groups.map{|r| r.id}
+    u.groups.map{|r| r.code}
   end
 
 

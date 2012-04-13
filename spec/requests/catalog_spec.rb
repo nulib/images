@@ -15,7 +15,7 @@ describe "Catalog" do
     end
     describe "who has read access to a collection that contains an image" do
       before do
-        @g1 = FactoryGirl.build(:user_group, :users=>[@user], :owner=>FactoryGirl.create(:user))
+        @g1 = FactoryGirl.create(:user_group, :users=>[@user.uid], :owner=>FactoryGirl.create(:user))
         @img = Multiresimage.new
         @img.titleSet_display = "Totally refreshing"
         @img.read_groups = [@g1.code]
@@ -25,9 +25,13 @@ describe "Catalog" do
         @g1.delete
       end
       it "should be able to discover the image" do
-        pending
         visit catalog_index_path
-        fill_in(:q, 'refreshing')
+        fill_in(:q, :with=>'refreshing')
+        click_on('Search')
+pending "That is not working"
+#puts page.body.to_s
+        page.should have_selector('.listing')
+
       end
     end
   end
