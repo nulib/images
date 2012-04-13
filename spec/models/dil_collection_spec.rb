@@ -28,6 +28,16 @@ describe DILCollection do
         subject["title_t"].should == ['My title']
       end
     end
+
+    context "adding a member image" do
+      before do
+        @img = Multiresimage.create
+        @c.insert_member(@img)
+      end
+      it "should set the collection_id on the image" do
+        @img.collection.should == @c
+      end
+    end
   end
   context "with rightsMetadata" do
     subject do
