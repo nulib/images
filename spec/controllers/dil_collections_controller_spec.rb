@@ -11,7 +11,7 @@ describe DilCollectionsController do
         @collection = FactoryGirl.build(:collection)
         @collection.edit_users = [@user.uid]
         @collection.save
-        @img = Multiresimage.find('inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b')
+        @img = Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
         @img.titleSet_display = "foo"
         @img.save!
         sign_in @user
@@ -20,7 +20,7 @@ describe DilCollectionsController do
         post :add, :id=>@collection.pid, :member_id=>@img.pid
         response.should be_success
         assigns[:collection].members.mods.title_info.main_title.should == ['foo']
-        assigns[:collection].members.mods.relatedItem.identifier.should == ['inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b']
+        assigns[:collection].members.mods.relatedItem.identifier.should == ['inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26']
         Multiresimage.find(@img.pid).collection_id.should == assigns[:collection].pid
         
       end
