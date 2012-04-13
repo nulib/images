@@ -40,15 +40,17 @@ class Ability
 
   private
   def can_edit_collection?(obj, user, session)
-    pid = obj.collection_id
-    return false unless pid
+    pids = obj.collection_ids
+    return false unless pids.present?
     @permissions_solr_document = nil # force reload
-    test_edit(pid, user, session)
+    ## TODO optimize - write a single solr query to check for permission on any of the pids
+    pids.any? { |pid| test_edit(pid, user, session) }
   end
   def can_read_collection?(obj, user, session)
-    pid = obj.collection_id
-    return false unless pid
+    pids = obj.collection_ids
+    return false unless pids.present?
     @permissions_solr_document = nil # force reload
-    test_read(pid, user, session)
+    ## TODO optimize - write a single solr query to check for permission on any of the pids
+    pids.any? {|pid| test_read(pid, user, session)}
   end
 end
