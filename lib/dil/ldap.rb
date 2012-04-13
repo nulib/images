@@ -20,7 +20,7 @@ module Dil
     end
 
     def self.ldap_config
-      @ldap_config ||= YAML.load_file(File.join(Rails.root, 'config', 'ldap.yml'))[Rails.env].with_indifferent_access
+      @ldap_config ||= YAML::load(ERB.new(IO.read(File.join(Rails.root, 'config', 'ldap.yml'))).result)[Rails.env].with_indifferent_access
     end
 
     def self.group_base
