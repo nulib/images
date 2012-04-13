@@ -41,5 +41,8 @@ DIL::Application.routes.draw do
     resources :users, :only=>[:create, :destroy]
   end
 
+  resources :technical_metadata, :only=>:index
+  match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
+
   
 end

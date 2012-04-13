@@ -60,50 +60,55 @@
 					  </tr>
 			   </tbody>
 			</table>
-			
-			
-			
-  <ul class="listexpander">
-	<% unless @multiresimage.datastreams["VRA"].find_by_terms(:image, :relationSet, :relation).text.empty? %>
-	   <li>Related Images
-		  <ul>
-			 <div class="gallery_container">
-				<% @multiresimage.related_ids.each do |work_pid| %>
-							<div class="listing"><a href="/catalog/<%= work_pid %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= work_pid %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
-				<% end %>
-			 </div>
-		  </ul>
-		</li>
-		
-	<% end %>
 
-	<% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
-	   <li>Downloads
-		  <ul>
-			 <li>
-				<table>
-				   <tbody>
-					  <tr>
-					  	 <% image_max = get_longside_max(@multiresimage) %>
-						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
-						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
-						 <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
-					  </tr>
-				   </tbody>
-				</table>
-			 </li>
-		  </ul>
-	   </li>
-	<% end %>
+            <ul class="listexpander">
+              <% unless @multiresimage.datastreams["VRA"].find_by_terms(:image, :relationSet, :relation).text.empty? %>
+                  <li>Related Images
+                    <ul>
+                      <div class="gallery_container">
+                        <% @multiresimage.related_ids.each do |work_pid| %>
+                            <div class="listing"><a href="/catalog/<%= work_pid %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= work_pid %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
+                        <% end %>
+                      </div>
+                    </ul>
+                  </li>
 
-    <%# Only display technical metadata if the user is a member of staff %>
-    <% if current_user && current_user.groups.include?("staff")%>
-        <%# TODO: add links to technical metadata datastreams here %>
-        <li>TechMD</li>
-    <% end %>
+              <% end %>
 
- </ul>
-		 <% end %>
+              <% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
+                  <li>Downloads
+                    <ul>
+                      <li>
+                        <table>
+                          <tbody>
+                          <tr>
+                            <% image_max = get_longside_max(@multiresimage) %>
+                            <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
+                            <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
+                            <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
+                          </tr>
+                          </tbody>
+                        </table>
+                      </li>
+                    </ul>
+                  </li>
+              <% end %>
+
+              <%# Only display technical metadata if the user is a member of staff %>
+              <% if can? :show, :technical_metadata %>
+                  <li>
+                    <%= link_to "EXIF Technical Metadata", technical_metadata_path(:id=>@multiresimage.pid, :type=>'ARCHV-EXIF', :format=>'xml') %>
+                  </li>
+                  <li>
+                    <%= link_to "MIX Technical Metadata", technical_metadata_path(:id=>@multiresimage.pid, :type=>'ARCHV-TECHMD', :format=>'xml') %>
+                  </li>
+                  <li>
+                    <%= link_to "MIX Technical Metadata for JP2", technical_metadata_path(:id=>@multiresimage.pid, :type=>'DELIV-TECHMD', :format=>'xml') %>
+                  </li>
+              <% end %>
+
+            </ul>
+         <% end %>
 	 
         <br/><br/>
 
