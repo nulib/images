@@ -13,7 +13,7 @@ class Group < ActiveRecord::Base
   end
 
   def persist_to_ldap
-    Dil::LDAP.create_group(code, owner_uid, @users)
+    Dil::LDAP.create_group(code, name, owner_uid, @users)
   end
 
   def delete_from_ldap
