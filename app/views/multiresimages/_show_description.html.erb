@@ -97,8 +97,7 @@
 	<% end %>
 
     <%# Only display technical metadata if the user is a member of staff %>
-
-    <% if current_user && current.groups.include?("staff")%>
+    <% if current_user && current_user.groups.include?("staff")%>
         <%# TODO: add links to technical metadata datastreams here %>
         <li>TechMD</li>
     <% end %>
