@@ -32,15 +32,13 @@ gem 'jquery.fileupload-rails'
 gem 'uuid'
 
 
-  # For testing.  You will probably want to use all of these to run the tests you write for your hydra head
-  group :development, :test do 
-         gem 'jettywrapper'
-         gem 'rspec-rails', '>=2.9.0'
-         gem 'cucumber-rails', :require=>false
+group :development, :test do 
+  gem 'jettywrapper'
+  gem 'rspec-rails', '>=2.9.0'
   gem 'factory_girl_rails'
-         gem 'database_cleaner'
-         gem 'capybara'
-         gem 'bcrypt-ruby'
-  end
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'bcrypt-ruby'
+end
 
-  gem 'unicorn'
+gem 'unicorn'
