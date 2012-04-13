@@ -3,20 +3,23 @@ development:
   port: 389
   username: cn=admin,dc=example,dc=com
   password: simple77
-  ou: Groups
+  group_base: ou=Groups,dc=example,dc=com
   base: dc=example,dc=com
+  uid: uid
 test:  
   host: ec2-107-20-53-121.compute-1.amazonaws.com
   port: 389
   username: cn=admin,dc=example,dc=com
   password: simple77
-  ou: Groups
+  group_base: ou=Groups,dc=example,dc=com
   base: dc=example,dc=com
+  uid: uid
 production:  
   host: ec2-107-20-53-121.compute-1.amazonaws.com
   port: 389
   username: cn=admin,dc=example,dc=com
   password: simple77
-  ou: Groups
-  base: dc=example,dc=com
+  group_base: ou=Groups,dc=library,dc=northwestern,dc=edu
+  base: dc=northwestern,dc=edu
+  uid: uid
 

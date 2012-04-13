@@ -23,8 +23,8 @@ module Dil
       @ldap_config ||= YAML.load_file(File.join(Rails.root, 'config', 'ldap.yml'))[Rails.env].with_indifferent_access
     end
 
-    def self.base
-      "ou=#{ldap_config[:ou]},#{treebase}"
+    def self.group_base
+      ldap_config[:group_base]
     end
 
     def self.treebase
@@ -32,7 +32,7 @@ module Dil
     end
 
     def self.dn(code)
-      dn = "cn=#{code},#{Dil::LDAP.base}"
+      dn = "cn=#{code},#{group_base}"
     end
 
     def self.create_group(code, description, owner, users)
@@ -55,12 +55,12 @@ module Dil
     # same as
     # ldapsearch -h ec2-107-20-53-121.compute-1.amazonaws.com -p 389 -x -b dc=example,dc=com -D "cn=admin,dc=example,dc=com" -W "(&(objectClass=groupofnames)(member=uid=vanessa))" cn
     def self.groups_for_user(uid)
-      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(member=uid=#{uid}))"), :attributes=>['cn'])
+      result = Dil::LDAP.connection.search(:base=>group_base, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(member=uid=#{uid}))"), :attributes=>['cn'])
       result.map{|r| r[:cn].first}
     end
 
     def self.groups_owned_by_user(uid)
-      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(owner=uid=#{uid}))"), :attributes=>['cn'])
+      result = Dil::LDAP.connection.search(:base=>group_base, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(owner=uid=#{uid}))"), :attributes=>['cn'])
       result.map{|r| r[:cn].first}
     end
     def self.title_of_group(group_code)
@@ -104,7 +104,7 @@ module Dil
     def self.find_group(group_code)
       @cache ||= {}
       return @cache[group_code] if @cache[group_code]
-      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner', 'description'])
+      result = Dil::LDAP.connection.search(:base=>group_base, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner', 'description'])
       val = {}
       raise GroupNotFound, "Can't find group '#{group_code}' in ldap" unless result.first
       result.first.each do |k, v|
