@@ -57,10 +57,10 @@ class User < ActiveRecord::Base
     codes = Dil::LDAP.groups_for_user(uid)
     #puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)
-    return res
     #puts "res: #{res}"
     # add eduPersonAffiliation (e.g. student, faculty, staff) to groups that the user is a member of
-#    res.push(*affiliations)
+    val = res + affiliations.map{ |code| Group.new(:code=>code) }
+    val
   end
 
   def collections
