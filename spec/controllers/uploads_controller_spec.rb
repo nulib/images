@@ -31,14 +31,15 @@ describe UploadsController do
   describe "create" do
     before do
       @before_count = Multiresimage.count
-      sign_in FactoryGirl.find_or_create(:archivist)
+      @user = FactoryGirl.find_or_create(:archivist)
+      sign_in @user
       post :create, :files=>[fixture_file_upload('/images/The_Tilled_Field.jpg', 'image/jpeg')], :format=>:json
     end
     it "should create a new Multiresimage" do
       Multiresimage.count.should == @before_count + 1
     end
     it "should store uploaded files in session" do
-      session[:files].should == [assigns[:image].pid]
+      @user.upload_files.map(&:pid).should == [assigns[:image].pid]
     end
     it "should return JSON for jquery-file-uploader" do
       json = JSON.parse(response.body)
@@ -64,18 +65,20 @@ describe UploadsController do
       req2 = stub('request')
       req1.should_receive(:enqueue)
       req2.should_receive(:enqueue)
-      session[:files] = ['pid:one', 'pid:two']
+      @user = FactoryGirl.find_or_create(:archivist)
+      UploadFile.create(:pid=>'pid:one', :user=>@user)
+      UploadFile.create(:pid=>'pid:two', :user=>@user)
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'm-stroming@northwestern.edu').and_return(req1)
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
-      sign_in FactoryGirl.find_or_create(:archivist)
+      sign_in @user
       post :enqueue
     end
     it "should create one image_processing_request for ever file uploaded and enqueue it" do
       flash[:notice].should == "Your files are now being processed"
       response.should redirect_to(catalog_index_path)
     end
-    it "should clear the files stored in the session" do
-      session[:files].should == []
+    it "should clear the files stored in the uploaded_files" do
+      @user.upload_files.should == []
     end
   end
 

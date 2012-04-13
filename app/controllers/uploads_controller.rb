@@ -13,9 +13,9 @@ class UploadsController < ApplicationController
     respond_to do |format|
       format.json {
         #TODO find_by_solr could be faster 
-        @multiresimages = selected_files.map do |pid|
+        @multiresimages = current_user.upload_files.map do |file|
           begin
-            Multiresimage.find(pid)
+            Multiresimage.find(file.pid)
           rescue ActiveFedora::ObjectNotFoundError
           end
         end.compact
@@ -26,12 +26,11 @@ class UploadsController < ApplicationController
   end
 
   def create
-    session[:files] ||= []
     @image = Multiresimage.create()
     @image.attach_file(params[:files])
     @image.apply_depositor_metadata(current_user.uid)
     @image.save!
-    session[:files] << @image.pid 
+    UploadFile.create(:user=>current_user, :pid=>@image.pid)
     respond_to do |format|
       format.json {  
         render :json => [@image.to_jq_upload].to_json			
@@ -41,11 +40,11 @@ class UploadsController < ApplicationController
   end
 
   def enqueue
-    selected_files.each do |pid|
-      @image_processing_request = ImageProcessingRequest.create!(:status => 'NEW', :pid=>pid, :email => 'm-stroming@northwestern.edu')
+    current_user.upload_files.each do |file|
+      @image_processing_request = ImageProcessingRequest.create!(:status => 'NEW', :pid=>file.pid, :email => 'm-stroming@northwestern.edu')
       @image_processing_request.enqueue
     end
-    self.selected_files = []
+    current_user.upload_files.delete_all
       
     redirect_to catalog_index_path, :notice=>'Your files are now being processed'
   end

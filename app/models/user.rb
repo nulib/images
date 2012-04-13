@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   # eduPersonAffiliation
   serialize :affiliations, Array
 
+  has_many :upload_files
+
   # Groups this user owns.  
   def owned_groups
     codes = Dil::LDAP.groups_owned_by_user(uid)
