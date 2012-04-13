@@ -35,12 +35,13 @@ module Dil
       dn = "cn=#{code},#{Dil::LDAP.base}"
     end
 
-    def self.create_group(code, owner, users)
+    def self.create_group(code, description, owner, users)
       raise NoUsersError, "Unable to persist a group without users" unless users.present?
       raise MissingOwnerError, "Unable to persist a group without owner" unless owner
       attributes = {
         :cn => code,
         :objectclass => "groupofnames",
+        :description => description,
         :member=>users.map {|u| "uid=#{u}"},
         :owner=>"uid=#{owner}"
       }
@@ -61,6 +62,10 @@ module Dil
     def self.groups_owned_by_user(uid)
       result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(owner=uid=#{uid}))"), :attributes=>['cn'])
       result.map{|r| r[:cn].first}
+    end
+    def self.title_of_group(group_code)
+      result = find_group(group_code)
+      result[:description].first
     end
 
     def self.users_for_group(group_code)
@@ -99,7 +104,7 @@ module Dil
     def self.find_group(group_code)
       @cache ||= {}
       return @cache[group_code] if @cache[group_code]
-      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner'])
+      result = Dil::LDAP.connection.search(:base=>treebase, :filter=> Net::LDAP::Filter.construct("(&(objectClass=groupofnames)(cn=#{group_code}))"), :attributes=>['member', 'owner', 'description'])
       val = {}
       raise GroupNotFound, "Can't find group '#{group_code}' in ldap" unless result.first
       result.first.each do |k, v|
