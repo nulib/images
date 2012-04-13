@@ -32,6 +32,10 @@ class Ability
     can :destroy, ActiveFedora::Base do |obj|
       obj.rightsMetadata.individuals[user.email] == 'edit'
     end
+
+    # Technical metadata should only be shown to staff
+    # membership in staff is provided by LDAP as eduPersonAffiliation (rather than groupOfNames)
+    can :show, :technical_metadata if user.affiliations.include?("staff")
   end
 
   private
