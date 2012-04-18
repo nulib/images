@@ -20,6 +20,7 @@ rake jetty:config
 h2. To run the application
 
 <pre>
+rake jetty:config
 rake jetty:start
 rake hydra:fixtures:refresh
 unicorn_rails
