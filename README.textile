@@ -32,6 +32,7 @@ The server will be started on port 8080 by default.
 h2. testing the application
 
 <pre>
-RAILS_ENV=test rake hydra:fixtures:refresh
+RAILS_ENV=test
+rake hydra:fixtures:refresh
 rake spec
 </pre>
