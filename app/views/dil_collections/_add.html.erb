@@ -13,7 +13,7 @@
       <% current_user.collections.each do |collection| %>
         <div class="ui-widget-content">
           <ul> 
-            <li id="collection-<%=collection['id']%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
+            <li id="<%=collection['id']%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
           </ul>
         </div>
       <% end %>
