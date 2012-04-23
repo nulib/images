@@ -3,7 +3,7 @@
 			appendTo: "body",
 			helper: "clone"
 		});
-		$( "#imageCollection ol" ).droppable({
+		$( "#imageCollection ul" ).droppable({
 			activeClass: "ui-state-default",
 			hoverClass: "ui-state-hover",
 			accept: ":not(.ui-sortable-helper)",
