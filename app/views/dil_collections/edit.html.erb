@@ -1,30 +1,3 @@
-<script language="javascript">
-	start_index='';
-	$(document).ready(function(){
-		$('.gallery_container').sortable({
-			start: function(event, ui) {
-			    start_index=$(this).children().index(ui.item)
-			}
-		});
-		$('.gallery_container').sortable({
-			update: function(event, ui) {
-				//var fruitOrder = $(this).sortable('toArray').toString();
-				var collection_id= $(this).attr('id');
-				// Note: ui.item.attr('id') is id of dragged item 
-				var url='/dil_collections/move/' + collection_id + '/' + start_index + '/' + $(this).children().index(ui.item);
-				//$.get('update-sort.cfm', {fruitOrder:fruitOrder});
-
-				$.ajax({
-				type: "POST",
-				url: url,
-				async: false,
-				success: function(msg){
-				}
-				});//end ajax
-			}
-		});
-	});
-</script>
 
   <div id="accordion">
     <a href="/catalog?f[object_type_facet][]=Collection&display_type=grid">← Return to Collections</a>
@@ -35,17 +8,19 @@
       <h2 class="section-title">Collection</h2>
       <%= render :partial => 'dil_collections/edit_members' %>
     <% end %>
-	
-    <!--Description, permissions-->
+  </div>
+  <p></p>
+  
+  <!--Description, permissions-->
 
-    <%= form_for @collection do |f| %>
-      <div class="control-group">
+<!--    <%= form_for @collection do |f| %>
+      <div class="control-group-collection">
         <%= f.label :title, :class=>"control-label" %>
         <div class="controls">
           <%= f.text_field :title, :class=>'span6' %>
         </div>
       </div>
-      <div class="control-group"> <%= f.label :read_groups, :class=>"control-label" %>
+      <div class="control-group-collection"> <%= f.label :read_groups, :class=>"control-label" %>
         <div class="controls">
           <%= f.select :read_groups, current_user.owned_groups.map{|x| [x.name, x.code]}, {}, :multiple=>true %>
         </div>
@@ -56,7 +31,7 @@
       </div>
     <% end %>
    
-  </div>
+  </div>-->
   
 <% sidebar_items << capture do %>
   <%= delete_asset_link(params[:id], "collection") %>
