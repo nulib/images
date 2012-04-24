@@ -53,11 +53,12 @@ class DilCollectionsController < ApplicationController
   #move a member item in a collection from original position to new position
   def move
     collection = DILCollection.find(params[:id])
-	  ds = collection.members
+	#ds = collection.members
+	ds = collection.datastreams["members"]
     #call the move_member method within mods_collection_members
     ds.move_member(params[:from_index], params[:to_index])
     collection.save!
-	  render :nothing => true
+	render :nothing => true
   end
   
   def show
