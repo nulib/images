@@ -7,7 +7,7 @@
           <table>
             <tr>
             <td><a href="<%= catalog_path(pid) %>"><img src="http://<%= request.host %>:8983/fedora/get/<%=  pid %>/inu:sdef-image/getWithLongSide?length=120"></a>
-            <a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>"><img src="/images/remove.gif" class="member-remove"/></a></td>
+            <a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>"><img src="/assets/remove.gif" class="member-remove"/></a></td>
             
             </tr>
             <% unless mods.search('titleInfo/title').empty? %>
