@@ -64,8 +64,11 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
 	  
 	# Remove the mods entry identified by pid
 	  def remove_member_by_pid(pid)
-		self.ng_xml.xpath('//mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
-		self.dirty = true
+        #logger.debug("debug xpath: " + self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'})
+        #logger.debug("debug xpath" + self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).to_s)
+		#self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
+		self.ng_xml.xpath('//mods:identifier[.="' + pid + '"]/ancestor::mods:mods', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
+	    self.dirty = true
 	  end
 	  
 	# Moves the mods record to a different index within the datastream
