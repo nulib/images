@@ -3,7 +3,7 @@
 # This is an RVM Project .rvmrc file, used to automatically load the ruby
 # development environment upon cd'ing into the directory
 
-ruby_string="1.9.3-p125"
+ruby_string="1.9.3-p194"
 rubygems_version="1.8.21"
 gemset_name="dil_hydra"
 
