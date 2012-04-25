@@ -43,8 +43,8 @@ class UploadsController < ApplicationController
     
     current_user.upload_files.each do |file|
       #create file on server from Fedora object datastream
-      logger.debug("filepath: " + new_filepath)
       new_filepath="/usr/local/rails_uploaded_images/" + file.pid.gsub!(":","") + ".jpg"
+      logger.debug("filepath: " + new_filepath)
       
       Net::HTTP.start("127.0.0.1", 8983) { |http|
         resp = http.get("/fedora/objects/" + file.pid + "/datastreams/raw/content")
