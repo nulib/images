@@ -1,3 +1,5 @@
+<!-- For adding items to the collection -->
+
 	$(function() {
 		$( "#images li" ).draggable({
 			appendTo: "body",
@@ -40,4 +42,35 @@
 			}
 		});
 	});
+	
+	
+	
+<!-- For moving items around in the collection -->
+
+	start_index='';
+	$(document).ready(function(){
+		$('.gallery_container').sortable({
+			start: function(event, ui) {
+			    start_index=$(this).children().index(ui.item)
+			}
+		});
+		$('.gallery_container').sortable({
+			update: function(event, ui) {
+				//var fruitOrder = $(this).sortable('toArray').toString();
+				var collection_id= $(this).attr('id');
+				// Note: ui.item.attr('id') is id of dragged item 
+				var url='/dil_collections/move/' + collection_id + '/' + start_index + '/' + $(this).children().index(ui.item);
+				//$.get('update-sort.cfm', {fruitOrder:fruitOrder});
+
+				$.ajax({
+				type: "POST",
+				url: url,
+				async: false,
+				success: function(msg){
+				}
+				});//end ajax
+			}
+		});
+	});
+
 
