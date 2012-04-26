@@ -54,6 +54,8 @@ class UploadsController < ApplicationController
         }
       }
       
+      FileUtils.chmod(0755, new_filepath)
+      
       @image_processing_request = ImageProcessingRequest.create!(:status => 'NEW', :pid=>file.pid, :email => 'm-stroming@northwestern.edu')
       @image_processing_request.enqueue
       
