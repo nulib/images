@@ -4,6 +4,8 @@ class UploadsController < ApplicationController
   include Hydra::FileAssetsHelper  
   include Hydra::RepositoryController  
   include Blacklight::SolrHelper
+  
+  require 'net/http'
  
   skip_before_filter :verify_authenticity_token, :only=>[:update_status]
   before_filter :authenticate_user!, :except=>[:update_status]
@@ -43,12 +45,11 @@ class UploadsController < ApplicationController
     
     current_user.upload_files.each do |file|
       #create file on server from Fedora object datastream
-      new_filepath="/usr/local/rails_uploaded_images/" + file.pid.gsub!(":","") + ".jpg"
-      logger.debug("filepath: " + new_filepath)
+      new_filepath="/usr/local/rails_uploaded_images/" + file.pid.gsub(":","") + ".jpg"
       
       Net::HTTP.start("127.0.0.1", 8983) { |http|
         resp = http.get("/fedora/objects/" + file.pid + "/datastreams/raw/content")
-        
+        logger.debug("response:" + resp.to_s) 
         open(new_filepath ,"wb") { |new_file|
           new_file.write(resp.body)
         }
