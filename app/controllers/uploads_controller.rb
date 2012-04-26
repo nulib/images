@@ -58,7 +58,7 @@ class UploadsController < ApplicationController
       FileUtils.chmod(0755, new_filepath)
       
       @image_processing_request = ImageProcessingRequest.create!(:status => 'NEW', :pid=>file.pid, :email => 'm-stroming@northwestern.edu')
-      @image_processing_request.enqueue
+      #@image_processing_request.enqueue
       
       # call CGI script with file location (path, name and id)
       # CGI on gandalf will pull file from shirley
