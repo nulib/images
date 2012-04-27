@@ -1,18 +1,18 @@
 development:  
-  host: ec2-107-20-53-121.compute-1.amazonaws.com
+  host: pesto.library.northwestern.edu
   port: 389
-  username: cn=admin,dc=example,dc=com
-  password: simple77
-  group_base: ou=Groups,dc=example,dc=com
-  base: dc=example,dc=com
+  username: cn=Manager,dc=library,dc=northwestern,dc=edu
+  password: abba
+  group_base: ou=groups,dc=library,dc=northwestern,dc=edu
+  base: ou=people,dc=northwestern,dc=edu
   uid: uid
 test:  
-  host: ec2-107-20-53-121.compute-1.amazonaws.com
+  host: pesto.library.northwestern.edu
   port: 389
-  username: cn=admin,dc=example,dc=com
-  password: simple77
-  group_base: ou=Groups,dc=example,dc=com
-  base: dc=example,dc=com
+  username: cn=Manager,dc=library,dc=northwestern,dc=edu
+  password: abba
+  group_base: ou=groups,dc=library,dc=northwestern,dc=edu
+  base: ou=people,dc=northwestern,dc=edu
   uid: uid
 production:  
   host: ec2-107-20-53-121.compute-1.amazonaws.com
