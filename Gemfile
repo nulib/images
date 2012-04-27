@@ -10,7 +10,7 @@ source 'http://rubygems.org'
   # You are free to implement your own User/Authentication solution in its place.
   gem 'devise'
   gem 'omniauth-ldap'
-
+  gem 'mysql2'
 
 # Gems used only for assets and not required
 # in production environments by default.
