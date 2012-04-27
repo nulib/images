@@ -1,5 +1,5 @@
 require 'blacklight/catalog'
-
+#test git push
 class CatalogController < ApplicationController  
 
   include Blacklight::Catalog
