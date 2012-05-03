@@ -167,8 +167,8 @@ PersistenceManager.saveCrop = function(crop)
 	// TODO: Site URL for xlink:href element...
 
 	prefix += '<image style="overflow: auto" height="' + ImageServer.details.o_height + '" width="'
-				 + ImageServer.details.o_width + '" xlink:href="http://example.com/ImageServer/imageserver?viewwidth=' +
-				 + Math.floor(ImageServer.details.o_width / 10) + "&amp;viewheight=" 
+				 + ImageServer.details.o_width + '" xlink:href="***REMOVED***' +
+                                 + Math.floor(ImageServer.details.o_width / 10) + "&amp;viewheight=" 
 				 + Math.floor(ImageServer.details.o_height / 10) +"&amp;filename=" + ImageServer.imagePath + '" />';
 
 	var suffix = '</svg>';
