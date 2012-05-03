@@ -260,29 +260,23 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
         xml.vra("xmlns"=>"http://www.vraweb.org/vracore4.htm", "xmlns:vra"=>"http://www.vraweb.org/vracore4.htm",
 		   "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance",
            "xsi:schemaLocation"=>"http://www.loc.gov/standards/vracore/vra.xsd") {
-           xml.titleSet {
+           xml.parent.namespace = xml.parent.namespace_definitions.find{|ns|ns.prefix=="vra"}
+           
+           xml['vra'].image{
+           
+           xml['vra'].agentSet {
 				xml.display_
-				xml.title(:pref=>"true")
-		   }
-		   xml.agentSet {
-				xml.display_
-		   }
-		   xml.relationSet {
-				xml.display_
-				xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
-		   }
-		   
-		   xml.descriptionSet {
-				xml.display_
-				xml.description
+				xml.agent {
+				 xml.name
+				 xml.attribution
+			    }
 		   }
 		   
-		   xml.inscriptionSet {
+		   xml['vra'].culturalContextSet {
 				xml.display_
-				xml.inscription
 		   }
 		   
-		    xml.dateSet {
+		   xml['vra'].dateSet {
 				xml.display_ {
 				  xml.date{
 		            xml.dateContent
@@ -292,6 +286,49 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
                   }
 				}
 		   }
+		   
+		    xml['vra'].descriptionSet {
+				xml.display_
+				xml.description
+		   }
+		   
+		    xml['vra'].inscriptionSet {
+				xml.display_
+				xml.inscription
+		   }
+		   
+		   
+		   xml['vra'].relationSet {
+				xml.display_
+				xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
+		   }
+		   
+		   xml['vra'].stylePeriodSet {
+				xml.display_
+				xml.stylePeriod
+		   }
+		   
+		   xml['vra'].subjectSet {
+				xml.display_
+				xml.subject
+		   }
+		   
+		   xml['vra'].techniqueSet {
+				xml.display_
+				xml.technique
+		   }
+		   
+           xml['vra'].titleSet {
+				xml.display_
+				xml.title(:pref=>"true")
+		   }
+		   
+		   xml['vra'].worktypeSet {
+				xml.display_
+				xml.worktype
+		   }
+		
+		 }
 		}
       end
       return builder.doc
