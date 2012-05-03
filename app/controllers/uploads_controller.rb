@@ -31,6 +31,7 @@ class UploadsController < ApplicationController
     @image = Multiresimage.create()
     @image.attach_file(params[:files])
     @image.apply_depositor_metadata(current_user.uid)
+    @image.titleSet_display = current_user.uid + " " + params[:files][0].original_filename
     @image.save!
     UploadFile.create(:user=>current_user, :pid=>@image.pid)
     respond_to do |format|
