@@ -378,8 +378,9 @@ module DIL
     end
 
     def mint_pid()
-      pid_mint_url="http://www.example.com/cgi-bin/drupal_to_repo/mint_pid.cgi?prefix=dil-"
-      Net::HTTP.get_response(URI.parse(pid_mint_url)).body.strip
+      pid_mint_url="http://gandalf.library.northwestern.edu/cgi-bin/drupal_to_repo/mint_pid.cgi?prefix=dil-" 
+      pid = Net::HTTP.get_response(URI.parse(pid_mint_url)).body.strip
+      #return pid
     end
   
     # This method will create a VRA Image object in Fedora.
