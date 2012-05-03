@@ -1,6 +1,6 @@
 development:  
   host: pesto.library.northwestern.edu
-  port: 636
+  port: 389
   username: cn=Manager,dc=library,dc=northwestern,dc=edu
   password: abba
   group_base: ou=groups,dc=library,dc=northwestern,dc=edu
@@ -8,7 +8,7 @@ development:
   uid: uid
 test:  
   host: pesto.library.northwestern.edu
-  port: 636
+  port: 389
   username: cn=Manager,dc=library,dc=northwestern,dc=edu
   password: abba
   group_base: ou=groups,dc=library,dc=northwestern,dc=edu
