@@ -10,7 +10,7 @@ module Dil
 
     def self.ldap_connection_config
       return @ldap_connection_config if @ldap_connection_config
-      @ldap_connection_config = {:auth=>{:method=>:simple},:encryption=>{:method => :simple_tls}}
+      @ldap_connection_config = {:auth=>{:method=>:simple}}
       yml = ldap_config
       @ldap_connection_config[:host] = yml[:host]
       @ldap_connection_config[:port] = yml[:port]
