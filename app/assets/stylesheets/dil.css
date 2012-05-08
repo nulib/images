@@ -1,9 +1,41 @@
+
+.pagination .prev_page {
+    border-bottom: medium none;
+    left: 26%;
+    margin-left: 1em;
+    position: right;
+}
+
+
+.pagination .next_page {
+    border-bottom: medium none;
+    right: 2.5%;
+    margin-left: 1em;
+    position: right;
+}
+
+
+span.page a, span.page.current {
+    border-bottom: medium none;
+    padding: 0.5em 0.5em;
+    float: left;
+    left: 50%;
+    text-decoration: none;
+}
+
+
+span.page.gap {
+    vertical-align: bottom;
+    float: left;
+}
+
+
 .listing
 {
         float: left;
         margin: 10px 10px 10px 10px;
         padding: 8px;
-         border: 1px dotted #cccccc;
+        border: 1px dotted #cccccc;
         width: 150px;
         height: 180px;
 }
