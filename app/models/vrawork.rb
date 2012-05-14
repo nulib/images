@@ -15,6 +15,7 @@ class Vrawork  < ActiveFedora::Base
 #	has_metadata :name => "VRA", :type => Hydra::VRAWorkDatastream 
    has_metadata :name => "VRA", :type => VRADatastream
 
+
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => ActiveFedora::MetadataDatastream do |m|
     m.field 'collection', :string
@@ -27,9 +28,33 @@ class Vrawork  < ActiveFedora::Base
   delegate :descriptionSet_display, :to=>:VRA, :unique=>true
   delegate :subjectSet_display, :to=>:VRA, :unique=>true
   delegate :culturalContextSet_display, :to=>:VRA, :unique=>true
+  #delegate :ref_id, :to=>:VRA, :unique=>true
 
-  def initialize( attrs={} )
-    super
-  end 
+  #def initialize( attrs={} )
+   # super
+  #end
+  
+  # The xml_template uses the vra:image tags when creating the vra work
+  #
+  def update_vra_work_tag
+    vra_xml = self.datastreams["VRA"].content.gsub("<vra:image","<vra:work")
+    vra_xml = vra_xml.gsub!("</vra:image>","</vra:work>")
+    self.datastreams["VRA"].content = vra_xml
+    self.save!
+  end
+  
+  def update_ref_id(ref_id)
+    node = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
+    node[0].set_attribute("refid", ref_id)
+    self.save!
+  end
+  
+  def update_relation_set(image_pid)
+    node = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:relationSet/vra:relation')
+    node[0].set_attribute("pref", "true")
+    node[0].set_attribute("relids", image_pid)
+    node[0].set_attribute("type", "imageIs")
+    self.save!
+  end
   
 end
