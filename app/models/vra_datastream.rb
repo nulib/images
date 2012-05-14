@@ -262,7 +262,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
            "xsi:schemaLocation"=>"http://www.loc.gov/standards/vracore/vra.xsd") {
            xml.parent.namespace = xml.parent.namespace_definitions.find{|ns|ns.prefix=="vra"}
            
-           xml['vra'].image{
+           xml['vra'].image(:refid=>""){
            
            xml['vra'].agentSet {
 				xml.display_
