@@ -37,7 +37,6 @@ class UploadsController < ApplicationController
     @image.attach_file(params[:files])
     @image.apply_depositor_metadata(current_user.uid)
     @image.titleSet_display = titleSet_display
-    @image.update_ref_id(@image.pid)
     @image.save!
     
     # create the Vrawork
@@ -54,6 +53,7 @@ class UploadsController < ApplicationController
     @work.update_vra_work_tag
     
     #update the refid field in the vra xml
+    @image.update_ref_id(@image.pid)
     @work.update_ref_id(@work.pid)
     
     #update the relation set in the vra xml for the image and work
