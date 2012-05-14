@@ -27,12 +27,39 @@ class UploadsController < ApplicationController
     end
   end
 
+  # After the image is uploaded, create Multiresimage and Vrawork Fedora objects
   def create
+  
+    titleSet_display = current_user.uid + " " + params[:files][0].original_filename
+    
+    # create the Multiresimage
     @image = Multiresimage.create()
     @image.attach_file(params[:files])
     @image.apply_depositor_metadata(current_user.uid)
-    @image.titleSet_display = current_user.uid + " " + params[:files][0].original_filename
+    @image.titleSet_display = titleSet_display
+    @image.update_ref_id(@image.pid)
     @image.save!
+    
+    # create the Vrawork
+    @work = Vrawork.create()
+    @work.apply_depositor_metadata(current_user.uid)
+    @work.titleSet_display = titleSet_display
+    @work.datastreams["properties"].delete
+    
+    #need to save the object before updating it's vra xml
+    @work.save!
+    
+    #update the Vrawork's VRA xml
+    #note: the xml_template creates the VRA xml for a VRA image.  Update the vra:image tags to vra:work
+    @work.update_vra_work_tag
+    
+    #update the refid field in the vra xml
+    @work.update_ref_id(@work.pid)
+    
+    #update the relation set in the vra xml for the image and work
+    @image.update_relation_set(@work.pid)
+    @work.update_relation_set(@image.pid)
+    
     UploadFile.create(:user=>current_user, :pid=>@image.pid)
     respond_to do |format|
       format.json {  
