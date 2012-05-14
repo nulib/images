@@ -44,16 +44,16 @@ class Vrawork  < ActiveFedora::Base
   end
   
   def update_ref_id(ref_id)
-    node = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
-    node[0].set_attribute("refid", ref_id)
+    node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
+    node_set[0].set_attribute("refid", ref_id)
     self.save!
   end
   
   def update_relation_set(image_pid)
-    node = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:relationSet/vra:relation')
-    node[0].set_attribute("pref", "true")
-    node[0].set_attribute("relids", image_pid)
-    node[0].set_attribute("type", "imageIs")
+    node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:relationSet/vra:relation')
+    node_set[0].set_attribute("pref", "true")
+    node_set[0].set_attribute("relids", image_pid)
+    node_set[0].set_attribute("type", "imageIs")
     self.save!
   end
   
