@@ -42,6 +42,7 @@ class Multiresimage < ActiveFedora::Base
   delegate :descriptionSet_display, :to=>:VRA, :unique=>true
   delegate :subjectSet_display, :to=>:VRA, :unique=>true
   delegate :culturalContextSet_display, :to=>:VRA, :unique=>true
+  delegate :techniqueSet_display, :to=>:VRA, :unique=>true
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
 
