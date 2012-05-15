@@ -85,6 +85,10 @@ class Multiresimage < ActiveFedora::Base
     self.save!
   end
   
+  def get_work_pid
+    self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
+  end
+  
   private
 
   ## Produce a unique filename that doesn't already exist.
