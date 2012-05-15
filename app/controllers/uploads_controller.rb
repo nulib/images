@@ -40,7 +40,7 @@ class UploadsController < ApplicationController
     
     @work = Vrawork.create()
     
-    @image.add_relationship("is_image_of", "info:fedora/" + @work.pid)
+    @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
    
     @image.save!
     
@@ -49,7 +49,7 @@ class UploadsController < ApplicationController
     @work.apply_depositor_metadata(current_user.uid)
     @work.titleSet_display = titleSet_display
     @work.datastreams["properties"].delete
-    @work.add_relationship("has_image", "info:fedora/" + @image.pid)
+    @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
     
     #need to save the object before updating it's vra xml
     @work.save!
