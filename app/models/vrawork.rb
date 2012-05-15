@@ -4,6 +4,7 @@ class Vrawork  < ActiveFedora::Base
   include ActiveFedora::Relationships
   
   has_relationship "parts", :is_part_of, :inbound => true
+  has_many :multiresimages, :class => "Multiresimage", :property=> :has_image
   
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
