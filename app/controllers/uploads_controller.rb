@@ -45,7 +45,7 @@ class UploadsController < ApplicationController
     @image.save!
     
     # create the Vrawork
-    @work = Vrawork.create()
+    #@work = Vrawork.create()
     @work.apply_depositor_metadata(current_user.uid)
     @work.titleSet_display = titleSet_display
     @work.datastreams["properties"].delete
