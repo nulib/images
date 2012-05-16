@@ -59,7 +59,8 @@ class Vrawork  < ActiveFedora::Base
   end
   
    def update_agent_set(agent_set_display)
-     self.agentSet_display = agent_set_display 
+    node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:agentSet/vra:display')
+    logger.debug("NODESET:" + node_set.to_s)
    end
   
 end
