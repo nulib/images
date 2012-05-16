@@ -74,7 +74,7 @@ class Multiresimage < ActiveFedora::Base
   def update_ref_id(ref_id)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
     node_set[0].set_attribute("refid", ref_id)
-    self.save!
+    #self.save!
   end
   
   def update_relation_set(work_pid)
@@ -83,7 +83,7 @@ class Multiresimage < ActiveFedora::Base
     node_set[0].set_attribute("relids", work_pid)
     node_set[0].set_attribute("type", "imageOf")
     node_set[0].set_attribute("label", "Image")
-    self.save!
+    #self.save!
   end
   
   def get_work_pid
