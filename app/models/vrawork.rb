@@ -58,8 +58,8 @@ class Vrawork  < ActiveFedora::Base
 	#self.save!
   end
   
-   def update_agent_set(image_pid)
-    
-  end
+   def update_agent_set(agent_set_display)
+     self.agentSet_display = agent_set_display 
+   end
   
 end
