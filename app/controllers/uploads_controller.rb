@@ -42,7 +42,7 @@ class UploadsController < ApplicationController
     
     @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
    
-    @image.save!
+    #@image.save!
     
     # create the Vrawork
     #@work = Vrawork.create()
@@ -66,6 +66,8 @@ class UploadsController < ApplicationController
     @image.update_relation_set(@work.pid)
     @work.update_relation_set(@image.pid)
     
+    @image.save!
+    @work.save!
     UploadFile.create(:user=>current_user, :pid=>@image.pid)
     respond_to do |format|
       format.json {  
