@@ -23,4 +23,13 @@ class DILCollection < ActiveFedora::Base
     members.insert_member(:member_id=>image.pid, :member_title=>image.titleSet_display)
   end
   
+  def export_pids_as_xml
+    export_xml = "<collection>"
+    self.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
+      export_xml << pid
+    end
+    export_xml << "</collection>"
+    return export_xml
+  end
+  
 end
