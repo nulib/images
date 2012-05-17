@@ -1,12 +1,14 @@
 require 'dil/multiresimage_service'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
+  #include Vrawork
 
   respond_to :html, :xml
 
   def destroy
     obj = Multiresimage.find(params[:id])
     authorize! :destroy, obj
+    obj.vrawork[0].delete
     obj.delete
     selected_files.delete(params[:id])
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
@@ -50,11 +52,26 @@ class MultiresimagesController < ApplicationController
       @multiresimage.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
     end
     @multiresimage.update_attributes(params[:multiresimage])
+        
+    #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
+    @vra_work = @multiresimage.vrawork[0]
+    @vra_work.agentSet_display_work = params[:multiresimage]['agentSet_display']
+    @vra_work.dateSet_display_work = params[:multiresimage]['dateSet_display']
+    @vra_work.descriptionSet_display_work = params[:multiresimage]['descriptionSet_display']
+    @vra_work.subjectSet_display_work = params[:multiresimage]['subjectSet_display']
+    @vra_work.titleSet_display_work = params[:multiresimage]['titleSet_display']
+
+    
+    @vra_work.save!
+   
     if @multiresimage.save
       flash[:notice] = "Saved changes to #{@multiresimage.id}"
     else
       flash[:alert] = "Failed to save your changes!"
     end
+    
+
+    
     redirect_to edit_multiresimage_path(@multiresimage)
   end
    
