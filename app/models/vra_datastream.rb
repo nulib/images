@@ -237,9 +237,16 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	t.descriptionSet_display(:proxy=>[:image, :descriptionSet, :descriptionSet_display])
 	t.inscriptionSet_display(:proxy=>[:image, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display(:proxy=>[:image, :dateSet, :dateSet_display])
-
 	t.subjectSet_display(:proxy=>[:image, :subjectSet, :subjectSet_display])
 	t.culturalContextSet_display(:proxy=>[:image, :culturalContextSet, :culturalContextSet_display])
+	
+	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
+	t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
+	t.descriptionSet_display_work(:proxy=>[:work, :descriptionSet, :descriptionSet_display])
+	t.inscriptionSet_display_work(:proxy=>[:work, :inscriptionSet, :inscriptionSet_display])
+	t.dateSet_display_work(:proxy=>[:work, :dateSet, :dateSet_display])
+	t.subjectSet_display_work(:proxy=>[:work, :subjectSet, :subjectSet_display])
+	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 
 	
   end
@@ -457,8 +464,9 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 		arraySet = extract_subjectSet
 		search_field << extract_values_for_search_field(arraySet)
 		solr_doc = solr_doc.merge(arraySet) { |field_name, oldval, newval|  oldval | newval }
-	  
-	    search_field_hash = Hash["search_field_t" => search_field]	    
+	    
+	    search_field_hash = Hash["search_field_t" => search_field]
+	    #logger.debug("searchFieldT: " + search_field_hash.to_s)
 	    solr_doc = solr_doc.merge(search_field_hash)
 
 		solr_doc
