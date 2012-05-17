@@ -37,17 +37,14 @@ class UploadsController < ApplicationController
     @image.attach_file(params[:files])
     @image.apply_depositor_metadata(current_user.uid)
     @image.titleSet_display = titleSet_display
+    @image.save!
     
     @work = Vrawork.create()
     
     @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
-   
-    #@image.save!
     
-    # create the Vrawork
-    #@work = Vrawork.create()
     @work.apply_depositor_metadata(current_user.uid)
-    @work.titleSet_display = titleSet_display
+    
     @work.datastreams["properties"].delete
     @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
     
@@ -58,6 +55,8 @@ class UploadsController < ApplicationController
     #note: the xml_template creates the VRA xml for a VRA image.  Update the vra:image tags to vra:work
     @work.update_vra_work_tag
     
+    @work.titleSet_display_work = titleSet_display
+    
     #update the refid field in the vra xml
     @image.update_ref_id(@image.pid)
     @work.update_ref_id(@work.pid)
@@ -66,8 +65,9 @@ class UploadsController < ApplicationController
     @image.update_relation_set(@work.pid)
     @work.update_relation_set(@image.pid)
     
-    @image.save!
     @work.save!
+    @image.save!
+    
     UploadFile.create(:user=>current_user, :pid=>@image.pid)
     respond_to do |format|
       format.json {  
