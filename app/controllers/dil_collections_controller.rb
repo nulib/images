@@ -69,5 +69,20 @@ class DilCollectionsController < ApplicationController
     @collection = DILCollection.find(params[:id])
     authorize! :edit, @collection
   end
+  
+  def export
+    @collection = DILCollection.find(params[:id])
+    authorize! :update, @collection
+    read_groups = params[:dil_collection].delete(:read_groups)
+    if read_groups.present?
+      eligible = current_user.owned_groups.map(&:code)
+      @collection.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
+    end
+    export_xml = @collection.export_pids_as_xml
+    
+    flash[:notice] = "Saved changes to #{@collection.title}"
+    
+    redirect_to edit_dil_collection_path(@collection)
+  end
 
 end
