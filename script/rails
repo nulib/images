@@ -20,9 +20,9 @@ module Rails
                 :SSLEnable => true,
                 :SSLVerifyClient => OpenSSL::SSL::VERIFY_NONE,
                 :SSLPrivateKey => OpenSSL::PKey::RSA.new(
-                       File.open("/root/cecil.key").read),
+                       File.open("config/cecil.key").read),
                 :SSLCertificate => OpenSSL::X509::Certificate.new(
-                       File.open("/root/cecil.crt").read),
+                       File.open("config/cecil.crt").read),
                 :SSLCertName => [["CN", WEBrick::Utils::getservername]]
             })
         end
