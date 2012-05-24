@@ -99,7 +99,7 @@ class DilCollectionsController < ApplicationController
     #client = Stomp::Client.new("", "", "stomp://129.105.203.30", 61613)
     #client.send("/queue/hydra.export", export_xml)
 
-    flash[:notice] = "Saved changes to #{@collection.title}"
+    flash[:notice] = "Collection exported"
     
     redirect_to edit_dil_collection_path(@collection)
   end
