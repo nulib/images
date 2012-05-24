@@ -17,7 +17,11 @@ DIL::Application.routes.draw do
     end
   end
   
-  resources :dil_collections
+  resources :dil_collections #do
+   # member do
+     # post 'export'
+    #end
+  #end 
   
   
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
@@ -28,7 +32,7 @@ DIL::Application.routes.draw do
   match "dil_collections/remove/:id/:pid" => "dil_collections#remove"
   match "dil_collections/new" => "dil_collections#new"
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
-  match "dil_collections/export/:id" => "dil_collections#export"
+  match "dil_collections/export/:id" => "dil_collections#export", :via => :post
 
   resources :uploads, :only => [:index] do
     collection do
