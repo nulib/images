@@ -29,38 +29,34 @@
       <div>
         PID: <%= @multiresimage.id %>
       </div>
+      <br/>
       <div class="control-group">
-        <%= f.label :agentSet_display, :class=>"control-label" %>
+        <%= f.label 'Agent', :class=>"control-label" %>
         <div class="controls">
           <%= f.text_field :agentSet_display, :class=>'span6' %>
         </div>
       </div>
       <div class="control-group">
-        <%= f.label :dateSet_display, :class=>"control-label" %>
+        <%= f.label 'Date', :class=>"control-label" %>
         <div class="controls">
         <%= f.text_field :dateSet_display, :class=>'span6' %>
         </div>
       </div>
       <div class="control-group">
-        <%= f.label :descriptionSet_display, :class=>"control-label" %>
+        <%= f.label 'Description', :class=>"control-label" %>
         <div class="controls">
           <%= f.text_field :descriptionSet_display, :class=>'span6' %>
         </div>
       </div>
        <div class="control-group">
-        <%= f.label :subjectSet_display, :class=>"control-label" %>
+        <%= f.label 'Subject', :class=>"control-label" %>
         <div class="controls">
           <%= f.text_field :subjectSet_display, :class=>'span6' %>
         </div>
       </div>
+      
       <div class="control-group">
-        <%= f.label :techniqueSet_display, :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :techniqueSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label :titleSet_display, :class=>"control-label" %>
+        <%= f.label 'Title', :class=>"control-label" %>
         <div class="controls">
           <%= f.text_field :titleSet_display, :class=>'span6' %>
         </div>
