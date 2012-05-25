@@ -14,100 +14,99 @@ module DIL
         #default return xml
         returnXml = "<response><returnCode>403</returnCode></response>"
         #if request is coming from these IP's, all other ip's will return with the 403 error xml)
-        if !request.remote_ip.nil? and !request.remote_ip.empty?
-      
-        #update returnXml (this is the error xml, will be updated if success)
-        returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
-      
-        #read in the xml from the POST request
-        xml = request.body.read
-
-        #make sure xml is not nil and not empty
-        if !xml.nil? and !xml.empty? 
-          #load xml into Nokogiri XML document
-          document = Nokogiri::XML(xml)
-          vra_type = ""
-          pid = ""
-          
-          #pid might be a query param
-          #debugger
-          if !params[:pid].nil? and !params[:pid].empty?
-            pid = params[:pid]
-          end
-          
-          #determine if xml represents VRA work or VRA image by running xpath query and checking the result
-          if !document.xpath("/vra:vra/vra:work").nil? and !document.xpath("/vra:vra/vra:work").empty?
-            #debugger
-            vra_type = "work"
-            #attempt to extract the pid by running xpath query
-            if pid.nil? or pid.empty?
-              pid = document.xpath("/vra:vra/vra:work/@vra:refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
-              if pid.nil? or pid.empty?
-                pid = document.xpath("/vra:vra/vra:work/@refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
-              end
-            end
-          elsif !document.xpath("/vra:vra/vra:image").nil? and !document.xpath("/vra:vra/vra:image").empty?
-            #debugger
-            vra_type = "image"
-            #attempt to extract the pid by running xpath query
-            if pid.nil? or pid.empty?
-              pid = document.xpath("/vra:vra/vra:image/@vra:refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
-              if pid.nil? or pid.empty?
-                pid = document.xpath("/vra:vra/vra:image/@refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
-              end
-            end
-          end
-          
-          #if no pid was in the xml, then create a new Fedora object
-          if pid.nil? or pid.empty?
-            #mint a pid
-            pid = mint_pid()
-            #if pid was minted successfully
-            if !pid.nil? and !pid.empty?
-            
-              if vra_type == "image"
-                #create Fedora object for VRA Image, calls method in helper
-                #debugger
-                returnXml = create_vra_image_fedora_object(pid, document)
-              elsif vra_type == "work"
-                #create Fedora object for VRA Work, calls method in helper
-                #debugger
-                returnXml = create_vra_work_fedora_object(pid, document)	           
-              end
-            
-            end     
-    
-      
-        #pid was in xml so update the existing Fedora object if the object exists, or create the object if it doesn't exist
-          #(a pid might have been minted before this web service was called)
-          else
-            #if object doesn't exist in Fedora, create the object
-            if ActiveFedora::Base.find(pid).nil?
-              #create the object
-              if vra_type == "image"
-                returnXml = create_vra_image_fedora_object(pid, document)
-              elsif vra_type == "work"
-                returnXml = create_vra_work_fedora_object(pid, document)
-              end
-            else
-              #object already exists, update the object
-              returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
-            end
-            
-            #if a work, get a list of it's related images, and re-index those images (because work info
-            #is indexed with the image, need to update the image index after the work index has been updated)
-            if vra_type == "work"
-              (solr_response, document_list) = get_related_images_from_controller(pid)
-              document_list.each { |i|
-                #load fedora object for the image
-                fedora_object = ActiveFedora::Base.find(i.id, :cast=>true)
-                #update it's solr index
-                fedora_object.update_index()
-              }
-            end
-         end #end pid if-else
-      
-         end #end xml_params if
+        if !request.remote_ip.nil? and !request.remote_ip.empty? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "127.0.0.1")
+			#update returnXml (this is the error xml, will be updated if success)
+			returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
+		  
+			#read in the xml from the POST request
+			xml = request.body.read
+	
+			#make sure xml is not nil and not empty
+			if !xml.nil? and !xml.empty? 
+			  #load xml into Nokogiri XML document
+			  document = Nokogiri::XML(xml)
+			  vra_type = ""
+			  pid = ""
+			  
+			  #pid might be a query param
+			  #debugger
+			  if !params[:pid].nil? and !params[:pid].empty?
+				pid = params[:pid]
+			  end
+			  
+			  #determine if xml represents VRA work or VRA image by running xpath query and checking the result
+			  if !document.xpath("/vra:vra/vra:work").nil? and !document.xpath("/vra:vra/vra:work").empty?
+				#debugger
+				vra_type = "work"
+				#attempt to extract the pid by running xpath query
+				if pid.nil? or pid.empty?
+				  pid = document.xpath("/vra:vra/vra:work/@vra:refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
+				  if pid.nil? or pid.empty?
+					pid = document.xpath("/vra:vra/vra:work/@refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
+				  end
+				end
+			  elsif !document.xpath("/vra:vra/vra:image").nil? and !document.xpath("/vra:vra/vra:image").empty?
+				#debugger
+				vra_type = "image"
+				#attempt to extract the pid by running xpath query
+				if pid.nil? or pid.empty?
+				  pid = document.xpath("/vra:vra/vra:image/@vra:refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
+				  if pid.nil? or pid.empty?
+					pid = document.xpath("/vra:vra/vra:image/@refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
+				  end
+				end
+			  end
+			  
+			  #if no pid was in the xml, then create a new Fedora object
+			  if pid.nil? or pid.empty?
+				#mint a pid
+				pid = mint_pid()
+				#if pid was minted successfully
+				if !pid.nil? and !pid.empty?
+				
+				  if vra_type == "image"
+					#create Fedora object for VRA Image, calls method in helper
+					#debugger
+					returnXml = create_vra_image_fedora_object(pid, document)
+				  elsif vra_type == "work"
+					#create Fedora object for VRA Work, calls method in helper
+					#debugger
+					returnXml = create_vra_work_fedora_object(pid, document)	           
+				  end
+				
+				end     
+		
+		  
+			#pid was in xml so update the existing Fedora object if the object exists, or create the object if it doesn't exist
+			  #(a pid might have been minted before this web service was called)
+			  else
+				#if object doesn't exist in Fedora, create the object
+				if ActiveFedora::Base.find(pid).nil?
+				  #create the object
+				  if vra_type == "image"
+					returnXml = create_vra_image_fedora_object(pid, document)
+				  elsif vra_type == "work"
+					returnXml = create_vra_work_fedora_object(pid, document)
+				  end
+				else
+				  #object already exists, update the object
+				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				end
+				
+				#if a work, get a list of it's related images, and re-index those images (because work info
+				#is indexed with the image, need to update the image index after the work index has been updated)
+				if vra_type == "work"
+				  (solr_response, document_list) = get_related_images_from_controller(pid)
+				  document_list.each { |i|
+					#load fedora object for the image
+					fedora_object = ActiveFedora::Base.find(i.id, :cast=>true)
+					#update it's solr index
+					fedora_object.update_index()
+				  }
+				end
+			 end #end pid if-else
+		  
+			 end #end xml_params if
      
        end #end request_ip if
     
@@ -181,16 +180,19 @@ module DIL
       begin #for exception handling
         #default return xml
         returnXml = "<response><returnCode>403</returnCode></response>"
-        if !request.remote_ip.nil? and !request.remote_ip.empty?
-        #update returnXml (this is the error xml, will be updated if success)
-        returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
-        #read in the xml from the POST request
-        #xml = request.body.read
-        #make sure pid, datstream name, datastream label and datastream location are not nil and not empty
-        if !params[:pid].nil? and !params[:pid].empty? and !params[:ds_name].nil? and !params[:ds_name].empty? and !params[:ds_label].nil? and !params[:ds_label].empty? and !params[:ds_location].nil? and !params[:ds_location].empty? and !params[:mime_type].nil? and !params[:mime_type].empty?
-            #calls method in helper
-            returnXml = add_external_ds(params[:pid], params[:ds_name], params[:ds_label], params[:ds_location], params[:mime_type])
-         end #end xml_params if
+        
+        if !request.remote_ip.nil? and !request.remote_ip.empty? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "127.0.0.1")
+		
+			#update returnXml (this is the error xml, will be updated if success)
+			returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
+			
+			#read in the xml from the POST request
+			#xml = request.body.read
+			#make sure pid, datstream name, datastream label and datastream location are not nil and not empty
+			if !params[:pid].nil? and !params[:pid].empty? and !params[:ds_name].nil? and !params[:ds_name].empty? and !params[:ds_label].nil? and !params[:ds_label].empty? and !params[:ds_location].nil? and !params[:ds_location].empty? and !params[:mime_type].nil? and !params[:mime_type].empty?
+				#calls method in helper
+				returnXml = add_external_ds(params[:pid], params[:ds_name], params[:ds_label], params[:ds_location], params[:mime_type])
+			 end #end xml_params if
      
        end #end request_ip if
     
@@ -222,15 +224,17 @@ module DIL
       begin #for exception handling
         #default return xml
         returnXml = "<response><returnCode>403</returnCode></response>"
-         if !request.remote_ip.nil? and !request.remote_ip.empty?
+        
+        if !request.remote_ip.nil? and !request.remote_ip.empty? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "127.0.0.1")
+        
         #update returnXml (this is the error xml, will be updated if success)
         returnXml = "<response><returnCode>Error: The object was not deleted.</returnCode><pid/></response>"
     
-          if !params[:pid].nil? and !params[:pid].empty?
-            fedora_object = ActiveFedora::Base.find(params[:pid], :cast=>true)
-            fedora_object.delete
-          returnXml = "<response><returnCode>Delete successful</returnCode><pid>" + params[:pid] + "</pid></response>"
-            end
+		  if !params[:pid].nil? and !params[:pid].empty?
+			fedora_object = ActiveFedora::Base.find(params[:pid], :cast=>true)
+			fedora_object.delete
+		  returnXml = "<response><returnCode>Delete successful</returnCode><pid>" + params[:pid] + "</pid></response>"
+			end
        
        end #end request_ip if
     
@@ -263,49 +267,50 @@ module DIL
         
         returnXml = "<response><returnCode>403</returnCode></response>"
        
-        if !request.remote_ip.nil? and !request.remote_ip.empty? 
-        #update returnXml (this is the error xml, will be updated if success)
-        returnXml = "<response><returnCode>Error: The object was not cloned.</returnCode><pid/></response>"
-        
-          if !params[:pid].nil? and !params[:pid].empty?
-            
-            pid = params[:pid]
-          
-        orig_fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
-          
-        #mint a pid
-        new_pid = mint_pid()
-          
-        # create new Fedora object with minted pid
-        new_fedora_object = Vrawork.new({:pid=>new_pid})
-          
-        orig_xml = orig_fedora_object.datastreams["VRA"].content
-    
-        orig_document = Nokogiri::XML(orig_xml)
-        orig_document.xpath("/vra:vra/vra:work/vra:relationSet").remove
-        #orig_document.xpath("/vra:vra/vra:work/vra:locationSet").remove
-          
-        display = orig_document.xpath("/vra:vra/vra:work/vra:locationSet/vra:display").text
-        display = display.gsub(/DIL:.*\s/,'DIL:' + new_pid + ' ; ')
-        orig_document.xpath("/vra:vra/vra:work/vra:locationSet/vra:display")[0].content = display
-          
-        orig_document.xpath("/vra:vra/vra:work/vra:locationSet/vra:location/vra:refid[@source='DIL']").each do |node|
-          node.content = new_pid
-        end
-          
-        id_attr = orig_document.xpath("/vra:vra/vra:work/@id")
-        id_attr[0].remove
-          
-        #set the refid attribute to the new pid
-        orig_document.xpath("/vra:vra/vra:work", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", new_pid)
-        #refid_attr = document.xpath("/vra:vra/vra:work/@refid")
-        #refid_attr[0].value = new_pid
-          
-        new_fedora_object.datastreams["VRA"].content = orig_document.to_s
-        new_fedora_object.save()
-          
-        returnXml = "<response><returnCode>Clone successful</returnCode><pid>" + new_pid + "</pid></response>"
-        end #end if	
+        if !request.remote_ip.nil? and !request.remote_ip.empty? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "127.0.0.1")
+		
+			#update returnXml (this is the error xml, will be updated if success)
+			returnXml = "<response><returnCode>Error: The object was not cloned.</returnCode><pid/></response>"
+			
+			if !params[:pid].nil? and !params[:pid].empty?
+				
+				pid = params[:pid]
+				  
+				orig_fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
+				  
+				#mint a pid
+				new_pid = mint_pid()
+				  
+				# create new Fedora object with minted pid
+				new_fedora_object = Vrawork.new({:pid=>new_pid})
+				  
+				orig_xml = orig_fedora_object.datastreams["VRA"].content
+			
+				orig_document = Nokogiri::XML(orig_xml)
+				orig_document.xpath("/vra:vra/vra:work/vra:relationSet").remove
+				#orig_document.xpath("/vra:vra/vra:work/vra:locationSet").remove
+				  
+				display = orig_document.xpath("/vra:vra/vra:work/vra:locationSet/vra:display").text
+				display = display.gsub(/DIL:.*\s/,'DIL:' + new_pid + ' ; ')
+				orig_document.xpath("/vra:vra/vra:work/vra:locationSet/vra:display")[0].content = display
+				  
+				orig_document.xpath("/vra:vra/vra:work/vra:locationSet/vra:location/vra:refid[@source='DIL']").each do |node|
+				  node.content = new_pid
+				end
+				  
+				id_attr = orig_document.xpath("/vra:vra/vra:work/@id")
+				id_attr[0].remove
+				  
+				#set the refid attribute to the new pid
+				orig_document.xpath("/vra:vra/vra:work", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", new_pid)
+				#refid_attr = document.xpath("/vra:vra/vra:work/@refid")
+				#refid_attr[0].value = new_pid
+				  
+				new_fedora_object.datastreams["VRA"].content = orig_document.to_s
+				new_fedora_object.save()
+				  
+				returnXml = "<response><returnCode>Clone successful</returnCode><pid>" + new_pid + "</pid></response>"
+			end #end if	
      
        end #end request_ip if
     
