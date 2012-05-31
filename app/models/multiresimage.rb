@@ -16,16 +16,22 @@ class Multiresimage < ActiveFedora::Base
   #has_metadata :name => "MODS", :type => ModsArticleDatastream 
 
   # Uses the VRA profile for tracking some of the descriptive metadata
-  has_metadata :name => "VRA", :type => VRADatastream 
+  has_metadata :name => "VRA", :type => VRADatastream, :label=> 'VRA metadata'
 
   # Uses the SVG schema to encode jp2 image path, size, crop, and rotation
-  has_metadata :name => "DELIV-OPS", :type => SVGDatastream 
+  has_metadata :name => "DELIV-OPS", :type => SVGDatastream, :label=>'SVG Datastream'
+  
+  has_metadata :name => "ARCHV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Archive image technical metadata'
+
+  has_metadata :name => "ARCHV-EXIF", :type => ActiveFedora::Datastream, :label=>'Archive image EXIF metadata'
+  
+  has_metadata :name => "DELIV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Image technical metadata'
   
   # External datastream
-  #has_datastream :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+ # has_datastream :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   
   # External datastream
-  #has_metadata :name => "ARCHV-EXIF", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+ # has_metadata :name => "ARCHV-EXIF", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   
   # External datastream
   #has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
