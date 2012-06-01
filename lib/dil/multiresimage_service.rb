@@ -38,7 +38,6 @@ module DIL
 			  
 			  #determine if xml represents VRA work or VRA image by running xpath query and checking the result
 			  if document.xpath("/vra:vra/vra:work").present?
-			    logger.debug("XML_DEBUG_WORK")
 				vra_type = "work"
 				#attempt to extract the pid by running xpath query
 				if !pid.present?
@@ -48,7 +47,6 @@ module DIL
 				  end
 				end
 			  elsif document.xpath("/vra:vra/vra:image").present?
-			    logger.debug("XML_DEBUG_IMAGE")
 				#debugger
 				vra_type = "image"
 				#attempt to extract the pid by running xpath query
@@ -69,13 +67,9 @@ module DIL
 				
 				  if vra_type == "image"
 					#create Fedora object for VRA Image, calls method in helper
-					#debugger
-					logger.debug("CREATE_IMAGE" + pid)
 					returnXml = create_vra_image_fedora_object(pid, document)
 				  elsif vra_type == "work"
 					#create Fedora object for VRA Work, calls method in helper
-					#debugger
-					logger.debug("CREATE_WORK" + pid)
 					returnXml = create_vra_work_fedora_object(pid, document)	           
 				  end
 				
@@ -102,15 +96,15 @@ module DIL
 				
 				#if a work, get a list of it's related images, and re-index those images (because work info
 				#is indexed with the image, need to update the image index after the work index has been updated)
-				if vra_type == "work"
-				  (solr_response, document_list) = get_related_images_from_controller(pid)
-				  document_list.each { |i|
+				#if vra_type == "work"
+				 #(solr_response, document_list) = get_related_images_from_controller(pid)
+				  #document_list.each { |i|
 					#load fedora object for the image
-					fedora_object = ActiveFedora::Base.find(i.id, :cast=>true)
+					#fedora_object = ActiveFedora::Base.find(i.id, :cast=>true)
 					#update it's solr index
-					fedora_object.update_index()
-				  }
-				end
+					#fedora_object.update_index()
+				 # }
+				#end
 			 end #end pid if-else
 		  
 	     end #end xml_params if
@@ -161,11 +155,11 @@ module DIL
     
      rescue ActiveFedora::ObjectNotFoundError => e
         #error xml
-        logger.debug("ActiveFedora::ObjectNotFoundError:" + e.message)
+        logger.error("ActiveFedora::ObjectNotFoundError:" + e.message)
         returnXml = "<response><returnCode>Error: An object with that pid was not found in the repository.</returnCode><pid>" + params[:pid] + "</pid></response>"
       rescue Exception => e
         #error xml
-        logger.debug("Exception:" + e.message)
+        logger.error("Exception:" + e.message)
         returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid>" + params[:pid] + "</pid></response>"
         
       ensure #this will get called even if an exception was raised
@@ -204,13 +198,14 @@ module DIL
      
        end #end request_ip if
     
-     rescue ActiveFedora::ObjectNotFoundError
+     rescue ActiveFedora::ObjectNotFoundError => e
         #error xml
+        logger.error("ActiveFedora::ObjectNotFoundError" + e.message)
         returnXml = "<response><returnCode>Error: An object with that pid was not found in the repository.</returnCode><pid>" + pid + "</pid></response>"
         
-      rescue Exception
+      rescue Exception => e
         #error xml
-        logger.debug("exception 3")
+        logger.error("Exception:" + e.message)
         returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid>" + params[:pid] + "</pid></response>"
         
       ensure #this will get called even if an exception was raised
@@ -247,12 +242,14 @@ module DIL
        
        end #end request_ip if
     
-     rescue ActiveFedora::ObjectNotFoundError
+     rescue ActiveFedora::ObjectNotFoundError => e
         #error xml
+        logger.error("ActiveFedora::ObjectNotFoundError:" + e.message)
         returnXml = "<response><returnCode>Error: An object with that pid was not found in the repository.</returnCode><pid>" + pid + "</pid></response>"
         
-      rescue Exception
+      rescue Exception => e
         #error xml
+        logger.error("Exception:" + e.message)
         returnXml = "<response><returnCode>Error: The object was not deleted.</returnCode><pid>" + params[:pid] + "</pid></response>"
         
       ensure #this will get called even if an exception was raised
@@ -323,12 +320,14 @@ module DIL
      
        end #end request_ip if
     
-     rescue ActiveFedora::ObjectNotFoundError
+     rescue ActiveFedora::ObjectNotFoundError => e
         #error xml
+        logger.error("ActiveFedora::ObjectNotFoundError:" + e.message)
         returnXml = "<response><returnCode>Error: An object with that pid was not found in the repository.</returnCode><pid>" + pid + "</pid></response>"
         
-      rescue Exception
+      rescue Exception => e
         #error xml
+        logger.error("Exception:" + e.message)
         returnXml = "<response><returnCode>Error: The object was not cloned.</returnCode><pid>" + pid + "</pid></response>"
         
       ensure #this will get called even if an exception was raised
@@ -412,9 +411,13 @@ module DIL
               
       #set VRA datastream to the xml document
       fedora_object.datastreams["VRA"].content = document.to_s
+      
+      #set rightsMetadata
+      fedora_object.rightsMetadata
+      fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
             
       #save Fedora object
-      fedora_object.save()
+      fedora_object.save
       logger.debug("create image")
       
       "<response><returnCode>Save successful</returnCode><pid>" + pid + "</pid></response>"
@@ -436,9 +439,13 @@ module DIL
               
       #set VRA datastream to the xml document
       fedora_object.datastreams["VRA"].content = document.to_s
+      
+      #set rightsMetadata
+      fedora_object.rightsMetadata
+      fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
             
       #save Fedora object
-      fedora_object.save()
+      fedora_object.save
       
       "<response><returnCode>Save successful</returnCode><pid>" + pid + "</pid></response>"
     end
@@ -461,9 +468,10 @@ module DIL
         #fedora_object.add_datastream(new_ds)
       #end
       
+      #create datastream
       fedora_object.send(ds_name)
       
-      #debugger
+      #set datastream content
       fedora_object.datastreams[ds_name].content = xml
     
       #save Fedora object
@@ -489,6 +497,7 @@ module DIL
       
       #if datastream doesn't already exist, add_datastream
       if (fedora_object.datastreams[ds_name].nil?)
+        #needs updated syntax
         new_ds = ActiveFedora::Datastream.new(:dsID=>ds_name, :dsLabel=>ds_label, :controlGroup=>"E", :dsLocation=>ds_location, :mimeType=>mime_type)
         fedora_object.add_datastream(new_ds)
       end
