@@ -11,6 +11,7 @@ source 'http://rubygems.org'
   gem 'devise'
   gem 'omniauth-ldap'
   gem 'mysql2'
+  gem 'clamav'
 
 # Gems used only for assets and not required
 # in production environments by default.
