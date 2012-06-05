@@ -28,53 +28,78 @@ class UploadsController < ApplicationController
   end
 
   # After the image is uploaded, create Multiresimage and Vrawork Fedora objects
+  # Called from Jquery uploader, ajax call, respond with JSON
   def create
-  
     titleSet_display = current_user.uid + " " + params[:files][0].original_filename
     
-    # create the Multiresimage
-    @image = Multiresimage.create()
-    @image.attach_file(params[:files])
-    @image.apply_depositor_metadata(current_user.uid)
-    @image.titleSet_display = titleSet_display
-    @image.save!
+    error = false
     
-    @work = Vrawork.create()
     
-    @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
+    #Create ClamAV instance for virus scanning
+    clam = ClamAV.instance
     
-    @work.apply_depositor_metadata(current_user.uid)
+    #Load ClamAV definitions
+    clam.loaddb
     
-    @work.datastreams["properties"].delete
-    @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
+    #Scan file (will return fixnum if ok, string with virus name if not ok)
+    scan_result = clam.scanfile(params[:files][0].tempfile.path)
     
-    #need to save the object before updating it's vra xml
-    @work.save!
+    if (scan_result.is_a? Fixnum)
+      # create the Multiresimage
+      @image = Multiresimage.create()
+      @image.attach_file(params[:files])
+      @image.apply_depositor_metadata(current_user.uid)
+      @image.titleSet_display = titleSet_display
+      @image.save!
     
-    #update the Vrawork's VRA xml
-    #note: the xml_template creates the VRA xml for a VRA image.  Update the vra:image tags to vra:work
-    @work.update_vra_work_tag
+      @work = Vrawork.create()
     
-    @work.titleSet_display_work = titleSet_display
+      @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
     
-    #update the refid field in the vra xml
-    @image.update_ref_id(@image.pid)
-    @work.update_ref_id(@work.pid)
+      @work.apply_depositor_metadata(current_user.uid)
     
-    #update the relation set in the vra xml for the image and work
-    @image.update_relation_set(@work.pid)
-    @work.update_relation_set(@image.pid)
+      @work.datastreams["properties"].delete
+      @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
     
-    @work.save!
-    @image.save!
+      #need to save the object before updating it's vra xml
+      @work.save!
     
-    UploadFile.create(:user=>current_user, :pid=>@image.pid)
-    respond_to do |format|
-      format.json {  
-        render :json => [@image.to_jq_upload].to_json			
-      }
+      #update the Vrawork's VRA xml
+      #note: the xml_template creates the VRA xml for a VRA image.  Update the vra:image tags to vra:work
+      @work.update_vra_work_tag
+    
+      @work.titleSet_display_work = titleSet_display
+    
+      #update the refid field in the vra xml
+      @image.update_ref_id(@image.pid)
+      @work.update_ref_id(@work.pid)
+    
+      #update the relation set in the vra xml for the image and work
+      @image.update_relation_set(@work.pid)
+      @work.update_relation_set(@image.pid)
+    
+      @work.save!
+      @image.save!
+    
+      UploadFile.create(:user=>current_user, :pid=>@image.pid)
+      
+    else
+      error = true
     end
-
+    
+    respond_to do |format|
+       if !error
+        format.json {  
+          render :json => [@image.to_jq_upload].to_json			
+        }
+        #custom error message, responds to AJAX call 
+        else
+          format.json {  
+            render :json => "[{\"error\":\"VIRUS DETECTED\"}]"
+        }
+        end
+    end
+    
   end
 
   def enqueue
