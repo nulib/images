@@ -85,6 +85,7 @@ class UploadsController < ApplicationController
       
     else
       error = true
+      logger.error("VIRUS_DETECTED: #{scan_result} : #{params[:files][0].tempfile.path}")
     end
     
     respond_to do |format|
@@ -106,7 +107,7 @@ class UploadsController < ApplicationController
     
     current_user.upload_files.each do |file|
       #create file on server from Fedora object datastream
-      new_filepath="/usr/local/rails_uploaded_images/" + file.pid.gsub(":","") + ".jpg"
+      new_filepath="/usr/local/rails_uploaded_images/" << file.pid.gsub(":","") << ".jpg"
       
       Net::HTTP.start("127.0.0.1", 8983) { |http|
         resp = http.get("/fedora/objects/" + file.pid + "/datastreams/raw/content")
