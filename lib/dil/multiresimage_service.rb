@@ -413,12 +413,12 @@ module DIL
       fedora_object.datastreams["VRA"].content = document.to_s
       
       #set rightsMetadata
-      fedora_object.rightsMetadata
+      #fedora_object.rightsMetadata
       fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
             
       #save Fedora object
       fedora_object.save
-      logger.debug("create image")
+      logger.debug("created image")
       
       "<response><returnCode>Save successful</returnCode><pid>" + pid + "</pid></response>"
     end
@@ -441,11 +441,12 @@ module DIL
       fedora_object.datastreams["VRA"].content = document.to_s
       
       #set rightsMetadata
-      fedora_object.rightsMetadata
+      #fedora_object.rightsMetadata
       fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
             
       #save Fedora object
       fedora_object.save
+      logger.debug("created work")
       
       "<response><returnCode>Save successful</returnCode><pid>" + pid + "</pid></response>"
     end
@@ -469,14 +470,14 @@ module DIL
       #end
       
       #create datastream
-      fedora_object.send(ds_name)
+      #fedora_object.send(ds_name)
       
       #set datastream content
       fedora_object.datastreams[ds_name].content = xml
     
       #save Fedora object
       #debugger
-      fedora_object.save()
+      fedora_object.save
     
       #update the solr index
       #debugger
@@ -496,14 +497,18 @@ module DIL
       #set datastream to xml from the request
       
       #if datastream doesn't already exist, add_datastream
-      if (fedora_object.datastreams[ds_name].nil?)
+      #if (fedora_object.datastreams[ds_name].nil?)
         #needs updated syntax
-        new_ds = ActiveFedora::Datastream.new(:dsID=>ds_name, :dsLabel=>ds_label, :controlGroup=>"E", :dsLocation=>ds_location, :mimeType=>mime_type)
-        fedora_object.add_datastream(new_ds)
-      end
+        #new_ds = ActiveFedora::Datastream.new(:dsID=>ds_name, :dsLabel=>ds_label, :controlGroup=>"E", :dsLocation=>ds_location, :mimeType=>mime_type)
+        #fedora_object.add_datastream(new_ds)
+        fedora_object.datastreams[ds_name].dsLabel=ds_label
+        fedora_object.datastreams[ds_name].dsLocation=ds_location
+        fedora_object.datastreams[ds_name].mimeType=mime_type
+        fedora_object.datastreams[ds_name].controlGroup='E'
+      #end
     
       #save Fedora object
-      fedora_object.save()
+      fedora_object.save
       
       "<response><returnCode>Update successful</returnCode><pid>" + pid + "</pid></response>"
     end
