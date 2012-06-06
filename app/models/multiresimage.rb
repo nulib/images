@@ -31,10 +31,7 @@ class Multiresimage < ActiveFedora::Base
   has_metadata :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   
   # External datastream
- # has_metadata :name => "ARCHV-EXIF", :type => ActiveFedora::Datastream, :controlGroup=>'E'
-  
-  # External datastream
-  #has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+  has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => ActiveFedora::QualifiedDublinCoreDatastream do |m|
