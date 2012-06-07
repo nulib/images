@@ -34,7 +34,6 @@ class UploadsController < ApplicationController
     
     error = false
     
-    
     #Create ClamAV instance for virus scanning
     clam = ClamAV.instance
     
@@ -86,6 +85,9 @@ class UploadsController < ApplicationController
     else
       error = true
       logger.error("VIRUS_DETECTED: #{scan_result} : #{params[:files][0].tempfile.path}")
+      
+      #delete file from file system
+      File.delete params[:files][0].tempfile.path
     end
     
     respond_to do |format|
