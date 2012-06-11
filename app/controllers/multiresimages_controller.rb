@@ -8,7 +8,9 @@ class MultiresimagesController < ApplicationController
   def destroy
     obj = Multiresimage.find(params[:id])
     authorize! :destroy, obj
-    obj.vrawork[0].delete
+    if obj.vrawork[0].present?
+      obj.vrawork[0].delete
+    end
     obj.delete
     selected_files.delete(params[:id])
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
@@ -54,15 +56,16 @@ class MultiresimagesController < ApplicationController
     @multiresimage.update_attributes(params[:multiresimage])
         
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
-    @vra_work = @multiresimage.vrawork[0]
-    @vra_work.agentSet_display_work = params[:multiresimage]['agentSet_display']
-    @vra_work.dateSet_display_work = params[:multiresimage]['dateSet_display']
-    @vra_work.descriptionSet_display_work = params[:multiresimage]['descriptionSet_display']
-    @vra_work.subjectSet_display_work = params[:multiresimage]['subjectSet_display']
-    @vra_work.titleSet_display_work = params[:multiresimage]['titleSet_display']
+    if @multiresimage.vrawork[0].present?
+      @vra_work = @multiresimage.vrawork[0]
+      @vra_work.agentSet_display_work = params[:multiresimage]['agentSet_display']
+      @vra_work.dateSet_display_work = params[:multiresimage]['dateSet_display']
+      @vra_work.descriptionSet_display_work = params[:multiresimage]['descriptionSet_display']
+      @vra_work.subjectSet_display_work = params[:multiresimage]['subjectSet_display']
+      @vra_work.titleSet_display_work = params[:multiresimage]['titleSet_display']
 
-    
-    @vra_work.save!
+      @vra_work.save!
+    end
    
     if @multiresimage.save
       flash[:notice] = "Saved changes to #{@multiresimage.id}"
