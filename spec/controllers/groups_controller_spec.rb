@@ -77,6 +77,7 @@ describe GroupsController do
         @g = Group.create(:name=>'Foo', :owner=>@user, :users=>['alicia'])
         Dil::LDAP.should_receive(:owner_for_group).with(@g.code).and_return(@user.uid)
         Dil::LDAP.should_receive(:users_for_group).with(@g.code).and_return(@g.users)
+        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@g])
         sign_in @user
       end
       it "should be successful" do
