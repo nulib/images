@@ -30,8 +30,9 @@ class UploadsController < ApplicationController
   # After the image is uploaded, create Multiresimage and Vrawork Fedora objects
   # Called from Jquery uploader, ajax call, respond with JSON
   def create
+    logger.debug("TEST_1")
     titleSet_display = current_user.uid + " " + params[:files][0].original_filename
-    
+    logger.debug("TEST_2")
     error = false
     
     
@@ -42,7 +43,11 @@ class UploadsController < ApplicationController
     clam.loaddb
     
     #Scan file (will return fixnum if ok, string with virus name if not ok)
-    scan_result = clam.scanfile(params[:files][0].tempfile.path)
+    if params[:files][0].is_a? Tempfile
+      scan_result = clam.scanfile(params[:files][0].tempfile.path)
+    else
+      scan_result = clam.scanfile(params[:files][0].path)
+    end
     
     if (scan_result.is_a? Fixnum)
       # create the Multiresimage
@@ -124,7 +129,7 @@ class UploadsController < ApplicationController
       
       # call CGI script with file location (path, name and id)
       # CGI on gandalf will pull file from shirley
-      cgi_url = "http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-jms.cgi?image_path=" + new_filepath + "&request_id=" + @image_processing_request.id().to_s
+      cgi_url = "http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-jms.cgi?image_path=" + new_filepath + "&request_id=" + @image_processing_request.id.to_s
 	  logger.debug("cgi url: " + cgi_url)
 	  # response will be status of script that puts JMS message in queue
 	  logger.debug("Before CGI call")
