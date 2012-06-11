@@ -14,6 +14,7 @@ describe DilCollectionsController do
         @img = Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
         @img.titleSet_display = "foo"
         @img.save!
+        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       it "should be successful" do
@@ -42,7 +43,6 @@ describe DilCollectionsController do
     end
     describe "when not logged in" do
       it "should redirect" do
-        Dil::LDAP.should_receive(:groups_for_user).and_return([])
         post :create, :dil_collection=>{:title=>'Oarsman'}
         assigns[:dil_collection].should be_nil
         response.should redirect_to(root_path)
@@ -81,7 +81,6 @@ describe DilCollectionsController do
     end
     describe "when not logged in" do
       it "should redirect" do
-        Dil::LDAP.should_receive(:groups_for_user).and_return([])
         get :edit, :id=>@collection.pid
         response.should redirect_to(root_path)
         flash[:alert].should == "You are not authorized to access this page."
@@ -135,7 +134,6 @@ describe DilCollectionsController do
     end
     describe "when not logged in" do
       it "should redirect" do
-        Dil::LDAP.should_receive(:groups_for_user).and_return([])
         put :update, :id=>@collection.pid
         response.should redirect_to(root_path)
         flash[:alert].should == "You are not authorized to access this page."

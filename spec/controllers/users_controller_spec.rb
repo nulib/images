@@ -9,6 +9,7 @@ describe UsersController do
     describe "when logged in" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
+        Dil::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       describe "on a group the user owns" do
@@ -55,6 +56,7 @@ describe UsersController do
     describe "when logged in" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
+        Dil::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       describe "on a group the user owns" do
@@ -79,6 +81,7 @@ describe UsersController do
         before do
           @group= FactoryGirl.create(:user_group)
           Dil::LDAP.should_receive(:owner_for_group).with(@group.code).and_return(@group.owner_uid)
+          Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group])
         end
         it "should handle errors" do
           delete :destroy, :id=>'ken', :group_id=>@group.id
