@@ -14,6 +14,7 @@ describe DilCollectionsController do
         @img = Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
         @img.titleSet_display = "foo"
         @img.save!
+        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       it "should be successful" do
