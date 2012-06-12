@@ -160,6 +160,9 @@ GEM
       activesupport
       cancan
       deprecation
+    hydra-ldap (0.0.2)
+      net-ldap
+      rails
     hydra-mods (0.0.5)
       active-fedora (~> 4.1)
     i18n (0.6.0)
@@ -353,6 +356,7 @@ DEPENDENCIES
   devise
   factory_girl_rails
   hydra-head!
+  hydra-ldap
   jettywrapper
   jquery-rails
   jquery-ui-rails

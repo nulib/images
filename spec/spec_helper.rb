@@ -64,8 +64,8 @@ def login(user)
       }
     }
   }
-  Dil::LDAP.stub(:groups_for_user).with(user.uid).and_return(user.affiliations)
-  Dil::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
+  Hydra::LDAP.stub(:groups_for_user).with(user.uid).and_return(user.affiliations)
+  Hydra::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
 
   visit '/'
   click_link "Login"

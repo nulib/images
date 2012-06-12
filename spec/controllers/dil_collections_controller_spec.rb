@@ -14,7 +14,7 @@ describe DilCollectionsController do
         @img = Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
         @img.titleSet_display = "foo"
         @img.save!
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       it "should be successful" do
@@ -31,7 +31,7 @@ describe DilCollectionsController do
     describe "as a logged in user" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       it "should be successful" do
@@ -57,7 +57,7 @@ describe DilCollectionsController do
     describe "as a logged in user" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       describe "when I am authorized to edit" do
@@ -95,7 +95,7 @@ describe DilCollectionsController do
     describe "as a logged in user" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       describe "when I am authorized to update" do
@@ -116,7 +116,7 @@ describe DilCollectionsController do
             @g3 = FactoryGirl.create(:user_group)
             @collection.read_groups = [@g1.code, @g3.code]
             @collection.save!
-            Dil::LDAP.stub(:groups_owned_by_user).with(@user.uid).and_return([@g1.code, @g2.code])
+            Hydra::LDAP.stub(:groups_owned_by_user).with(@user.uid).and_return([@g1.code, @g2.code])
             put :update, :id=>@collection.pid, :dil_collection=>{:read_groups =>[@g2.code]}
           end
           it "should set read access to groups I specify and not remove groups that I don't own" do

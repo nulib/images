@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   # Groups this user owns.  
   def owned_groups
-    codes = Dil::LDAP.groups_owned_by_user(uid)
+    codes = Hydra::LDAP.groups_owned_by_user(uid)
     #puts "codes: #{codes}"
     Group.find_all_by_code(codes)
   end
@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
 
   # Groups that user is a member of
   def groups 
-    codes = Dil::LDAP.groups_for_user(uid)
+    codes = Hydra::LDAP.groups_for_user(uid)
     #puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)
     #puts "res: #{res}"
