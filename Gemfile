@@ -40,6 +40,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'bcrypt-ruby'
+  gem 'debugger'
 end
 
 gem 'unicorn'
