@@ -60,11 +60,11 @@ def login(user)
     },
     :extra => {
       :raw_info => {
-          :edupersonaffiliation => ["staff", "student"]
+          :edupersonaffiliation => user.affiliations
       }
     }
   }
-  Dil::LDAP.stub(:groups_for_user).with(user.uid).and_return(['staff', 'student'])
+  Dil::LDAP.stub(:groups_for_user).with(user.uid).and_return(user.affiliations)
   Dil::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
 
   visit '/'
