@@ -12,10 +12,7 @@ class Multiresimage < ActiveFedora::Base
 
   has_file_datastream :name=>'raw', :type=>ActiveFedora::Datastream, :label=>'Raw image'
   
-  # Uses the Hydra MODS Article profile for tracking most of the descriptive metadata
-  #has_metadata :name => "MODS", :type => ModsArticleDatastream 
-
-  # Uses the VRA profile for tracking some of the descriptive metadata
+  # Uses the VRA profile for tracking the descriptive metadata
   has_metadata :name => "VRA", :type => VRADatastream, :label=> 'VRA metadata'
 
   # Uses the SVG schema to encode jp2 image path, size, crop, and rotation
