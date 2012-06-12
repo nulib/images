@@ -13,7 +13,7 @@ describe ImageProcessingRequest do
     subject {ImageProcessingRequest.create!(:pid=>@image.pid, :email=>'test@example.com', :status=>'NEW')}
     it "should enqueue" do
       file_path = "/tmp/foo.jpg#{$$}.0"
-      cgi_url = "http://www.example.com/cgi-bin/hydra/hydra-jms.cgi?image_path=#{file_path}&request_id=#{subject.id}"
+      cgi_url = "http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-jms.cgi?image_path=#{file_path}&request_id=#{subject.id}"
 
       Net::HTTP.should_receive(:get_response).with(URI.parse(cgi_url)).and_return(stub(:body=>'hey'))
       subject.enqueue
