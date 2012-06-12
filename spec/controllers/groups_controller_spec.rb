@@ -20,7 +20,7 @@ describe GroupsController do
         @g2 = FactoryGirl.create(:user_group)
         ## This represents a system group (e.g. no owner)
         @g3 = FactoryGirl.create(:user_group, :owner=>nil)
-        Dil::LDAP.stub(:groups_owned_by_user).with(@user.uid).and_return([@g1.code])
+        Hydra::LDAP.stub(:groups_owned_by_user).with(@user.uid).and_return([@g1.code])
       end
       it "should be successful" do
         get :index
@@ -75,9 +75,9 @@ describe GroupsController do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
         @g = Group.create(:name=>'Foo', :owner=>@user, :users=>['alicia'])
-        Dil::LDAP.should_receive(:owner_for_group).with(@g.code).and_return(@user.uid)
-        Dil::LDAP.should_receive(:users_for_group).with(@g.code).and_return(@g.users)
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@g])
+        Hydra::LDAP.should_receive(:owner_for_group).with(@g.code).and_return(@user.uid)
+        Hydra::LDAP.should_receive(:users_for_group).with(@g.code).and_return(@g.users)
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@g])
         sign_in @user
       end
       it "should be successful" do

@@ -13,11 +13,11 @@ class Group < ActiveRecord::Base
   end
 
   def persist_to_ldap
-    Dil::LDAP.create_group(code, name, owner_uid, @users)
+    Hydra::LDAP.create_group(code, name, owner_uid, @users)
   end
 
   def delete_from_ldap
-    Dil::LDAP.delete_group(code)
+    Hydra::LDAP.delete_group(code)
   end
 
   def users=(u)
@@ -25,7 +25,7 @@ class Group < ActiveRecord::Base
   end
 
   def users
-    @users ||= Dil::LDAP.users_for_group(self.code)
+    @users ||= Hydra::LDAP.users_for_group(self.code)
   end
 
   def owner=(u)
@@ -37,7 +37,7 @@ class Group < ActiveRecord::Base
     if @owner
       @owner_uid = @owner.uid
     elsif !new_record?
-      @owner_uid = Dil::LDAP.owner_for_group(self.code)
+      @owner_uid = Hydra::LDAP.owner_for_group(self.code)
     end
     @owner_uid
   end

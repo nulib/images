@@ -11,7 +11,7 @@ describe "a user" do
         @group = FactoryGirl.build(:user_group)
         @group.users = [@user.email]
         @group.save!
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
         @user.stub(:groups=>[@group])
     end
     
@@ -77,7 +77,7 @@ describe "a user" do
   context "who is an owner of a group" do
     before do
         @group = FactoryGirl.build(:user_group, :owner=>@user)
-        Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
         @group.users = [FactoryGirl.build(:user).uid]
         @group.save!
         @user.stub(:groups=>[@group])
@@ -87,7 +87,7 @@ describe "a user" do
     end
   end
   it "should be able to create DILCollections" do
-    Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+    Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
     subject.can?(:create, DILCollection).should be_true
   end
 end

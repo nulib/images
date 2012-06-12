@@ -198,10 +198,10 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
   config.omniauth :ldap, :title => 'DIL local ldap',
-    :host => Dil::LDAP.ldap_config[:host],
-    :base => Dil::LDAP.ldap_config[:base],
-    :uid => Dil::LDAP.ldap_config[:uid],
-    :port => Dil::LDAP.ldap_config[:port]
+    :host => Hydra::LDAP.ldap_config[:host],
+    :base => Hydra::LDAP.ldap_config[:base],
+    :uid => Hydra::LDAP.ldap_config[:uid],
+    :port => Hydra::LDAP.ldap_config[:port]
     # :bind_dn => 'uid=vanessa,ou=people,dc=example,dc=com',
     # :password => 'vanessa1'
 
