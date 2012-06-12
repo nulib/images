@@ -49,28 +49,28 @@ end
 
 # for request specs
 def login(user)
-  visit '/'
-  click_link "Login"
-  fill_in 'user_uid', :with => user.uid
-  fill_in 'user_password', :with => user.password
-  click_on('Sign in')
-  page.should have_selector("a[href='/users/edit']", :text=> user.email)
-  
-end
-
-# for OmniAuth specs
-OmniAuth.config.test_mode = true
-OmniAuth.config.mock_auth[:ldap] = {
+  OmniAuth.config.test_mode = true
+  OmniAuth.config.mock_auth[:ldap] = {
     :provider => 'ldap',
-    :uid => 'uid=vanessa,ou=people,dc=example,dc=com',
+    :uid=> "uid=#{user.uid},ou=people,dc=example,dc=com",
     :info => {
-        :name => 'Vanessa Smith',
-        :email => 'vanessa@example.com',
-        :nickname => 'vanessa'
+        :name => user.uid + ' User',
+        :email => user.uid + '@example.com',
+        :nickname => user.uid 
     },
     :extra => {
       :raw_info => {
           :edupersonaffiliation => ["staff", "student"]
       }
     }
-}
+  }
+  Dil::LDAP.stub(:groups_for_user).with(user.uid).and_return(['staff', 'student'])
+  Dil::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
+
+  visit '/'
+  click_link "Login"
+  click_link "sign in with LDAP"
+  page.should have_selector("a[href='/users/edit']", :text=> user.email)
+  
+end
+
