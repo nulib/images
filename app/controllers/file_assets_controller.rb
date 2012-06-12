@@ -2,8 +2,8 @@ class FileAssetsController < ApplicationController
   
   include Hydra::AccessControlsEnforcement
   include Hydra::AssetsControllerHelper
-  include Hydra::FileAssetsHelper  
-  include Hydra::RepositoryController  
+  include Hydra::Controller::UploadBehavior
+  include Hydra::Controller::RepositoryControllerBehavior  
   include Blacklight::SolrHelper
   
   # need to include this after the :require_solr/fedora before filters because of the before filter that the workflow provides.
@@ -14,23 +14,6 @@ class FileAssetsController < ApplicationController
   helper :hydra_uploader
   
   def index
-=begin
-Removed from file_assets/index.html.haml
--# javascript_includes << infusion_javascripts(:inline_edit, :extras=>[:inline_editor_integrations], :debug=>true, :render_html=>false) 
--# javascript_includes << ['../infusion/framework/core/js/ProgressiveEnhancement.js', '../infusion/InfusionAll.js', {:cache=>true, :plugin=>"fluid-infusion"}]
-
-- javascript_includes << "jquery.jeditable.mini"
-- javascript_includes << 'custom'
-- javascript_includes << "catalog/edit"
-- javascript_includes << "jquery.hydraMetadata.js"  
-- javascript_includes << "/plugin_assets/fluid-infusion/infusion/components/undo/js/Undo.js" 
-- javascript_includes << "jquery.form.js"
-
-
-
-
-=end
-
     if params[:layout] == "false"
       # action = "index_embedded"
       layout = false
@@ -60,11 +43,6 @@ Removed from file_assets/index.html.haml
   end
   
   def new
-=begin
-From file_assets/_new.html.haml
-=render :partial=>"fluid_infusion/uploader"
-=render :partial=>"fluid_infusion/uploader_js"
-=end
     render :partial=>"new", :layout=>false
   end
   

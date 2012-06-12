@@ -1,11 +1,9 @@
 require 'blacklight/catalog'
-#test git push
-#test git push
 class CatalogController < ApplicationController  
 
   include Blacklight::Catalog
   # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
-  include Hydra::Catalog
+  include Hydra::Controller::ControllerBehavior
   include Blacklight::SolrHelpers::ObjectTypeFacet
 
   # These before_filters apply the hydra access controls
