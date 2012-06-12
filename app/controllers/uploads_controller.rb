@@ -1,8 +1,8 @@
 class UploadsController < ApplicationController
 
   include Hydra::AssetsControllerHelper
-  include Hydra::FileAssetsHelper  
-  include Hydra::RepositoryController  
+  include Hydra::Controller::UploadBehavior  
+  include Hydra::Controller::RepositoryControllerBehavior  
   include Blacklight::SolrHelper
   
   require 'net/http'

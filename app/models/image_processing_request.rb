@@ -1,9 +1,4 @@
 class ImageProcessingRequest < ActiveRecord::Base
-  # include Hydra::AssetsControllerHelper
-  # include Hydra::FileAssetsHelper  
-  # include Hydra::RepositoryController  
-  # include Blacklight::SolrHelper
-  
   require "net/http"
   require "uri"
 
