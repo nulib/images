@@ -1,8 +1,7 @@
 class AssetsController < ApplicationController
     include Blacklight::SolrHelper
-    include Hydra::RepositoryController
+    include Hydra::Controller::RepositoryControllerBehavior
     include Hydra::AssetsControllerHelper
-#    include WhiteListHelper
     include ReleaseProcessHelper
     
     
