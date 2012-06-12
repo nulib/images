@@ -12,7 +12,7 @@ describe TechnicalMetadataController do
     describe "when logged in as a member of staff" do
       before do
         @user = FactoryGirl.find_or_create(:staff)
-        Dil::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       it "should be successful" do
@@ -24,7 +24,7 @@ describe TechnicalMetadataController do
     describe "when logged in as a non-staff member" do
       before do
         @user = FactoryGirl.find_or_create(:student)
-        Dil::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
+        Hydra::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
         sign_in @user
       end
       it "should fail" do

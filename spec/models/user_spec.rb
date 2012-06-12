@@ -26,7 +26,7 @@ describe User do
     g3 = Group.new(:name=>'three', :users=>['vanessa'])
     g3.owner = FactoryGirl.create(:user)
     g3.save!
-    Dil::LDAP.should_receive(:groups_owned_by_user).with(@user.uid).and_return([g1.code, g2.code])
+    Hydra::LDAP.should_receive(:groups_owned_by_user).with(@user.uid).and_return([g1.code, g2.code])
     @user.owned_groups.should == [g1, g2]
   end
 
@@ -36,7 +36,7 @@ describe User do
       @user = FactoryGirl.create(:user)
       @group.users = [@user.uid]
       @group.save
-      Dil::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
+      Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
     end
     it "should return a list" do
       puts "** groups: #{@group.inspect} **"

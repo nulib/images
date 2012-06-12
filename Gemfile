@@ -31,6 +31,7 @@ gem 'jquery-rails'
 gem 'jquery.fileupload-rails'
 
 gem 'uuid'
+gem 'hydra-ldap'
 
 
 group :development, :test do 

@@ -4,8 +4,8 @@ describe "Create a group" do
 
   describe "as a logged in user" do
     before do
-      Dil::LDAP.should_receive(:create_group) do |*args|
-        Dil::LDAP.should_receive(:groups_owned_by_user).and_return([args.first])
+      Hydra::LDAP.should_receive(:create_group) do |*args|
+        Hydra::LDAP.should_receive(:groups_owned_by_user).and_return([args.first])
       end
       login FactoryGirl.find_or_create(:archivist)
     end

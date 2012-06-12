@@ -6,7 +6,7 @@ class Ability
   def user_groups(user, session)
     return @user_groups if @user_groups
     @user_groups = default_user_groups
-    @user_groups += Dil::LDAP.groups_for_user(user.uid) << 'registered' unless user.new_record?
+    @user_groups += Hydra::LDAP.groups_for_user(user.uid) << 'registered' unless user.new_record?
     @user_groups
   end
 
