@@ -3,7 +3,7 @@ source 'http://rubygems.org'
   gem 'rails', '3.2.5'
   gem 'blacklight', '3.4.2'
   gem 'hydra-head', :git=>'https://github.com/projecthydra/hydra-head.git' , :ref=>'1a2d4fa'
-  gem 'active-fedora', '4.1.0'
+  gem 'active-fedora', '4.2.0'
   gem 'sqlite3'
   
   #  We will assume you're using devise in tutorials/documentation. 
