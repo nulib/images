@@ -1,0 +1,3 @@
+class BatchUpdateController < CatalogController
+
+end
