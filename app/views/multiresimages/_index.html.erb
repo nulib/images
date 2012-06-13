@@ -1,2 +1,30 @@
-<% display_type = params[:display_type].nil? ? 'grid' : params[:display_type] %>
-<%= render :partial => "multiresimages/index_#{display_type}", :locals => {:document => document, :counter => counter } %>
+<div class="listing">
+  <table>
+    <tr valign="center">
+      <div id="images">
+        <ul>
+         <% if !document[:id].nil? %>
+           <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><img src="http://<%= request.host %>:8983/fedora/get/<%= document[:id] %>/inu:sdef-image/getWithLongSide?length=100"/>	
+          <% end %>
+         </li>
+       </ul>
+    </div>
+    </tr>
+    <tr>
+      <td align="center">
+      <% if document[:title_t].nil? %>
+		 <a href="/multiresimages/<%=document[:id]%>"><%=document[:id]%></a>
+	  <% else %>
+	    <% 
+	      title = document[:title_t][0]
+	      if title.length > 50
+	        title = title[0,50] << " ..."
+	      end
+        %>
+	    <a href="/multiresimages/<%=document[:id]%>"><%=title%></a>
+	  <% end %>
+      </td>
+    </tr>
+  </table>
+</div>
+

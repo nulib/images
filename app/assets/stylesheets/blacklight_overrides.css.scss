@@ -2,8 +2,17 @@ th, td {
   border: 0;
 }
 
-/*override listexpander/styles.css*/
+
+#search .submit {
+  margin: 0;
+  padding: 4px 10px 4px;
+}
 
 body {
   text-align: left; /*will be fixed in hydra 4.0*/
+}
+
+/* this is actually a bootstrap override */
+form.form-search {
+  margin-bottom: 0;
 }

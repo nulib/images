@@ -1,3 +1,1 @@
-<% display_type = params[:display_type].nil? ? 'grid' : params[:display_type] %>
-
-<%= render :partial => "dil_collections/index_#{display_type}", :locals => {:document => document, :counter => counter } %>
+<%= render :partial => "dil_collections/index_grid", :locals => {:document => document, :counter => counter } %>

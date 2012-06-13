@@ -47,6 +47,9 @@ DIL::Application.routes.draw do
   end
 
   resources :technical_metadata, :only=>:index
+
+  resources :batch_update, :only=>:index
+
   match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
   

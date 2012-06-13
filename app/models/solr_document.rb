@@ -1,3 +1,4 @@
+#TODO DELETE
 # -*- encoding : utf-8 -*-
 class SolrDocument 
 
