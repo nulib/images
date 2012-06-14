@@ -17,13 +17,8 @@ DIL::Application.routes.draw do
     end
   end
   
-  resources :dil_collections #do
-   # member do
-     # post 'export'
-    #end
-  #end 
-  
-  
+  resources :dil_collections  
+
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
   match "multiresimages/svg/:id" => "multiresimages#get_svg"
   match "multiresimages/aware_details" => "multiresimages#aware_details"
@@ -48,7 +43,17 @@ DIL::Application.routes.draw do
 
   resources :technical_metadata, :only=>:index
 
-  resources :batch_update, :only=>:index
+  resources :batch_updates, :only=>[:index] do
+    member do
+      delete :destroy
+      put :add
+    end
+    collection do
+      get :edit
+      put :update
+      delete :clear
+    end
+  end
 
   match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 

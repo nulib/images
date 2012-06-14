@@ -30,9 +30,7 @@ span.page.gap {
 }
 
 
-.listing
-{
-        float: left;
+.listing {
         margin: 10px 10px 10px 10px;
         padding: 8px;
         border: 1px dotted #cccccc;
