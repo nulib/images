@@ -86,6 +86,8 @@
    <field name="id" type="string" indexed="true" stored="true" required="true" />
    <field name="text" type="text" indexed="true" stored="true" multiValued="true"/>
    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/>
+   <field name="title_display" type="string" indexed="false" stored="true" multiValued="false"/>
+  
 
    <!-- format is used for facet, display, and choosing which partial to use for the show view, so it must be stored and indexed -->
    <field name="format" type="string" indexed="true" stored="true"/>

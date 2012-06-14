@@ -10,7 +10,7 @@ describe VRADatastream do
       subject["title_t"].should == ["Evanston Public Library. Exterior: facade"]
     end
     it "should have title_display" do
-      subject["title_display"].should == "Evanston Public Library. Exterior: facade"
+      subject["title_display"].should == ["Evanston Public Library. Exterior: facade"]
     end
   end
 

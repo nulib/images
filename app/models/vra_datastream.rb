@@ -550,7 +550,6 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
         ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Vrawork")
           
       end
-      solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
       solr_doc = add_sort_fields(solr_doc)
       solr_doc
     end
