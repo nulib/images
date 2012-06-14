@@ -57,7 +57,14 @@ describe Multiresimage do
     it "should have related_ids" do
       subject.related_ids.should == ["inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b"]
     end
+
   end
+  context "to_solr" do
+    subject { Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26').to_solr }
+    it "should have title_display" do
+      subject['title_display'].should == "Evanston Public Library. Exterior: facade" 
+    end
+  end 
 
   context "with rightsMetadata" do
     subject do
