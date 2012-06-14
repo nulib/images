@@ -1,30 +1,14 @@
 <div class="listing">
-  <table>
-    <tr valign="center">
-      <div id="images">
-        <ul>
-         <% if !document[:id].nil? %>
-           <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><img src="http://<%= request.host %>:8983/fedora/get/<%= document[:id] %>/inu:sdef-image/getWithLongSide?length=100"/>	
-          <% end %>
-         </li>
-       </ul>
-    </div>
-    </tr>
-    <tr>
-      <td align="center">
-      <% if document[:title_t].nil? %>
-		 <a href="/multiresimages/<%=document[:id]%>"><%=document[:id]%></a>
-	  <% else %>
-	    <% 
-	      title = document[:title_t][0]
-	      if title.length > 50
-	        title = title[0,50] << " ..."
-	      end
-        %>
-	    <a href="/multiresimages/<%=document[:id]%>"><%=title%></a>
-	  <% end %>
-      </td>
-    </tr>
-  </table>
+  <div id="images">
+    <ul>
+     <% if !document[:id].nil? %>
+       <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><img src="http://<%= request.host %>:8983/fedora/get/<%= document[:id] %>/inu:sdef-image/getWithLongSide?length=100"/>	
+      <% end %>
+     </li>
+   </ul>
+  </div>
+  <a href="/multiresimages/<%=document[:id]%>">
+    <%= document[:title_display].nil?  ? document[:id] : document[:title_display].truncate(50) %>
+  </a>
 </div>
 
