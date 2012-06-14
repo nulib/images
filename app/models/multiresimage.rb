@@ -89,7 +89,13 @@ class Multiresimage < ActiveFedora::Base
   def get_work_pid
     self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end
-  
+
+  def to_solr(solr_doc = Hash.new, opts={}) 
+    solr_doc = super(solr_doc, opts)
+    solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
+    solr_doc
+  end
+
   private
 
   ## Produce a unique filename that doesn't already exist.
