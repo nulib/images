@@ -6,7 +6,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	# titleSet OM definition
 	t.titleSet_ref(:path=>"titleSet", :label=>"Titles") {
 		t.titleSet_display(:path=>"display", :label=>"display") 
-		t.title(:path=>"title", :label=>"title") 
+		t.title(:path=>"title", :label=>"title", :index_as=>[:searchable, :displayable]) 
 		t.title_pref(:path=>"title", :attributes=>{:pref=>"true"}) 
 	}
 		
@@ -248,6 +248,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	t.subjectSet_display_work(:proxy=>[:work, :subjectSet, :subjectSet_display])
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 
+  t.title(:ref=>[:work, :titleSet, :title]) 
 	
   end
 
@@ -527,35 +528,29 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
      def to_solr(solr_doc=Hash.new)
       super(solr_doc)
 
-	  solr_doc = add_vra_description_to_solrdoc(solr_doc) # Add description for this object
-	  solr_doc = solr_doc.merge(extract_work_image_relationships)	# Add relationships for this object	 
+      solr_doc = add_vra_description_to_solrdoc(solr_doc) # Add description for this object
+      solr_doc = solr_doc.merge(extract_work_image_relationships)	# Add relationships for this object	 
 
-	  # Is this an Image?
-	  if self.node_exists?(:image) # Is this datastream for an Image object?
-		# Set its object_type_facet
-		::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Multiresimage")
-				
-		# Get any associated Works and fold their descriptions into this record
-		self.find_by_terms(:image,:relationSet,:imageOf, :relation_relids).each do |imageOf_pid| 
-			#puts "About to Vrawork.find \n\n\n"
-			#debugger
-			imageOf_work = Vrawork.find(imageOf_pid.text)
-			#debugger
-			#puts "got past find for " + imageOf_pid
-			imageOf_work = Vrawork.find(imageOf_pid.text)
-			#debugger
-			imageOf_work_vra = imageOf_work.datastreams["VRA"]
-			#debugger
-			solr_doc = imageOf_work_vra.add_vra_description_to_solrdoc(solr_doc)
-		end
+      # Is this an Image?
+      if self.node_exists?(:image) # Is this datastream for an Image object?
+        # Set its object_type_facet
+        ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Multiresimage")
+            
+        # Get any associated Works and fold their descriptions into this record
+        self.find_by_terms(:image,:relationSet,:imageOf, :relation_relids).each do |imageOf_pid| 
+          imageOf_work = Vrawork.find(imageOf_pid.text)
+          imageOf_work_vra = imageOf_work.datastreams["VRA"]
+          solr_doc = imageOf_work_vra.add_vra_description_to_solrdoc(solr_doc)
+        end
       end
 
-	  # Is this a Work?
-	  if self.node_exists?(:work) # ... or is this datastream for a Work object?
-		# Set its object_type_facet
-		::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Vrawork")
-        
+      # Is this a Work?
+      if self.node_exists?(:work) # ... or is this datastream for a Work object?
+        # Set its object_type_facet
+        ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Vrawork")
+          
       end
+      solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
       solr_doc = add_sort_fields(solr_doc)
       solr_doc
     end

@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
   gem 'rails', '3.2.5'
-  gem 'blacklight', '3.4.2'
-  gem 'hydra-head', :git=>'https://github.com/projecthydra/hydra-head.git' , :ref=>'1a2d4fa'
+  gem 'blacklight', :git=>'git://github.com/projectblacklight/blacklight.git', :ref=>'a83c286'
+  gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'9b0d84f'
   gem 'active-fedora', '4.2.0'
   gem 'sqlite3'
   
@@ -23,7 +23,7 @@ group :assets do
   gem 'compass-susy-plugin', '~> 0.9.0', :require => 'susy'
   gem 'therubyracer'
   gem 'jquery-ui-rails'
-  gem "bootstrap-sass-rails", :git=>'https://github.com/yabawock/bootstrap-sass-rails.git', :ref=>"3c68b13fff0d51406b73658869a39bb88fa1cd83" # due to pull request #12 which isn't in 2.0.2.2
+  gem "bootstrap-sass-rails", '2.0.3.0'
 
 end
 
