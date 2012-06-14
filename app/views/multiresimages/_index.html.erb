@@ -7,9 +7,9 @@
      </li>
    </ul>
   </div>
-dis: <%= document.keys %>
   <a href="/multiresimages/<%=document[:id]%>">
     <%= document[:title_display].nil?  ? document[:id] : document[:title_display].truncate(50) %>
   </a>
+  <%= render :partial=>'/batch_updates/add_button', :locals=>{:document=>document} %>
 </div>
 
