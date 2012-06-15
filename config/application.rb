@@ -64,5 +64,17 @@ module DIL
 
     # Location where dil puts files to be processed
     config.processing_file_path = "/tmp"
+    
+    config.public_permission_levels = {
+      "No Access"=>"none",
+      "Discover" => "discover",
+      "View" => "read" 
+    } 
+    config.permission_levels = {
+      "No Access"=>"none",
+      "Discover" => "discover",
+      "View" => "read",
+      "Edit" => "edit"
+    }
   end
 end
