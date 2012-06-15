@@ -43,10 +43,10 @@ DIL::Application.routes.draw do
 
   resources :technical_metadata, :only=>:index
 
+  match 'batch_updates/:id' => 'batch_updates#add', :via=>:put
   resources :batch_updates, :only=>[:index] do
     member do
       delete :destroy
-      put :add
     end
     collection do
       get :edit
