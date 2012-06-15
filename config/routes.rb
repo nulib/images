@@ -17,6 +17,9 @@ DIL::Application.routes.draw do
       get 'delete_fedora_object'
       get 'clone_work'
     end
+    member do
+      post 'permissions'
+    end
   end
   
   resources :dil_collections  
