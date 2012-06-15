@@ -4,7 +4,7 @@
 # development environment upon cd'ing into the directory
 
 ruby_string="1.9.3-p194"
-rubygems_version="1.8.24"
+# rubygems_version="1.8.24"
 gemset_name="dil_hydra"
 
 # Install rubies when used instead of only displaying a warning and exiting
