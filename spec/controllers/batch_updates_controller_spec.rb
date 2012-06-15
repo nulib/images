@@ -103,5 +103,18 @@ describe BatchUpdatesController do
   end
 
 
+  describe "state" do
+    it "should save state on" do
+      xhr :put, :state, :state=>'on'
+      response.should be_successful
+      session[:batch_update_state].should == 'on'
+    end
+    it "should save state off" do
+      xhr :put, :state, :state=>'off'
+      response.should be_successful
+      session[:batch_update_state].should == 'off'
+    end
+  end
+
 
 end

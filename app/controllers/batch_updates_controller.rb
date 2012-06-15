@@ -1,12 +1,20 @@
 class BatchUpdatesController < ApplicationController
   
   cattr_accessor :type
-
   self.type = :multiresimage
+
+  before_filter :filter_docs_with_access!, :only=>[:edit, :update]
+  before_filter :check_for_empty!, :only=>[:edit, :update]
+
   
   # fetch the documents that match the ids in the folder
   def index
     @response, @documents = get_solr_response_for_field_values("id",session[:batch_document_ids] || [])
+  end
+
+  def state
+    session[:batch_update_state] = params[:state]
+    render :json => {"OK" => "OK"}
   end
 
   # add a document_id to the batch. :id of action is solr doc id 
@@ -44,19 +52,9 @@ class BatchUpdatesController < ApplicationController
   end
 
   def edit
-    filter_docs_with_access!
-    if batch.empty?
-      redirect_to :back 
-      return
-    end
   end
 
   def update
-    filter_docs_with_access!
-    if batch.empty?
-      redirect_to catalog_index_path
-      return
-    end
     batch.each do |doc_id|
       obj = ActiveFedora::Base.find(doc_id, :cast=>true)
       obj.update_attributes(params[self.class.type])
@@ -68,10 +66,17 @@ class BatchUpdatesController < ApplicationController
     
   end
 
-  private
+  protected
 
   def batch
     session[:batch_document_ids] ||= []
+  end
+
+  def check_for_empty!
+    if batch.empty?
+      redirect_to catalog_index_path
+      return false
+    end
   end
   
   def filter_docs_with_access!
