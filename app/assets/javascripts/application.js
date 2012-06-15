@@ -17,6 +17,7 @@
 //= require jquery.fileupload
 //= require jquery.fileupload-ui
 //= require twitter/bootstrap
+//= require batch_edit
 
 
 		

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe BatchUpdatesController do
+describe BatchEditsController do
   before(:each) do
     request.env["HTTP_REFERER"] = "/"
   end
@@ -107,12 +107,12 @@ describe BatchUpdatesController do
     it "should save state on" do
       xhr :put, :state, :state=>'on'
       response.should be_successful
-      session[:batch_update_state].should == 'on'
+      session[:batch_edit_state].should == 'on'
     end
     it "should save state off" do
       xhr :put, :state, :state=>'off'
       response.should be_successful
-      session[:batch_update_state].should == 'off'
+      session[:batch_edit_state].should == 'off'
     end
   end
 
