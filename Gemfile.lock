@@ -161,6 +161,7 @@ GEM
       activesupport
       cancan
       deprecation
+    hydra-batch-edit (0.0.2)
     hydra-ldap (0.0.3)
       net-ldap
     hydra-mods (0.0.5)
@@ -363,6 +364,7 @@ DEPENDENCIES
   debugger
   devise
   factory_girl_rails
+  hydra-batch-edit
   hydra-head!
   hydra-ldap (~> 0.0.3)
   jettywrapper

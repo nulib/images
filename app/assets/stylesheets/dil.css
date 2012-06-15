@@ -36,7 +36,12 @@ span.page.gap {
 }
 
 
+#documents {
+  overflow: auto;
+}
+
 .listing {
+        float: left;
         margin: 10px 10px 10px 10px;
         padding: 8px;
         border: 1px dotted #cccccc;
