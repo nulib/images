@@ -1,4 +1,10 @@
+.hidden {
+  display: none;
+}
 
+label.batch_toggle {
+  display: inline;
+}
 .pagination .prev_page {
     border-bottom: medium none;
     left: 26%;

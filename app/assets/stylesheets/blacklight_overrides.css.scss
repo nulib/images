@@ -2,10 +2,17 @@ th, td {
   border: 0;
 }
 
+ul li {
+  list-style: none;
+}
 
 #search .submit {
   margin: 0;
   padding: 4px 10px 4px;
+}
+
+a:link, a:visited, a:active {
+  border-bottom: none;
 }
 
 body {
