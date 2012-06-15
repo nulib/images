@@ -1,7 +1,7 @@
 class DILCollection < ActiveFedora::Base
   
   include Hydra::ModelMethods
-  include Dil::RightsMetadata
+  include Hydra::ModelMixins::RightsMetadata
   
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 

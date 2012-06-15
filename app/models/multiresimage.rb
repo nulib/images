@@ -1,8 +1,9 @@
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMixins::CommonMetadata
   include Hydra::ModelMethods
+  include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
-  include Dil::RightsMetadata
+  
   
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_governed_by
   has_and_belongs_to_many :vrawork, :class_name => "Vrawork", :property => :is_image_of
