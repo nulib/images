@@ -104,5 +104,17 @@ describe MultiresimagesController do
       end
     end
   end
+  
+  describe "parse_permissions" do
+    it "should take post params and turn them into a hash that works with Hydra::ModelMixins::RightsMetadata#permissions=" do
+      permissions_params = {"new_user_name"=>"mzc206", "new_user_permission"=>"read", "new_group_name"=>"grp108", "new_group_permission"=>"edit", "group"=>{"group22"=>"discover", "group65"=>"read"}, "user"=>{"jcoyne"=>"edit", "acozine"=>"read"}}
+      sample_params = {:generic_file=>{:permissions=>permissions_params, :otherkey=>"otherval"}}
+      result = controller.send(:parse_permissions!, sample_params[:generic_file])
+      result.should == sample_params[:generic_file] # it should modify the source hash
+      sample_params[:generic_file][:permissions].should == [{:name=>"mzc206", :access=>"read", :type=>"user"}, {:name=>"grp108", :access=>"edit", :type=>"group"}, {:name=>"jcoyne", :access=>"edit", :type=>"user"}, {:name=>"acozine", :access=>"read", :type=>"user"}, {:name=>"group22", :access=>"discover", :type=>"group"}, {:name=>"group65", :access=>"read", :type=>"group"}]
+      sample_params[:generic_file][:otherkey].should == "otherval"
+    end
+    
+  end
 
 end

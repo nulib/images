@@ -53,6 +53,7 @@ class MultiresimagesController < ApplicationController
       eligible = current_user.owned_groups.map(&:code)
       @multiresimage.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
     end
+    parse_permissions!(params[:multiresimage])
     @multiresimage.update_attributes(params[:multiresimage])
         
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
@@ -130,6 +131,15 @@ class MultiresimagesController < ApplicationController
       wants.xml  { render :inline =>'<success pid="'+ new_image.pid + '"/>' }
     end
   end
+  
+  # routed to /files/:id/permissions (POST)
+  def permissions
+    @multiresimage = Multiresimage.find(params[:id])
+    parse_permissions!(params[:multiresimage])
+    @multiresimage.update_attributes(params[:multiresimage].reject { |k,v| %w{ Filedata Filename revision}.include? k})
+    @multiresimage.save
+    redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/asset_updated_flash', :locals => { :multiresimage => @multiresimage })
+  end
  
   def updatecrop
     image_id = params[:id]
@@ -149,5 +159,42 @@ class MultiresimagesController < ApplicationController
     document_fedora.save
 	  render :inline =>'<success pid="'+ image_id + '"/>'	
   end
+  
+  private
+  
+  # Takes parmas[:permissions] and generates an array that can be passed into Hydra::ModelMixins::RightsMetadata#permissions= 
+  # @example Adding Permissions for a User
+  #   parse_permissions( {"new_user_name"=>"mzc206", "new_user_permission"=>"read"} )
+  #   => [{:name=>"mzc206", :access=>"read", :type=>"user"}]
+  #
+  # @example Adding Permissions for a Group
+  #   parse_permissions( {"new_user_name"=>"group-555ux", "new_group_permission"=>"edit"} )
+  #   => [{:name=>"group-555ux", :access=>"edit", :type=>"group"}]
+  # 
+  def parse_permissions!(params)
+    if params.has_key?(:permissions)
+      permissions_params = params[:permissions]
+      reformatted_params = []
+      if permissions_params.has_key?("new_user_name") 
+        reformatted_params << {:name=>permissions_params["new_user_name"], :access=>permissions_params["new_user_permission"], :type=>"user"}
+      end
+      if permissions_params.has_key?("new_group_name") 
+        reformatted_params << {:name=>permissions_params["new_group_name"], :access=>permissions_params["new_group_permission"], :type=>"group"}
+      end
+      if permissions_params.has_key?("user") 
+        permissions_params["user"].each_pair do |name, access|
+          reformatted_params << {:name=>name, :access=>access, :type=>"user"}
+        end
+      end
+      if permissions_params.has_key?("group") 
+        permissions_params["group"].each_pair do |name, access|
+          reformatted_params << {:name=>name, :access=>access, :type=>"group"}
+        end
+      end
+      params[:permissions] = reformatted_params
+    end
+    return params
+  end
+  
   
 end
