@@ -1,6 +1,8 @@
 DIL::Application.routes.draw do
   Blacklight.add_routes(self)
   HydraHead.add_routes(self)
+  Hydra::BatchEdit.add_routes(self)
+
 
   root :to => "catalog#index"
 
@@ -42,18 +44,6 @@ DIL::Application.routes.draw do
   end
 
   resources :technical_metadata, :only=>:index
-
-  match 'batch_updates/:id' => 'batch_updates#add', :via=>:put
-  resources :batch_updates, :only=>[:index] do
-    member do
-      delete :destroy
-    end
-    collection do
-      get :edit
-      put :update
-      delete :clear
-    end
-  end
 
   match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 

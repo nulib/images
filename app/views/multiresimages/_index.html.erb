@@ -10,6 +10,6 @@
   <a href="/multiresimages/<%=document[:id]%>">
     <%= document[:title_display].nil?  ? document[:id] : document[:title_display].truncate(50) %>
   </a>
-  <%= batch_update_select(document) %>
+  <%= batch_edit_select(document) %>
 </div>
 
