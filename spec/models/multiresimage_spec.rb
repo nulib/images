@@ -60,7 +60,11 @@ describe Multiresimage do
 
   end
   context "to_solr" do
-    subject { Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26').to_solr }
+    before do
+      @img = Multiresimage.new
+      @img.titleSet_display = 'Evanston Public Library. Exterior: facade'
+    end
+    subject { @img.to_solr }
     it "should have title_display" do
       subject['title_display'].should == "Evanston Public Library. Exterior: facade" 
     end

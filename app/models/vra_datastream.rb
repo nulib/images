@@ -248,7 +248,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	t.subjectSet_display_work(:proxy=>[:work, :subjectSet, :subjectSet_display])
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 
-  t.title(:ref=>[:work, :titleSet, :title]) 
+  #t.title(:proxy=>[:work, :titleSet, :titleSet_display]) 
 	
   end
 
@@ -542,6 +542,8 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
           imageOf_work_vra = imageOf_work.datastreams["VRA"]
           solr_doc = imageOf_work_vra.add_vra_description_to_solrdoc(solr_doc)
         end
+
+        solr_doc['title_display'] = titleSet_display
       end
 
       # Is this a Work?
