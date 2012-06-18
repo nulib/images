@@ -61,12 +61,19 @@
           <%= f.text_field :titleSet_display, :class=>'span6' %>
         </div>
       </div>
-      <div class="control-group">
-        <%= f.label :read_groups, :class=>"control-label" %>
-        <div class="controls">
-          <%= f.select :read_groups, current_user.owned_groups.map{|x| [x.name, x.code]}, {}, :multiple=>true %>
-        </div>
-      </div>
+      
+      <fieldset class="permissions">
+        <legend>Permissions</legend>
+        <div class="control-group">
+          <%= f.label :policy, :class=>"control-label" %>
+          <div class="controls">
+            <%#= f.select :policy, Policy.find(:all).map{|x| [x.name, x.code]}, {}, :multiple=>true %>
+          </div>
+          <span class="description">-- Policy description text will be displayed here --</span>
+        </div>        
+        <span id="object-permissions-heading">Also grant access to</span>
+        <%= render :partial => "permissions/edit_groups_and_users", :locals=>{:fedora_object=>@multiresimage} %>
+      </fieldset>
       
       <div class="form-actions">
         <%= f.submit "Save changes", :class=>'btn btn-primary'%>
