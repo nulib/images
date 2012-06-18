@@ -94,10 +94,15 @@ describe BatchEditsController do
         sign_in @user
       end
       it "should update all the field" do
-        put :update, :multiresimage=>{:titleSet_display=>'My title' } 
+        put :update, :multiresimage=>{:titleSet_display=>'My title', :agentSet_display => "My agent", :dateSet_display=>"April, 2009", :descriptionSet_display=>'My description', :subjectSet_display=>'My subject' } 
         response.should redirect_to catalog_index_path
         flash[:notice].should == "Batch update complete"
-        Multiresimage.find(@one.pid).titleSet_display.should == "My title"
+        result = Multiresimage.find(@one.pid)
+        result.titleSet_display.should == "My title"
+        result.agentSet_display.should == "My agent"
+        result.dateSet_display.should == "April, 2009"
+        result.descriptionSet_display.should == "My description"
+        result.subjectSet_display.should == "My subject"
       end
     end
   end
