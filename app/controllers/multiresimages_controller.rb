@@ -132,14 +132,15 @@ class MultiresimagesController < ApplicationController
     end
   end
   
+  # This will only be necessary when using ajax -- even then might not be necessary - MZ 06/18/2012
   # routed to /files/:id/permissions (POST)
-  def permissions
-    @multiresimage = Multiresimage.find(params[:id])
-    parse_permissions!(params[:multiresimage])
-    @multiresimage.update_attributes(params[:multiresimage].reject { |k,v| %w{ Filedata Filename revision}.include? k})
-    @multiresimage.save
-    redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/permissions_updated_flash', :locals => { :asset => @multiresimage }).html_safe
-  end
+  # def permissions
+  #   @multiresimage = Multiresimage.find(params[:id])
+  #   parse_permissions!(params[:multiresimage])
+  #   @multiresimage.update_attributes(params[:multiresimage].reject { |k,v| %w{ Filedata Filename revision}.include? k})
+  #   @multiresimage.save
+  #   redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/permissions_updated_flash', :locals => { :asset => @multiresimage }).html_safe
+  # end
  
   def updatecrop
     image_id = params[:id]
@@ -162,23 +163,15 @@ class MultiresimagesController < ApplicationController
   
   private
   
-  # Takes parmas[:permissions] and generates an array that can be passed into Hydra::ModelMixins::RightsMetadata#permissions= 
-  # @example Adding Permissions for a User
-  #   parse_permissions( {"new_user_name"=>"mzc206", "new_user_permission"=>"read"} )
-  #   => [{:name=>"mzc206", :access=>"read", :type=>"user"}]
-  #
-  # @example Adding Permissions for a Group
-  #   parse_permissions( {"new_user_name"=>"group-555ux", "new_group_permission"=>"edit"} )
-  #   => [{:name=>"group-555ux", :access=>"edit", :type=>"group"}]
-  # 
+
   def parse_permissions!(params)
     if params.has_key?(:permissions)
       permissions_params = params[:permissions]
       reformatted_params = []
-      if permissions_params.has_key?("new_user_name") 
+      if permissions_params["new_user_name"].present? 
         reformatted_params << {:name=>permissions_params["new_user_name"], :access=>permissions_params["new_user_permission"], :type=>"user"}
       end
-      if permissions_params.has_key?("new_group_name") 
+      if permissions_params["new_group_name"].present?
         reformatted_params << {:name=>permissions_params["new_group_name"], :access=>permissions_params["new_group_permission"], :type=>"group"}
       end
       if permissions_params.has_key?("user") 
