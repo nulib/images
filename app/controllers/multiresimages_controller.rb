@@ -138,7 +138,7 @@ class MultiresimagesController < ApplicationController
     parse_permissions!(params[:multiresimage])
     @multiresimage.update_attributes(params[:multiresimage].reject { |k,v| %w{ Filedata Filename revision}.include? k})
     @multiresimage.save
-    redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/asset_updated_flash', :locals => { :multiresimage => @multiresimage })
+    redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/permissions_updated_flash', :locals => { :asset => @multiresimage }).html_safe
   end
  
   def updatecrop
