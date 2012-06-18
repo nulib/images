@@ -42,6 +42,7 @@ group :development, :test do
   gem 'capybara'
   gem 'bcrypt-ruby'
   gem 'debugger'
+  gem 'launchy'
 end
 
 gem 'unicorn'
