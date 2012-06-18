@@ -72,6 +72,7 @@ describe MultiresimagesController do
     describe "that I have edit permissions on" do
       before do
         @img.apply_depositor_metadata(@user.uid)
+        @img.edit_groups = ["staff"]
         @img.save
       end
       it "should save changes" do
@@ -79,6 +80,36 @@ describe MultiresimagesController do
         response.should redirect_to(edit_multiresimage_path(@img))
         assigns[:multiresimage].titleSet_display.should == "New title"
         flash[:notice].should == "Saved changes to #{@img.pid}"
+      end
+      
+      describe "setting permissions" do
+        it "should update permissions" do
+          put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
+          "new_group_name"=>"", "new_group_permission"=>"none", 
+          "new_user_name"=>"", "new_user_permission"=>"none"}}
+          updated_img = Multiresimage.find(@img.pid)
+          updated_img.edit_groups.should include("staff")
+          updated_img.edit_groups.should include("faculty") 
+          updated_img.discover_users.should include("student1")
+          updated_img.edit_users.should include("vanessa")
+          updated_img.read_users.should include("archivist1")
+        end
+        it "should add group & user permissions without wiping out existing permissions" do
+          # pre-existing permissions
+          @img.edit_groups.should include("staff") 
+          @img.edit_users.should include(@user.uid)
+          
+          put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{
+            "new_group_name"=>"mynewgroup", "new_group_permission"=>"discover", 
+            "new_user_name"=>"uuuusssserzed", "new_user_permission"=>"edit"}}
+          updated_img = Multiresimage.find(@img.pid)
+          # check that new permissions were granted
+          updated_img.discover_groups.should include("mynewgroup")
+          updated_img.edit_users.should include("uuuusssserzed")
+          # check that the original permissions weren't changed
+          updated_img.edit_groups.should include("staff") 
+          updated_img.edit_users.should include(@user.uid)
+        end
       end
 
       describe "setting group access" do
