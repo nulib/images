@@ -1,36 +1,27 @@
-<h2>Update Current</h2>
+<h2>Users &amp; Groups with Access</h2>
 <% fedora_object.permissions.each do |permission| %>
-  <%= form_for fedora_object, :url => permissions_multiresimage_path, :method => :post, :html => {:id => permission[:name] + '_update_form', :class => 'form-horizontal'} do |f| %>
     <div class="control-group"> 
       <div class="controls">
       <%= label_tag "multiresimage[permissions][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <%= select_tag "multiresimage[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'small' if permission[:name].upcase == 'PUBLIC'%>
       <%= select_tag "multiresimage[permissions][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'small' unless permission[:name].upcase == 'PUBLIC' %>
-      <%= f.submit :value => "Update", :name=> "update_permission", :id => "#{permission[:name]}_update_permission"  %> 
       </div>
     </div> 
-  <% end %>
 <% end %>
 
-<h2>Save New</h2>
-<%= form_for fedora_object, :url => permissions_multiresimage_path, :method => :post, :html => {:id => 'multiresimage[permissions][new_group_name]_form', :class => 'form-horizontal'} do |f| %>
+<h2>Grant Access For</h2>
   <div class="control-group" id="new-group"> 
     <%= label_tag 'multiresimage[permissions][new_group_name]', "Group", :class=>"control-label" %>
     <div class="controls">
       <%= text_field_tag 'multiresimage[permissions][new_group_name]' %>
       <%= select_tag 'multiresimage[permissions][new_group_permission]', options_for_select(DIL::Application::config.permission_levels) %>
-      <%= f.submit :value => "Add Group", :name=> "new_group_permission", :id => "new_group_permission"  %>
     </div>
   </div>
-<% end %>
 
-<%= form_for fedora_object, :url => permissions_multiresimage_path, :method => :post, :html => {:id => 'multiresimage[permissions][new_user_name]_form', :class => 'form-horizontal'} do |f| %>
   <div class="control-group" id="new-user"> 
     <%= label_tag 'multiresimage[permissions][new_user_name]', "User", :class=>"control-label" %>
     <div class="controls">
       <%= text_field_tag 'multiresimage[permissions][new_user_name]' %>
       <%= select_tag 'multiresimage[permissions][new_user_permission]', options_for_select(DIL::Application::config.permission_levels) %>
-      <%= f.submit :value => "Add Person", :name=> "new_user_permission", :id => "new_user_permission"  %>
     </div>
   </div>
-<% end %>
