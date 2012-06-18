@@ -32,8 +32,7 @@ gem 'jquery.fileupload-rails'
 
 gem 'uuid'
 gem 'hydra-ldap', '~>0.0.3'
-gem 'hydra-batch-edit'
-
+gem 'hydra-batch-edit', '~>0.0.4'
 
 group :development, :test do 
   gem 'jettywrapper'
