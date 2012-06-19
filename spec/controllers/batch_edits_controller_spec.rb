@@ -70,18 +70,6 @@ describe BatchEditsController do
       @one = Multiresimage.create
       @two = Multiresimage.create
     end
-    it "should complain when none are in the batch " do
-      put :update, :multiresimage=>{:titleSet_display=>'My title' } 
-      response.should redirect_to catalog_index_path
-      flash[:notice].should == "Select something first"
-    end
-    it "should not update when the user doesn't have permissions" do
-      put :add, :id =>@one.pid
-      put :add, :id => @two.pid
-      put :update, :multiresimage=>{:titleSet_display=>'My title' } 
-      response.should redirect_to catalog_index_path
-      flash[:notice].should == "You do not have permission to edit the documents: #{@one.pid}, #{@two.pid}"
-    end
     describe "when current user has access to the documents" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
