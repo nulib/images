@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
-  gem 'rails', '3.2.5'
+  gem 'rails', '3.2.6'
   gem 'blacklight', :git=>'git://github.com/projectblacklight/blacklight.git', :ref=>'a83c286'
-  gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'ca10693'
+  gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'7fd7d0a'
   gem 'active-fedora', '4.2.0'
   gem 'sqlite3'
   
@@ -32,7 +32,7 @@ gem 'jquery.fileupload-rails'
 
 gem 'uuid'
 gem 'hydra-ldap', '~>0.0.3'
-gem 'hydra-batch-edit', '~>0.0.4'
+gem 'hydra-batch-edit', '~>0.0.5'
 
 group :development, :test do 
   gem 'jettywrapper'
