@@ -65,6 +65,8 @@ describe MultiresimagesController do
   describe "update an image" do
     before do
       @img = Multiresimage.create
+      @work = Vrawork.create
+      @img.vraworks = [@work]
       @user = FactoryGirl.find_or_create(:archivist)
       Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
       sign_in @user
@@ -75,10 +77,11 @@ describe MultiresimagesController do
         @img.edit_groups = ["staff"]
         @img.save
       end
-      it "should save changes" do
+      it "should save changes to the image and its associated vrawork" do
         put :update, :id=>@img.pid, :multiresimage=>{:titleSet_display =>"New title"}
         response.should redirect_to(edit_multiresimage_path(@img))
         assigns[:multiresimage].titleSet_display.should == "New title"
+        assigns[:multiresimage].vraworks.first.titleSet_display_work.should == "New title"
         flash[:notice].should == "Saved changes to #{@img.pid}"
       end
       
