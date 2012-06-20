@@ -6,7 +6,7 @@ class Multiresimage < ActiveFedora::Base
   
   
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_governed_by
-  has_and_belongs_to_many :vrawork, :class_name => "Vrawork", :property => :is_image_of
+  has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
@@ -48,6 +48,22 @@ class Multiresimage < ActiveFedora::Base
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
 
+  before_save :update_associated_work
+
+
+  def update_associated_work
+    #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
+    if vraworks.first.present?
+      vra_work = vraworks.first
+      vra_work.agentSet_display_work = agentSet_display
+      vra_work.dateSet_display_work = dateSet_display
+      vra_work.descriptionSet_display_work = descriptionSet_display
+      vra_work.subjectSet_display_work = subjectSet_display
+      vra_work.titleSet_display_work = titleSet_display
+      vra_work.save!
+    end
+  end
+   
 
   def attach_file(files)
     if files.present?

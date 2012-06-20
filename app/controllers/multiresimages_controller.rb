@@ -9,8 +9,8 @@ class MultiresimagesController < ApplicationController
   def destroy
     obj = Multiresimage.find(params[:id])
     authorize! :destroy, obj
-    if obj.vrawork[0].present?
-      obj.vrawork[0].delete
+    if obj.vraworks[0].present?
+      obj.vraworks[0].delete
     end
     obj.delete
     selected_files.delete(params[:id])
@@ -57,25 +57,7 @@ class MultiresimagesController < ApplicationController
     parse_permissions!(params[:multiresimage])
     @multiresimage.update_attributes(params[:multiresimage])
         
-    #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
-    if @multiresimage.vrawork[0].present?
-      @vra_work = @multiresimage.vrawork[0]
-      @vra_work.agentSet_display_work = params[:multiresimage]['agentSet_display']
-      @vra_work.dateSet_display_work = params[:multiresimage]['dateSet_display']
-      @vra_work.descriptionSet_display_work = params[:multiresimage]['descriptionSet_display']
-      @vra_work.subjectSet_display_work = params[:multiresimage]['subjectSet_display']
-      @vra_work.titleSet_display_work = params[:multiresimage]['titleSet_display']
-
-      @vra_work.save!
-    end
-   
-    if @multiresimage.save
-      flash[:notice] = "Saved changes to #{@multiresimage.id}"
-    else
-      flash[:alert] = "Failed to save your changes!"
-    end
-    
-
+    flash[:notice] = "Saved changes to #{@multiresimage.id}"
     
     redirect_to edit_multiresimage_path(@multiresimage)
   end
