@@ -2,6 +2,7 @@ require 'dil/multiresimage_service'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
   #include Vrawork
+  helper :permissions
 
   respond_to :html, :xml
 
