@@ -24,12 +24,6 @@ describe UsersController do
           response.should redirect_to(edit_group_path(@group))
         end
       end
-      describe "without a group" do
-        it "should handle errors" do
-          post :create, :id=>'ken'
-          response.response_code.should == 404
-        end
-      end
       describe "on a group the user doesn't own" do
         before do
           @group= FactoryGirl.create(:user_group)
@@ -69,12 +63,6 @@ describe UsersController do
           delete :destroy, :id=>'ken', :group_id=>@group.id
           flash[:notice].should == "Removed member ken"
           response.should redirect_to(edit_group_path(@group))
-        end
-      end
-      describe "without a group" do
-        it "should handle errors" do
-          delete :destroy, :id=>'ken'
-          response.response_code.should == 404
         end
       end
       describe "on a group the user doesn't own" do

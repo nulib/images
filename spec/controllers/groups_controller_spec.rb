@@ -88,7 +88,7 @@ describe GroupsController do
     end
     describe "when not logged in" do
       before do
-        @g = Group.create
+        @g = Group.create!(:name=>"Foo")
       end
       it "should redirect to signin" do
         get :edit, :id=>@g.id
