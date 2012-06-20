@@ -92,5 +92,18 @@ describe Multiresimage do
       subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
     end
   end
+
+  describe "update with an attached vrawork" do
+    before do
+      @img = Multiresimage.create
+      @work = Vrawork.create
+      @img.vraworks = [@work]
+    end
+    it "should update the work" do
+      @img.update_attributes(:titleSet_display => "Woah cowboy")
+      @img.vraworks.first.titleSet_display_work.should == "Woah cowboy"
+      
+    end
+  end
 end
 
