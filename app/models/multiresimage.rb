@@ -38,15 +38,15 @@ class Multiresimage < ActiveFedora::Base
     m.field 'file_name', :string
   end
   
-  delegate :titleSet_display, :to=>:VRA, :unique=>true
-  delegate :agentSet_display, :to=>:VRA, :unique=>true
-  delegate :dateSet_display, :to=>:VRA, :unique=>true
-  delegate :descriptionSet_display, :to=>:VRA, :unique=>true
-  delegate :subjectSet_display, :to=>:VRA, :unique=>true
-  delegate :culturalContextSet_display, :to=>:VRA, :unique=>true
-  delegate :techniqueSet_display, :to=>:VRA, :unique=>true
+  delegate_to :VRA, [:titleSet_display, :agentSet_display, :dateSet_display, 
+      :descriptionSet_display, :subjectSet_display, :culturalContextSet_display, 
+      :techniqueSet_display, :locationSet_display, :materialSet_display, 
+      :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display, 
+      :worktypeSet_display], :unique=>true 
+
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
+  delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
 
   before_save :update_associated_work
 
@@ -64,6 +64,11 @@ class Multiresimage < ActiveFedora::Base
     end
   end
    
+  def preferred_related_work
+    return @preferred_related_work if @preferred_related_work
+    return nil unless preferred_related_work_pid
+		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
+  end
 
   def attach_file(files)
     if files.present?

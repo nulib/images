@@ -1,0 +1,13 @@
+              <% unless @multiresimage.VRA.find_by_terms(:image, :relationSet, :relation).text.empty? %>
+                  <li>Related Images
+                    <ul>
+                      <div class="gallery_container">
+                        <% @multiresimage.related_ids.each do |work_pid| %>
+                            <div class="listing"><a href="/catalog/<%= work_pid %>"><img src="http://<%= request.host %>:8983/fedora/get/<%= work_pid %>/inu:sdef-image/getWithLongSide?length=110"></a></div>
+                        <% end %>
+                      </div>
+                    </ul>
+                  </li>
+
+              <% end %>
+
