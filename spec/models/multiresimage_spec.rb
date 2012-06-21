@@ -106,14 +106,32 @@ describe Multiresimage do
     end
   end
 
-  describe "preferred_related_work" do
+  describe "with related works" do
     before do
       @img = Multiresimage.new
-      @work = Vrawork.create
-      @img.VRA.image.relationSet.imageOf_preferred.relation_relids = @work.pid
+      @work1 = Vrawork.create
+      @work2 = Vrawork.create
+      @work3 = Vrawork.create
+      vra_xml = <<-eos
+      <vra:vra xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
+        <vra:image id="inu-dil-77334_w" refid="inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26">
+
+          <vra:relationSet>
+            <vra:display>Evanston Public Library. Exterior: facade</vra:display>
+            <vra:relation pref="true" relids="#{@work1.pid}" type="imageOf">Evanston Public Library. Exterior: facade</vra:relation>
+            <vra:relation relids="#{@work2.pid}" type="imageOf">Evanston Public Library. Exterior: facade</vra:relation>
+            <vra:relation relids="#{@work3.pid}" type="imageOf">Evanston Public Library. Exterior: facade</vra:relation>
+          </vra:relationSet>
+        </vra:image>
+      </vra:vra>
+      eos
+      @img.datastreams["VRA"] = VRADatastream.from_xml(vra_xml)
     end
-    it "should return the work at [:image, :relationSet, :imageOf_preferred, :relation_relids]" do
-      @img.preferred_related_work.should == @work
+    it "preferred_related_work should return the preferred work" do
+      @img.preferred_related_work.should == @work1
+    end
+    it "other_related_works should be the others" do
+      @img.other_related_works.should == [@work2, @work3]
     end
   end
 end
