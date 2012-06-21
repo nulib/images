@@ -4,10 +4,6 @@ module MultiresimageHelper
 	  Vrawork.find(work_pid)
   end
 
-  def get_preferred_work_object(preferred_work_pid)
-	  get_work_object(preferred_work_pid) 
-  end
-
   def get_longside_max(image_object)
     ds = image_object.DELIV_OPS
     if ds.svg_rect.empty?

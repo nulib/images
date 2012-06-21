@@ -1,0 +1,26 @@
+			<% vra_work = @multiresimage.preferred_related_work %>
+			<table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
+			   <tbody>
+				  				  
+					  <%# Display sets for work and image %>
+					  <% vraSetArray.each.with_index do |setName, index| %>
+					    <%# Get the preferred work's set value from the VRA datastream.  Using to_sym to covert Strings into Symbols %> 
+					    <% pref_work_display_value = vra_work.VRA.find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
+					    <% image_display_value = @multiresimage.send((setName + "Set_display").to_sym) %> 
+						  <% unless pref_work_display_value.empty? %>
+							  <tr>
+								 <td class="Elements"><%=setName.capitalize%>:</td>
+								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
+								 	<%= [pref_work_display_value, image_display_value].flatten.join(' ; ')%> 
+								 </td>
+							  </tr>
+							<%end%>
+					  <%end%>
+	
+					  <%# Include its identifier (pid) %>
+					  <tr>
+						 <td class="Elements">Identifier:</td>
+						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%=vra_work.pid%> ; <%= @multiresimage.pid %></td>
+					  </tr>
+			   </tbody>
+			</table>
