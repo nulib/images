@@ -12,5 +12,5 @@ discover access granted on object for NU account holders |
 | inu:dil-ae2f7e7b-01c7-4996-80e6-74acb6ebbed0 | inu:dil-special-collection-image | read access granted on object for Africana faculty (LDAP group) 
 (implicit) edit access granted for Digital Collections Curators (LDAP group) |
 | inu:dil-6a3ee5e5-558f-4277-9d01-916f5a25bfc5 | inu:dil-special-collection-image-work | |
-| inu:dil-c092b2c9-85b1-4cfa-908b-217410f98ec5 | inu:dil-open-access-image | |
+| inu:dil-c092b2c9-85b1-4cfa-908b-217410f98ec5 | inu:dil-open-access-image | Public/World has been granted Read & Download access |
 | inu:dil-a67a986b-bb26-4576-9ffd-ac0fbfeb5804 | inu:dil-open-access-image-work | |

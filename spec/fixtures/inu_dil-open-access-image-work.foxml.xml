@@ -74,9 +74,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   </copyright>
   <access type="discover">
     <human></human>
-    <machine>
-      <group>public</group>
-    </machine>
+    <machine></machine>
   </access>
   <access type="read">
     <human></human>
