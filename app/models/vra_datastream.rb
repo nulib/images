@@ -165,10 +165,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	# relationSet OM definitions
 	t.relationSet_ref(:path=>"relationSet") {
 	  t.relationSet_display(:path=>"display", :label=>"Relation")
+    t.imageOf_others(:path=>"relation", :attributes=>{:pref=>:none, :type=>"imageOf"}) do
+      t.relation_relids(:path=>{:attribute=>"relids"})
+    end
 	  t.imageOf_preferred(:path=>"relation", :attributes=>{:pref=>"true", :type=>"imageOf"}, :label=>"Preferred Work") {
-		t.relation_type(:path=>{:attribute=>"type"})
-		t.relation_relids(:path=>{:attribute=>"relids"})
-		#t.relation_href(:path=>{:attribute=>"href"})
+      t.relation_type(:path=>{:attribute=>"type"})
+      t.relation_relids(:path=>{:attribute=>"relids"})
+      #t.relation_href(:path=>{:attribute=>"href"})
 	  }
 	  t.imageOf(:path=>"relation", :attributes=>{:type=>"imageOf"}, :label=>"Image of Work") {
 		t.relation_type(:path=>{:attribute=>"type"})

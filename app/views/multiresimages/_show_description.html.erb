@@ -10,9 +10,6 @@
  	     
  	    <% vraSetArray = ["agent", "title", "date", "subject", "location", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"] %>
 		
-		<%# the pid for the preferred work %>
-		<% preferred_related_work_pid = @multiresimage.VRA.find_by_terms(:image, :relationSet, :imageOf_preferred, :relation_relids).text %>
-		
 		<%# if preferred work exists %>
 		<% if @multiresimage.preferred_related_work %>
       <%= render :partial=>'description_metadata', :locals=>{:vraSetArray=>vraSetArray} %>
@@ -27,14 +24,13 @@
     <br/><br/>
 
 		<%# Check for other related works (not preferred) %>
-		<% unless @multiresimage.VRA.find_by_terms("//vra:relationSet/vra:relation[not(@pref='true')]").empty? %>
+		<% if @multiresimage.other_related_works.present? %>
 		
 			<ul class="listexpander">		
 			  <li>Related Works
 			  <ul>
 			  <li>
-			  <% @multiresimage.VRA.find_by_terms("//vra:relationSet/vra:relation[not(@pref='true')]").each do |related_work_pid| %>
-			  	<% related_work = get_work_object(related_work_pid.attr("relids")) %>
+			  <% @multiresimage.other_related_works.each do |related_work| %>
 			  <table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
 			   <tbody>
 			   
