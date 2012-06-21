@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 # Adds Hydra behaviors into the application controller 
   include Hydra::Controller::ControllerBehavior
   def layout_name
-   'hydra-head'
+   'application'
   end
 
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
