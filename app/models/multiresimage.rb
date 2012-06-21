@@ -47,6 +47,7 @@ class Multiresimage < ActiveFedora::Base
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
   delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
+  delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
   before_save :update_associated_work
 
@@ -68,6 +69,28 @@ class Multiresimage < ActiveFedora::Base
     return @preferred_related_work if @preferred_related_work
     return nil unless preferred_related_work_pid
 		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
+  end
+
+  def other_related_works
+    return @other_related_works if @other_related_works
+    return nil unless other_related_works_pids
+		@other_related_works = []
+    other_related_works_pids.each do |rel_pid|
+      @other_related_works << Vrawork.find(rel_pid)
+    end
+    @other_related_works
+  end
+
+  def longside_max
+      ds = self.DELIV_OPS
+      if ds.svg_rect.empty?
+        svg_height = ds.svg_image.svg_height.first.to_i
+        svg_width = ds.svg_image.svg_width.first.to_i
+      else
+        svg_height = ds.svg_rect.svg_rect_height.first.to_i
+        svg_width = ds.svg_rect.svg_rect_width.first.to_i
+      end
+      svg_height > svg_width ? svg_height : svg_width
   end
 
   def attach_file(files)
