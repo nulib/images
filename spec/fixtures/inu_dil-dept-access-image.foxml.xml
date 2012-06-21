@@ -288,7 +288,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <access type="edit">
     <human></human>
     <machine>
-      <person>joecreator</person>
+      <person>joe_creator</person>
     </machine>
   </access>
   <embargo>

@@ -149,7 +149,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
   <access type="edit">
     <human></human>
     <machine>
-      <person>joecreator</person>
+      <person>joe_creator</person>
     </machine>
   </access>
   <embargo>
@@ -4527,7 +4527,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
       <vra:technique></vra:technique>
     </vra:techniqueSet>
     <vra:titleSet>
-      <vra:display>joecreator Tibetan_astronomical_Thangka_4.jpg</vra:display>
+      <vra:display>joe_creator Tibetan_astronomical_Thangka_4.jpg</vra:display>
       <vra:title pref="true"></vra:title>
     </vra:titleSet>
     <vra:worktypeSet>
@@ -4587,7 +4587,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
       <vra:technique></vra:technique>
     </vra:techniqueSet>
     <vra:titleSet>
-      <vra:display>joecreator Tibetan_astronomical_Thangka_4.jpg</vra:display>
+      <vra:display>joe_creator Tibetan_astronomical_Thangka_4.jpg</vra:display>
       <vra:title pref="true"></vra:title>
     </vra:titleSet>
     <vra:worktypeSet>
