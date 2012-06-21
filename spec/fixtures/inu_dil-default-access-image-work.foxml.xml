@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- THIS IS THE VRA WORK, NOT THE IMAGE -->
+<foxml:digitalObject VERSION="1.1" PID="inu:dil-default-access-image-work"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE=""/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2012-06-21T17:11:31.218Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2012-06-21T17:11:32.726Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2012-06-21T17:11:31.218Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-06-21T17:11:31.335Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-06-21T17:11:32.173Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-06-21T17:11:32.265Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC4">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>VRA</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-06-21T17:11:32.337Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC5">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-06-21T17:11:32.651Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC6">
+<audit:process type="Fedora API-M"/>
+<audit:action>modifyDatastreamByValue</audit:action>
+<audit:componentID>VRA</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2012-06-21T17:11:32.726Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2012-06-21T17:11:31.218Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="340">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:identifier>inu:dil-default-access-image-work</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2012-06-21T17:11:31.335Z" MIMETYPE="application/rdf+xml" SIZE="281">
+<foxml:xmlContent>
+<rdf:RDF xmlns:ns0="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/inu:dil-default-access-image-work">
+    <ns0:hasModel rdf:resource="info:fedora/afmodel:Vrawork"></ns0:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="RELS-EXT.1" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2012-06-21T17:11:32.173Z" MIMETYPE="application/rdf+xml" SIZE="404">
+<foxml:xmlContent>
+<rdf:RDF xmlns:ns0="http://projecthydra.org/ns/relations#" xmlns:ns1="info:fedora/fedora-system:def/model#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/inu:dil-default-access-image-work">
+    <ns0:hasImage rdf:resource="info:fedora/inu:dil-default-access-image"></ns0:hasImage>
+    <ns1:hasModel rdf:resource="info:fedora/afmodel:Vrawork"></ns1:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="" CREATED="2012-06-21T17:11:32.265Z" MIMETYPE="text/xml" SIZE="575">
+<foxml:xmlContent>
+<rightsMetadata xmlns="http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1" version="0.1">
+  <copyright>
+    <human></human>
+    <machine>
+      <uvalicense>no</uvalicense>
+    </machine>
+  </copyright>
+  <access type="discover">
+    <human></human>
+    <machine></machine>
+  </access>
+  <access type="read">
+    <human></human>
+    <machine></machine>
+  </access>
+  <access type="edit">
+    <human></human>
+    <machine>
+      <person>joecreator</person>
+    </machine>
+  </access>
+  <embargo>
+    <human></human>
+    <machine></machine>
+  </embargo>
+</rightsMetadata>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="VRA" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="VRA.0" LABEL="" CREATED="2012-06-21T17:11:32.337Z" MIMETYPE="text/xml" SIZE="1846">
+<foxml:xmlContent>
+<vra:vra xmlns="http://www.vraweb.org/vracore4.htm" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/vracore/vra.xsd">
+  <vra:image refid="">
+    <vra:agentSet>
+      <vra:display></vra:display>
+      <vra:agent>
+        <vra:name></vra:name>
+        <vra:attribution></vra:attribution>
+      </vra:agent>
+    </vra:agentSet>
+    <vra:culturalContextSet>
+      <vra:display></vra:display>
+    </vra:culturalContextSet>
+    <vra:dateSet>
+      <vra:display>
+        <vra:date>
+          <vra:dateContent></vra:dateContent>
+          <vra:dateType type=""></vra:dateType>
+          <vra:earliestDate></vra:earliestDate>
+          <vra:latestDate></vra:latestDate>
+        </vra:date>
+      </vra:display>
+    </vra:dateSet>
+    <vra:descriptionSet>
+      <vra:display></vra:display>
+      <vra:description></vra:description>
+    </vra:descriptionSet>
+    <vra:inscriptionSet>
+      <vra:display></vra:display>
+      <vra:inscription></vra:inscription>
+    </vra:inscriptionSet>
+    <vra:relationSet>
+      <vra:display></vra:display>
+      <vra:relation label="Work" pref="true" type="imageOf"></vra:relation>
+    </vra:relationSet>
+    <vra:stylePeriodSet>
+      <vra:display></vra:display>
+      <vra:stylePeriod></vra:stylePeriod>
+    </vra:stylePeriodSet>
+    <vra:subjectSet>
+      <vra:display></vra:display>
+      <vra:subject></vra:subject>
+    </vra:subjectSet>
+    <vra:techniqueSet>
+      <vra:display></vra:display>
+      <vra:technique></vra:technique>
+    </vra:techniqueSet>
+    <vra:titleSet>
+      <vra:display></vra:display>
+      <vra:title pref="true"></vra:title>
+    </vra:titleSet>
+    <vra:worktypeSet>
+      <vra:display></vra:display>
+      <vra:worktype></vra:worktype>
+    </vra:worktypeSet>
+  </vra:image>
+</vra:vra>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+<foxml:datastreamVersion ID="VRA.1" LABEL="" CREATED="2012-06-21T17:11:32.726Z" MIMETYPE="text/xml" SIZE="1918">
+<foxml:xmlContent>
+<vra:vra xmlns="http://www.vraweb.org/vracore4.htm" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/standards/vracore/vra.xsd">
+  <vra:work refid="inu:dil-default-access-image-work">
+    <vra:agentSet>
+      <vra:display></vra:display>
+      <vra:agent>
+        <vra:name></vra:name>
+        <vra:attribution></vra:attribution>
+      </vra:agent>
+    </vra:agentSet>
+    <vra:culturalContextSet>
+      <vra:display></vra:display>
+    </vra:culturalContextSet>
+    <vra:dateSet>
+      <vra:display>
+        <vra:date>
+          <vra:dateContent></vra:dateContent>
+          <vra:dateType type=""></vra:dateType>
+          <vra:earliestDate></vra:earliestDate>
+          <vra:latestDate></vra:latestDate>
+        </vra:date>
+      </vra:display>
+    </vra:dateSet>
+    <vra:descriptionSet>
+      <vra:display></vra:display>
+      <vra:description></vra:description>
+    </vra:descriptionSet>
+    <vra:inscriptionSet>
+      <vra:display></vra:display>
+      <vra:inscription></vra:inscription>
+    </vra:inscriptionSet>
+    <vra:relationSet>
+      <vra:display></vra:display>
+      <vra:relation label="Work" pref="true" relids="inu:dil-default-access-image" type="imageIs"></vra:relation>
+    </vra:relationSet>
+    <vra:stylePeriodSet>
+      <vra:display></vra:display>
+      <vra:stylePeriod></vra:stylePeriod>
+    </vra:stylePeriodSet>
+    <vra:subjectSet>
+      <vra:display></vra:display>
+      <vra:subject></vra:subject>
+    </vra:subjectSet>
+    <vra:techniqueSet>
+      <vra:display></vra:display>
+      <vra:technique></vra:technique>
+    </vra:techniqueSet>
+    <vra:titleSet>
+      <vra:display>Joe's Tibetan Astronomical Thangka 4</vra:display>
+      <vra:title pref="true"></vra:title>
+    </vra:titleSet>
+    <vra:worktypeSet>
+      <vra:display></vra:display>
+      <vra:worktype></vra:worktype>
+    </vra:worktypeSet>
+  </vra:work>
+</vra:vra>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>
