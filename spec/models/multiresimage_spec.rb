@@ -105,5 +105,16 @@ describe Multiresimage do
       
     end
   end
+
+  describe "preferred_related_work" do
+    before do
+      @img = Multiresimage.new
+      @work = Vrawork.create
+      @img.VRA.image.relationSet.imageOf_preferred.relation_relids = @work.pid
+    end
+    it "should return the work at [:image, :relationSet, :imageOf_preferred, :relation_relids]" do
+      @img.preferred_related_work.should == @work
+    end
+  end
 end
 

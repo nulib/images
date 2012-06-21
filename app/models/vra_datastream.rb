@@ -238,6 +238,14 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	t.inscriptionSet_display(:proxy=>[:image, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display(:proxy=>[:image, :dateSet, :dateSet_display])
 	t.subjectSet_display(:proxy=>[:image, :subjectSet, :subjectSet_display])
+	t.locationSet_display(:proxy=>[:image, :locationSet, :locationSet_display])
+	t.materialSet_display(:proxy=>[:image, :materialSet, :materialSet_display])
+
+	t.measurementsSet_display(:proxy=>[:image, :measurementsSet, :measurementsSet_display])
+	t.stylePeriodSet_display(:proxy=>[:image, :stylePeriodSet, :stylePeriodSet_display])
+	t.inscriptionSet_display(:proxy=>[:image, :inscriptionSet, :inscriptionSet_display])
+	t.worktypeSet_display(:proxy=>[:image, :worktypeSet, :worktypeSet_display])
+
 	t.culturalContextSet_display(:proxy=>[:image, :culturalContextSet, :culturalContextSet_display])
 	
 	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
