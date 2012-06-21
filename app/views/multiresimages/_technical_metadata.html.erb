@@ -1,5 +1,5 @@
               <%# Only display technical metadata if the user is a member of staff %>
-              <% if can? :show, :technical_metadata %>
+              <% if can? :view_technical_metadata, @multiresimage %>
                   <li>
                     <%= link_to "EXIF Technical Metadata", technical_metadata_path(:id=>@multiresimage.pid, :type=>'ARCHV-EXIF', :format=>'xml') %>
                   </li>

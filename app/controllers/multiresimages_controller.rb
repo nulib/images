@@ -44,6 +44,7 @@ class MultiresimagesController < ApplicationController
    
   def show
     @multiresimage = Multiresimage.find(params[:id])
+    @page_title = @multiresimage.titleSet_display
   end
    
   def update

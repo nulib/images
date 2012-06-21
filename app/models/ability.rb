@@ -6,7 +6,7 @@ class Ability
   def user_groups(user, session)
     return @user_groups if @user_groups
     @user_groups = default_user_groups
-    @user_groups += Hydra::LDAP.groups_for_user(user.uid) << 'registered' unless user.new_record?
+    @user_groups += user.groups.map(&:code) << 'registered' unless user.new_record?
     @user_groups
   end
 
@@ -22,20 +22,17 @@ class Ability
 
     ### Delegate Multiresimage permissions to the collection
     can :read, Multiresimage do |obj|
-      test_read(obj.pid, user,session) || can_read_collection?(obj, user, session)
+      test_read(obj.pid, user,session)
     end
 
 
-    can [:edit, :update, :destroy], Multiresimage do |obj|
-      test_edit(obj.pid, user,session) || can_edit_collection?(obj, user, session)
+    can [:edit, :update, :destroy, :view_technical_metadata], Multiresimage do |obj|
+      test_edit(obj.pid, user,session)
     end
     can :destroy, ActiveFedora::Base do |obj|
       obj.rightsMetadata.individuals[user.email] == 'edit'
     end
 
-    # Technical metadata should only be shown to staff
-    # membership in staff is provided by LDAP as eduPersonAffiliation (rather than groupOfNames)
-    can :show, :technical_metadata if user.affiliations.include?("staff")
   end
 
   private
