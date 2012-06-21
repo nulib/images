@@ -1,2 +1,11 @@
-inu:dil-9b1a1098-6a2f-4ddc-8fc5-a5a511b8678b      inu:dil-nu-read-access-image
-inu:dil-3cbdc575-23e7-4aa1-8cf6-9ad664d943ef      inu:dil-nu-read-access-image-work
+| Original PID | Fixture PID | |
+| N/A | inu:dil-default-access-image |
+| inu:dil-9b1a1098-6a2f-4ddc-8fc5-a5a511b8678b | inu:dil-nu-read-access-image | created by Joe Creator
+no custom access permissions set (creator has edit permission by default) |
+| inu:dil-3cbdc575-23e7-4aa1-8cf6-9ad664d943ef | inu:dil-nu-read-access-image-work | |
+| inu:dil-b0522fd3-699d-4a3f-b6ad-2c704f23108d | inu:dil-dept-access-image | |
+| inu:dil-05d2a409-d774-4113-8e86-a38d272ee725 | inu:dil-dept-access-image-work | |
+| inu:dil-ae2f7e7b-01c7-4996-80e6-74acb6ebbed0 | inu:dil-special-collection-image | |
+| inu:dil-6a3ee5e5-558f-4277-9d01-916f5a25bfc5 | inu:dil-special-collection-image-work | |
+| inu:dil-c092b2c9-85b1-4cfa-908b-217410f98ec5 | inu:dil-open-access-image | |
+| inu:dil-a67a986b-bb26-4576-9ffd-ac0fbfeb5804 | inu:dil-open-access-image-work | |
