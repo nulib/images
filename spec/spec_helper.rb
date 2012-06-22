@@ -31,7 +31,7 @@ RSpec.configure do |config|
     begin
       Multiresimage.find(:all, :rows=>1000).each do |m|
         ### Delete everything except the fixture
-        m.delete unless m.pid =='inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26'
+        m.delete unless /^inu:dil-/.match(m.pid)
       end
       DILCollection.find(:all, :rows=>1000).each(&:delete)
     rescue ActiveFedora::ObjectNotFoundError
