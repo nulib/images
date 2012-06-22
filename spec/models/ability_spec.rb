@@ -11,6 +11,10 @@ describe "a user" do
       subject.user_groups(@user, nil).should == ['public', 'staff', 'registered']
     end
   end
+
+  it "should be able to create admin policies" do
+    subject.can?(:create, AdminPolicy).should be_true
+  end
   context "who is a member of a group" do
     before do
         @group = FactoryGirl.build(:user_group)
@@ -57,5 +61,6 @@ describe "a user" do
     Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
     subject.can?(:create, DILCollection).should be_true
   end
+
 end
 
