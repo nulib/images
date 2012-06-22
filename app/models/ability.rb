@@ -33,6 +33,8 @@ class Ability
       obj.rightsMetadata.individuals[user.email] == 'edit'
     end
 
+    can :create, AdminPolicy
+
   end
 
   private
