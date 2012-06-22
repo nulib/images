@@ -1,5 +1,4 @@
 class Multiresimage < ActiveFedora::Base
-  include Hydra::ModelMixins::CommonMetadata
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers

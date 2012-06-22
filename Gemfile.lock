@@ -16,30 +16,20 @@ GIT
       unicode
 
 GIT
-  remote: git://github.com/projecthydra/active_fedora.git
-  revision: 4301654daa5e2cdae9925112f4cd3a2e524e0acc
-  ref: 4301654
+  remote: git://github.com/projecthydra/hydra-access-controls
+  revision: ccc6aca05e8a31500c93702466e77e9e37fba89f
+  ref: ccc6aca
   specs:
-    active-fedora (4.2.0)
-      activeresource (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      equivalent-xml
-      mediashelf-loggable
-      mime-types (>= 1.16)
-      multipart-post
-      nokogiri
-      om (~> 1.6.0)
-      rdf
-      rdf-rdfxml (~> 0.3.8)
-      rsolr
-      rubydora (~> 0.5.9)
-      solrizer (~> 1.2.0)
-      xml-simple (>= 1.0.12)
+    hydra-access-controls (0.0.1)
+      active-fedora
+      activesupport
+      cancan
+      deprecation
 
 GIT
   remote: git://github.com/projecthydra/hydra-head.git
-  revision: 7fd7d0af1d6f8839825415b92e42ad101c752dbb
-  ref: 7fd7d0a
+  revision: f0d6c567e79992a5abaad297f48922072222ccbc
+  ref: f0d6c56
   specs:
     hydra-head (4.0.3)
       RedCloth (= 4.2.9)
@@ -71,6 +61,21 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.3)
+    active-fedora (4.3.0)
+      activeresource (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      equivalent-xml
+      mediashelf-loggable
+      mime-types (>= 1.16)
+      multipart-post
+      nokogiri
+      om (~> 1.6.0)
+      rdf
+      rdf-rdfxml (~> 0.3.8)
+      rsolr
+      rubydora (~> 0.5.9)
+      solrizer (~> 1.2.0)
+      xml-simple (>= 1.0.12)
     activemodel (3.2.6)
       activesupport (= 3.2.6)
       builder (~> 3.0.0)
@@ -162,11 +167,6 @@ GEM
     hike (1.2.1)
     httpi (1.0.0)
       rack
-    hydra-access-controls (0.0.1)
-      active-fedora
-      activesupport
-      cancan
-      deprecation
     hydra-batch-edit (0.0.6)
       blacklight
     hydra-ldap (0.0.3)
@@ -209,7 +209,7 @@ GEM
       treetop (~> 1.4.8)
     marc (0.5.0)
     mediashelf-loggable (0.4.9)
-    mime-types (1.18)
+    mime-types (1.19)
     multi_json (1.3.6)
     multipart-post (1.1.5)
     mysql2 (0.3.11)
@@ -360,7 +360,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active-fedora!
+  active-fedora (= 4.3.0)
   bcrypt-ruby
   blacklight!
   bootstrap-sass-rails (= 2.0.3.0)
@@ -373,6 +373,7 @@ DEPENDENCIES
   debugger
   devise
   factory_girl_rails
+  hydra-access-controls!
   hydra-batch-edit (~> 0.0.6)
   hydra-head!
   hydra-ldap (~> 0.0.3)
