@@ -24,7 +24,6 @@ describe TechnicalMetadataController do
       it "should be successful" do
         get :show, {:id=>@img.pid, :type=>'ARCHV-EXIF', :format=>'xml'}
         response.should be_successful
-puts " BOdy: #{response.body}"
         response.body.should have_xpath("//exif")
       end
     end
