@@ -16,6 +16,7 @@
 
 *.swp
 *.swo
+*.swn
 .DS_Store
 
 vendor/servlet/
