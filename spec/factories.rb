@@ -6,6 +6,10 @@ FactoryGirl.define do
     uid 'archivist1'
     password 'archivist1'
   end
+  factory :nu_id_holder, :parent=>:user do |u|
+    uid 'nu_id_holder'
+    password 'nu_id_holder'
+  end
   factory :staff, :parent=>:user do |u|
     uid 'staff1'
     password 'staff1'
