@@ -63,7 +63,6 @@ clear:both;
   text-align: right;
 }
 
-h1 { padding: .2em; margin: 0; }
 <!--#products { float:left; width: 300px; margin-right: 2em; } -->
 #imageCollection { width: 174px; float: left; }
 /* style the list to maximize the droppable hitarea */
