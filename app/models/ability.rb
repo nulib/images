@@ -30,10 +30,14 @@ class Ability
       test_edit(obj.pid, user,session)
     end
     can :destroy, ActiveFedora::Base do |obj|
+      #TODO this may not be necessary.  Also it's ignoring groups.
       obj.rightsMetadata.individuals[user.email] == 'edit'
     end
 
     can :create, AdminPolicy
+    can :update, AdminPolicy do |obj|
+      test_edit(obj.pid, user,session)
+    end
 
   end
 

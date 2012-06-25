@@ -385,6 +385,7 @@ DEPENDENCIES
   mysql2
   omniauth-ldap
   rails (= 3.2.6)
+  rdf
   rspec-rails (>= 2.9.0)
   sass-rails (~> 3.2.3)
   sqlite3
