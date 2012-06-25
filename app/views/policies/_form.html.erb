@@ -35,7 +35,11 @@
   </div>        
   <fieldset class="permissions">
     <legend>Provides these Permissions</legend>
-    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy} %>
+    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy, :field=>:defaultPermissions} %>
+  </fieldset>
+  <fieldset class="maintainers">
+    <legend>Policy Maintainers</legend>
+    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy, :field=>:permissions} %>
   </fieldset>
 
   <div class="form-actions">
