@@ -145,33 +145,5 @@ class MultiresimagesController < ApplicationController
 	  render :inline =>'<success pid="'+ image_id + '"/>'	
   end
   
-  private
-  
-
-  def parse_permissions!(params)
-    if params.has_key?(:permissions)
-      permissions_params = params[:permissions]
-      reformatted_params = []
-      if permissions_params["new_user_name"].present? 
-        reformatted_params << {:name=>permissions_params["new_user_name"], :access=>permissions_params["new_user_permission"], :type=>"user"}
-      end
-      if permissions_params["new_group_name"].present?
-        reformatted_params << {:name=>permissions_params["new_group_name"], :access=>permissions_params["new_group_permission"], :type=>"group"}
-      end
-      if permissions_params.has_key?("user") 
-        permissions_params["user"].each_pair do |name, access|
-          reformatted_params << {:name=>name, :access=>access, :type=>"user"}
-        end
-      end
-      if permissions_params.has_key?("group") 
-        permissions_params["group"].each_pair do |name, access|
-          reformatted_params << {:name=>name, :access=>access, :type=>"group"}
-        end
-      end
-      params[:permissions] = reformatted_params
-    end
-    return params
-  end
-  
   
 end
