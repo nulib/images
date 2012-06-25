@@ -21,9 +21,9 @@ class AdminPolicy < ActiveFedora::Base
 
   ## Updates those permissions that are provided to it. Does not replace any permissions unless they are provided
   # @example
-  #  obj.defaultPermissions= [{:name=>"group1", :access=>"discover", :type=>'group'},
+  #  obj.default_permissions= [{:name=>"group1", :access=>"discover", :type=>'group'},
   #  {:name=>"group2", :access=>"discover", :type=>'group'}]
-  def defaultPermissions=(params)
+  def default_permissions=(params)
     perm_hash = {'person' => defaultRights.individuals, 'group'=> defaultRights.groups}
 
     params.each do |row|
@@ -44,7 +44,7 @@ class AdminPolicy < ActiveFedora::Base
   #  {:name=>"user2", :access=>"read", :type=>'user'},
   #  {:name=>"user1", :access=>"edit", :type=>'user'},
   #  {:name=>"user3", :access=>"read", :type=>'user'}]
-  def defaultPermissions
+  def default_permissions
     (defaultRights.groups.map {|x| {:type=>'group', :access=>x[1], :name=>x[0] }} + 
       defaultRights.individuals.map {|x| {:type=>'user', :access=>x[1], :name=>x[0]}})
 
