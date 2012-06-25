@@ -75,6 +75,9 @@ describe PoliciesController do
         it "should update permissions" do
           put :update, :id=>@policy.pid, :admin_policy=>{"permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
           "new_group_name"=>"", "new_group_permission"=>"none", 
+          "new_user_name"=>"", "new_user_permission"=>"none"},
+          "default_permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
+          "new_group_name"=>"", "new_group_permission"=>"none", 
           "new_user_name"=>"", "new_user_permission"=>"none"}}
           updated_policy = AdminPolicy.find(@policy.pid)
           updated_policy.edit_groups.should include("staff")
@@ -82,6 +85,7 @@ describe PoliciesController do
           updated_policy.discover_users.should include("student1")
           updated_policy.edit_users.should include("vanessa")
           updated_policy.read_users.should include("archivist1")
+          updated_policy.defaultRights.individuals.should == {"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}
         end
         it "should add group & user permissions without wiping out existing permissions" do
           # pre-existing permissions
