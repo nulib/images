@@ -10,13 +10,16 @@ class PoliciesController < ApplicationController
   end
 
   def create
-    parse_permissions!(params[:admin_policy])
+    parse_permissions!(params[:admin_policy], [:permissions, :default_permissions])
     @policy.update_attributes(params[:admin_policy])
+    # TODO apply this, add test
+    #apply_depositor_metadata(@policy)
+
     redirect_to policies_path
   end
 
   def update
-    parse_permissions!(params[:admin_policy])
+    parse_permissions!(params[:admin_policy], [:permissions, :default_permissions])
     @policy.update_attributes(params[:admin_policy])
     redirect_to policies_path, :notice =>"Saved changes to #{@policy.title}"
   end
