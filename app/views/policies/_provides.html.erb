@@ -2,10 +2,10 @@
 <% obj = fedora_object.class.to_s.underscore%>
 <% users_for_permtype(@policy, field).each do |permission| %>
     <div class="control-group"> 
-      <div class="controls">
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
-      <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'small' if permission[:name].upcase == 'PUBLIC'%>
-      <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'small' unless permission[:name].upcase == 'PUBLIC' %>
+      <div class="controls">
+        <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
+        <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
       </div>
     </div> 
 <% end %>
@@ -14,17 +14,18 @@
   <%= label_tag "#{obj}[#{field}][new_user_name]", "Add User", :class=>"control-label" %>
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_user_name]" %>
-    <%= select_tag "#{obj}[#{field}][new_user_permission]", options_for_select(DIL::Application::config.permission_levels) %>
+    <%= select_tag "#{obj}[#{field}][new_user_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
   </div>
 </div>
 
 <h4>Groups with Access</h4>
 <% groups_for_permtype(@policy, field).each do |permission| %>
     <div class="control-group"> 
-      <div class="controls">
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
-      <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'small' if permission[:name].upcase == 'PUBLIC'%>
-      <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'small' unless permission[:name].upcase == 'PUBLIC' %>
+      <div class="controls">
+        <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
+        <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
+        <%= submit_tag "Remove", 'data-behavior'=>'permissions-remove', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'group', :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -33,7 +34,8 @@
   <%= label_tag "#{obj}[#{field}][new_group_name]", "Add Group", :class=>"control-label" %>
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_group_name]" %>
-    <%= select_tag "#{obj}[#{field}][new_group_permission]", options_for_select(DIL::Application::config.permission_levels) %>
+    <%= select_tag "#{obj}[#{field}][new_group_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
+    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'group', :class=>'hidden btn' %>
   </div>
 </div>
 

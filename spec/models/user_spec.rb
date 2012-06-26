@@ -45,8 +45,6 @@ describe User do
       Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
     end
     it "should return a list" do
-      puts "** groups: #{@group.inspect} **"
-
       # @user.groups returns the LDAP groups user is a member of and the user's eduPersonAffiliation
       @user.groups.should == [@group].concat(@user.affiliations)
     end
