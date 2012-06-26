@@ -1,18 +1,20 @@
 require 'spec_helper'
 
-describe "given a Faculty-created image with no custom access set" do
+# NOTES: 
+#   See spec/requests/... for test coverage describing WHAT should appear on a page based on access permissions
+#   Test coverage for discover permission is in spec/requests/gated_discovery_spec.rb
+
+
+describe "Given a Faculty-created image with no custom access set" do
   before do
     @image = Multiresimage.find("inu:dil-default-access-image")
   end
-  context "someone with NU id" do
+  context "Then someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should not be able to discover the image" do
-      subject.can?(:discover, @image).should be_false
-    end
     it "should not be able to view the image" do
       subject.can?(:read, @image).should be_false
     end
@@ -22,15 +24,13 @@ describe "given a Faculty-created image with no custom access set" do
       subject.can?(:destroy, @image).should be_false
     end
   end
-  context "the Creator" do
+  context "Then the Creator" do
     before do
       @user = FactoryGirl.find_or_create(:joe_creator)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should be able to discover the image" do
-      subject.can?(:discover, @image).should be_true
-    end
+
     it "should be able to view the image" do
       subject.can?(:read, @image).should be_true
     end
@@ -43,15 +43,13 @@ describe "given a Faculty-created image with no custom access set" do
       subject.can?(:admin, @image).should be_false
     end
   end
-  context "a Repository Admin" do
+  context "Then a Repository Admin" do
     before do
       @user = FactoryGirl.find_or_create(:alice_admin)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should be able to discover the image" do
-      subject.can?(:discover, @image).should be_true
-    end
+
     it "should be able to view the image" do
       subject.can?(:read, @image).should be_true
     end
@@ -66,19 +64,17 @@ describe "given a Faculty-created image with no custom access set" do
   end
 end
 
-describe "given a Faculty-created image which NU has read access to" do
+describe "Given a Faculty-created image which NU has read access to" do
   before do
     @image = Multiresimage.find("inu:dil-nu-read-access-image")
   end
-  context "someone with NU id" do
+  context "The someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should be able to discover the image" do
-      subject.can?(:discover, @image).should be_true
-    end
+
     it "should be able to view the image" do
       subject.can?(:read, @image).should be_true
     end
@@ -93,19 +89,17 @@ describe "given a Faculty-created image which NU has read access to" do
   end
 end
 
-describe "given a Faculty-created image with collaborator" do
+describe "Given a Faculty-created image with collaborator" do
   before do
     @image = Multiresimage.find("inu:dil-nu-read-access-image")
   end
-  context "a collaborator with edit access" do
+  context "Then a collaborator with edit access" do
     before do
       @user = FactoryGirl.find_or_create(:calvin_collaborator)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should be able to discover the image" do
-      subject.can?(:discover, @image).should be_true
-    end
+
     it "should be able to view the image" do
       subject.can?(:read, @image).should be_true
     end
@@ -120,19 +114,17 @@ describe "given a Faculty-created image with collaborator" do
   end
 end
 
-describe "given a Faculty-created object where dept can read & NU can discover" do
+describe "Given a Faculty-created object where dept can read & NU can discover" do
   before do
     @image = Multiresimage.find("inu:dil-dept-access-image")
   end
-  context "someone with NU id" do
+  context "Then someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should be able to discover the image" do
-      subject.can?(:discover, @image).should be_true
-    end
+
     it "should not be able to view the image" do
       subject.can?(:read, @image).should be_false
     end
@@ -145,15 +137,13 @@ describe "given a Faculty-created object where dept can read & NU can discover" 
       subject.can?(:admin, @image).should be_false
     end
   end
-  context "someone whose department has read access" do
+  context "Then someone whose department has read access" do
     before do
       @user = FactoryGirl.find_or_create(:martia_morocco)
       Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
-    it "should be able to discover the image" do
-      subject.can?(:discover, @image).should be_true
-    end
+
     it "should be able to view the image" do
       subject.can?(:read, @image).should be_true
     end
