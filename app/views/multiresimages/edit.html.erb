@@ -70,6 +70,7 @@
             <%#= f.select :policy, Policy.find(:all).map{|x| [x.name, x.code]}, {}, :multiple=>true %>
           </div>
           <span class="description">-- Policy description text will be displayed here --</span>
+          <%= link_to "manage policies", policies_path %>
         </div>        
         <span id="object-permissions-heading">Also grant access to</span>
         <%= render :partial => "permissions/edit_groups_and_users", :locals=>{:fedora_object=>@multiresimage} %>
