@@ -26,6 +26,9 @@ class PoliciesController < ApplicationController
   def update
     parse_permissions!(params[:admin_policy], [:permissions, :default_permissions])
     @policy.update_attributes(params[:admin_policy])
-    redirect_to policies_path, :notice =>"Saved changes to #{@policy.title}"
+    respond_to do |format|
+      format.json { render :json=>params[:admin_policy][:permissions] }
+      format.html { redirect_to policies_path, :notice =>"Saved changes to #{@policy.title}" }
+    end
   end
 end
