@@ -49,4 +49,10 @@ class AdminPolicy < ActiveFedora::Base
       defaultRights.individuals.map {|x| {:type=>'user', :access=>x[1], :name=>x[0]}})
 
   end
+
+  def to_solr(solr_doc = {}) 
+    super
+    solr_doc['title_display'] = solr_doc['title_t'].first if solr_doc['title_t']
+    solr_doc
+  end
 end

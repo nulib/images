@@ -36,15 +36,22 @@ describe PoliciesController do
   end
 
   describe "new" do
+    before do
+      @policy = AdminPolicy.create
+      @user = FactoryGirl.find_or_create(:archivist)
+      Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+      sign_in @user
+    end
     it "should draw the form" do
         get :new
         assigns["policy"].should be_kind_of AdminPolicy
+        assigns["policy"].edit_users.should == 'archivist'
         response.should be_successful
     end
   end
 
   describe "create" do
-    it "should save the new policy" do
+    it "should save the new policy and creator should have edit perms" do
       post :create, :admin_policy=>{:title=>'My title'}
       response.should redirect_to policies_path
       assigns['policy'].title.should == 'My title'
@@ -105,5 +112,14 @@ describe PoliciesController do
         end
       end
     end
+  end
+
+  describe "index" do
+    it "should be successful" do
+      get :index
+      response.should be_successful
+      assigns[:policies].should be_kind_of Array
+    end
+    it "should only have policies that you have the ability to view"
   end
 end
