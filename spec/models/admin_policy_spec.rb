@@ -21,5 +21,15 @@ describe AdminPolicy do
   end
     
 
+  describe "to_solr" do
+    subject { AdminPolicy.new(:title=>"Foobar").to_solr }
+    it "should have title_t" do
+      subject["title_t"].should == ['Foobar']
+    end
+    it "should have title_display" do
+      subject["title_display"].should == 'Foobar'
+    end
+  end
+
 
 end

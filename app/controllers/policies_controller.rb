@@ -1,6 +1,11 @@
 class PoliciesController < ApplicationController
   load_and_authorize_resource :class=>AdminPolicy
 
+  def index
+    @page_title = 'Admin Policies'
+    @policies = AdminPolicy.find_with_conditions({})
+  end
+
   def new
     @page_title = 'Create a policy'
   end
