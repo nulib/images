@@ -26,10 +26,13 @@ describe "View a multiresimage" do
       page.should have_link('MIX Technical Metadata')
       page.should have_link('MIX Technical Metadata for JP2')
     end
+    describe "GET /multiresimages/inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26/edit"
     it "should edit the object" do
       visit edit_multiresimage_path('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
-      #page.should have_selector "select"
       page.should have_link "manage policies"
+      select 'Policy', :with=>'Default Policy &mdash; Private to Owner'
+      click_button 'Save changes'
+      page.should have_content('Saved changes to inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
     end
   end
 

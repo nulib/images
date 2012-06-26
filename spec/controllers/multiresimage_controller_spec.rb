@@ -51,8 +51,10 @@ describe MultiresimagesController do
       it "should be success" do
         get :edit, :id=>@img.pid
         assigns[:multiresimage].should == @img
+        assigns[:policies].should be_kind_of Array
         response.should be_success
       end
+      it "should only set policies I have permissions to use"
     end
     describe "that I don't have edit permissions on" do
       it "should redirect to catalog" do
@@ -85,6 +87,18 @@ describe MultiresimagesController do
         flash[:notice].should == "Saved changes to #{@img.pid}"
       end
       
+      describe "setting a policy" do
+        before do
+          @policy = AdminPolicy.create
+        end
+        after do
+          @policy.delete
+        end
+        it "should save the policy" do
+          put :update, :id=>@img.pid, :multiresimage=>{:admin_policy_id=>@policy.pid}
+          assigns[:multiresimage].admin_policy.should == @policy
+        end
+      end
       describe "setting permissions" do
         it "should update permissions" do
           put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
