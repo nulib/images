@@ -9,9 +9,8 @@ require "spec_helper"
 describe "When viewing images" do
   context "Given I have discover access" do
     before { login FactoryGirl.find_or_create(:nu_id_holder) }
-    context "When viewing search result for an image" do
-      it "Then I should see the image in search results" 
-    end
+    # NOTE: Tests for gated discovery (discover permissions in search results) are in spec/requests/gated_discovery_spec.rb
+    #       These tests are only specifying what should appear on show/edit pages, not search results.
     context "When visiting show page for an image" do
       before { visit multiresimage_path('inu:dil-dept-access-image') }
       it "Then I should see the descriptive metadata" do
@@ -115,10 +114,14 @@ describe "When viewing images" do
   context "Given I have admin access" do
     before { login FactoryGirl.find_or_create(:carol_curator) }
     context "When visiting edit page for an image" do
-      it "Then I should see a link to the admin page"
+      it "Then I should see a link to the admin page" do
+        pending "Admin permissions"
+      end
     end
     context "When visiting admin page for an image" do
-      it "Then I should see admin-only metadata"
+      it "Then I should see admin-only metadata" do
+        pending "Admin permissions"
+      end
     end
   end
 end
