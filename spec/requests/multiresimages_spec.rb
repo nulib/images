@@ -28,6 +28,7 @@ describe "View a multiresimage" do
     end
     it "should edit the object" do
       visit edit_multiresimage_path('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
+      #page.should have_selector "select"
       page.should have_link "manage policies"
     end
   end

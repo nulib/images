@@ -17,8 +17,7 @@ class PoliciesController < ApplicationController
   def create
     parse_permissions!(params[:admin_policy], [:permissions, :default_permissions])
     @policy.update_attributes(params[:admin_policy])
-    # TODO apply this, add test
-    #apply_depositor_metadata(@policy)
+    @policy.apply_depositor_metadata(current_user.user_key)
 
     redirect_to policies_path
   end

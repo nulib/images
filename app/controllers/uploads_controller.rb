@@ -31,7 +31,7 @@ class UploadsController < ApplicationController
   # Called from Jquery uploader, ajax call, respond with JSON
   def create
     logger.debug("TEST_1")
-    titleSet_display = current_user.uid + " " + params[:files][0].original_filename
+    titleSet_display = current_user.user_key + " " + params[:files][0].original_filename
     logger.debug("TEST_2")
     error = false
     
@@ -52,7 +52,7 @@ class UploadsController < ApplicationController
       # create the Multiresimage
       @image = Multiresimage.create()
       @image.attach_file(params[:files])
-      @image.apply_depositor_metadata(current_user.uid)
+      @image.apply_depositor_metadata(current_user.user_key)
       @image.titleSet_display = titleSet_display
       @image.save!
     
@@ -60,7 +60,7 @@ class UploadsController < ApplicationController
     
       @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
     
-      @work.apply_depositor_metadata(current_user.uid)
+      @work.apply_depositor_metadata(current_user.user_key)
     
       @work.datastreams["properties"].delete
       @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
