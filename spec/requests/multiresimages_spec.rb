@@ -30,11 +30,14 @@ describe "When viewing images" do
         page.should have_content("inu:dil-dept-access-image-work")
       end
       it "Then I should not see the image content & download links" do
-        pending "Limiting what Discover allows you to see..."
         page.should_not have_selector("div#crop-tool")
         page.should_not have_link('thumbnail')
         page.should_not have_link('medium')
         page.should_not have_link('large')
+      end
+      it "Then I should see a message explaining that I do not have access" do
+        page.should have_content("You do not have permission to view the content of this image.")
+        page.should have_selector("li.current_owner", :text=>"joe_creator")
       end
       it "Then I should not see a link to the edit page" do
         page.should_not have_selector("a[href='#{edit_multiresimage_path('inu:dil-dept-access-image')}']")
