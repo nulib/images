@@ -7,10 +7,14 @@ module PermissionsHelper
   def permissions_groups(obj)
     groups_for_permtype(obj, :permissions)
   end
+  
+  def editors(obj)
+    permissions_users(obj).select { |p| p[:access] == "edit" }
+  end
 
   # @example
   #  groups_for_permtype(obj, :defaultPermissions)
-  #  groups_for_permtype(obj, :permissions
+  #  groups_for_permtype(obj, :permissions)
   def groups_for_permtype(obj, perm_type) 
     sort_permissions(obj.send(perm_type).select {|p| p[:type] == "group"})    
   end
@@ -22,5 +26,5 @@ module PermissionsHelper
   def sort_permissions(permissions)
     permissions.sort_by! {|p| p[:name] }
   end
-  
+
 end
