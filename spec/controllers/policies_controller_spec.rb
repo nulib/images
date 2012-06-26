@@ -53,10 +53,10 @@ describe PoliciesController do
 
     describe "create" do
       it "should save the new policy and creator should have edit perms" do
-        post :create, :admin_policy=>{:title=>'My title'}
+        post :create, :admin_policy=>{:title=>'My title', "permissions"=>{"new_user_name"=>"justin", "new_user_permission"=>"edit", "new_group_name"=>"", "new_group_permission"=>"none"}}
         response.should redirect_to policies_path
         assigns['policy'].title.should == 'My title'
-        assigns["policy"].edit_users.should == ['archivist1']
+        assigns["policy"].edit_users.should == ['archivist1', 'justin']
       end
     end
 

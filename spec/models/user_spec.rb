@@ -15,6 +15,12 @@ describe User do
     u.errors[:password].should == ["can't be blank"] 
   end
 
+  it "should have a user_key" do
+    @user = FactoryGirl.find_or_create(:archivist)
+    @user.user_key.should == 'archivist1'
+    
+  end
+
   it "should have many groups that they own" do
     @user = FactoryGirl.find_or_create(:archivist)
     g1 = Group.new(:name=>'one', :users=>['vanessa'])
