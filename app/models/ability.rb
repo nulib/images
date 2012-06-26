@@ -6,7 +6,7 @@ class Ability
   def user_groups(user, session)
     return @user_groups if @user_groups
     @user_groups = default_user_groups
-    @user_groups += user.groups.map(&:code) << 'registered' unless user.new_record?
+    @user_groups += RoleMapper.roles(user)
     @user_groups
   end
 
