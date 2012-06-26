@@ -51,14 +51,17 @@ describe "Given a Faculty-created image with no custom access set" do
     subject { Ability.new(@user) }
 
     it "should be able to view the image" do
+      pending "Admin Permissions"
       subject.can?(:read, @image).should be_true
     end
     it "should be able to edit, update and destroy the image" do
+      pending "Admin Permissions"
       subject.can?(:edit, @image).should be_true
       subject.can?(:update, @image).should be_true
       subject.can?(:destroy, @image).should be_true
     end
     it "should not be able to see the admin view of the image" do
+      pending "Admin Permissions"
       subject.can?(:admin, @image).should be_true
     end
   end
@@ -231,19 +234,19 @@ describe "Policy-enforcement: accessing an object whose" do
       # @image.save
     end
     it "should be able to view the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:read, @image).should be_true
     end
     it "should be able to destroy the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:destroy, @image).should be_true
     end
     it "should be able to edit the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:edit, @image).should be_true
     end
     it "should be able to update the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:update, @image).should be_true
     end
   end
@@ -254,19 +257,19 @@ describe "Policy-enforcement: accessing an object whose" do
       # @image.save
     end
     it "should be able to view the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:read, @image).should be_true
     end
     it "should be able to destroy the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:destroy, @image).should be_false
     end
     it "should be able to edit the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:edit, @image).should be_false
     end
     it "should be able to update the image" do
-      pending
+      pending "Policy-based permissions"
       subject.can?(:update, @image).should be_false
     end
   end
