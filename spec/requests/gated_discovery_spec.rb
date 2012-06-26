@@ -11,9 +11,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should not be able to discover the image" do
-        subject.can?(:discover, @image).should be_false
-      end
+      it "should not be able to discover the image" 
     end
     context "Then the Creator" do
       before do
@@ -21,9 +19,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should be able to discover the image" do
-        subject.can?(:discover, @image).should be_true
-      end
+      it "should be able to discover the image" 
     end
     context "Then a Repository Admin" do
       before do
@@ -31,9 +27,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should be able to discover the image" do
-        subject.can?(:discover, @image).should be_true
-      end
+      it "should be able to discover the image" 
     end
   end
 
@@ -47,9 +41,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should be able to discover the image" do
-        subject.can?(:discover, @image).should be_true
-      end
+      it "should be able to discover the image" 
     end
   end
 
@@ -63,9 +55,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should be able to discover the image" do
-        subject.can?(:discover, @image).should be_true
-      end
+      it "should be able to discover the image" 
     end
   end
   
@@ -79,9 +69,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should be able to discover the image" do
-        subject.can?(:discover, @image).should be_true
-      end
+      it "should be able to discover the image" 
     end
     context "Then someone whose department has read access" do
       before do
@@ -89,9 +77,7 @@ describe "When I am searching for content" do
         Group.any_instance.stub :persist_to_ldap
       end
       subject { Ability.new(@user) }
-      it "should be able to discover the image" do
-        subject.can?(:discover, @image).should be_true
-      end
+      it "should be able to discover the image" 
     end
   end
 
@@ -103,7 +89,7 @@ describe "When I am searching for content" do
       # @image.save
     end
     it "Then I should be able to discover the image" do
-      pendin
+      pending
       subject.can?(:discover, @image).should be_true
     end
   end
