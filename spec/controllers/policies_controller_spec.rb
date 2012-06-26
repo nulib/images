@@ -106,6 +106,11 @@ describe PoliciesController do
             updated_policy.edit_groups.should include("staff") 
             updated_policy.edit_users.should include(@user.uid)
           end
+          it "should accept ajax requests" do
+            xhr :put, :update, :id=>@policy.pid, :admin_policy=>{:permissions=>{:new_group_name=>"ajaxgroup", :new_group_permission=>'view'}}, :format=>'json'
+            response.should be_successful
+            JSON.parse(response.body).should == [{'name'=>'ajaxgroup', 'type'=>'group', 'access'=>'view'} ] 
+          end
         end
       end
     end
