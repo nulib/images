@@ -1,6 +1,4 @@
-<div class="page-header">
-  <h1><%=@page_title %></h1>
-</div>
+<%= render :partial=>'/shared/page_header' %>
 <%= form_for @policy, :url=>@policy.new_record? ? policies_path : policy_path(@policy.pid), :html=>{:class=>'form-horizontal'} do |f| %>
   <div class="control-group">
     <%= f.label :title, 'Policy Name', :class=>"control-label" %>
