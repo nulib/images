@@ -1,4 +1,4 @@
-
+<% if can?(:read, @multiresimage) %>
               <% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
                   <li>Downloads
                     <ul>
@@ -17,4 +17,5 @@
                     </ul>
                   </li>
               <% end %>
+<% end %>
 
