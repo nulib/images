@@ -65,11 +65,10 @@
       <fieldset class="permissions">
         <legend>Permissions</legend>
         <div class="control-group">
-          <%= f.label :policy, :class=>"control-label" %>
+          <%= f.label :admin_policy_id, "Policy", :class=>"control-label" %>
           <div class="controls">
-            <%#= f.select :policy, Policy.find(:all).map{|x| [x.name, x.code]}, {}, :multiple=>true %>
+            <%= f.collection_select :admin_policy_id, @policies, :pid, :title, {:include_blank => 'Default Policy &mdash; Private to Owner'.html_safe}, :class=>'span5' %>
           </div>
-          <span class="description">-- Policy description text will be displayed here --</span>
           <%= link_to "manage policies", policies_path %>
         </div>        
         <span id="object-permissions-heading">Also grant access to</span>

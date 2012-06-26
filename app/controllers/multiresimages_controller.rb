@@ -39,6 +39,7 @@ class MultiresimagesController < ApplicationController
    
   def edit
     @multiresimage = Multiresimage.find(params[:id]) 
+    @policies = AdminPolicy.find(:all)
     authorize! :destroy, @multiresimage
   end
    
