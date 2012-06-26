@@ -1,41 +1,45 @@
 require "spec_helper"
 
+# NOTES:
+#   See spec/models/ability_spec.rb for coverage describing who should have which permissions under various circumstances
+
+
 # Descriptions of page contents
 
-describe "when you have discover access"
-  describe "viewing search result for an image" do
-    it "should see the image in search results"
+describe "Given I have discover access" do
+  describe "When viewing search result for an image" do
+    it "Then I should see the image in search results"
   end
-  describe "visiting show page for an image" do
-    it "should see the descriptive metadata"
-    it "should not see the image content & download links"
-  end
-end
-
-describe "when you have read access"
-  describe "visiting show page for an image" do
-    it "should see the descriptive metadata"
-    it "should see the image content & download links"
-    it "should not see a link to the edit page"
+  describe "When visiting show page for an image" do
+    it "Then I should see the descriptive metadata"
+    it "Then I should not see the image content & download links"
   end
 end
 
-describe "when you have edit access"
-  describe "visiting show page for an image" do
-    it "should see a link to the edit page"
-  end
-  describe "visiting edit page for an image" do
-    it "should see technical metadata"
-    it "should see a link to the show/browse page"
+describe "Given I have read access" do
+  describe "When visiting show page for an image" do
+    it "Then I should see the descriptive metadata"
+    it "Then I should see the image content & download links"
+    it "Then I should not see a link to the edit page"
   end
 end
 
-describe "when you have admin access"
-  describe "visiting edit page for an image" do
-    it "should see a link to the admin page"
+describe "Given I have edit access" do
+  describe "When visiting show page for an image" do
+    it "Then I should see a link to the edit page"
   end
-  describe "visiting admin page for an image" do
-    it "should see admin-only metadata"
+  describe "When visiting edit page for an image" do
+    it "Then I should see technical metadata"
+    it "Then I should see a link to the show/browse page"
+  end
+end
+
+describe "Given I have admin access" do
+  describe "When visiting edit page for an image" do
+    it "Then I should see a link to the admin page"
+  end
+  describe "When visiting admin page for an image" do
+    it "Then I should see admin-only metadata"
   end
 end
 
