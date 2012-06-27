@@ -1,25 +1,44 @@
 <h4>Users with Access</h4>
 <% obj = fedora_object.class.to_s.underscore%>
-<% users_for_permtype(@policy, field).each do |permission| %>
+<% users_for_field(@policy, field).each do |permission| %>
     <div class="control-group"> 
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <div class="controls">
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
+        <%= submit_tag "Remove", 'data-behavior'=>'permissions-remove', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'user', :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
+
+    <script type="text/x-tmpl" id="tmpl-<%= field %>-user">
+      <div class="control-group">
+        <label class="control-label">{%=o.record_name%}</label>
+        <div class="controls">
+          <select class="span2" id="admin_policy_<%=field %>_user_{%=o.record_name %}" name="admin_policy[<%=field %>][user][{%=o.record_name%}]">
+            <option value="none">No Access</option>
+            <option value="discover">Discover</option>
+            <option value="read">View</option>
+            <option value="edit">Edit</option>
+          </select>
+          <input class="btn" data-behavior="permissions-remove" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+        </div>
+      </div>
+    </script>
+
+
 
 <div class="control-group" id="new-user"> 
   <%= label_tag "#{obj}[#{field}][new_user_name]", "Add User", :class=>"control-label" %>
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_user_name]" %>
     <%= select_tag "#{obj}[#{field}][new_user_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
+    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-name'=>"#{obj}_#{field}_new_user_name", 'data-value'=>"#{obj}_#{field}_new_user_permission", 'data-template'=>"tmpl-#{field}-user", :class=>'hidden btn' %>
   </div>
 </div>
 
 <h4>Groups with Access</h4>
-<% groups_for_permtype(@policy, field).each do |permission| %>
+<% groups_for_field(@policy, field).each do |permission| %>
     <div class="control-group"> 
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <div class="controls">
@@ -29,13 +48,27 @@
       </div>
     </div> 
 <% end %>
+    <script type="text/x-tmpl" id="tmpl-<%= field %>-group">
+      <div class="control-group">
+        <label class="control-label">{%=o.record_name%}</label>
+        <div class="controls">
+          <select class="span2" id="admin_policy_<%=field %>_group_{%=o.record_name %}" name="admin_policy[<%=field %>][group][{%=o.record_name%}]">
+            <option value="none">No Access</option>
+            <option value="discover">Discover</option>
+            <option value="read">View</option>
+            <option value="edit">Edit</option>
+          </select>
+          <input class="btn" data-behavior="permissions-remove" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+        </div>
+      </div>
+    </script>
 
 <div class="control-group" id="new-group"> 
   <%= label_tag "#{obj}[#{field}][new_group_name]", "Add Group", :class=>"control-label" %>
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_group_name]" %>
     <%= select_tag "#{obj}[#{field}][new_group_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
-    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'group', :class=>'hidden btn' %>
+    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-name'=>"#{obj}_#{field}_new_group_name", 'data-value'=>"#{obj}_#{field}_new_group_permission", 'data-template'=>"tmpl-#{field}-group", :class=>'hidden btn' %>
   </div>
 </div>
 
