@@ -1,7 +1,7 @@
 <%= render :partial=>'/shared/page_header' %>
 <ul>
 <% @policies.each do |v| %>
-  <li><%= link_to v["title_t"].first, edit_policy_path(v["id"]) %></li>
+  <li><%= link_to v["title_display"], edit_policy_path(v["id"]) %></li>
 <% end %>
 </ul>
 
