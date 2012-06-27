@@ -46,6 +46,19 @@ puts "IN edit perms"
       if params.has_key?(key)
         permissions_params = params[key]
         reformatted_params = []
+        if permissions_params["new_edit_user_name"].present? 
+          reformatted_params << {:name=>permissions_params["new_edit_user_name"], :access=>'edit', :type=>"user"}
+        end
+        if permissions_params["new_edit_group_name"].present? 
+          reformatted_params << {:name=>permissions_params["new_edit_group_name"], :access=>'edit', :type=>"group"}
+        end
+        if permissions_params["new_read_user_name"].present? 
+puts "setting #{permissions_params["new_read_user_name"]}"
+          reformatted_params << {:name=>permissions_params["new_read_user_name"], :access=>'read', :type=>"user"}
+        end
+        if permissions_params["new_read_group_name"].present? 
+          reformatted_params << {:name=>permissions_params["new_read_group_name"], :access=>'read', :type=>"group"}
+        end
         if permissions_params["new_user_name"].present? 
           reformatted_params << {:name=>permissions_params["new_user_name"], :access=>permissions_params["new_user_permission"], :type=>"user"}
         end

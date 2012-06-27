@@ -65,6 +65,8 @@ describe PoliciesController do
         before do
           @policy.apply_depositor_metadata(@user.uid)
           @policy.edit_groups = ["staff"]
+          @policy.rightsMetadata.permissions({:person=>"jason"}, "edit") #depositor metadata already set, don't overwrite.
+          @policy.default_permissions =  [{:name=>"marcus", :access=>"discover", :type=>'user'}, {:name=>"group1", :access=>"edit", :type=>'group'}]
           @policy.save
         end
         it "should save changes to the policy" do
@@ -77,8 +79,7 @@ describe PoliciesController do
         describe "setting permissions" do
           it "should update permissions" do
             put :update, :id=>@policy.pid, :admin_policy=>{"permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
-            "new_group_name"=>"", "new_group_permission"=>"none", 
-            "new_user_name"=>"", "new_user_permission"=>"none"},
+            "new_read_group_name"=>"", "new_edit_group_name"=>"", "new_read_user_name"=>"", "new_edit_user_name"=>""},
             "default_permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
             "new_group_name"=>"", "new_group_permission"=>"none", 
             "new_user_name"=>"", "new_user_permission"=>"none"}}
@@ -88,7 +89,7 @@ describe PoliciesController do
             updated_policy.discover_users.should include("student1")
             updated_policy.edit_users.should include("vanessa")
             updated_policy.read_users.should include("archivist1")
-            updated_policy.defaultRights.individuals.should == {"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}
+            updated_policy.defaultRights.individuals.should == {"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read", 'marcus'=>'discover'}
           end
           it "should add group & user permissions without wiping out existing permissions" do
             # pre-existing permissions
@@ -96,21 +97,63 @@ describe PoliciesController do
             @policy.edit_users.should include(@user.uid)
             
             put :update, :id=>@policy.pid, :admin_policy=>{"permissions"=>{
-              "new_group_name"=>"mynewgroup", "new_group_permission"=>"discover", 
-              "new_user_name"=>"uuuusssserzed", "new_user_permission"=>"edit"}}
+              "new_read_group_name"=>"mynewgroup", "new_edit_group_name"=>"",
+              "new_read_user_name"=>"", "new_edit_user_name"=>"uuuusssserzed"}}
             updated_policy = AdminPolicy.find(@policy.pid)
             # check that new permissions were granted
-            updated_policy.discover_groups.should include("mynewgroup")
+            updated_policy.read_groups.should include("mynewgroup")
             updated_policy.edit_users.should include("uuuusssserzed")
             # check that the original permissions weren't changed
             updated_policy.edit_groups.should include("staff") 
             updated_policy.edit_users.should include(@user.uid)
           end
-          it "should accept ajax requests" do
-            xhr :put, :update, :id=>@policy.pid, :admin_policy=>{:permissions=>{:new_group_name=>"ajaxgroup", :new_group_permission=>'view'}}, :format=>'json'
-            response.should be_successful
-            JSON.parse(response.body).should == [{'name'=>'ajaxgroup', 'type'=>'group', 'access'=>'view'} ] 
+          it "should add group & user default permissions without wiping out existing default permissions" do
+            # pre-existing permissions
+            @policy.default_permissions.should include({:name=>"marcus", :access=>"discover", :type=>'user'})
+            @policy.default_permissions.should include({:name=>"group1", :access=>"edit", :type=>'group'})
+            
+            put :update, :id=>@policy.pid, :admin_policy=>{
+              "default_permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
+            "new_group_name"=>"group3", "new_group_permission"=>"edit", 
+            "new_user_name"=>"student2", "new_user_permission"=>"view"}}
+            updated_policy = AdminPolicy.find(@policy.pid)
+            # check that new permissions were granted
+            updated_policy.default_permissions.should ==  [{:type=>"group", :access=>"edit", :name=>"group1"},
+              {:type=>"group", :access=>"edit", :name=>"group3"},
+              {:type=>"group", :access=>"edit", :name=>"staff"},
+              {:type=>"group", :access=>"edit", :name=>"faculty"},
+              {:type=>"user", :access=>"discover", :name=>"marcus"},
+              {:type=>"user", :access=>"discover", :name=>"student1"},
+              {:type=>"user", :access=>"read", :name=>"archivist1"},
+              {:type=>"user", :access=>"edit", :name=>"vanessa"}]
           end
+          it "should not downgrade access" do
+            xhr :put, :update, :id=>@policy.pid, :admin_policy=>{"permissions"=>{ 
+              "new_read_group_name"=>"staff", "new_edit_group_name"=>"",
+              "new_read_user_name"=>"jason", "new_edit_user_name"=>""}},
+              :format=>'json'
+            updated_policy = AdminPolicy.find(@policy.pid)
+            updated_policy.edit_groups.should include("staff")
+            updated_policy.edit_users.should include("jason")
+            JSON.parse(response.body).should == {'errors' => ["jason is a maintainer.  Maintainers can already use the policy.", "staff is a maintainer.  Maintainers can already use the policy."] } 
+          end
+          describe "ajax requests" do
+            it "should update view permissions" do
+              xhr :put, :update, :id=>@policy.pid, :admin_policy=>{:permissions=>{:new_read_group_name=>"ajaxgroup"}}, :format=>'json'
+              response.should be_successful
+              JSON.parse(response.body).should == {'values'=>[{'name'=>'ajaxgroup', 'type'=>'group', 'access'=>'read'} ] }
+            end
+            it "should update edit permissions" do
+              xhr :put, :update, :id=>@policy.pid, :admin_policy=>{:permissions=>{:new_edit_group_name=>"ajaxgroup"}}, :format=>'json'
+              response.should be_successful
+              JSON.parse(response.body).should == {'values'=>[{'name'=>'ajaxgroup', 'type'=>'group', 'access'=>'edit'} ]  }
+            end
+            it "should update provided permissions" do
+              xhr :put, :update, :id=>@policy.pid, :admin_policy=>{:default_permissions=>{:new_group_name=>"ajaxgroup", :new_group_permission=>'read'}}, :format=>'json'
+              response.should be_successful
+              JSON.parse(response.body).should == {'values' => [{'name'=>'ajaxgroup', 'type'=>'group', 'access'=>'read'} ] } 
+            end
+          end   
         end
       end
     end
