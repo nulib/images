@@ -36,4 +36,12 @@ module PermissionsHelper
     permissions.sort_by! {|p| p[:name] }
   end
 
+  def remove_behavior(obj)
+    "permissions-remove-#{obj.new_record? ? 'new' : 'existing'}"
+  end
+
+  def add_behavior(obj)
+    "permissions-add-#{obj.new_record? ? 'new' : 'existing'}"
+  end
+
 end

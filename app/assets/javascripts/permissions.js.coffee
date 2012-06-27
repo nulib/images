@@ -1,7 +1,10 @@
 $ ->
-  $("[data-behavior='permissions-add']").removeClass('hidden')
-  $("[data-behavior='permissions-remove']").removeClass('hidden')
-  removeBehavior = (e, button) ->
+  $("[data-behavior='permissions-add-existing']").removeClass('hidden')
+  $("[data-behavior='permissions-remove-existing']").removeClass('hidden')
+  $("[data-behavior='permissions-add-new']").removeClass('hidden')
+  $("[data-behavior='permissions-remove-new']").removeClass('hidden')
+
+  removeExistingBehavior = (e, button) ->
     e.preventDefault()
     obj = button.attr('data-object')
     field = button.attr('data-field')
@@ -14,12 +17,35 @@ $ ->
     })
     request.success (data) -> 
       button.closest('.control-group').remove()
+
+  removeBehavior = (e, button) ->
+    e.preventDefault()
+    button.closest('.control-group').remove()
+
+  addNewBehavior = (e, button) ->
+    e.preventDefault()
+    name = button.attr('data-name')
+    value = button.attr('data-value')
+    new_name = $("##{name}")
+    new_perm = $("##{value}")
+    info = { record_name: new_name.val() }
+    new_template = $(tmpl(button.attr('data-template'), info))
+    button.closest('.control-group').before(new_template)
+    new_template.find("[data-behavior='permissions-remove-new']").click (e) ->
+      removeBehavior(e, $(this))
+    new_name.val('')
+    new_template.find("option[value='#{new_perm.val()}']").attr('selected', 'selected')
     
-  $("[data-behavior='permissions-remove']").click (e) ->
+  $("[data-behavior='permissions-remove-existing']").click (e) ->
+    removeExistingBehavior(e, $(this))
+
+  $("[data-behavior='permissions-remove-new']").click (e) ->
     removeBehavior(e, $(this))
 
+  $("[data-behavior='permissions-add-new']").click (e) ->
+    addNewBehavior(e, $(this))
 
-  $("[data-behavior='permissions-add']").click (e) ->
+  $("[data-behavior='permissions-add-existing']").click (e) ->
     e.preventDefault()
     button = $(this)
     name = button.attr('data-name')
@@ -41,8 +67,8 @@ $ ->
         info = { record_name: record.name }
         new_template = $(tmpl(button.attr('data-template'), info))
         button.closest('.control-group').before(new_template)
-        new_template.find("[data-behavior='permissions-remove']").click (e) ->
-          removeBehavior(e, $(this))
+        new_template.find("[data-behavior='permissions-remove-existing']").click (e) ->
+          removeExistingBehavior(e, $(this))
         new_name.val('')
         new_template.find("option[value='#{record.access}']").attr('selected', 'selected')
       
