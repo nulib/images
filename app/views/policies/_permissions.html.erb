@@ -1,0 +1,62 @@
+<h4>Users</h4>
+<% obj = fedora_object.class.to_s.underscore%>
+<% users_for_field(@policy, field, access).each do |permission| %>
+    <div class="control-group"> 
+      <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
+      <div class="controls">
+        <%= hidden_field_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", access %>
+        <%= submit_tag "Remove", 'data-behavior'=>'permissions-remove', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>"user", :class=>'hidden btn' %>
+      </div>
+    </div> 
+<% end %>
+    <script type="text/x-tmpl" id="tmpl-<%= field %>-user-<%= access %>">
+      <div class="control-group">
+        <label class="control-label">{%=o.record_name%}</label>
+        <div class="controls">
+          <input id="admin_policy_<%=field %>_user_{%=o.record_name %}" type="hidden" value="<%=access %>" name="admin_policy[<%=field %>][user][{%=o.record_name%}]">
+          <input class="btn" data-behavior="permissions-remove" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+        </div>
+      </div>
+    </script>
+
+<div class="control-group" id="new-user"> 
+  <%= label_tag "#{obj}[#{field}][new_#{access}_user_name]", "Add User", :class=>"control-label" %>
+  <div class="controls">
+    <%= text_field_tag "#{obj}[#{field}][new_#{access}_user_name]" %>
+    <%= hidden_field_tag "#{obj}[#{field}][new_#{access}_user_permission]", access %>
+    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-name'=>"#{obj}_#{field}_new_#{access}_user_name", 'data-value'=>"#{obj}_#{field}_new_#{access}_user_permission",  'data-template'=>"tmpl-#{field}-user-#{access}", :class=>'hidden btn' %>
+  </div>
+</div>
+
+<h4>Groups</h4>
+<% groups_for_field(@policy, field, access).each do |permission| %>
+    <div class="control-group"> 
+      <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
+      <div class="controls">
+        <%= hidden_field_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", access %>
+        <%= submit_tag "Remove", 'data-behavior'=>'permissions-remove', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>"group", :class=>'hidden btn' %>
+      </div>
+    </div> 
+<% end %>
+    <script type="text/x-tmpl" id="tmpl-<%= field %>-group-<%= access %>">
+      <div class="control-group">
+        <label class="control-label">{%=o.record_name%}</label>
+        <div class="controls">
+          <input id="admin_policy_<%=field %>_group_{%=o.record_name %}" type="hidden" value="<%=access %>" name="admin_policy[<%=field %>][group][{%=o.record_name%}]">
+          <input class="btn" data-behavior="permissions-remove" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+        </div>
+      </div>
+    </script>
+
+<div class="control-group" id="new-group"> 
+  <%= label_tag "#{obj}[#{field}][new_#{access}_group_name]", "Add Group", :class=>"control-label" %>
+  <div class="controls">
+    <%= text_field_tag "#{obj}[#{field}][new_#{access}_group_name]" %>
+    <%= hidden_field_tag "#{obj}[#{field}][new_#{access}_group_permission]", access %>
+    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-name'=>"#{obj}_#{field}_new_#{access}_group_name", 'data-value'=>"#{obj}_#{field}_new_#{access}_group_permission", 'data-template'=>"tmpl-#{field}-group-#{access}", :class=>'hidden btn' %>
+  </div>
+</div>
+
+
+
+

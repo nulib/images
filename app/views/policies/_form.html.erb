@@ -37,7 +37,12 @@
   </fieldset>
   <fieldset class="maintainers">
     <legend>Policy Maintainers</legend>
-    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy, :field=>:permissions} %>
+    <%=render :partial=>'permissions', :locals=>{:fedora_object=>@policy, :field=>:permissions, :access=>:edit} %>
+  </fieldset>
+  <fieldset class="users">
+    <legend>Who may use this policy</legend>
+    <p>In addition to maintainers, these users &amp; groups may apply this policy to objects &amp; collections.</p>
+    <%=render :partial=>'permissions', :locals=>{:fedora_object=>@policy, :field=>:permissions, :access=>:read} %>
   </fieldset>
 
   <div class="form-actions">

@@ -24,10 +24,33 @@ class PoliciesController < ApplicationController
   end
 
   def update
+    errors = []
+    # if read_user is already edit_user, don't downgrade access
+    new_read_user = params[:admin_policy][:permissions][:new_read_user_name] if params[:admin_policy][:permissions]
+    if @policy.edit_users.include?(new_read_user)
+      params[:admin_policy][:permissions][:new_read_user_name] = ''
+      errors <<  "#{new_read_user} is a maintainer.  Maintainers can already use the policy."
+    end
+    # if read_group is already edit_group, don't downgrade access
+    new_read_group = params[:admin_policy][:permissions][:new_read_group_name] if params[:admin_policy][:permissions]
+    if @policy.edit_groups.include?(new_read_group)
+      params[:admin_policy][:permissions][:new_read_group_name] = ''
+      errors <<  "#{new_read_group} is a maintainer.  Maintainers can already use the policy."
+    end
+
     parse_permissions!(params[:admin_policy], [:permissions, :default_permissions])
     @policy.update_attributes(params[:admin_policy])
     respond_to do |format|
-      format.json { render :json=>params[:admin_policy][:permissions] }
+      format.json do
+        val = [] << params[:admin_policy][:permissions] << params[:admin_policy][:default_permissions]
+        data = {}
+        if errors.present?
+          data[:errors] = errors
+        else
+          data[:values] = val.flatten.compact
+        end
+        render :json=>data
+      end
       format.html { redirect_to policies_path, :notice =>"Saved changes to #{@policy.title}" }
     end
   end
