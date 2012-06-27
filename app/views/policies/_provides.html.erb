@@ -6,7 +6,7 @@
       <div class="controls">
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
-        <%= submit_tag "Remove", 'data-behavior'=>'permissions-remove', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'user', :class=>'hidden btn' %>
+        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'user', :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -21,7 +21,7 @@
             <option value="read">View</option>
             <option value="edit">Edit</option>
           </select>
-          <input class="btn" data-behavior="permissions-remove" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" data-name=""  data-value="" name="commit" type="submit" value="Remove">
         </div>
       </div>
     </script>
@@ -33,7 +33,7 @@
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_user_name]" %>
     <%= select_tag "#{obj}[#{field}][new_user_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
-    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-name'=>"#{obj}_#{field}_new_user_name", 'data-value'=>"#{obj}_#{field}_new_user_permission", 'data-template'=>"tmpl-#{field}-user", :class=>'hidden btn' %>
+    <%= submit_tag "Add", 'data-behavior'=>add_behavior(@policy), 'data-name'=>"#{obj}_#{field}_new_user_name", 'data-value'=>"#{obj}_#{field}_new_user_permission", 'data-template'=>"tmpl-#{field}-user", :class=>'hidden btn' %>
   </div>
 </div>
 
@@ -44,7 +44,7 @@
       <div class="controls">
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
-        <%= submit_tag "Remove", 'data-behavior'=>'permissions-remove', 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'group', :class=>'hidden btn' %>
+        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'group', :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -58,7 +58,7 @@
             <option value="read">View</option>
             <option value="edit">Edit</option>
           </select>
-          <input class="btn" data-behavior="permissions-remove" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" data-name=""  data-value="" name="commit" type="submit" value="Remove">
         </div>
       </div>
     </script>
@@ -68,7 +68,7 @@
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_group_name]" %>
     <%= select_tag "#{obj}[#{field}][new_group_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
-    <%= submit_tag "Add", 'data-behavior'=>'permissions-add', 'data-name'=>"#{obj}_#{field}_new_group_name", 'data-value'=>"#{obj}_#{field}_new_group_permission", 'data-template'=>"tmpl-#{field}-group", :class=>'hidden btn' %>
+    <%= submit_tag "Add", 'data-behavior'=>add_behavior(@policy), 'data-name'=>"#{obj}_#{field}_new_group_name", 'data-value'=>"#{obj}_#{field}_new_group_permission", 'data-template'=>"tmpl-#{field}-group", :class=>'hidden btn' %>
   </div>
 </div>
 

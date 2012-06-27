@@ -3,7 +3,7 @@ class PoliciesController < ApplicationController
 
   def index
     @page_title = 'Admin Policies'
-    @policies = AdminPolicy.find_with_conditions({})
+    @policies = AdminPolicy.find_with_conditions({}, :rows=>1000)
   end
 
   def new
