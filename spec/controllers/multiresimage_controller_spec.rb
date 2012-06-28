@@ -45,16 +45,22 @@ describe MultiresimagesController do
     end
     describe "that I have edit permissions on" do
       before do
+        @readable_policy = AdminPolicy.new
+        @readable_policy.read_users = [@user.uid]
+        @readable_policy.save
+
+        @no_access_policy = AdminPolicy.create
         @img.apply_depositor_metadata(@user.uid)
         @img.save
       end
-      it "should be success" do
+      it "should only set policies I have permissions to use" do
         get :edit, :id=>@img.pid
         assigns[:multiresimage].should == @img
-        assigns[:policies].should be_kind_of Array
+        policy_pids = assigns[:policies].map {|p| p["id"]}
+        policy_pids.should include @readable_policy.pid
+        policy_pids.should_not include @no_access_policy.pid
         response.should be_success
       end
-      it "should only set policies I have permissions to use"
     end
     describe "that I don't have edit permissions on" do
       it "should redirect to catalog" do

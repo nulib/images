@@ -3,11 +3,42 @@
   <%= render :partial=>'shared/menu' %>
 <% end %>
 
-<ul>
-<% @policies.each do |v| %>
-  <li><%= link_to v["title_display"], edit_policy_path(v["id"]) %></li>
-<% end %>
-</ul>
+
+Policies you are a maintainer of:
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Policy Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @edit_policies.each do |v| %>
+    <tr>
+      <td><%= link_to v["title_display"], edit_policy_path(v["id"]) %></td>
+      <td><%= v["description_t"].first if v["description_t"] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+Other policies you have permissions to use:
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Policy Name</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @read_policies.each do |v| %>
+    <tr>
+      <td><%= link_to v["title_display"], policy_path(v["id"]) %></td>
+      <td><%= v["description_t"].first if v["description_t"] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
 
 
 <div class="form-actions">

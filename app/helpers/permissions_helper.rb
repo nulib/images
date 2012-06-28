@@ -1,4 +1,10 @@
 module PermissionsHelper
+
+  def options_for_select_from_solr (collection, id_field, label_field, default=nil) 
+    id_field = id_field.to_s
+    label_field = label_field.to_s
+    options_for_select(collection.map {|r| [r[label_field] ? r[label_field].first : r[id_field], r[id_field]]}, default)
+  end
   
   def permissions_users(obj)
     users_for_field(obj, :permissions)
