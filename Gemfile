@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
   gem 'rails', '3.2.6'
   gem 'blacklight', :git=>'git://github.com/projectblacklight/blacklight.git', :ref=>'a83c286'
-  gem 'hydra-access-controls', :require=>false, :git=>'git://github.com/projecthydra/hydra-access-controls' , :ref=>'ccc6aca'
+  gem 'hydra-access-controls', :require=>false, :git=>'git://github.com/projecthydra/hydra-access-controls' , :ref=>'201f78931b'
   gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'5f55ef6'
   gem 'active-fedora', '4.3.0' 
   gem 'sqlite3'
