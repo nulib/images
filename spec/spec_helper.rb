@@ -28,15 +28,18 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     ## Clean out the repository
-    begin
-      Multiresimage.find(:all, :rows=>1000).each do |m|
-        ### Delete everything except the fixture
-        m.delete unless /^inu:dil-/.match(m.pid)
+      begin
+        Multiresimage.find_each({}, :rows=>1000) do |m|
+          ### Delete everything except the fixture
+          m.delete unless /^inu:dil-/.match(m.pid)
+        end
+        DILCollection.find_each({}, :rows=>1000) { |c| c.delete }
+        AdminPolicy.find_each({}, :rows=>1000) { |c| c.delete }
+      rescue ActiveFedora::ObjectNotFoundError => e
+        puts "Index is out of synch with repository. #{e.message}"
+        puts "Aborting repository cleanup"
+        #nop - index is out of synch with repository. Try solrizing
       end
-      DILCollection.find(:all, :rows=>1000).each(&:delete)
-    rescue ActiveFedora::ObjectNotFoundError
-      #nop - index is out of synch with repository. Try solrizing
-    end
   end
 end
 

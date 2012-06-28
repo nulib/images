@@ -41,7 +41,7 @@
         <div class="control-group">
           <%= f.label :admin_policy_id, "Policy", :class=>"control-label" %>
           <div class="controls">
-            <%= f.collection_select :admin_policy_id, @policies, :pid, :title, {:include_blank => 'Default Policy &mdash; Private to Owner'.html_safe}, :class=>'span5' %>
+            <%= f.select :admin_policy_id, options_for_select_from_solr(@policies, :id, :title_t), {:include_blank => 'Default Policy &mdash; Private to Owner'.html_safe}, :class=>'span5' %>
           </div>
           <%= link_to "manage policies", policies_path %>
         </div>        

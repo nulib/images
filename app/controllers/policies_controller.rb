@@ -3,7 +3,8 @@ class PoliciesController < ApplicationController
 
   def index
     @page_title = 'Admin Policies'
-    @policies = AdminPolicy.find_with_conditions({}, :rows=>1000)
+    @edit_policies = AdminPolicy.editable_by_user(current_user)
+    @read_policies = AdminPolicy.where_user_has_permissions(current_user, [:read])
   end
 
   def new
