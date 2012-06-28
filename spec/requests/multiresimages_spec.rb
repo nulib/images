@@ -6,7 +6,7 @@ require "spec_helper"
 
 # Descriptions of page contents
 
-describe "When viewing images" do
+describe "Images " do
   context "Given I have discover access" do
     before { login FactoryGirl.find_or_create(:nu_id_holder) }
     # NOTE: Tests for gated discovery (discover permissions in search results) are in spec/requests/gated_discovery_spec.rb
@@ -96,7 +96,9 @@ describe "When viewing images" do
     end
     context "When visiting edit page for an image" do
       before { visit edit_multiresimage_path('inu:dil-nu-read-access-image') }
-      it "Then I should see a form for editing descriptive metadata"
+      it "Then I should see a form for editing descriptive metadata" do
+        page.should have_selector "form[action='#{multiresimage_path('inu:dil-nu-read-access-image')}']"
+      end
       it "Then I should be able to edit the policy association" do
         page.should have_link "manage policies"
         select 'Policy', :with=>'Default Policy &mdash; Private to Owner'
@@ -105,6 +107,9 @@ describe "When viewing images" do
       end
       it "Then I should see a link to the show/browse page" do
         page.should_not have_selector("a[href='#{multiresimage_path('inu:dil-nu-read-access-image')}']", :text=>"Browse")
+      end
+      it "Then I should not have the ability to remove my own access" do
+        page.should_not have_selector("#multiresimage_permissions_user_joe_creator")
       end
     end
   end
