@@ -6,9 +6,6 @@ $ ->
 
   removeExistingBehavior = (e, button) ->
     e.preventDefault()
-    obj = button.attr('data-object')
-    field = button.attr('data-field')
-    type = button.attr('data-type')
     request = $.ajax({
       type: 'PUT',
       url: button.closest('form').attr('action'),
