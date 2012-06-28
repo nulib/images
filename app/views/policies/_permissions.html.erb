@@ -5,7 +5,7 @@
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <div class="controls">
         <%= hidden_field_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", access %>
-        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), 'data-object'=>obj, 'data-field'=>field, 'data-type' =>"user", :class=>'hidden btn' %>
+        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -14,7 +14,7 @@
         <label class="control-label">{%=o.record_name%}</label>
         <div class="controls">
           <input id="admin_policy_<%=field %>_user_{%=o.record_name %}" type="hidden" value="<%=access %>" name="admin_policy[<%=field %>][user][{%=o.record_name%}]">
-          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" name="commit" type="submit" value="Remove">
         </div>
       </div>
     </script>
@@ -34,7 +34,7 @@
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <div class="controls">
         <%= hidden_field_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", access %>
-        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), 'data-object'=>obj, 'data-field'=>field, 'data-type' =>"group", :class=>'hidden btn' %>
+        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -43,7 +43,7 @@
         <label class="control-label">{%=o.record_name%}</label>
         <div class="controls">
           <input id="admin_policy_<%=field %>_group_{%=o.record_name %}" type="hidden" value="<%=access %>" name="admin_policy[<%=field %>][group][{%=o.record_name%}]">
-          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" name="commit" type="submit" value="Remove">
         </div>
       </div>
     </script>

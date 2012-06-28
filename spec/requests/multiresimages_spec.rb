@@ -35,10 +35,6 @@ describe "When viewing images" do
         page.should_not have_link('medium')
         page.should_not have_link('large')
       end
-      it "Then I should see a message explaining that I do not have access" do
-        page.should have_content("You do not have permission to view the content of this image.")
-        page.should have_selector("li.current_owner", :text=>"joe_creator")
-      end
       it "Then I should not see a link to the edit page" do
         page.should_not have_selector("a[href='#{edit_multiresimage_path('inu:dil-dept-access-image')}']")
       end
@@ -70,7 +66,6 @@ describe "When viewing images" do
         page.should have_content("inu:dil-nu-read-access-image")
       end
       it "Then I should see the image content & download links" do
-        page.should have_selector("div#crop-tool")
         page.should have_link('thumbnail')
         page.should have_link('medium')
         page.should have_link('large')

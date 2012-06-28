@@ -33,7 +33,7 @@
   </div>        
   <fieldset class="permissions">
     <legend>Provides these Permissions</legend>
-    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy, :field=>:default_permissions} %>
+    <%=render :partial=>'shared/edit_groups_and_users', :locals=>{:fedora_object=>@policy, :field=>:default_permissions} %>
   </fieldset>
   <fieldset class="maintainers">
     <legend>Policy Maintainers</legend>

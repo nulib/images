@@ -59,9 +59,12 @@ class MultiresimagesController < ApplicationController
     parse_permissions!(params[:multiresimage])
     @multiresimage.update_attributes(params[:multiresimage])
         
-    flash[:notice] = "Saved changes to #{@multiresimage.id}"
-    
-    redirect_to edit_multiresimage_path(@multiresimage)
+    respond_to do |format|
+      format.json do
+        render :json=>{:values => params[:multiresimage][:permissions] }
+      end
+      format.html { redirect_to edit_multiresimage_path(@multiresimage), :notice =>"Saved changes to #{@multiresimage.id}" }
+    end
   end
    
   # Create new crop

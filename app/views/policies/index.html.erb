@@ -1,4 +1,8 @@
 <%= render :partial=>'/shared/page_header' %>
+<% sidebar_items << capture do %>
+  <%= render :partial=>'shared/menu' %>
+<% end %>
+
 <ul>
 <% @policies.each do |v| %>
   <li><%= link_to v["title_display"], edit_policy_path(v["id"]) %></li>
