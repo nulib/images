@@ -1,12 +1,12 @@
 <h4>Users with Access</h4>
 <% obj = fedora_object.class.to_s.underscore%>
-<% users_for_field(@policy, field).each do |permission| %>
+<% users_for_field(fedora_object, field).each do |permission| %>
     <div class="control-group"> 
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <div class="controls">
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
-        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'user', :class=>'hidden btn' %>
+        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(fedora_object), :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -21,7 +21,7 @@
             <option value="read">View</option>
             <option value="edit">Edit</option>
           </select>
-          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+          <input class="btn" data-behavior="<%=remove_behavior(fedora_object)%>" name="commit" type="submit" value="Remove">
         </div>
       </div>
     </script>
@@ -33,18 +33,18 @@
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_user_name]" %>
     <%= select_tag "#{obj}[#{field}][new_user_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
-    <%= submit_tag "Add", 'data-behavior'=>add_behavior(@policy), 'data-name'=>"#{obj}_#{field}_new_user_name", 'data-value'=>"#{obj}_#{field}_new_user_permission", 'data-template'=>"tmpl-#{field}-user", :class=>'hidden btn' %>
+    <%= submit_tag "Add", 'data-behavior'=>add_behavior(fedora_object), 'data-name'=>"#{obj}_#{field}_new_user_name", 'data-value'=>"#{obj}_#{field}_new_user_permission", 'data-template'=>"tmpl-#{field}-user", :class=>'hidden btn' %>
   </div>
 </div>
 
 <h4>Groups with Access</h4>
-<% groups_for_field(@policy, field).each do |permission| %>
+<% groups_for_field(fedora_object, field).each do |permission| %>
     <div class="control-group"> 
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
       <div class="controls">
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
         <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
-        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), 'data-object'=>obj, 'data-field'=>field, 'data-type' =>'group', :class=>'hidden btn' %>
+        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(fedora_object), :class=>'hidden btn' %>
       </div>
     </div> 
 <% end %>
@@ -58,7 +58,7 @@
             <option value="read">View</option>
             <option value="edit">Edit</option>
           </select>
-          <input class="btn" data-behavior="<%=remove_behavior(@policy)%>" data-name=""  data-value="" name="commit" type="submit" value="Remove">
+          <input class="btn" data-behavior="<%=remove_behavior(fedora_object)%>" name="commit" type="submit" value="Remove">
         </div>
       </div>
     </script>
@@ -68,7 +68,7 @@
   <div class="controls">
     <%= text_field_tag "#{obj}[#{field}][new_group_name]" %>
     <%= select_tag "#{obj}[#{field}][new_group_permission]", options_for_select(DIL::Application::config.permission_levels), :class=>'span2' %>
-    <%= submit_tag "Add", 'data-behavior'=>add_behavior(@policy), 'data-name'=>"#{obj}_#{field}_new_group_name", 'data-value'=>"#{obj}_#{field}_new_group_permission", 'data-template'=>"tmpl-#{field}-group", :class=>'hidden btn' %>
+    <%= submit_tag "Add", 'data-behavior'=>add_behavior(fedora_object), 'data-name'=>"#{obj}_#{field}_new_group_name", 'data-value'=>"#{obj}_#{field}_new_group_permission", 'data-template'=>"tmpl-#{field}-group", :class=>'hidden btn' %>
   </div>
 </div>
 

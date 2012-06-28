@@ -100,33 +100,47 @@ describe MultiresimagesController do
         end
       end
       describe "setting permissions" do
-        it "should update permissions" do
-          put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
-          "new_group_name"=>"", "new_group_permission"=>"none", 
-          "new_user_name"=>"", "new_user_permission"=>"none"}}
-          updated_img = Multiresimage.find(@img.pid)
-          updated_img.edit_groups.should include("staff")
-          updated_img.edit_groups.should include("faculty") 
-          updated_img.discover_users.should include("student1")
-          updated_img.edit_users.should include("vanessa")
-          updated_img.read_users.should include("archivist1")
+        describe "html requests" do
+          it "should update permissions" do
+            put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{"group"=>{"staff"=>"edit", "faculty"=>"edit"}, "user"=>{"student1"=>"discover","vanessa"=>"edit", "archivist1"=>"read"}, 
+            "new_group_name"=>"", "new_group_permission"=>"none", 
+            "new_user_name"=>"", "new_user_permission"=>"none"}}
+            updated_img = Multiresimage.find(@img.pid)
+            updated_img.edit_groups.should include("staff")
+            updated_img.edit_groups.should include("faculty") 
+            updated_img.discover_users.should include("student1")
+            updated_img.edit_users.should include("vanessa")
+            updated_img.read_users.should include("archivist1")
+          end
+          it "should add group & user permissions without wiping out existing permissions" do
+            # pre-existing permissions
+            @img.edit_groups.should include("staff") 
+            @img.edit_users.should include(@user.uid)
+            
+            put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{
+              "new_group_name"=>"mynewgroup", "new_group_permission"=>"discover", 
+              "new_user_name"=>"uuuusssserzed", "new_user_permission"=>"edit"}}
+            updated_img = Multiresimage.find(@img.pid)
+            # check that new permissions were granted
+            updated_img.discover_groups.should include("mynewgroup")
+            updated_img.edit_users.should include("uuuusssserzed")
+            # check that the original permissions weren't changed
+            updated_img.edit_groups.should include("staff") 
+            updated_img.edit_users.should include(@user.uid)
+          end
         end
-        it "should add group & user permissions without wiping out existing permissions" do
-          # pre-existing permissions
-          @img.edit_groups.should include("staff") 
-          @img.edit_users.should include(@user.uid)
-          
-          put :update, :id=>@img.pid, :multiresimage=>{"permissions"=>{
-            "new_group_name"=>"mynewgroup", "new_group_permission"=>"discover", 
-            "new_user_name"=>"uuuusssserzed", "new_user_permission"=>"edit"}}
-          updated_img = Multiresimage.find(@img.pid)
-          # check that new permissions were granted
-          updated_img.discover_groups.should include("mynewgroup")
-          updated_img.edit_users.should include("uuuusssserzed")
-          # check that the original permissions weren't changed
-          updated_img.edit_groups.should include("staff") 
-          updated_img.edit_users.should include(@user.uid)
-        end
+        describe "ajax requests" do
+          it "should update group permissions" do
+            xhr :put, :update, :id=>@img.pid, :multiresimage=>{:permissions=>{:new_group_name=>"ajaxgroup", :new_group_permission=>'read'}}, :format=>'json'
+            response.should be_successful
+            JSON.parse(response.body).should == {'values' => [{'name'=>'ajaxgroup', 'type'=>'group', 'access'=>'read'} ] } 
+          end
+          it "should update user permissions" do
+            xhr :put, :update, :id=>@img.pid, :multiresimage=>{:permissions=>{:new_user_name=>"ajaxuser", :new_user_permission=>'discover'}}, :format=>'json'
+            response.should be_successful
+            JSON.parse(response.body).should == {'values' => [{'name'=>'ajaxuser', 'type'=>'user', 'access'=>'discover'} ] } 
+          end
+        end   
       end
 
       describe "setting group access" do

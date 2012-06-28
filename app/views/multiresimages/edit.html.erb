@@ -2,82 +2,17 @@
   <%= render :partial=>'shared/menu' %>
 <% end %>
 		
-		<script type="text/javascript">
-			$(document).ready(function()
-			{
-				CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"));
-			});
-		</script>
 
-<!-- crop tool above -->
-	<div id="crop-tool" style="background-color:#000000; width:100%; height: 500px; border: thin solid blue;">
-    <div id="metadata" style="display:none">
-      <div id="crop-details"></div>
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab1" data-toggle="tab">Description</a></li>
+    <li><a href="#tab2" data-toggle="tab">Crop</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab1">
+      <%=render :partial=>'edit_description' %>
     </div>
-    <div id="collection"  style="display:none">
-      <div id="crop-list">
-        <ul id="sortable">
-
-        </ul>
-      </div>
+    <div class="tab-pane" id="tab2">
+      <%=render :partial=>'crop' %>
     </div>
-  </div>      
-
-  <div id="accordion">
-    <h2 class="section-title"><a href="#">Description</a></h2>
-    <%= form_for @multiresimage do |f|%>
-      <div>
-        PID: <%= @multiresimage.id %>
-      </div>
-      <br/>
-      <div class="control-group">
-        <%= f.label 'Agent', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :agentSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label 'Date', :class=>"control-label" %>
-        <div class="controls">
-        <%= f.text_field :dateSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label 'Description', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :descriptionSet_display, :class=>'span6' %>
-        </div>
-      </div>
-       <div class="control-group">
-        <%= f.label 'Subject', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :subjectSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      
-      <div class="control-group">
-        <%= f.label 'Title', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :titleSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      
-      <fieldset class="permissions">
-        <legend>Permissions</legend>
-        <div class="control-group">
-          <%= f.label :admin_policy_id, "Policy", :class=>"control-label" %>
-          <div class="controls">
-            <%= f.collection_select :admin_policy_id, @policies, :pid, :title, {:include_blank => 'Default Policy &mdash; Private to Owner'.html_safe}, :class=>'span5' %>
-          </div>
-          <%= link_to "manage policies", policies_path %>
-        </div>        
-        <span id="object-permissions-heading">Also grant access to</span>
-        <%= render :partial => "permissions/edit_groups_and_users", :locals=>{:fedora_object=>@multiresimage} %>
-      </fieldset>
-      
-      <div class="form-actions">
-        <%= f.submit "Save changes", :class=>'btn btn-primary'%>
-      </div>
-    <%end%>
   </div>
 
