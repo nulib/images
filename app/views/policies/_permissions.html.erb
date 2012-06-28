@@ -3,10 +3,13 @@
 <% users_for_field(@policy, field, access).each do |permission| %>
     <div class="control-group"> 
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
-      <div class="controls">
-        <%= hidden_field_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", access %>
-        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), :class=>'hidden btn' %>
-      </div>
+      <% if field != :permissions || current_user.user_key != permission[:name] %>
+        <%# don't let the current user remove their own permissions %>
+        <div class="controls">
+          <%= hidden_field_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", access %>
+          <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(@policy), :class=>'hidden btn' %>
+        </div>
+      <% end %>
     </div> 
 <% end %>
     <script type="text/x-tmpl" id="tmpl-<%= field %>-user-<%= access %>">
