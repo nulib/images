@@ -3,11 +3,14 @@
 <% users_for_field(fedora_object, field).each do |permission| %>
     <div class="control-group"> 
       <%= label_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", permission[:name], :class=>"control-label" %>
-      <div class="controls">
-        <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
-        <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
-        <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(fedora_object), :class=>'hidden btn' %>
-      </div>
+      <% if field != :permissions || current_user.user_key != permission[:name] %>
+        <%# don't let the current user remove their own permissions %>
+        <div class="controls">
+          <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.public_permission_levels, permission[:access]), :class=>'span2' if permission[:name].upcase == 'PUBLIC'%>
+          <%= select_tag "#{obj}[#{field}][#{permission[:type]}][#{permission[:name]}]", options_for_select(DIL::Application::config.permission_levels, permission[:access]), :class=>'span2' unless permission[:name].upcase == 'PUBLIC' %>
+          <%= submit_tag "Remove", 'data-behavior'=>remove_behavior(fedora_object), :class=>'hidden btn' %>
+        </div>
+      <% end %>
     </div> 
 <% end %>
 
