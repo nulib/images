@@ -226,51 +226,123 @@ describe "a user" do
 
 end
 
-describe "Policy-enforcement: accessing an object whose" do
-  context "policy grants edit access to a group I belong to" do
+#
+# Policy-based Access Controls
+#
+describe "When accessing images with Policies associated" do
+  before do
+    @user = FactoryGirl.find_or_create(:martia_morocco)
+    Group.any_instance.stub :persist_to_ldap
+  end
+  subject { Ability.new(@user) }
+  context "Given a policy grants read access to a group I belong to" do
     before do
-      # @image = Multiresimage.new()
-      # @image.policy=@policy
-      # @image.save
+      @policy = AdminPolicy.new
+      @policy.default_permissions = [{:type=>"group", :access=>"read", :name=>"africana-faculty"}]
+      @policy.save
     end
-    it "should be able to view the image" do
-      pending "Policy-based permissions"
-      subject.can?(:read, @image).should be_true
-    end
-    it "should be able to destroy the image" do
-      pending "Policy-based permissions"
-      subject.can?(:destroy, @image).should be_true
-    end
-    it "should be able to edit the image" do
-      pending "Policy-based permissions"
-      subject.can?(:edit, @image).should be_true
-    end
-    it "should be able to update the image" do
-      pending "Policy-based permissions"
-      subject.can?(:update, @image).should be_true
+    after { @policy.delete }
+  	context "And a subscribing image does not grant access" do
+  	  before do
+        @image = Multiresimage.new()
+        @image.admin_policy = @policy
+        @image.save
+      end
+      after { @image.delete }
+  		it "Then I should be able to view the image" do
+  		  pending "Policy-based access controls"
+  		  subject.can?(:read, @image).should be_true
+		  end
+      it "Then I should not be able to edit, update and destroy the image" do
+        subject.can?(:edit, @image).should be_false
+        subject.can?(:update, @image).should be_false
+        subject.can?(:destroy, @image).should be_false
+      end
     end
   end
-  context "policy grants read access to a group I belong to" do
+  context "Given a policy grants edit access to a group I belong to" do
     before do
-      # @image = Multiresimage.new()
-      # @image.policy=@policy
-      # @image.save
+      @policy = AdminPolicy.new
+      @policy.default_permissions = [{:type=>"group", :access=>"edit", :name=>"africana-faculty"}]
+      @policy.save
     end
-    it "should be able to view the image" do
-      pending "Policy-based permissions"
-      subject.can?(:read, @image).should be_true
+    after { @policy.delete }
+  	context "And a subscribing image does not grant access" do
+  	  before do
+        @image = Multiresimage.new()
+        @image.admin_policy = @policy
+        @image.save
+      end
+      after { @image.delete }
+  		it "Then I should be able to view the image" do
+  		  pending "Policy-based access controls"
+  		  subject.can?(:read, @image).should be_true
+		  end
+  		it "Then I should be able to edit/update/destroy the image" do
+  		  pending "Policy-based access controls"
+        subject.can?(:edit, @image).should be_true
+        subject.can?(:update, @image).should be_true
+        subject.can?(:destroy, @image).should be_true
+      end
+		end
+  	context "And a subscribing image grants read access to me as an individual" do
+  	  before do
+        @image = Multiresimage.new()
+        @image.read_users = [@user.uid]
+        @image.admin_policy = @policy
+        @image.save
+      end
+      after { @image.delete }
+  		it "Then I should be able to view the image" do
+  		  subject.can?(:read, @image).should be_true
+		  end
+      it "Then I should be able to edit/update/destroy the image" do
+        pending "Policy-based access controls"
+        subject.can?(:edit, @image).should be_true
+        subject.can?(:update, @image).should be_true
+        subject.can?(:destroy, @image).should be_true
+      end
     end
-    it "should be able to destroy the image" do
-      pending "Policy-based permissions"
-      subject.can?(:destroy, @image).should be_false
+  end
+
+  context "Given a policy does not grant access to any group I belong to" do
+    before do
+      @policy = AdminPolicy.new
+      @policy.save
     end
-    it "should be able to edit the image" do
-      pending "Policy-based permissions"
-      subject.can?(:edit, @image).should be_false
+    after { @policy.delete }
+    context "And a subscribing image does not grant access" do
+      before do
+        @image = Multiresimage.new()
+        @image.admin_policy = @policy
+        @image.save
+      end
+      after { @image.delete }
+		  it "Then I should not be able to view the image" do
+  		  subject.can?(:read, @image).should be_false
+		  end
+      it "Then I should not be able to edit/update/destroy the image" do
+        subject.can?(:edit, @image).should be_false
+        subject.can?(:update, @image).should be_false
+        subject.can?(:destroy, @image).should be_false
+      end
     end
-    it "should be able to update the image" do
-      pending "Policy-based permissions"
-      subject.can?(:update, @image).should be_false
+    context "And a subscribing image grants read access to me as an individual" do
+      before do
+        @image = Multiresimage.new()
+        @image.read_users = [@user.uid]
+        @image.admin_policy = @policy
+        @image.save
+      end
+      after { @image.delete }
+		  it "Then I should be able to view the image" do
+  		  subject.can?(:read, @image).should be_true
+		  end
+      it "Then I should not be able to edit/update/destroy the image" do
+        subject.can?(:edit, @image).should be_false
+        subject.can?(:update, @image).should be_false
+        subject.can?(:destroy, @image).should be_false
+      end
     end
   end
 end
