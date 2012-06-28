@@ -17,10 +17,10 @@ GIT
 
 GIT
   remote: git://github.com/projecthydra/hydra-access-controls
-  revision: ccc6aca05e8a31500c93702466e77e9e37fba89f
-  ref: ccc6aca
+  revision: 201f78931b20f5301e0438741e29451e039978c7
+  ref: 201f78931b
   specs:
-    hydra-access-controls (0.0.1)
+    hydra-access-controls (0.0.2)
       active-fedora
       activesupport
       cancan
@@ -364,6 +364,7 @@ DEPENDENCIES
   bcrypt-ruby
   blacklight!
   bootstrap-sass-rails (= 2.0.3.0)
+  cancan (= 1.6.7)
   capybara
   clamav
   coffee-rails (~> 3.2.1)
