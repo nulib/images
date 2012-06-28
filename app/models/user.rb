@@ -54,13 +54,13 @@ class User < ActiveRecord::Base
 
   # Groups that user is a member of
   def groups 
+    return @groups if @groups
     codes = Hydra::LDAP.groups_for_user(uid)
     #puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)
     #puts "res: #{res}"
     # add eduPersonAffiliation (e.g. student, faculty, staff) to groups that the user is a member of
-    val = res + affiliations.map{ |code| Group.new(:code=>code) }
-    val
+    @groups = res + affiliations.map{ |code| Group.new(:code=>code) }
   end
 
   def collections

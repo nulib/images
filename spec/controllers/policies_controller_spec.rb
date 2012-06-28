@@ -160,11 +160,41 @@ describe PoliciesController do
   end
 
   describe "index" do
-    it "should be successful" do
+    before  do
+      @user = FactoryGirl.find_or_create(:staff)
+      Hydra::LDAP.stub(:groups_for_user).with(@user.uid).and_return([])
+
+      @user_policy = AdminPolicy.new
+      @user_policy.edit_users = [@user.user_key]
+      @user_policy.save
+      @group_policy = AdminPolicy.new
+      @group_policy.edit_groups = ['staff']
+      @group_policy.save
+
+      @readable_policy = AdminPolicy.new
+      @readable_policy.read_groups = ['staff']
+      @readable_policy.save
+
+      @no_access_policy = AdminPolicy.create
+
+      sign_in @user
+    end
+    after do
+      @user_policy.delete
+      @group_policy.delete
+      @readable_policy.delete
+      @no_access_policy.delete
+    end
+    it "should only have policies that you have the ability to view" do
       get :index
       response.should be_successful
-      assigns[:policies].should be_kind_of Array
+      assigns[:edit_policies].should be_kind_of Array
+      assigns[:read_policies].should be_kind_of Array
+      edit_policy_pids = assigns[:edit_policies].map {|p| p["id"]}
+      read_policy_pids = assigns[:read_policies].map {|p| p["id"]}
+      read_policy_pids.should == [@readable_policy.pid]
+      edit_policy_pids.should include(@user_policy.pid, @group_policy.pid)
+      edit_policy_pids.should_not include(@no_access_policy.pid)
     end
-    it "should only have policies that you have the ability to view"
   end
 end
