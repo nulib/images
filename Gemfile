@@ -28,6 +28,7 @@ group :assets do
 
 end
 
+gem "cancan", "1.6.7"  # 1.6.8 breaks PoliciesController.create method in a super strange way.
 gem 'jquery-rails'
 gem 'jquery.fileupload-rails'
 
