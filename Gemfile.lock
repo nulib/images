@@ -1,42 +1,4 @@
 GIT
-  remote: git://github.com/projectblacklight/blacklight.git
-  revision: a83c2864660ae95700cb5409e245c7d2a6b2f517
-  ref: a83c286
-  specs:
-    blacklight (3.4.0)
-      compass-rails (~> 1.0.0)
-      compass-susy-plugin (>= 0.9.0)
-      kaminari
-      marc (>= 0.4.3, < 1.1)
-      nokogiri (~> 1.5)
-      rails (~> 3.1)
-      rsolr (~> 1.0.6)
-      rsolr-ext (~> 1.0.3)
-      sass-rails
-      unicode
-
-GIT
-  remote: git://github.com/projecthydra/active_fedora.git
-  revision: 5bb8c44a0f37dbff585b27236955e05ba705fec5
-  ref: 5bb8c44
-  specs:
-    active-fedora (4.3.0)
-      activeresource (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      equivalent-xml
-      mediashelf-loggable
-      mime-types (>= 1.16)
-      multipart-post
-      nokogiri
-      om (~> 1.6.0)
-      rdf
-      rdf-rdfxml (~> 0.3.8)
-      rsolr
-      rubydora (~> 0.5.10)
-      solrizer (~> 1.2.0)
-      xml-simple (>= 1.0.12)
-
-GIT
   remote: git://github.com/projecthydra/hydra-access-controls
   revision: 201f78931b20f5301e0438741e29451e039978c7
   ref: 201f78931b
@@ -46,24 +8,6 @@ GIT
       activesupport
       cancan
       deprecation
-
-GIT
-  remote: git://github.com/projecthydra/hydra-head.git
-  revision: 5f55ef656f4aa6fb75e2143c51b4f80ff5bc49b1
-  ref: 5f55ef6
-  specs:
-    hydra-head (4.0.3)
-      RedCloth (= 4.2.9)
-      active-fedora (~> 4.1)
-      blacklight (~> 3.4)
-      block_helpers
-      deprecation (>= 0.0.5)
-      devise
-      hydra-access-controls
-      hydra-mods (>= 0.0.5)
-      jquery-rails
-      rails (~> 3.2.3)
-      sanitize
 
 GEM
   remote: http://rubygems.org/
@@ -82,6 +26,17 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.3)
+    active-fedora (4.4.0)
+      activeresource (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      equivalent-xml
+      mediashelf-loggable
+      om (~> 1.6.0)
+      rdf
+      rdf-rdfxml (~> 0.3.8)
+      rsolr
+      rubydora (~> 0.5.10)
+      solrizer (~> 1.2.0)
     activemodel (3.2.6)
       activesupport (= 3.2.6)
       builder (~> 3.0.0)
@@ -103,6 +58,17 @@ GEM
     arel (3.0.2)
     backports (2.6.1)
     bcrypt-ruby (3.0.1)
+    blacklight (3.5.0)
+      compass-rails (~> 1.0.0)
+      compass-susy-plugin (>= 0.9.0)
+      kaminari
+      marc (>= 0.4.3, < 1.1)
+      nokogiri (~> 1.5)
+      rails (~> 3.1)
+      rsolr (~> 1.0.6)
+      rsolr-ext (~> 1.0.3)
+      sass-rails
+      unicode
     block_helpers (0.3.3)
       activesupport (>= 2.0)
     bootstrap-sass-rails (2.0.3.0)
@@ -117,7 +83,7 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    childprocess (0.3.2)
+    childprocess (0.3.3)
       ffi (~> 1.0.6)
     chunky_png (1.2.5)
     clamav (0.4.1)
@@ -129,12 +95,12 @@ GEM
       execjs
     coffee-script-source (1.3.3)
     columnize (0.3.6)
-    compass (0.12.1)
+    compass (0.12.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
       sass (~> 3.1)
-    compass-rails (1.0.2)
-      compass (>= 0.12.0, < 0.14)
+    compass-rails (1.0.3)
+      compass (>= 0.12.2, < 0.14)
     compass-susy-plugin (0.9)
       compass (>= 0.11.1)
     daemons (1.1.8)
@@ -159,10 +125,10 @@ GEM
     erubis (2.7.0)
     execjs (1.4.0)
       multi_json (~> 1.0)
-    factory_girl (3.4.1)
+    factory_girl (3.5.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (3.4.0)
-      factory_girl (~> 3.4.0)
+    factory_girl_rails (3.5.0)
+      factory_girl (~> 3.5.0)
       railties (>= 3.0.0)
     fastercsv (1.5.5)
     ffi (1.0.11)
@@ -175,6 +141,18 @@ GEM
       rack
     hydra-batch-edit (0.0.6)
       blacklight
+    hydra-head (4.1.0)
+      RedCloth (= 4.2.9)
+      active-fedora (~> 4.1)
+      blacklight (~> 3.4)
+      block_helpers
+      deprecation (>= 0.0.5)
+      devise
+      hydra-access-controls (>= 0.0.2)
+      hydra-mods (>= 0.0.5)
+      jquery-rails
+      rails (~> 3.2.3)
+      sanitize
     hydra-ldap (0.0.3)
       net-ldap
     hydra-mods (0.0.5)
@@ -217,7 +195,6 @@ GEM
     mediashelf-loggable (0.4.9)
     mime-types (1.19)
     multi_json (1.3.6)
-    multipart-post (1.1.5)
     mysql2 (0.3.11)
     net-ldap (0.2.2)
     nokogiri (1.5.5)
@@ -233,7 +210,7 @@ GEM
       omniauth (~> 1.0)
       pyu-ruby-sasl (~> 0.0.3.1)
       rubyntlm (~> 0.1.1)
-    orm_adapter (0.1.0)
+    orm_adapter (0.3.0)
     polyglot (0.3.3)
     pyu-ruby-sasl (0.0.3.3)
     rack (1.4.1)
@@ -315,9 +292,8 @@ GEM
       nokogiri (>= 1.4.0)
       nori (~> 1.1.0)
       wasabi (~> 2.5.0)
-    selenium-webdriver (2.22.2)
+    selenium-webdriver (2.24.0)
       childprocess (>= 0.2.5)
-      ffi (~> 1.0)
       libwebsocket (~> 0.1.3)
       multi_json (~> 1.0)
       rubyzip
@@ -337,13 +313,13 @@ GEM
     systemu (2.5.1)
     therubyracer (0.10.1)
       libv8 (~> 3.3.10)
-    thor (0.15.3)
+    thor (0.15.4)
     tilt (1.3.3)
     treetop (1.4.10)
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.33)
-    uglifier (1.2.5)
+    uglifier (1.2.6)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
     unicode (0.4.2)
@@ -366,9 +342,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active-fedora!
   bcrypt-ruby
-  blacklight!
+  blacklight
   bootstrap-sass-rails (= 2.0.3.0)
   cancan (= 1.6.7)
   capybara
@@ -382,7 +357,7 @@ DEPENDENCIES
   factory_girl_rails
   hydra-access-controls!
   hydra-batch-edit (~> 0.0.6)
-  hydra-head!
+  hydra-head (= 4.1.0)
   hydra-ldap (~> 0.0.3)
   jettywrapper
   jquery-rails
