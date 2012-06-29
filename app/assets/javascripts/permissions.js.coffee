@@ -9,15 +9,15 @@ $ ->
     request = $.ajax({
       type: 'PUT',
       url: button.closest('form').attr('action'),
-      data: button.closest('.control-group').find('select,input[type=hidden]').attr('name')+"=none",
+      data: button.closest('[data-behavior="access-entry"]').find('select,input[type=hidden]').attr('name')+"=none",
       dataType: 'json'
     })
     request.success (data) -> 
-      button.closest('.control-group').remove()
+      button.closest('[data-behavior="access-entry"]').remove()
 
   removeBehavior = (e, button) ->
     e.preventDefault()
-    button.closest('.control-group').remove()
+    button.closest('[data-behavior="access-entry"]').remove()
 
   addNewBehavior = (e, button) ->
     e.preventDefault()
@@ -27,7 +27,7 @@ $ ->
     new_perm = $("##{value}")
     info = { record_name: new_name.val() }
     new_template = $(tmpl(button.attr('data-template'), info))
-    button.closest('.control-group').before(new_template)
+    button.closest('[data-behavior="access-entry"]').before(new_template)
     new_template.find("[data-behavior='permissions-remove-new']").click (e) ->
       removeBehavior(e, $(this))
     new_name.val('')
@@ -58,12 +58,12 @@ $ ->
 
     request.success (data) ->
       if data.errors
-        button.closest('.control-group').before("<div class=\"alert alert-info\"> <button class=\"close\" data-dismiss=\"alert\">×</button> #{data.errors.join()}  </div>")
+        button.closest('[data-behavior="access-entry"]').before("<div class=\"alert alert-info\"> <button class=\"close\" data-dismiss=\"alert\">×</button> #{data.errors.join()}  </div>")
       else
         record = data.values[0]
         info = { record_name: record.name }
         new_template = $(tmpl(button.attr('data-template'), info))
-        button.closest('.control-group').before(new_template)
+        button.closest('[data-behavior="access-entry"]').before(new_template)
         new_template.find("[data-behavior='permissions-remove-existing']").click (e) ->
           removeExistingBehavior(e, $(this))
         new_name.val('')
