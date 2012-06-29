@@ -220,8 +220,8 @@ GEM
     multipart-post (1.1.5)
     mysql2 (0.3.11)
     net-ldap (0.2.2)
-    nokogiri (1.5.4)
-    nori (1.1.0)
+    nokogiri (1.5.5)
+    nori (1.1.1)
     om (1.6.1)
       mediashelf-loggable
       nokogiri (>= 1.4.2)

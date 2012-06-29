@@ -65,9 +65,6 @@ class UploadsController < ApplicationController
       @work.datastreams["properties"].delete
       @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
     
-      #need to save the object before updating it's vra xml
-      @work.save!
-    
       #update the Vrawork's VRA xml
       #note: the xml_template creates the VRA xml for a VRA image.  Update the vra:image tags to vra:work
       @work.update_vra_work_tag
