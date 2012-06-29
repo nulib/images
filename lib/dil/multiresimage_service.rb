@@ -414,8 +414,12 @@ module DIL
       
       #set rightsMetadata
       #fedora_object.rightsMetadata
-      fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
-            
+      #fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
+      
+      #todo: make groups be a param to the API
+      fedora_object.read_groups["registered"]
+      fedora_object.edit_groups["registered"]
+      
       #save Fedora object
       fedora_object.save
       logger.debug("created image")
@@ -442,8 +446,12 @@ module DIL
       
       #set rightsMetadata
       #fedora_object.rightsMetadata
-      fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
-            
+      #fedora_object.datastreams["rightsMetadata"].content = "<rightsMetadata xmlns='http://hydra-collab.stanford.edu/schemas/rightsMetadata/v1' version='0.1'> <copyright> <human></human> <machine> <uvalicense>no</uvalicense> </machine> </copyright> <access type='discover'> <human></human> <machine> <group>public</group> </machine> </access> <access type='read'> <human></human> <machine> <group>public</group> </machine> </access> <access type='edit'> <human></human> <machine></machine> </access> <embargo> <human></human> <machine></machine> </embargo> </rightsMetadata>"
+      
+      #todo: make groups be a param to the API
+      fedora_object.read_groups["registered"]
+      fedora_object.edit_groups["registered"]
+      
       #save Fedora object
       fedora_object.save
       logger.debug("created work")
