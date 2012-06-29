@@ -1,6 +1,7 @@
 class Vrawork  < ActiveFedora::Base
   include Hydra::ModelMethods
   include ActiveFedora::Relationships
+  include Hydra::ModelMixins::RightsMetadata
   
   has_relationship "parts", :is_part_of, :inbound => true
   has_and_belongs_to_many :multiresimages, :class => "Multiresimage", :property=> :has_image
