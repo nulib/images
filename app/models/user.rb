@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
     email
   end
 
+  def settable_policies
+    AdminPolicy.readable_by_user(self)
+  end
+
   # Find an existing user by email or create one with a random password otherwise
   def self.find_for_ldap_oauth(access_token, signed_in_resource=nil)
     info = access_token[:info]
