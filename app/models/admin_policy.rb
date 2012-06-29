@@ -37,10 +37,7 @@ class AdminPolicy < ActiveFedora::Base
     permissions.each do |permission|
       or_query << "#{permission}_access_person_t:#{user.user_key}"
     end
-    escaped_class_uri = ActiveFedora::SolrService.escape_uri_for_query(self.to_class_uri)
-    with_access_query = "has_model_s:#{escaped_class_uri} AND (#{or_query.join(" OR ")} )"
-
-    ActiveFedora::SolrService.query(with_access_query, :rows=>1000, :sort=>[ActiveFedora::SolrService.solr_name(:system_create,:date)+' asc'])
+    find_with_conditions(or_query.join(" OR "))
   end
 
   ## Updates those permissions that are provided to it. Does not replace any permissions unless they are provided
