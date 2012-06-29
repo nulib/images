@@ -15,6 +15,9 @@ class Vrawork  < ActiveFedora::Base
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => Hydra::Datastream::Properties
 
+  # External datastream
+  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+
   delegate :titleSet_display_work, :to=>:VRA, :unique=>true
   delegate :agentSet_display_work, :to=>:VRA, :unique=>true
   delegate :dateSet_display_work, :to=>:VRA, :unique=>true
