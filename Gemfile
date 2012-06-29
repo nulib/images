@@ -4,7 +4,7 @@ source 'http://rubygems.org'
   gem 'blacklight', :git=>'git://github.com/projectblacklight/blacklight.git', :ref=>'a83c286'
   gem 'hydra-access-controls', :require=>false, :git=>'git://github.com/projecthydra/hydra-access-controls' , :ref=>'201f78931b'
   gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'5f55ef6'
-  gem 'active-fedora', '4.3.0' 
+  gem 'active-fedora', :git=>'git://github.com/projecthydra/active_fedora.git', :ref=>'5bb8c44' 
   gem 'sqlite3'
   
   #  We will assume you're using devise in tutorials/documentation. 
