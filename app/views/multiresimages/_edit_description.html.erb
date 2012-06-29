@@ -38,7 +38,7 @@
       
       <fieldset class="permissions">
         <legend>Permissions</legend>
-        <%=render :partial=>'shared/select_policy', :locals=>{:f=>f} %>
+        <%=render :partial=>'shared/select_policy', :locals=>{:f=>f, :blank_label=>'Default Policy &mdash; Private to Owner'.html_safe} %>
         <span id="object-permissions-heading">Also grant access to</span>
         <%= render :partial=>'shared/edit_groups_and_users', :locals=>{:fedora_object=>@multiresimage, :field=>:permissions} %>
       </fieldset>

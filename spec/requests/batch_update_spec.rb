@@ -21,7 +21,7 @@ describe "Select images to update" do
       click_on "Use all results"
       page.should have_selector("form[action='#{batch_edits_path}']")
 
-      select "Default Policy — Private to Owner", :from=>"Policy"
+      select "No changes", :from=>"Policy"
 
       click_on "Save changes"
       
