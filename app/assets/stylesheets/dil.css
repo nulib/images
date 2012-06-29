@@ -1,3 +1,7 @@
+.permissions-table {
+  width: auto;
+  margin: 10px 0 20px 20px;
+}
 
 label.batch_toggle {
   display: inline;
