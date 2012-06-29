@@ -16,6 +16,27 @@ GIT
       unicode
 
 GIT
+  remote: git://github.com/projecthydra/active_fedora.git
+  revision: 5bb8c44a0f37dbff585b27236955e05ba705fec5
+  ref: 5bb8c44
+  specs:
+    active-fedora (4.3.0)
+      activeresource (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      equivalent-xml
+      mediashelf-loggable
+      mime-types (>= 1.16)
+      multipart-post
+      nokogiri
+      om (~> 1.6.0)
+      rdf
+      rdf-rdfxml (~> 0.3.8)
+      rsolr
+      rubydora (~> 0.5.10)
+      solrizer (~> 1.2.0)
+      xml-simple (>= 1.0.12)
+
+GIT
   remote: git://github.com/projecthydra/hydra-access-controls
   revision: 201f78931b20f5301e0438741e29451e039978c7
   ref: 201f78931b
@@ -61,21 +82,6 @@ GEM
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
       sprockets (~> 2.1.3)
-    active-fedora (4.3.0)
-      activeresource (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      equivalent-xml
-      mediashelf-loggable
-      mime-types (>= 1.16)
-      multipart-post
-      nokogiri
-      om (~> 1.6.0)
-      rdf
-      rdf-rdfxml (~> 0.3.8)
-      rsolr
-      rubydora (~> 0.5.9)
-      solrizer (~> 1.2.0)
-      xml-simple (>= 1.0.12)
     activemodel (3.2.6)
       activesupport (= 3.2.6)
       builder (~> 3.0.0)
@@ -91,9 +97,9 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.2.8)
-    akami (1.1.0)
+    akami (1.2.0)
       gyoku (>= 0.4.0)
-      nokogiri (>= 1.5.2)
+      nokogiri (>= 1.4.0)
     arel (3.0.2)
     backports (2.6.1)
     bcrypt-ruby (3.0.1)
@@ -161,11 +167,11 @@ GEM
     fastercsv (1.5.5)
     ffi (1.0.11)
     fssm (0.2.9)
-    gyoku (0.4.5)
+    gyoku (0.4.6)
       builder (>= 2.1.2)
     hashie (1.2.0)
     hike (1.2.1)
-    httpi (1.0.0)
+    httpi (1.1.0)
       rack
     hydra-batch-edit (0.0.6)
       blacklight
@@ -284,7 +290,7 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.10.0)
-    rubydora (0.5.9)
+    rubydora (0.5.10)
       activemodel
       activesupport
       fastercsv
@@ -301,14 +307,14 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    savon (1.0.0)
-      akami (~> 1.1)
+    savon (1.1.0)
+      akami (~> 1.2.0)
       builder (>= 2.1.2)
-      gyoku (>= 0.4.0)
-      httpi (~> 1.0)
+      gyoku (~> 0.4.5)
+      httpi (~> 1.1.0)
       nokogiri (>= 1.4.0)
-      nori (~> 1.1)
-      wasabi (~> 2.2)
+      nori (~> 1.1.0)
+      wasabi (~> 2.5.0)
     selenium-webdriver (2.22.2)
       childprocess (>= 0.2.5)
       ffi (~> 1.0)
@@ -327,7 +333,7 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.6)
-    stomp (1.2.3)
+    stomp (1.2.4)
     systemu (2.5.1)
     therubyracer (0.10.1)
       libv8 (~> 3.3.10)
@@ -349,7 +355,7 @@ GEM
       macaddr (~> 1.0)
     warden (1.2.1)
       rack (>= 1.0)
-    wasabi (2.4.1)
+    wasabi (2.5.0)
       httpi (~> 1.0)
       nokogiri (>= 1.4.0)
     xml-simple (1.1.1)
@@ -360,7 +366,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active-fedora (= 4.3.0)
+  active-fedora!
   bcrypt-ruby
   blacklight!
   bootstrap-sass-rails (= 2.0.3.0)
