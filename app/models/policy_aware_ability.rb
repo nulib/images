@@ -2,10 +2,11 @@
 module PolicyAwareAbility
   
   # Returns the pid of policy object (is_governed_by) for the specified object
+  # Assumes that the policy object is associated by an is_governed_by relationship (Whis is stored as "is_governed_by_s" in object's solr document)
   # Returns nil if no policy associated with the object
   def policy_pid_for(object_pid)
     return @policy_pid if @policy_pid
-    solr_result = Multiresimage.find_with_conditions({:id=>object_pid}, :fl=>'is_governed_by_s')
+    solr_result = ActiveFedora::Base.find_with_conditions({:id=>object_pid}, :fl=>'is_governed_by_s')
     begin
       @policy_pid = value_from_solr_field(solr_result, 'is_governed_by_s').first.gsub("info:fedora/", "")
     rescue NoMethodError
