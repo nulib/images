@@ -250,7 +250,6 @@ describe "When accessing images with Policies associated" do
       end
       after { @image.delete }
   		it "Then I should be able to view the image" do
-  		  pending "Policy-based access controls"
   		  subject.can?(:read, @image).should be_true
 		  end
       it "Then I should not be able to edit, update and destroy the image" do
@@ -275,11 +274,9 @@ describe "When accessing images with Policies associated" do
       end
       after { @image.delete }
   		it "Then I should be able to view the image" do
-  		  pending "Policy-based access controls"
   		  subject.can?(:read, @image).should be_true
 		  end
   		it "Then I should be able to edit/update/destroy the image" do
-  		  pending "Policy-based access controls"
         subject.can?(:edit, @image).should be_true
         subject.can?(:update, @image).should be_true
         subject.can?(:destroy, @image).should be_true
@@ -297,7 +294,6 @@ describe "When accessing images with Policies associated" do
   		  subject.can?(:read, @image).should be_true
 		  end
       it "Then I should be able to edit/update/destroy the image" do
-        pending "Policy-based access controls"
         subject.can?(:edit, @image).should be_true
         subject.can?(:update, @image).should be_true
         subject.can?(:destroy, @image).should be_true
