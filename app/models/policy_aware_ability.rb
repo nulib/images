@@ -21,7 +21,7 @@ module PolicyAwareAbility
   def policy_permissions_doc(policy_pid)
     return @policy_permissions_solr_document if @policy_permissions_solr_document
     response, @policy_permissions_solr_document = get_permissions_solr_response_for_doc_id(policy_pid)
-    @permissions_solr_document
+    @policy_permissions_solr_document
   end
   
   # Tests whether the object's governing policy object grants edit access for the current user
@@ -85,7 +85,7 @@ module PolicyAwareAbility
   def read_persons_from_policy(policy_pid)
     policy_permissions = policy_permissions_doc(policy_pid)
     read_individual_field = Hydra.config[:permissions][:inheritable][:read][:individual]
-    rp = edit_persons | ((policy_permissions == nil || policy_permissions.fetch(read_individual_field,nil) == nil) ? [] : policy_permissions.fetch(read_individual_field,nil))
+    rp = edit_persons_from_policy(policy_pid) | ((policy_permissions == nil || policy_permissions.fetch(read_individual_field,nil) == nil) ? [] : policy_permissions.fetch(read_individual_field,nil))
     logger.debug("read_persons: #{rp.inspect}")
     return rp
   end
