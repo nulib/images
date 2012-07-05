@@ -1,3 +1,20 @@
-// Place all the styles related to the policies controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+form.reorderable {
+  /*Allows the first (primary) submit button to occur first in the dom,
+    but be displayed at the end of the form */
+  position: relative;
+  padding-bottom: 70px;
+
+  .form-actions.force-bottom {
+    position: absolute;
+    padding-left: 20px;
+    bottom: 0;
+    width: 100%;
+  }
+}
+
+
+.permissions-table {
+  width: auto;
+  margin: 10px 0 20px 20px;
+}
+
