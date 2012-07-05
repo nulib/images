@@ -1,3 +1,7 @@
+html, body {
+ background-image: none;
+}
+
 th, td {
   border: 0;
 }
@@ -15,9 +19,6 @@ a:link, a:visited, a:active {
   border-bottom: none;
 }
 
-body {
-  text-align: left; /*will be fixed in hydra 4.0*/
-}
 
 /* this is actually a bootstrap override */
 form.form-search {
