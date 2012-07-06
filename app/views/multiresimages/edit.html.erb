@@ -1,6 +1,13 @@
 <% sidebar_items << capture do %>
   <%= render :partial=>'shared/menu' %>
 <% end %>
+
+<% if can?(:read, @multiresimage) %>
+  <div id="browselinks">
+    <%= link_to "Browse", multiresimage_path(@multiresimage), :class=>'active browse' %> |
+    <span class="inactive edit">Edit</span>
+  </div>
+<% end %>
 		
 
   <ul class="nav nav-tabs">
@@ -15,4 +22,5 @@
       <%=render :partial=>'crop' %>
     </div>
   </div>
+
 
