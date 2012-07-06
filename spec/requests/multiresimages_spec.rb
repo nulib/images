@@ -106,7 +106,7 @@ describe "Images " do
         page.should have_content('Saved changes to inu:dil-nu-read-access-image')
       end
       it "Then I should see a link to the show/browse page" do
-        page.should_not have_selector("a[href='#{multiresimage_path('inu:dil-nu-read-access-image')}']", :text=>"Browse")
+        page.should have_selector("a[href='#{multiresimage_path('inu:dil-nu-read-access-image')}']", :text=>"Browse")
       end
       it "Then I should not have the ability to remove my own access" do
         page.should_not have_selector("#multiresimage_permissions_user_joe_creator")
