@@ -1,11 +1,16 @@
 <% sidebar_items << capture do %>
   <%= render :partial=>'shared/menu' %>
 <% end %>
+
+<% if can?(:edit, @multiresimage) %>
+  <div id="browselinks">
+    <span class="inactive browse">Browse</span> |
+    <%= link_to "Edit", edit_multiresimage_path(@multiresimage), :class=>'active edit' %>
+  </div>
+<% end %>
+
 <%= render :partial=>'/shared/page_header' %>
 
 <%= render :partial => 'multiresimages/show_description' %>
 
-<% if can?(:edit, @multiresimage) %>
-  <%= link_to "Edit", edit_multiresimage_path(@multiresimage) %>
-<% end %>
 
