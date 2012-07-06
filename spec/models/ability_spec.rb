@@ -12,7 +12,6 @@ describe "Given a Faculty-created image with no custom access set" do
   context "Then someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
-      Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
     it "should not be able to view the image" do
@@ -27,7 +26,6 @@ describe "Given a Faculty-created image with no custom access set" do
   context "Then the Creator" do
     before do
       @user = FactoryGirl.find_or_create(:joe_creator)
-      Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
 
@@ -46,7 +44,6 @@ describe "Given a Faculty-created image with no custom access set" do
   context "Then a Repository Admin" do
     before do
       @user = FactoryGirl.find_or_create(:alice_admin)
-      Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
 
@@ -74,7 +71,6 @@ describe "Given a Faculty-created image which NU has read access to" do
   context "The someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
-      Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
 
@@ -99,7 +95,6 @@ describe "Given a Faculty-created image with collaborator" do
   context "Then a collaborator with edit access" do
     before do
       @user = FactoryGirl.find_or_create(:calvin_collaborator)
-      Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
 
@@ -124,7 +119,6 @@ describe "Given a Faculty-created object where dept can read & NU can discover" 
   context "Then someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
-      Group.any_instance.stub :persist_to_ldap
     end
     subject { Ability.new(@user) }
 
@@ -143,7 +137,7 @@ describe "Given a Faculty-created object where dept can read & NU can discover" 
   context "Then someone whose department has read access" do
     before do
       @user = FactoryGirl.find_or_create(:martia_morocco)
-      Group.any_instance.stub :persist_to_ldap
+      stub_groups_for_user(@user)
     end
     subject { Ability.new(@user) }
 
@@ -164,7 +158,6 @@ end
 describe "a user" do
   before do
     @user = FactoryGirl.create(:staff)
-    Group.any_instance.stub :persist_to_ldap
   end
   subject { Ability.new(@user) }
   describe "user_groups" do
@@ -179,10 +172,9 @@ describe "a user" do
   context "who is a member of a group" do
     before do
         @group = FactoryGirl.build(:user_group)
-        @group.users = [@user.email]
+        @group.stub :persist_to_ldap
         @group.save!
         Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
-        #@user.stub(:groups=>[@group])
     end
     
     context "that has edit permission on a collection" do
@@ -210,10 +202,6 @@ describe "a user" do
   context "who is an owner of a group" do
     before do
         @group = FactoryGirl.build(:user_group, :owner=>@user)
-        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
-        @group.users = [FactoryGirl.build(:user).uid]
-        @group.save!
-        #@user.stub(:groups=>[@group])
     end
     it "should be able to edit it" do
       subject.can?(:edit, @group).should be_true
@@ -232,7 +220,7 @@ end
 describe "When accessing images with Policies associated" do
   before do
     @user = FactoryGirl.find_or_create(:martia_morocco)
-    Group.any_instance.stub :persist_to_ldap
+    stub_groups_for_user(@user)
   end
   subject { Ability.new(@user) }
   context "Given a policy grants read access to a group I belong to" do

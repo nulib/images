@@ -73,4 +73,26 @@ describe User do
     end
   end
 
+  describe ".admin_groups" do
+    it "should load them from the config file" do
+      User.admin_groups.should == ['repository-admin', 'library-admin']
+    end
+  end
+  describe "#admin?" do
+    before do
+      @user = FactoryGirl.find_or_create(:archivist)
+      @admin_group = FactoryGirl.create(:user_group, :code=>'library-admin')
+      @group = FactoryGirl.create(:user_group)
+
+    end
+    it "should return true when they are a member of an admin group" do
+      Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@admin_group.code])
+      @user.admin?.should be_true
+    end
+    it "should return false when they are not a member of an admin group" do
+      Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
+      @user.admin?.should be_false
+    end
+    
+  end
 end
