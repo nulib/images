@@ -44,6 +44,7 @@ describe "Given a Faculty-created image with no custom access set" do
   context "Then a Repository Admin" do
     before do
       @user = FactoryGirl.find_or_create(:alice_admin)
+      stub_groups_for_user(@user)
     end
     subject { Ability.new(@user) }
 

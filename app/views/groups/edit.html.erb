@@ -5,6 +5,10 @@
 <div class="page-header">
   <h1><%= @group.name %></h1>
 </div>
+
+<h3>Group Code</h3>
+<p><%= @group.code %></p>
+
 <h3>Members</h3>
 <ul>
   <% @group.users.each do |u| %>
