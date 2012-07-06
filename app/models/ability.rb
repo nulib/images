@@ -12,7 +12,7 @@ class Ability
   end
 
   def custom_permissions(user, session)
-#    can :manage, :all if user.admin?
+    can :manage, :all if user.admin?
 
     can :create, DILCollection unless user.new_record?
     can :update, DILCollection do |obj|

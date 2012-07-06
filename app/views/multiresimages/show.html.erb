@@ -11,7 +11,7 @@
 
 <%= render :partial=>'/shared/page_header' %>
 
-<img src="http://localhost:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=600"/>
+<img src="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=600"/>
 <br />
 
 
