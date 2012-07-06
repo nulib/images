@@ -50,6 +50,11 @@ module FactoryGirl
   end
 end
 
+# add a group_codes attribute to User so that our factories can stub the groups the user belongs to.
+class User
+  attr_accessor :group_codes
+end
+
 # for request specs
 def login(user)
   OmniAuth.config.test_mode = true
@@ -67,7 +72,7 @@ def login(user)
       }
     }
   }
-  Hydra::LDAP.stub(:groups_for_user).with(user.uid).and_return(user.affiliations)
+  stub_groups_for_user(user)
   Hydra::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
 
   visit '/'
@@ -75,5 +80,17 @@ def login(user)
   click_link "sign in with LDAP"
   page.should have_selector("a[href='/users/edit']", :text=> user.email)
   
+end
+
+
+# for unit specs
+def stub_groups_for_user(user)
+  return unless user.group_codes
+  Group.any_instance.stub :persist_to_ldap
+  user.group_codes.each do |code|
+    Group.find_or_create_by_code_and_name!(code, 'Stub group')
+  end
+  Hydra::LDAP.stub(:groups_for_user).with(user.uid).and_return(user.group_codes)
+
 end
 
