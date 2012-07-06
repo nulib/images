@@ -71,4 +71,12 @@ class User < ActiveRecord::Base
     query="rightsMetadata_edit_access_machine_person_t:#{uid} AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
+
+  def self.admin_groups
+     @admin_groups ||= YAML.load_file("config/admin_groups.yml")[Rails.env]
+  end
+
+  def admin?
+    (User.admin_groups & groups.map(&:code)).length > 0
+  end
 end

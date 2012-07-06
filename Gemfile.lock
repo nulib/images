@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/projecthydra/hydra-access-controls
-  revision: 201f78931b20f5301e0438741e29451e039978c7
-  ref: 201f78931b
+  revision: d0f6fa5832c6dbd4d710f11b0dcdd5a098e162cf
+  ref: d0f6fa5
   specs:
     hydra-access-controls (0.0.2)
       active-fedora
@@ -109,7 +109,7 @@ GEM
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.1.1)
       debugger-ruby_core_source (~> 1.1.3)
-    debugger-linecache (1.1.1)
+    debugger-linecache (1.1.2)
       debugger-ruby_core_source (>= 1.1.1)
     debugger-ruby_core_source (1.1.3)
     deprecation (0.0.5)
@@ -137,7 +137,7 @@ GEM
       builder (>= 2.1.2)
     hashie (1.2.0)
     hike (1.2.1)
-    httpi (1.1.0)
+    httpi (1.1.1)
       rack
     hydra-batch-edit (0.0.6)
       blacklight
@@ -198,7 +198,7 @@ GEM
     mysql2 (0.3.11)
     net-ldap (0.2.2)
     nokogiri (1.5.5)
-    nori (1.1.1)
+    nori (1.1.2)
     om (1.6.1)
       mediashelf-loggable
       nokogiri (>= 1.4.2)
@@ -279,7 +279,7 @@ GEM
     rubyzip (0.9.9)
     sanitize (2.0.3)
       nokogiri (>= 1.4.4, < 1.6)
-    sass (3.1.19)
+    sass (3.1.20)
     sass-rails (3.2.5)
       railties (~> 3.2.0)
       sass (>= 3.1.10)

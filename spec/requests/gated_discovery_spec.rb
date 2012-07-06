@@ -18,10 +18,13 @@ describe "When I am searching for content" do
       end 
     end
     context "Then a Repository Admin" do
-      before { login FactoryGirl.find_or_create(:alice_admin) }
-      before { visit multiresimage_path(@pid) }
+      let (:user) { FactoryGirl.find_or_create(:alice_admin) }
+      before do 
+        login user 
+        visit catalog_index_path(:q=>"Tibetan_astronomical_Thangka_4")
+      end
       it "should be able to discover the image" do
-        pending "Repo admin permissions"
+        user.should be_admin
         page.should have_selector("a[href='#{multiresimage_path(@pid)}']")
       end
     end
