@@ -85,7 +85,6 @@ end
 
 # for unit specs
 def stub_groups_for_user(user)
-  return unless user.group_codes
   Group.any_instance.stub :persist_to_ldap
   user.group_codes.each do |code|
     Group.find_or_create_by_code_and_name!(code, 'Stub group')

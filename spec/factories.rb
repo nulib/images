@@ -4,7 +4,6 @@ FactoryGirl.define do
   
   factory :archivist, :parent=>:user do |u|
     uid 'archivist1'
-    password 'archivist1'
   end
   factory :nu_id_holder, :parent=>:user do |u|
     uid 'nu_id_holder'
@@ -74,6 +73,7 @@ FactoryGirl.define do
     end
     email { "#{uid}@example.com" }
     password { uid }
+    group_codes []
   end
 
   # Groups

@@ -12,6 +12,7 @@ describe "Given a Faculty-created image with no custom access set" do
   context "Then someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
+      stub_groups_for_user @user
     end
     subject { Ability.new(@user) }
     it "should not be able to view the image" do
@@ -26,6 +27,7 @@ describe "Given a Faculty-created image with no custom access set" do
   context "Then the Creator" do
     before do
       @user = FactoryGirl.find_or_create(:joe_creator)
+      stub_groups_for_user @user
     end
     subject { Ability.new(@user) }
 
@@ -69,6 +71,7 @@ describe "Given a Faculty-created image which NU has read access to" do
   context "The someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
+      stub_groups_for_user @user
     end
     subject { Ability.new(@user) }
 
@@ -93,6 +96,7 @@ describe "Given a Faculty-created image with collaborator" do
   context "Then a collaborator with edit access" do
     before do
       @user = FactoryGirl.find_or_create(:calvin_collaborator)
+      stub_groups_for_user @user
     end
     subject { Ability.new(@user) }
 
@@ -117,6 +121,7 @@ describe "Given a Faculty-created object where dept can read & NU can discover" 
   context "Then someone with NU id" do
     before do
       @user = FactoryGirl.find_or_create(:nu_id_holder)
+      stub_groups_for_user @user
     end
     subject { Ability.new(@user) }
 
@@ -156,6 +161,7 @@ end
 describe "a user" do
   before do
     @user = FactoryGirl.create(:staff)
+    stub_groups_for_user(@user)
   end
   subject { Ability.new(@user) }
   describe "user_groups" do
