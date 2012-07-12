@@ -1,14 +1,3 @@
-GIT
-  remote: git://github.com/projecthydra/hydra-access-controls
-  revision: d0f6fa5832c6dbd4d710f11b0dcdd5a098e162cf
-  ref: d0f6fa5
-  specs:
-    hydra-access-controls (0.0.2)
-      active-fedora
-      activesupport
-      cancan
-      deprecation
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -139,16 +128,22 @@ GEM
     hike (1.2.1)
     httpi (1.1.1)
       rack
+    hydra-access-controls (5.0.0.pre1)
+      active-fedora
+      activesupport
+      blacklight
+      cancan
+      deprecation
     hydra-batch-edit (0.0.6)
       blacklight
-    hydra-head (4.1.0)
+    hydra-core (5.0.0.pre1)
       RedCloth (= 4.2.9)
       active-fedora (~> 4.1)
       blacklight (~> 3.4)
       block_helpers
       deprecation (>= 0.0.5)
       devise
-      hydra-access-controls (>= 0.0.2)
+      hydra-access-controls (= 5.0.0.pre1)
       hydra-mods (>= 0.0.5)
       jquery-rails
       rails (~> 3.2.3)
@@ -355,10 +350,11 @@ DEPENDENCIES
   debugger
   devise
   factory_girl_rails
-  hydra-access-controls!
+  hydra-access-controls (= 5.0.0.pre1)
   hydra-batch-edit (~> 0.0.6)
-  hydra-head (= 4.1.0)
+  hydra-core (= 5.0.0.pre1)
   hydra-ldap (~> 0.0.3)
+  hydra-mods
   jettywrapper
   jquery-rails
   jquery-ui-rails

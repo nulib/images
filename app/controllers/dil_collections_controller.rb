@@ -1,12 +1,12 @@
 class DilCollectionsController < ApplicationController
-  include Hydra::AssetsControllerHelper
+#  include Hydra::AssetsControllerHelper
   require 'stomp'
   
   def create
     authorize!(:create, DILCollection)
 		@dil_collection = DILCollection.new()
 		@dil_collection.apply_depositor_metadata(current_user.user_key)
-		set_collection_type(@dil_collection, 'dil_collection')
+		@dil_collection.set_collection_type('dil_collection')
 		@dil_collection.descMetadata.title = params[:dil_collection][:title]
 		@dil_collection.save!
 	  redirect_to catalog_index_path

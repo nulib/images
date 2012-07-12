@@ -49,6 +49,7 @@ describe BatchEditsController do
       @one = Multiresimage.new
       @two = Multiresimage.new
       @user = FactoryGirl.find_or_create(:archivist)
+      stub_groups_for_user @user
       @one.apply_depositor_metadata(@user.uid)
       @one.save
       @two.apply_depositor_metadata(@user.uid)
@@ -73,6 +74,7 @@ describe BatchEditsController do
     describe "when current user has access to the documents" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
+        stub_groups_for_user @user
         @one.apply_depositor_metadata(@user.uid)
         @one.save
         @two.apply_depositor_metadata(@user.uid)
