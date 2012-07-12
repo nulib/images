@@ -31,7 +31,7 @@ describe DilCollectionsController do
     describe "as a logged in user" do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
-        Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([])
+        stub_groups_for_user @user
         sign_in @user
       end
       it "should be successful" do

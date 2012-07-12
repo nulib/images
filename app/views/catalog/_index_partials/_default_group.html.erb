@@ -10,9 +10,8 @@
     </tr>
   <% end %>
   
-<% docs.each_with_index do |document,counter| %>
-  <%= render_document_partial document, 'index', :counter => counter %>
-<%end%>
+<%= render :partial => 'document', :collection => docs, :as => :document %>
+
   
 <% unless display_type == 'list' || display_type == 'grid'  %>
   </table>
