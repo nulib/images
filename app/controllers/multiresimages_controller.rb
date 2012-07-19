@@ -164,12 +164,13 @@ class MultiresimagesController < ApplicationController
     if can?(:read, multiresimage)  
       Net::HTTP.start("127.0.0.1", 8983) { |http|
         resp = http.get("/fedora/get/" + params[:id] + "/inu:sdef-image/getWithLongSide?length=100")
-        open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
-          new_file.write(resp.body)
-          send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
-          #send data would use server memory instead of storage. send_file better for Rails performance
+        #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
+          #new_file.write(resp.body)
+          #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
+          send_data(resp.body, :disposition=>'inline', :type=>'image/jpeg', :filename=>"#{params[:id]}.jpg")
+          #send data uses server memory instead of storage.
         }
-      }
+      #}
     end   
   end
   
