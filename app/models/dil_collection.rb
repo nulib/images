@@ -32,15 +32,17 @@ class DILCollection < ActiveFedora::Base
     return export_xml
   end
   
-  def export_image_urls_as_xml
-    url = "/inu:sdef-image/getWithLongSide?length=100"
-    #export_xml = "<collection>"
-    export_xml = ""
+  def export_image_info_as_xml(email)
+    export_xml = "<collection><email>#{email}</email>"
+    #export_xml = ""
     self.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
-      #export_xml << "<imageLink>" << "http://cecil.library.northwestern.edu:8983/fedora/get/" << pid << "/inu:sdef-image/getWithLongSide?length=100</imageLink>"
-      export_xml << "http://cecil.library.northwestern.edu:8983/fedora/get/" << pid << "/inu:sdef-image/getWithLongSide?length=500|"
+      export_xml << "<image><url>" << "http://cecil.library.northwestern.edu:8983/fedora/get/" << pid << "/inu:sdef-image/getWithLongSide?length=500</url>"
+      #export_xml << "http://cecil.library.northwestern.edu:8983/fedora/get/" << pid << "/inu:sdef-image/getWithLongSide?length=500|"
+      logger.debug("PID:" << pid)
+      image = Multiresimage.find(pid.text)
+      export_xml << "<metadata>" << "<title>Title: #{image.titleSet_display}</title>" << "<agent>Agent: #{image.agentSet_display}</agent>" << "<date>Date: #{image.dateSet_display}</date>" << "<description>Description: #{image.descriptionSet_display}</description>" << "<subject>Subject: #{image.subjectSet_display}</subject>" << "</metadata></image>"  
     end
-    #export_xml << "</collection>"
+    export_xml << "</collection>"
     return export_xml
   end
   
