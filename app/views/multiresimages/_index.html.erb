@@ -2,7 +2,7 @@
   <div id="images">
     <ul>
      <% if !document[:id].nil? %>
-       <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><img src="http://<%= request.host %>:8983/fedora/get/<%= document[:id] %>/inu:sdef-image/getWithLongSide?length=100"/>	
+       <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><img src="https://<%= request.host %>:3000/multiresimages/get_image/<%= document[:id]%>"/>	
       <% end %>
      </li>
    </ul>
