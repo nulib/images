@@ -150,4 +150,27 @@ class MultiresimagesController < ApplicationController
   end
   
   
+  # This method is called from multiresimage/_index.html.erb (image search results).
+  # We don't want to show the Fedora URL to the user, so we call this action.
+  # The permissions are checked and, if applicable, the image is retrieved and
+  # displayed in the browser. The request to Fedora is coming from the app server
+  # (and not the user's browser) so the Fedora XACML policy won't reject the request. If an unauthorized
+  # user requests the image from Fedora directly, the XACML policy will block them.  If they request it from
+  # this action, the permissions check will deny access.
+  
+  def proxy_image
+    multiresimage = Multiresimage.find(params[:id])
+     
+    if can?(:read, multiresimage)  
+      Net::HTTP.start("127.0.0.1", 8983) { |http|
+        resp = http.get("/fedora/get/" + params[:id] + "/inu:sdef-image/getWithLongSide?length=100")
+        open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
+          new_file.write(resp.body)
+          send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
+          #send data would use server memory instead of storage. send_file better for Rails performance
+        }
+      }
+    end   
+  end
+  
 end
