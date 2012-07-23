@@ -28,12 +28,12 @@ class MultiresimagesController < ApplicationController
  
    # Get Aware's HTML view of the image for screen scraping geometry
   def aware_details
-    @aware_details_url = "***REMOVED***" + params[:file_path]
+    @aware_details_url = DIL_CONFIG['dil_aware_url'] << params[:file_path]
   end
 
   # Get tile from Aware
   def aware_tile
-    tile_url = "***REMOVED***" + params[:file_path] + "&zoom=" + params[:level] + "&x=" + params[:x] + "&y=" + params[:y] + "&rotation=0"  
+    tile_url =DIL_CONFIG['dil_aware_url'] << params[:file_path] << "&zoom=" << params[:level] << "&x=" << params[:x] << "&y=" << params[:y] << "&rotation=0"  
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
    
@@ -162,8 +162,8 @@ class MultiresimagesController < ApplicationController
     multiresimage = Multiresimage.find(params[:id])
      
     if can?(:read, multiresimage)  
-      Net::HTTP.start("127.0.0.1", 8983) { |http|
-        resp = http.get("/fedora/get/" + params[:id] + "/inu:sdef-image/getWithLongSide?length=100")
+      Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
+        resp = http.get("/fedora/get/" + params[:id] + DIL_CONFIG['dil_fedora_disseminator_thumbnail'])
         #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
           #new_file.write(resp.body)
           #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")

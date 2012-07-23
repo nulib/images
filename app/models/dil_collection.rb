@@ -26,7 +26,7 @@ class DILCollection < ActiveFedora::Base
   def export_pids_as_xml
     export_xml = "<collection>"
     self.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
-      export_xml << "<pid>" << pid << "</pid>"
+      export_xml << "<pid>#{pid}</pid>"
     end
     export_xml << "</collection>"
     return export_xml
@@ -34,13 +34,11 @@ class DILCollection < ActiveFedora::Base
   
   def export_image_info_as_xml(email)
     export_xml = "<collection><email>#{email}</email>"
-    #export_xml = ""
     self.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
-      export_xml << "<image><url>" << "http://cecil.library.northwestern.edu:8983/fedora/get/" << pid << "/inu:sdef-image/getWithLongSide?length=500</url>"
-      #export_xml << "http://cecil.library.northwestern.edu:8983/fedora/get/" << pid << "/inu:sdef-image/getWithLongSide?length=500|"
+      export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
       logger.debug("PID:" << pid)
       image = Multiresimage.find(pid.text)
-      export_xml << "<metadata>" << "<title>Title: #{image.titleSet_display}</title>" << "<agent>Agent: #{image.agentSet_display}</agent>" << "<date>Date: #{image.dateSet_display}</date>" << "<description>Description: #{image.descriptionSet_display}</description>" << "<subject>Subject: #{image.subjectSet_display}</subject>" << "</metadata></image>"  
+      export_xml << "<metadata><title>Title: #{image.titleSet_display}</title><agent>Agent: #{image.agentSet_display}</agent><date>Date: #{image.dateSet_display}</date>" << "<description>Description: #{image.descriptionSet_display}</description><subject>Subject: #{image.subjectSet_display}</subject></metadata></image>"  
     end
     export_xml << "</collection>"
     return export_xml
