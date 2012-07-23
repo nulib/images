@@ -1,6 +1,5 @@
 class UploadsController < ApplicationController
 
-  include Hydra::AssetsControllerHelper
   include Hydra::Controller::UploadBehavior  
   include Hydra::Controller::RepositoryControllerBehavior  
   include Blacklight::SolrHelper
