@@ -59,6 +59,7 @@ class User < ActiveRecord::Base
   # Groups that user is a member of
   def groups 
     return @groups if @groups
+    return [] if uid.nil?
     codes = Hydra::LDAP.groups_for_user(uid)
     #puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)

@@ -2,8 +2,10 @@ source 'http://rubygems.org'
 
   gem 'rails', '3.2.6'
   gem 'blacklight'
+	
   gem 'hydra-access-controls', :require=>false, :git=>'git://github.com/projecthydra/hydra-access-controls' , :ref=>'d0f6fa5'
   gem 'hydra-head', '4.1.0'
+  gem 'hydra-mods'
   gem 'sqlite3'
   
   #  We will assume you're using devise in tutorials/documentation. 
