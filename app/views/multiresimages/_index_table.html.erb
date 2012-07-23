@@ -5,7 +5,7 @@
     <div id="images">
       <div>
         <ul>
-			<li pid="<%=document[:id]%>" title="<%=document[:id]%>"><img src="http://<%= request.host %>:8983/fedora/get/<%= document[:id] %>/inu:sdef-image/getWithLongSide?length=100"/>
+			<li pid="<%=document[:id]%>" title="<%=document[:id]%>"><img src="<%=DIL_CONFIG['dil_fedora_url']%><%= document[:id] %><%= DIL_CONFIG['dil_fedora_disseminator_thumbnail']%>"/>
           <br/>
          	<% if document[:title_t].nil? %>
          	   <a href="/multiresimages/<%=document[:id]%>/edit"><%=document[:id]%></a>
