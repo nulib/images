@@ -15,7 +15,7 @@ source 'http://rubygems.org'
   gem 'rdf'
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
+#group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
@@ -25,7 +25,7 @@ group :assets do
   gem 'jquery-ui-rails'
   gem "bootstrap-sass-rails", '2.0.3.0'
 
-end
+#end
 
 gem "cancan", "1.6.7"  # cancan 1.6.8 breaks PoliciesController.create method in a super strange way.
 gem 'jquery-rails'
