@@ -7,9 +7,9 @@
                           <tbody>
                           <tr>
                             <% image_max = @multiresimage.longside_max %>
-                            <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
-                            <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
-                            <td><a class="download_links" href="http://<%= request.host %>:8983/fedora/get/<%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
+                            <td><a class="download_links" href="<%=DIL_CONFIG['dil_fedora_url']%><%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
+                            <td><a class="download_links" href="<%=DIL_CONFIG['dil_fedora_url']%><%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
+                            <td><a class="download_links" href="<%=DIL_CONFIG['dil_fedora_url']%><%= @multiresimage.pid %>/inu:sdef-image/getWithLongSide?length=<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
                           </tr>
                           </tbody>
                         </table>
