@@ -10,6 +10,7 @@
 //
 // Required by Blacklight
 //= require blacklight/blacklight
+
 //= require_tree .
 
 // The Iframe Transport is required for browsers without support for XHR file uploads 

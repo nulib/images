@@ -4,12 +4,20 @@
     <span class="edit-browse">
       <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit
     </span>
+    
     <% if @collection.members %>
+      <p/>
+      <%= form_for @collection, :url => { :action => "export" } , :method => "post" do |f| %>
+        <%= f.submit "Export to PowerPoint" %>
+      <% end %>
       <h2 class="section-title">Collection</h2>
       <%= render :partial => 'dil_collections/edit_members' %>
     <% end %>
   </div>
-  <p></p>
+  
+  <p>
+  </p>
+  
   
   <!--Description, permissions-->
 

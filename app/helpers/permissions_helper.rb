@@ -1,34 +1,53 @@
 module PermissionsHelper
+
+  def options_for_select_from_solr (collection, id_field, label_field, default=nil) 
+    id_field = id_field.to_s
+    label_field = label_field.to_s
+    options_for_select(collection.map {|r| [r[label_field] ? r[label_field].first : r[id_field], r[id_field]]}, default)
+  end
   
   def permissions_users(obj)
-    sort_permissions(obj.permissions.select {|p| p[:type] == "user"})
+    users_for_field(obj, :permissions)
   end
   
   def permissions_groups(obj)
-    sort_permissions(obj.permissions.select {|p| p[:type] == "group"})    
+    groups_for_field(obj, :permissions)
+  end
+  
+  def editors(obj)
+    permissions_users(obj).select { |p| p[:access] == "edit" }
   end
 
   # @example
-  #  groups_for_permtype(obj, :defaultPermissions)
-  #  groups_for_permtype(obj, :permissions
-  def groups_for_permtype(obj, perm_type) 
-    sort_permissions(obj.send(perm_type).select {|p| p[:type] == "group"})    
+  #  groups_for_field(obj, :defaultPermissions)
+  #  groups_for_field(obj, :permissions, ['read', 'edit'])
+  def groups_for_field(obj, field, access = ['discover', 'read', 'edit']) 
+    perms(obj, field, :group, access)
   end
   
-  def users_for_permtype(obj, perm_type) 
-    sort_permissions(obj.send(perm_type).select {|p| p[:type] == "group"})    
+  def users_for_field(obj, field, access = ['discover', 'read', 'edit']) 
+    perms(obj, field, :user, access)
+  end
+
+  # @example
+  #  perms(obj, :defaultPermissions, :user, :edit)
+  #  perms(obj, :permissions, :group, [:view, :edit])
+  def perms(obj, field, obj_type, access) 
+    access = Array(access)
+    sort_permissions(obj.send(field).select {|p| p[:type] == obj_type.to_s && access.map(&:to_s).include?(p[:access])})    
+
   end
 
   def sort_permissions(permissions)
     permissions.sort_by! {|p| p[:name] }
   end
-  
-  
-  def hashify_permissions(permissions)
-    perms_hash = {}
-    permissions.each do |p|
-      perms_hash[p[:name]] = p[:access]
-    end
-    return perms_hash
+
+  def remove_behavior(obj)
+    "permissions-remove-#{obj.new_record? ? 'new' : 'existing'}"
   end
+
+  def add_behavior(obj)
+    "permissions-add-#{obj.new_record? ? 'new' : 'existing'}"
+  end
+
 end

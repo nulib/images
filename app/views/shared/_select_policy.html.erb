@@ -1,0 +1,8 @@
+        <div class="control-group">
+          <%= f.label :admin_policy_id, "Policy", :class=>"control-label" %>
+          <div class="controls">
+            <%= f.select :admin_policy_id, options_for_select_from_solr(current_user.settable_policies, :id, :title_t, f.object.admin_policy_id), {:include_blank => blank_label}, :class=>'span5' %>
+          </div>
+          <%= link_to "manage policies", policies_path %>
+        </div>        
+

@@ -15,6 +15,12 @@ describe User do
     u.errors[:password].should == ["can't be blank"] 
   end
 
+  it "should have a user_key" do
+    @user = FactoryGirl.find_or_create(:archivist)
+    @user.user_key.should == 'archivist1'
+    
+  end
+
   it "should have many groups that they own" do
     @user = FactoryGirl.find_or_create(:archivist)
     g1 = Group.new(:name=>'one', :users=>['vanessa'])
@@ -39,8 +45,6 @@ describe User do
       Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
     end
     it "should return a list" do
-      puts "** groups: #{@group.inspect} **"
-
       # @user.groups returns the LDAP groups user is a member of and the user's eduPersonAffiliation
       @user.groups.should == [@group].concat(@user.affiliations)
     end
@@ -69,4 +73,26 @@ describe User do
     end
   end
 
+  describe ".admin_groups" do
+    it "should load them from the config file" do
+      User.admin_groups.should == ['repository-admin', 'library-admin']
+    end
+  end
+  describe "#admin?" do
+    before do
+      @user = FactoryGirl.find_or_create(:archivist)
+      @admin_group = FactoryGirl.create(:user_group, :code=>'library-admin')
+      @group = FactoryGirl.create(:user_group)
+
+    end
+    it "should return true when they are a member of an admin group" do
+      Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@admin_group.code])
+      @user.admin?.should be_true
+    end
+    it "should return false when they are not a member of an admin group" do
+      Hydra::LDAP.should_receive(:groups_for_user).with(@user.uid).and_return([@group.code])
+      @user.admin?.should be_false
+    end
+    
+  end
 end

@@ -28,17 +28,18 @@ class MultiresimagesController < ApplicationController
  
    # Get Aware's HTML view of the image for screen scraping geometry
   def aware_details
-    @aware_details_url = "***REMOVED***" + params[:file_path]
+    @aware_details_url = DIL_CONFIG['dil_aware_url'] << params[:file_path]
   end
 
   # Get tile from Aware
   def aware_tile
-    tile_url = "***REMOVED***" + params[:file_path] + "&zoom=" + params[:level] + "&x=" + params[:x] + "&y=" + params[:y] + "&rotation=0"  
+    tile_url =DIL_CONFIG['dil_aware_url'] << params[:file_path] << "&zoom=" << params[:level] << "&x=" << params[:x] << "&y=" << params[:y] << "&rotation=0"  
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
    
   def edit
     @multiresimage = Multiresimage.find(params[:id]) 
+    @policies = AdminPolicy.readable_by_user(current_user)
     authorize! :destroy, @multiresimage
   end
    
@@ -57,10 +58,12 @@ class MultiresimagesController < ApplicationController
     end
     parse_permissions!(params[:multiresimage])
     @multiresimage.update_attributes(params[:multiresimage])
-        
-    flash[:notice] = "Saved changes to #{@multiresimage.id}"
-    
-    redirect_to edit_multiresimage_path(@multiresimage)
+    respond_to do |format|
+      format.json do
+        render :json=>{:values => params[:multiresimage][:permissions] }
+      end
+      format.html { redirect_to edit_multiresimage_path(@multiresimage), :notice =>"Saved changes to #{@multiresimage.id}" }
+    end
   end
    
   # Create new crop
@@ -76,7 +79,7 @@ class MultiresimagesController < ApplicationController
     new_image = Multiresimage.new
     puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
     apply_depositor_metadata(new_image)
-    set_collection_type(new_image, 'Multiresimage')
+		@dil_collection.set_collection_type('Multiresimage')
 
     # Get source Fedora object
     source_fedora_object = Multiresimage.find(image_id)
@@ -145,5 +148,29 @@ class MultiresimagesController < ApplicationController
 	  render :inline =>'<success pid="'+ image_id + '"/>'	
   end
   
+  
+  # This method is called from multiresimage/_index.html.erb (image search results).
+  # We don't want to show the Fedora URL to the user, so we call this action.
+  # The permissions are checked and, if applicable, the image is retrieved and
+  # displayed in the browser. The request to Fedora is coming from the app server
+  # (and not the user's browser) so the Fedora XACML policy won't reject the request. If an unauthorized
+  # user requests the image from Fedora directly, the XACML policy will block them.  If they request it from
+  # this action, the permissions check will deny access.
+  
+  def proxy_image
+    multiresimage = Multiresimage.find(params[:id])
+     
+    if can?(:read, multiresimage)  
+      Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
+        resp = http.get("/fedora/get/" + params[:id] + DIL_CONFIG['dil_fedora_disseminator_thumbnail'])
+        #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
+          #new_file.write(resp.body)
+          #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
+          send_data(resp.body, :disposition=>'inline', :type=>'image/jpeg', :filename=>"#{params[:id]}.jpg")
+          #send data uses server memory instead of storage.
+        }
+      #}
+    end   
+  end
   
 end

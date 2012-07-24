@@ -1,34 +1,38 @@
 <%= form_for Multiresimage.new, :url=>batch_edits_path, :method=>:put do |f| %>
 
   <div class="control-group">
-    <%= f.label :titleSet_display, "Title:"  %>
+    <%= f.label :titleSet_display, "Title"  %>
     <div class="controls">
       <%= f.text_field :titleSet_display %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :agentSet_display, "Agent:"  %>
+    <%= f.label :agentSet_display, "Agent"  %>
     <div class="controls">
       <%= f.text_field :agentSet_display %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :dateSet_display, "Date:"  %>
+    <%= f.label :dateSet_display, "Date"  %>
     <div class="controls">
       <%= f.text_field :dateSet_display %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :descriptionSet_display, "Description:"  %>
+    <%= f.label :descriptionSet_display, "Description"  %>
     <div class="controls">
       <%= f.text_field :descriptionSet_display %>
     </div>
   </div>
   <div class="control-group">
-    <%= f.label :subjectSet_display, "Subject:"  %>
+    <%= f.label :subjectSet_display, "Subject"  %>
     <div class="controls">
       <%= f.text_field :subjectSet_display %>
     </div>
+  </div>
+
+  <div class="control-group">
+    <%=render :partial=>'shared/select_policy', :locals=>{:f=>f, :blank_label=>'No changes'} %>
   </div>
 
   <div class="form-actions">

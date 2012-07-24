@@ -8,6 +8,7 @@ describe "Create a group" do
         Hydra::LDAP.should_receive(:groups_owned_by_user).and_return([args.first])
       end
       login FactoryGirl.find_or_create(:archivist)
+      Group.any_instance.unstub :persist_to_ldap  #undo the stub created by login in spec_helper.rb
     end
     it "should have a form" do
       visit groups_path

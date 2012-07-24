@@ -1,16 +1,19 @@
 class Ability
   include CanCan::Ability
   include Hydra::Ability
+  include PolicyAwareAbility
 
   ## This method overrides the default Hydra implementation to provide LDAP integration
   def user_groups(user, session)
     return @user_groups if @user_groups
     @user_groups = default_user_groups
-    @user_groups += user.groups.map(&:code) << 'registered' unless user.new_record?
+    @user_groups += RoleMapper.roles(user)
     @user_groups
   end
 
   def custom_permissions(user, session)
+    can :manage, :all if user.admin?
+
     can :create, DILCollection unless user.new_record?
     can :update, DILCollection do |obj|
       test_edit(obj.pid, user,session)
@@ -41,6 +44,28 @@ class Ability
 
   end
 
+  # Extends Hydra::Ability.test_edit to try policy controls if object-level controls deny access
+  def test_edit(pid, user, session)
+    result = super
+    if result 
+      return result
+    else
+      return test_edit_from_policy(pid, user, session)
+    end
+  end
+  
+  # Extends Hydra::Ability.test_read to try policy controls if object-level controls deny access
+  def test_read(pid, user, session)
+    result = super
+    if result 
+      return result
+    else
+      return test_read_from_policy(pid, user, session)
+    end
+  end
+  
+
+  
   private
   def can_edit_collection?(obj, user, session)
     pids = obj.collection_ids

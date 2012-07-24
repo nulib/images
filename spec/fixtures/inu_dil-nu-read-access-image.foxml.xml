@@ -309,6 +309,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
     <human></human>
     <machine>
       <person>joe_creator</person>
+      <person>calvin_collaborator</person>
     </machine>
   </access>
   <embargo>
