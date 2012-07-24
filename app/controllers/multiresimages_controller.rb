@@ -162,7 +162,7 @@ class MultiresimagesController < ApplicationController
      
     if can?(:read, multiresimage)  
       Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-        resp = http.get("/fedora/get/" + params[:id] + DIL_CONFIG['dil_fedora_disseminator_thumbnail'])
+        resp = http.get("/fedora/get/#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{params[:image_length]}")
         #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
           #new_file.write(resp.body)
           #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
