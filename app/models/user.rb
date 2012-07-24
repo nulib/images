@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
     email
   end
 
+  def settable_policies
+    AdminPolicy.readable_by_user(self)
+  end
+
   # Find an existing user by email or create one with a random password otherwise
   def self.find_for_ldap_oauth(access_token, signed_in_resource=nil)
     info = access_token[:info]
@@ -54,17 +58,26 @@ class User < ActiveRecord::Base
 
   # Groups that user is a member of
   def groups 
+    return @groups if @groups
+    return [] if uid.nil?
     codes = Hydra::LDAP.groups_for_user(uid)
     #puts "codes for #{uid} are #{codes}"
     res = Group.find_all_by_code(codes)
     #puts "res: #{res}"
     # add eduPersonAffiliation (e.g. student, faculty, staff) to groups that the user is a member of
-    val = res + affiliations.map{ |code| Group.new(:code=>code) }
-    val
+    @groups = res + affiliations.map{ |code| Group.new(:code=>code) }
   end
 
   def collections
     query="rightsMetadata_edit_access_machine_person_t:#{uid} AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
+  end
+
+  def self.admin_groups
+     @admin_groups ||= YAML.load_file("config/admin_groups.yml")[Rails.env]
+  end
+
+  def admin?
+    (User.admin_groups & groups.map(&:code)).length > 0
   end
 end

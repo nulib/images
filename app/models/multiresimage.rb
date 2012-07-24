@@ -3,8 +3,9 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
   
+  belongs_to :admin_policy, :class_name=> "AdminPolicy", :property=>:is_governed_by
   
-  has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_governed_by
+  has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
   has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
@@ -29,6 +30,9 @@ class Multiresimage < ActiveFedora::Base
   
   # External datastream
   has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+
+  # External datastream
+  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => ActiveFedora::QualifiedDublinCoreDatastream do |m|

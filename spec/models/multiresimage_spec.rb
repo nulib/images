@@ -5,6 +5,19 @@ describe Multiresimage do
     subject { Multiresimage.new(:file_name=>'readme.txt') }
     its(:file_name) { should  == 'readme.txt' }
   end
+
+  describe "should have an admin policy" do
+    before do
+      @policy = AdminPolicy.create
+    end
+    after do
+      @policy.delete
+    end
+    subject { Multiresimage.new(:admin_policy=>@policy) }
+    its(:admin_policy) { should == @policy } 
+
+  end
+
   describe "should belong to multiple collections" do
     before do
       @collection1 = FactoryGirl.create(:collection)

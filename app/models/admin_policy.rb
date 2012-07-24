@@ -2,7 +2,7 @@ class AdminPolicy < ActiveFedora::Base
   include Hydra::ModelMethods
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
-  has_metadata :name => "defaultRights", :type => Hydra::Datastream::RightsMetadata 
+  has_metadata :name => "defaultRights", :type => Hydra::Datastream::InheritableRightsMetadata 
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
@@ -18,6 +18,27 @@ class AdminPolicy < ActiveFedora::Base
 
   # easy access to edit_groups, etc
   include Hydra::ModelMixins::RightsMetadata 
+
+  def self.readable_by_user(user)
+    where_user_has_permissions(user, [:read, :edit])
+  end
+
+  def self.editable_by_user(user)
+    where_user_has_permissions(user, [:edit])
+  end
+
+  def self.where_user_has_permissions(user, permissions=[:edit])
+    or_query = [] 
+    RoleMapper.roles(user).each do |group|
+      permissions.each do |permission|
+        or_query << "#{permission}_access_group_t:#{group}"
+      end
+    end
+    permissions.each do |permission|
+      or_query << "#{permission}_access_person_t:#{user.user_key}"
+    end
+    find_with_conditions(or_query.join(" OR "))
+  end
 
   ## Updates those permissions that are provided to it. Does not replace any permissions unless they are provided
   # @example

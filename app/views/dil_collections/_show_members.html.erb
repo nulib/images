@@ -6,7 +6,7 @@
 				<div class="listing">
 				<table>
 				<tr valign="center">
-				<td><a href="<%= catalog_path(pid) %>"><img src="http://<%= request.host %>:8983/fedora/get/<%=  pid %>/inu:sdef-image/getWithLongSide?length=120"></a></td>
+				<td><a href="<%= catalog_path(pid) %>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= pid%>"/></a></td>
 				</tr>
 				<% unless mods.search('titleInfo/title').empty? %>
 					<%	title = mods.search('titleInfo/title').first.text() %>

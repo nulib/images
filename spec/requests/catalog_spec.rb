@@ -15,7 +15,6 @@ describe "Catalog" do
     end
     describe "who has read access to a collection that contains an image" do
       before do
-        Hydra::LDAP.should_receive(:create_group)
         @g1 = FactoryGirl.create(:user_group, :users=>[@user.uid], :owner=>FactoryGirl.create(:user))
         @img = Multiresimage.new
         @img.titleSet_display = "Totally refreshing"

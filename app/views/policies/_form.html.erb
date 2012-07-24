@@ -1,5 +1,5 @@
 <%= render :partial=>'/shared/page_header' %>
-<%= form_for @policy, :url=>@policy.new_record? ? policies_path : policy_path(@policy.pid), :html=>{:class=>'form-horizontal'} do |f| %>
+<%= form_for @policy, :url=>@policy.new_record? ? policies_path : policy_path(@policy.pid), :html=>{:class=>'form-horizontal reorderable'} do |f| %>
   <div class="control-group">
     <%= f.label :title, 'Policy Name', :class=>"control-label" %>
     <div class="controls">
@@ -31,17 +31,23 @@
       <%= f.text_field :license_url %>
     </div>
   </div>        
+  <div class="form-actions force-bottom">
+    <%# the submit button has to be the first button on the page, so that pressing enter submits the form correctly %>
+    <%= f.submit :class=>'btn btn-primary'%>
+  </div>
   <fieldset class="permissions">
     <legend>Provides these Permissions</legend>
-    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy, :field=>:default_permissions} %>
+    <%=render :partial=>'shared/edit_groups_and_users', :locals=>{:fedora_object=>@policy, :field=>:default_permissions} %>
   </fieldset>
   <fieldset class="maintainers">
     <legend>Policy Maintainers</legend>
-    <%=render :partial=>'provides', :locals=>{:fedora_object=>@policy, :field=>:permissions} %>
+    <%=render :partial=>'permissions', :locals=>{:fedora_object=>@policy, :field=>:permissions, :access=>:edit} %>
+  </fieldset>
+  <fieldset class="users">
+    <legend>Who may use this policy</legend>
+    <p>In addition to maintainers, these users &amp; groups may apply this policy to objects &amp; collections.</p>
+    <%=render :partial=>'permissions', :locals=>{:fedora_object=>@policy, :field=>:permissions, :access=>:read} %>
   </fieldset>
 
-  <div class="form-actions">
-    <%= f.submit :class=>'btn btn-primary'%>
-  </div>
 <% end %>
 

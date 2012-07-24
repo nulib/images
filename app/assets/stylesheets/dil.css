@@ -1,4 +1,7 @@
-
+#browselinks {
+  float: right;
+  width: 100px;
+}
 label.batch_toggle {
   display: inline;
 }
