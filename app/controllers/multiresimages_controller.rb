@@ -58,7 +58,6 @@ class MultiresimagesController < ApplicationController
     end
     parse_permissions!(params[:multiresimage])
     @multiresimage.update_attributes(params[:multiresimage])
-        
     respond_to do |format|
       format.json do
         render :json=>{:values => params[:multiresimage][:permissions] }
@@ -80,7 +79,7 @@ class MultiresimagesController < ApplicationController
     new_image = Multiresimage.new
     puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
     apply_depositor_metadata(new_image)
-    set_collection_type(new_image, 'Multiresimage')
+		@dil_collection.set_collection_type('Multiresimage')
 
     # Get source Fedora object
     source_fedora_object = Multiresimage.find(image_id)

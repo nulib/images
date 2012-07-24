@@ -1,5 +1,3 @@
-require 'mediashelf/active_fedora_helper'
-
 ##
 ## This class' index method is a web service that the VRA Editor (or any external app) can call
 ## to perform a search the same way Hydra does.  It extends CatalogController because it needs to 
