@@ -9,7 +9,6 @@ require "hydra"
 # As long as your module includes methods for full_name, affiliation, and photo the personalization_helper should function correctly
 #
 # NOTE: For your development environment, also specify the module in lib/user_attributes_loader.rb
-User.send(:include, Hydra::GenericUserAttributes)
 
 if Hydra.respond_to?(:configure)
   Hydra.configure(:shared) do |config|
@@ -50,6 +49,14 @@ if Hydra.respond_to?(:configure)
       :edit => {:group =>"edit_access_group_t", :individual=>"edit_access_person_t"},
       :owner => "depositor_t",
       :embargo_release_date => "embargo_release_date_dt"
+    }
+    config[:permissions][:inheritable] = {
+      :catchall => "inheritable_access_t",
+      :discover => {:group =>"inheritable_discover_access_group_t", :individual=>"inheritable_discover_access_person_t"},
+      :read => {:group =>"inheritable_read_access_group_t", :individual=>"inheritable_read_access_person_t"},
+      :edit => {:group =>"inheritable_edit_access_group_t", :individual=>"inheritable_edit_access_person_t"},
+      :owner => "inheritable_depositor_t",
+      :embargo_release_date => "inheritable_embargo_release_date_dt"
     }
   end
 end

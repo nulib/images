@@ -1,10 +1,11 @@
 source 'http://rubygems.org'
 
   gem 'rails', '3.2.6'
-  gem 'blacklight', :git=>'git://github.com/projectblacklight/blacklight.git', :ref=>'a83c286'
-  gem 'hydra-access-controls', :require=>false, :git=>'git://github.com/projecthydra/hydra-access-controls' , :ref=>'ccc6aca'
-  gem 'hydra-head', :git=>'git://github.com/projecthydra/hydra-head.git' , :ref=>'517d131'
-  gem 'active-fedora', '4.3.0' 
+  gem 'blacklight'
+	
+  gem 'hydra-access-controls', :require=>false, :git=>'git://github.com/projecthydra/hydra-access-controls' , :ref=>'d0f6fa5'
+  gem 'hydra-head', '4.1.0'
+  gem 'hydra-mods'
   gem 'sqlite3'
   
   #  We will assume you're using devise in tutorials/documentation. 
@@ -16,7 +17,7 @@ source 'http://rubygems.org'
   gem 'rdf'
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
+#group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
@@ -26,8 +27,9 @@ group :assets do
   gem 'jquery-ui-rails'
   gem "bootstrap-sass-rails", '2.0.3.0'
 
-end
+#end
 
+gem "cancan", "1.6.7"  # cancan 1.6.8 breaks PoliciesController.create method in a super strange way.
 gem 'jquery-rails'
 gem 'jquery.fileupload-rails'
 

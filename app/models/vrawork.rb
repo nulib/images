@@ -1,6 +1,7 @@
 class Vrawork  < ActiveFedora::Base
   include Hydra::ModelMethods
   include ActiveFedora::Relationships
+  include Hydra::ModelMixins::RightsMetadata
   
   has_relationship "parts", :is_part_of, :inbound => true
   has_and_belongs_to_many :multiresimages, :class => "Multiresimage", :property=> :has_image
@@ -15,6 +16,9 @@ class Vrawork  < ActiveFedora::Base
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => Hydra::Datastream::Properties
 
+  # External datastream
+  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+
   delegate :titleSet_display_work, :to=>:VRA, :unique=>true
   delegate :agentSet_display_work, :to=>:VRA, :unique=>true
   delegate :dateSet_display_work, :to=>:VRA, :unique=>true
@@ -26,7 +30,7 @@ class Vrawork  < ActiveFedora::Base
   # The xml_template uses the vra:image tags when creating the vra work
   #
   def update_vra_work_tag
-    vra_xml = self.datastreams["VRA"].content.gsub("<vra:image","<vra:work")
+    vra_xml = self.datastreams["VRA"].ng_xml.to_s.gsub("<vra:image","<vra:work")
     vra_xml = vra_xml.gsub!("</vra:image>","</vra:work>")
     self.datastreams["VRA"].content = vra_xml
     #self.save!

@@ -1,0 +1,51 @@
+    <h2 class="section-title">Description</h2>
+    <%= form_for @multiresimage, :html=>{:class=>'form-horizontal reorderable'} do |f|%>
+      <div>
+        PID: <%= @multiresimage.id %>
+      </div>
+      <br/>
+      <div class="control-group">
+        <%= f.label 'Agent', :class=>"control-label" %>
+        <div class="controls">
+          <%= f.text_field :agentSet_display, :class=>'span6' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label 'Date', :class=>"control-label" %>
+        <div class="controls">
+        <%= f.text_field :dateSet_display, :class=>'span6' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <%= f.label 'Description', :class=>"control-label" %>
+        <div class="controls">
+          <%= f.text_field :descriptionSet_display, :class=>'span6' %>
+        </div>
+      </div>
+       <div class="control-group">
+        <%= f.label 'Subject', :class=>"control-label" %>
+        <div class="controls">
+          <%= f.text_field :subjectSet_display, :class=>'span6' %>
+        </div>
+      </div>
+      
+      <div class="control-group">
+        <%= f.label 'Title', :class=>"control-label" %>
+        <div class="controls">
+          <%= f.text_field :titleSet_display, :class=>'span6' %>
+        </div>
+      </div>
+      <div class="form-actions force-bottom">
+        <%# the submit button has to be the first button on the page, so that pressing enter submits the form correctly %>
+        <%= f.submit "Save changes", :class=>'btn btn-primary'%>
+      </div>
+      
+      <fieldset class="permissions">
+        <legend>Permissions</legend>
+        <%=render :partial=>'shared/select_policy', :locals=>{:f=>f, :blank_label=>'Default Policy &mdash; Private to Owner'.html_safe} %>
+        <p id="object-permissions-heading">Also grant access to:</p>
+        <%= render :partial=>'shared/edit_groups_and_users', :locals=>{:fedora_object=>@multiresimage, :field=>:permissions} %>
+      </fieldset>
+      
+    <%end%>
+
