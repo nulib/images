@@ -5,3 +5,5 @@ test:
   - repository-admin
   - library-admin
 production:
+  - repository-admin
+  - library-admin
