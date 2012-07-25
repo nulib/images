@@ -28,12 +28,19 @@ module DIL
 			  document = Nokogiri::XML(xml)
 			  vra_type = ""
 			  pid = ""
+			  rel_pid = ""
 			  
 			  #pid might be a query param
 			  #debugger
 			  if params[:pid].present?
 				pid = params[:pid]
 				logger.debug("PID:" + pid)
+			  end
+			  
+			  #rel_pid might be a query param
+			  if params[:rel_pid].present?
+				rel_pid = params[:rel_pid]
+				logger.debug("RELATED_PID:" + rel_pid)
 			  end
 			  
 			  #determine if xml represents VRA work or VRA image by running xpath query and checking the result
@@ -67,10 +74,10 @@ module DIL
 				
 				  if vra_type == "image"
 					#create Fedora object for VRA Image, calls method in helper
-					returnXml = create_vra_image_fedora_object(pid, document)
+					returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
 				  elsif vra_type == "work"
 					#create Fedora object for VRA Work, calls method in helper
-					returnXml = create_vra_work_fedora_object(pid, document)	           
+					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)	           
 				  end
 				
 				end     
@@ -401,7 +408,7 @@ module DIL
     # The output is output indicating a success.
     # If an exception occurs, the controller will catch it.
 
-    def create_vra_image_fedora_object(pid, document)
+    def create_vra_image_fedora_object(pid, rel_pid, document)
       logger.debug("create_image_method")
       # create new Fedora object with minted pid
       fedora_object = Multiresimage.new({:pid=>pid})
@@ -418,7 +425,9 @@ module DIL
       
       #todo: make groups be a param to the API
       fedora_object.read_groups = ["registered"]
-      fedora_object.edit_groups = ["registered"]
+      #fedora_object.edit_groups = ["registered"]
+      
+      fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
       
       #save Fedora object
       fedora_object.save
@@ -432,7 +441,7 @@ module DIL
     # The output is output indicating a success.
     # If an exception occurs, the controller will catch it.
     
-    def create_vra_work_fedora_object(pid, document)
+    def create_vra_work_fedora_object(pid, rel_pid, document)
       logger.debug("create_work_method")
       # create new Fedora object with minted pid
       #ActiveFedora.init()
@@ -450,7 +459,9 @@ module DIL
       
       #todo: make groups be a param to the API
       fedora_object.read_groups  = ["registered"]
-      fedora_object.edit_groups = ["registered"]
+      #fedora_object.edit_groups = ["registered"]
+      
+      fedora_object.add_relationship(:has_image, "info:fedora/" + rel_pid)
       
       #save Fedora object
       fedora_object.save
