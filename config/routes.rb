@@ -11,7 +11,6 @@ DIL::Application.routes.draw do
   resources :multiresimages do
     collection do
       get 'aware_tile'
-      post 'create_update_fedora_object'
       post 'add_datastream'
       post 'add_external_datastream'
       get 'delete_fedora_object'
@@ -23,7 +22,8 @@ DIL::Application.routes.draw do
   end
   
   resources :dil_collections  
-
+  
+  match "multiresimages/create_update_fedora_object/:pid/:rel_pid", :via => :post
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
   match "multiresimages/svg/:id" => "multiresimages#get_svg"
   match "multiresimages/aware_details" => "multiresimages#aware_details"
