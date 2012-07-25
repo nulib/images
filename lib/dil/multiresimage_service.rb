@@ -92,9 +92,9 @@ module DIL
 				rescue ActiveFedora::ObjectNotFoundError => e
 				  #create the object
 				  if vra_type == "image"
-					returnXml = create_vra_image_fedora_object(pid, document)
+					returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
 				  elsif vra_type == "work"
-					returnXml = create_vra_work_fedora_object(pid, document)
+					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
 				  end
 			    else
 				  #object already exists, update the object
