@@ -427,7 +427,11 @@ module DIL
       fedora_object.read_groups = ["registered"]
       #fedora_object.edit_groups = ["registered"]
       
+      #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
       fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
+      
+      #add rels-ext CModel relationship
+      fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
       
       #save Fedora object
       fedora_object.save
@@ -461,7 +465,11 @@ module DIL
       fedora_object.read_groups  = ["registered"]
       #fedora_object.edit_groups = ["registered"]
       
+      #add rels-ext has_image relationship (VRAWork hasImage VRAItem)
       fedora_object.add_relationship(:has_image, "info:fedora/" + rel_pid)
+      
+      #add rels-ext CModel relationship
+      fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
       
       #save Fedora object
       fedora_object.save
