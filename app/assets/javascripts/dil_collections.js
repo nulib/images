@@ -1,4 +1,4 @@
-<!-- For adding items to the collection -->
+// For adding items to the collection
 
 	$(function() {
 		$( "#images li" ).draggable({
@@ -45,7 +45,7 @@
 	
 	
 	
-<!-- For moving items around in the collection -->
+//For moving items around in the collection
 
 	start_index='';
 	$(document).ready(function(){
