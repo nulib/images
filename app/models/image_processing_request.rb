@@ -33,7 +33,7 @@ class ImageProcessingRequest < ActiveRecord::Base
 
     # TODO Can we replace the cgi-bin with stomp?
     # call CGI script with file location (path, name and id)
-      cgi_url = DIL_CONFIG['dil_upload_cgi_url'] << "?image_path=" << new_filepath << "&request_id=" << id.to_s
+      cgi_url = "#{DIL_CONFIG['dil_upload_cgi_url']}?image_path=#{new_filepath}&request_id=#{id.to_s}"
 	  logger.debug("cgi url: " + cgi_url)
 	  # response will be status of script that puts JMS message in queue
 	  logger.debug("Before CGI call")
