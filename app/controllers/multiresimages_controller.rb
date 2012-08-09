@@ -17,8 +17,10 @@ class MultiresimagesController < ApplicationController
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
   
+  
   # Get SVG for id
   def get_svg
+	  expires_in(1.hours, :private => false, :public => true)
 	  source_fedora_object = Multiresimage.find(params[:id])
 	  @svg = source_fedora_object.DELIV_OPS.content()
     respond_to do |wants|
