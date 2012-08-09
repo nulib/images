@@ -29,7 +29,7 @@ CoordinateManager.initialize = function(frame_width, frame_height, levels)
     
     var image_width = frame_width;
     var image_height = frame_height;
-
+    
     this.level_count = levels; // level = level_count => full zoom
 
     var viewport_max = viewport_width;
@@ -41,7 +41,7 @@ CoordinateManager.initialize = function(frame_width, frame_height, levels)
         image_max = frame_height;
     }
 
-    for (this.base_level = this.level_count; image_max > viewport_max; this.base_level = this.base_level - 1)
+    for (this.base_level = this.level_count; image_max > viewport_max && this.base_level > 0; this.base_level = this.base_level - 1)
     {
         image_max = image_max / 2;
         
@@ -68,8 +68,6 @@ CoordinateManager.currentActualViewport = function()
 	var vp = {};
 	
 	var zoom = this.zoomCoefficient();
-	
-	alert("ZOOM = " + CoordinateManager.glass.attr("y"));
 	
 	vp.x = (0 - CoordinateManager.glass.attr("x")) * zoom;
 	vp.y = (0 - CoordinateManager.glass.attr("y")) * zoom;
@@ -343,7 +341,7 @@ CoordinateManager.setViewport = function(cx, cy, level)
     var y_offset = Math.floor(top / ImageServer.tile_size);
     
 //    TileManager.clearTileQueue();
-    
+
     for (var i = -1; (i * ImageServer.tile_size) < (2 * side) + ImageServer.tile_size; i++)
     {
         for (var j = -1; (j * ImageServer.tile_size) < (2 * side) + ImageServer.tile_size; j++)

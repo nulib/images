@@ -540,7 +540,7 @@ ControlManager.initialize = function ()
 			CoordinateManager.setRotation(newRotation);
 		else
 			alert("Cannot rotate clockwise further.");
-   });
+	});
 	controls.clockIcon = clockIcon; 
 
 	var counterIcon = CropTool.paper.image(Site.iconPath() + "counter-16.png", width - (base * 8) + 8, 9, 16, 16);
@@ -746,28 +746,31 @@ ControlManager.resize = function (width, height)
 {
 	var base = ControlManager.BASE_SIDE;
 
-	ControlManager.controls.mode.attr({x: width - base, y: height - base});
-	ControlManager.controls.modeIcon.attr({x: width - base + 5, y: height - base + 5});
-	
-	if (ControlManager.controls.create !== undefined)
+	if (ControlManager.controls !== undefined)
 	{
-		ControlManager.controls.create.attr({x: width - base, y: 0});
-		ControlManager.controls.createIcon.attr({x: width - base + 6, y: 7});
+		ControlManager.controls.mode.attr({x: width - base, y: height - base});
+		ControlManager.controls.modeIcon.attr({x: width - base + 5, y: height - base + 5});
+
+		if (ControlManager.controls.create !== undefined)
+		{
+			ControlManager.controls.create.attr({x: width - base, y: 0});
+			ControlManager.controls.createIcon.attr({x: width - base + 6, y: 7});
+		}
+
+		ControlManager.controls.rotation.attr({x: width - (base * 8), y: 0});
+		ControlManager.controls.clockIcon.attr({x: width - (base * 3) + 7.5, y: 8.5});
+		ControlManager.controls.counterIcon.attr({x: width - (base * 8) + 7.5, y: 8.5});
+		ControlManager.controls.rotationBar.attr({x: ControlManager.controls.counterIcon.attr("x") + ControlManager.controls.counterIcon.attr("width") + 8, y: 6});
+
+		ControlManager.updateRotation(CoordinateManager.currentRotation());
+
+		ControlManager.controls.zoom.attr({x: width - base, y: base * 2});
+		ControlManager.controls.zoomInIcon.attr({x: width - base + 8.5, y: (base * 2) + 8});
+		ControlManager.controls.zoomOutIcon.attr({x: width - base + 8.5, y: (base * 8) - 24});
+		ControlManager.controls.zoomBar.attr({x: width - base + 6, y: base * 3});
+
+		ControlManager.updateZoom(CoordinateManager.current_level);
 	}
-	
-	ControlManager.controls.rotation.attr({x: width - (base * 8), y: 0});
-	ControlManager.controls.clockIcon.attr({x: width - (base * 3) + 7.5, y: 8.5});
-	ControlManager.controls.counterIcon.attr({x: width - (base * 8) + 7.5, y: 8.5});
-	ControlManager.controls.rotationBar.attr({x: ControlManager.controls.counterIcon.attr("x") + ControlManager.controls.counterIcon.attr("width") + 8, y: 6});
-
-	ControlManager.updateRotation(CoordinateManager.currentRotation());
-
-	ControlManager.controls.zoom.attr({x: width - base, y: base * 2});
-	ControlManager.controls.zoomInIcon.attr({x: width - base + 8.5, y: (base * 2) + 8});
-	ControlManager.controls.zoomOutIcon.attr({x: width - base + 8.5, y: (base * 8) - 24});
-	ControlManager.controls.zoomBar.attr({x: width - base + 6, y: base * 3});
-
-	ControlManager.updateZoom(CoordinateManager.current_level);
 };
 
 
