@@ -31,7 +31,8 @@ function setImageParameters(element)
 	CoordinateManager.initialize(ImageServer.details.width, ImageServer.details.height, ImageServer.details.levels);
 	PersistenceManager.initialize(CropTool.identifier);
 	ControlManager.initialize();
-	ControlManager.updateZoomWidget();
+//	ControlManager.updateZoomWidget();
+//	ControlManager.updateZoom(CoordinateManager.current_level);
 };
 
 ImageServer.initialize = function(image)
@@ -104,7 +105,7 @@ ImageServer.initialize = function(image)
 	{
 		alert("ImageServer.initialize: Unable to fetch " + url + ". Check that everything is served from the same host.");
 	}});
-	
+
 	CropTool.resize();
 };
 

@@ -71,7 +71,7 @@ TileManager.loadTile = function(i, j, level)
             }
             else if (context.level !== CoordinateManager.current_level)
             {
-            
+
             }
             else
             {
@@ -81,8 +81,8 @@ TileManager.loadTile = function(i, j, level)
                 var glass_origin_x = cx - (context.glass.o_width / 2);
                 var glass_origin_y = cy - (context.glass.o_height / 2);
                 
-                var img_width = $(img_element).attr("width");
-                var img_height = $(img_element).attr("height");
+                var img_width = $(img_element).width(); // .attr("width");
+                var img_height = $(img_element).height(); // .attr("height");
 
                 var x = glass_origin_x + (context.i * ImageServer.tile_size);
                 var y = glass_origin_y + (context.j * ImageServer.tile_size);
@@ -94,7 +94,7 @@ TileManager.loadTile = function(i, j, level)
                 image.glass = context.glass;
                 image.i = context.i;
                 image.j = context.j;
-                
+
                 image.updatePosition = function ()
                 {
                     var cx = this.glass.attr("x") + (context.glass.o_width / 2);
@@ -113,17 +113,17 @@ TileManager.loadTile = function(i, j, level)
 
                     image.toFront();
                     context.glass.toFront();
-                }
-                
+                };
+
                 image.toFront();
-                
+
                 context.glass.toFront();
 
                 CropManager.toFront();
                 ControlManager.toFront();
                 
                 image.rotate(context.glass.rotation, cx, cy);
-            
+
                 $(img_element).remove();
             }   
 
@@ -159,6 +159,7 @@ TileManager.loadTile = function(i, j, level)
 
                     setTimeout(f, 100);
                 } */
+                TileManager.updatePosition();
             }
             
             // Prefetch the four tiles underneath this one for performance reasons...
@@ -184,7 +185,7 @@ TileManager.loadTile = function(i, j, level)
         context.j = j;
         context.level = level;
         context.glass = glass;
-            
+
         ImageServer.queueImage(tile_url, callback, context);
     }
 };
