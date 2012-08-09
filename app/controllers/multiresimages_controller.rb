@@ -28,12 +28,13 @@ class MultiresimagesController < ApplicationController
  
    # Get Aware's HTML view of the image for screen scraping geometry
   def aware_details
-    @aware_details_url = "#{DIL_CONFIG['dil_aware_url']}#{params[:file_path]}"
+    @aware_details_url = "#{DIL_CONFIG['dil_aware_detail_url']}#{params[:file_path]}"
   end
 
   # Get tile from Aware
   def aware_tile
-    tile_url = "#{DIL_CONFIG['dil_aware_url']}#{params[:file_path]}&zoom=#{params[:level]}&x=#{params[:x]}&y=#{params[:y]}&rotation=0"  
+    tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{params[:file_path]}&zoom=#{params[:level]}&x=#{params[:x]}&y=#{params[:y]}&rotation=0"  
+    #logger.debug("tile_url:#{tile_url}")
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
    
