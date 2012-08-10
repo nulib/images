@@ -37,6 +37,7 @@ class MultiresimagesController < ApplicationController
   def aware_tile
     tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{params[:file_path]}&zoom=#{params[:level]}&x=#{params[:x]}&y=#{params[:y]}&rotation=0"  
     #logger.debug("tile_url:#{tile_url}")
+    expires_in(1.hours, :private => false, :public => true)
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
    
