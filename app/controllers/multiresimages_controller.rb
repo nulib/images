@@ -48,6 +48,7 @@ class MultiresimagesController < ApplicationController
   end
    
   def show
+    logger.debug("POINT")
     @multiresimage = Multiresimage.find(params[:id])
     @page_title = @multiresimage.titleSet_display
   end
@@ -71,9 +72,10 @@ class MultiresimagesController < ApplicationController
   end
    
   # Create new crop
-  def create
-    image_id = params[:id]
+  def create_crop
 
+    image_id = params[:id]
+      
     # Get the new crop boundaries
     x=params[:x]
     y=params[:y]
@@ -82,8 +84,7 @@ class MultiresimagesController < ApplicationController
     
     new_image = Multiresimage.new
     puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
-    apply_depositor_metadata(new_image)
-		@dil_collection.set_collection_type('Multiresimage')
+	#@dil_collection.set_collection_type('Multiresimage')
 
     # Get source Fedora object
     source_fedora_object = Multiresimage.find(image_id)
@@ -100,25 +101,30 @@ class MultiresimagesController < ApplicationController
     # Add the <image> object
     new_svg_ds.add_image(image_node)
 
-	  # Update SVG
+	# Update SVG
     new_svg_ds.add_rect(x, y, width, height)
+    
+    new_image.apply_depositor_metadata(current_user.user_key)
+    
     new_svg_ds.dirty = true
     new_image.save
 
     # Get source VRA datastream
-    source_vra_ds = source_fedora_object.VRA
-    source_vra_image=source_vra_ds.find_by_terms(:vra_image) 
-    vra_ds = new_image.VRA   
-    vra_ds.add_image(source_vra_image)
+    source_vra_ds = source_fedora_object.datastreams["VRA"]
+    source_vra_image=source_vra_ds.find_by_terms(:vra) 
+    vra_ds = new_image.VRA
+    #vra_ds.add_image(source_vra_image)
     new_image.save
 
   	# Add image and VRA behavior via their cmodels
     new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
     new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
+    
+    new_image.edit_users=[current_user.user_key]
     new_image.save
-
+    
     respond_to do |wants|
-      wants.html { redirect_to url_for(:action=>"show", :controller=>"catalog", :id=>new_image.pid) }
+      wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }
       wants.xml  { render :inline =>'<success pid="'+ new_image.pid + '"/>' }
     end
   end

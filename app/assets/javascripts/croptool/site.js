@@ -10,7 +10,7 @@ var Site = {};
  
 Site.createCropUrl = function(x, y, width, height, image)
 {
-	return "/multiresimages/create?x=" + x + "&y=" + y + "&width=" + width + "&height=" + height + "&id=" + image;
+	return "/multiresimages/create_crop/" + image + "/?x=" + x + "&y=" + y + "&width=" + width + "&height=" + height;
 };
 
 /**
