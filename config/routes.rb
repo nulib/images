@@ -24,6 +24,7 @@ DIL::Application.routes.draw do
   resources :dil_collections  
   
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
+  match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
   match "multiresimages/svg/:id" => "multiresimages#get_svg"
   match "multiresimages/aware_details" => "multiresimages#aware_details"
