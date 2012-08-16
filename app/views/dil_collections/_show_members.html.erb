@@ -6,12 +6,21 @@
 				<div class="listing">
 				<table>
 				<tr valign="center">
-				<td><a href="<%= catalog_path(pid) %>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= pid%>/150"/></a></td>
+				<td>
+				<% if !mods.search('type').text.present? || mods.search('type').text=='image'%>
+				  <a href="/multiresimages/<%=pid%>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= pid%>/150"/></a></td>
+				<% elsif mods.search('type').text=='collection' %>
+				  <a href="/dil_collections/<%=pid%>"><img src="/assets/folder.jpg" width="102px" height="102px"/></a>
+				<% end %>
 				</tr>
 				<% unless mods.search('titleInfo/title').empty? %>
 					<%	title = mods.search('titleInfo/title').first.text() %>
 					<tr>
-					<td><font size="-2"><%= link_to(title, catalog_path(pid)) %></font></td>
+					<% if !mods.search('type').text.present? || mods.search('type').text=='image'%>
+				      <td><font size="-2"><a href="/multiresimages/<%=pid%>"><%=title%></a></font></td>
+				    <% elsif mods.search('type').text=='collection' %>
+				      <td><font size="-2"><a href="/dil_collections/<%=pid%>"><%=title%></a></font></td>
+	                <% end %>
 					</tr>
 				<% end %>
 				</table>

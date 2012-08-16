@@ -17,9 +17,14 @@
 				
 				//get title attribute for draggable <li> item (image)
 				var titleID = $(ui.draggable).attr("title");
+				
+				//get member_type attribute for draggable <li> item (image)
+				//var memberType = $(ui.draggable).attr("member_type");
 
 				//get id attribute for droppable <li> item (collection)
 				var collectionID = $( this ).find("li").attr("id");
+				
+				
 				
 				$( "<li></li>" ).text(ui.draggable.attr("title")+" added!").appendTo(this);
 				
