@@ -30,10 +30,10 @@ class DilCollectionsController < ApplicationController
   def add
     @collection = DILCollection.find(params[:id])
     authorize! :edit, @collection
-    @image = Multiresimage.find(params[:member_id])
-    authorize! :show, @image
+    @fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
+    authorize! :show, @fedora_object
 #  puts "Inserting #{@image.pid} to #{@collection.pid}"
-    @collection.insert_member(@image)
+    @collection.insert_member(@fedora_object)
     @collection.save!
     render :nothing => true
   end
