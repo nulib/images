@@ -11,7 +11,14 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
 			t.relatedItem {
 				t.identifier
 			}
+			t.relatedItem {
+				t.identifier
+			}
+			t.type
+			
 			t.title(:path=>"titleInfo/title")
+			
+			
 		}
 		
 		
@@ -39,6 +46,9 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
 		   xml.relatedItem {
 	           xml.identifier item[:pid]
 		   }
+		   
+	       xml.type item[:type]
+		
         }
       end
       return builder.doc
@@ -47,7 +57,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
 		     
     # Inserts a new MODS record into a modsCollection, representing a collection member
     def insert_member(parms)
-	  node = ModsCollectionMembers.mods_template({:title => parms[:member_title] , :pid => parms[:member_id]}).root()
+	  node = ModsCollectionMembers.mods_template({:title => parms[:member_title], :type => parms[:member_type], :pid => parms[:member_id]}).root()
 	  nodeset = self.find_by_terms(:modsCollection)
       unless nodeset.nil?
 		self.ng_xml.root.add_child(node)
@@ -94,6 +104,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
       def to_solr(solr_doc=Hash.new)
         super(solr_doc)
         ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
+        ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "title_t", self.find_by_terms("titleInfo/title"))
         solr_doc
       end
 

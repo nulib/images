@@ -3,6 +3,11 @@ class DILCollection < ActiveFedora::Base
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   
+  has_and_belongs_to_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_image
+  has_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
+  #has_many :subcollections, :class_name=> "DILCollection", :property=> :has_subcollection
+  #belongs_to :parent, :class_name=> "DILCollection", :property=> :is_member_of
+  
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
 
@@ -12,15 +17,41 @@ class DILCollection < ActiveFedora::Base
   # Uses the Hydra modsCollection profile for collection list
   has_metadata :name => "members", :type => Hydra::ModsCollectionMembers 
 
-
   delegate :title, :to=>'descMetadata', :unique=>true
 
   validates :title, :presence => true
 
-  def insert_member(image)
-    image.collections << self
-    image.save!
-    members.insert_member(:member_id=>image.pid, :member_title=>image.titleSet_display)
+  #A collection can have another collection as a member, or an image
+  def insert_member(fedora_object)
+    if (fedora_object.instance_of?(Multiresimage))
+      
+      #add to the members ds
+      members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.titleSet_display, :member_type=>'image')
+      
+      #add to the rels-ext ds
+      fedora_object.collections << self
+      self.multiresimages << fedora_object
+      #self.add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
+      
+    elsif (fedora_object.instance_of?(DILCollection))
+      
+      #add to the members ds
+      members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
+      
+      #add to the rels-ext ds      
+      fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+      self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
+      
+      #logger.debug("self:#{self}")
+      #logger.debug("fedora_object:#{fedora_object}")
+      #self.subcollections << fedora_object
+      #fedora_object.parent = self
+      
+    end
+    
+    fedora_object.save!
+    self.save!
+
   end
   
   def export_pids_as_xml
