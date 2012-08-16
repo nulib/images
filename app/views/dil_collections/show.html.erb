@@ -4,7 +4,7 @@
     <span class="edit-browse">
       Browse | <a href="/dil_collections/<%=@collection.id%>/edit">Edit</a>
     </span>
-    <h2 class="section-title"><a href="#">Collection</a></h2>
+    <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
     <%= render :partial => 'dil_collections/show_members' %>
     <br/>
    <!--<h2 class="section-title"><a href="#">Description</a></h2>-->

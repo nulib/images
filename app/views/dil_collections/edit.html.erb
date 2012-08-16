@@ -10,7 +10,7 @@
       <%= form_for @collection, :url => { :action => "export" } , :method => "post" do |f| %>
         <%= f.submit "Export to PowerPoint" %>
       <% end %>
-      <h2 class="section-title">Collection</h2>
+      <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
       <%= render :partial => 'dil_collections/edit_members' %>
     <% end %>
   </div>
