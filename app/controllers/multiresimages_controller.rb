@@ -48,7 +48,6 @@ class MultiresimagesController < ApplicationController
   end
    
   def show
-    logger.debug("POINT")
     @multiresimage = Multiresimage.find(params[:id])
     @page_title = @multiresimage.titleSet_display
   end
@@ -74,7 +73,7 @@ class MultiresimagesController < ApplicationController
   # Create new crop
   def create_crop
 
-    image_id = params[:id]
+    image_id = params[:pid]
       
     # Get the new crop boundaries
     x=params[:x]
@@ -111,11 +110,15 @@ class MultiresimagesController < ApplicationController
 
     # Get source VRA datastream
     source_vra_ds = source_fedora_object.datastreams["VRA"]
-    source_vra_image=source_vra_ds.find_by_terms(:vra) 
-    vra_ds = new_image.VRA
+    #source_vra_image=source_vra_ds.find_by_terms(:vra) 
+    #vra_ds = new_image.VRA
     #vra_ds.add_image(source_vra_image)
+    new_image.VRA.content =  source_vra_ds.content
     new_image.save
 
+    #todo: add rels-ext to source image for hasImage, and VRA
+    #todo: add rels-ext to crop image for imageOf, and VRA
+  	
   	# Add image and VRA behavior via their cmodels
     new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
     new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
