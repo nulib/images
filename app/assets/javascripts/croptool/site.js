@@ -10,7 +10,7 @@ var Site = {};
  
 Site.createCropUrl = function(x, y, width, height, image)
 {
-	return "/multiresimages/create_crop/" + image + "/?x=" + x + "&y=" + y + "&width=" + width + "&height=" + height;
+	return "/multiresimages/create_crop.xml?pid=" + image + "&x=" + x + "&y=" + y + "&width=" + width + "&height=" + height;
 };
 
 /**
@@ -56,4 +56,9 @@ Site.iconPath = function()
 Site.catalogPathForPid = function(pid)
 {
 	return "/catalog/" + pid;
+};
+
+Site.multiresimagePathForPid = function(pid)
+{
+	return "/multiresimages/" + pid;
 };

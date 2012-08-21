@@ -35,10 +35,10 @@ PersistenceManager.requestNewCrop = function()
 	$.get(fetch_url, function(data) 
 	{
 		// TODO: Check for <error /> return
-		
+		alert("TEST" + $(data).find("success"));
 		var pid = $(data).find("success").attr("pid");
 
-		window.location = Site.catalogPathForPid(pid);
+		window.location = Site.multiresimagePathForPid(pid);
 	});
 };
 
