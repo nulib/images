@@ -56,3 +56,5 @@
     :is_image_of: isImageOf
     :has_image: hasImage
     :has_subcollection: hasSubcollection
+    :has_crop: hasCrop
+    :is_crop_of: isCropOf
