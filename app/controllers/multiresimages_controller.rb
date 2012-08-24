@@ -103,6 +103,7 @@ class MultiresimagesController < ApplicationController
 	# Update SVG
     new_svg_ds.add_rect(x, y, width, height)
     
+    #Add properties datastream with depositor (user) info
     new_image.apply_depositor_metadata(current_user.user_key)
     
     new_svg_ds.dirty = true
@@ -113,17 +114,30 @@ class MultiresimagesController < ApplicationController
     #source_vra_image=source_vra_ds.find_by_terms(:vra) 
     #vra_ds = new_image.VRA
     #vra_ds.add_image(source_vra_image)
-    new_image.VRA.content =  source_vra_ds.content
-    new_image.save
-
-    #todo: add rels-ext to source image for hasImage, and VRA
-    #todo: add rels-ext to crop image for imageOf, and VRA
-  	
+    
+    #copy VRA ds from source image object
+    new_image.VRA.content = source_vra_ds.content
+    
+    #replace pid in VRA with crop's pid 
+    new_image.replace_pid_in_vra(image_id, new_image.pid)
+	
+	# Add [DETAIL] to title in VRA
+	new_image.titleSet_display = new_image.titleSet_display << " [DETAIL]"
+	
   	# Add image and VRA behavior via their cmodels
     new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
     new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
     
+    #Add isCropOf relationship to crop
+    new_image.add_relationship(:is_crop_of, "info:fedora/#{source_fedora_object.pid}")
+    
+    #Add hasCrop relationship to image
+    source_fedora_object.add_relationship(:has_crop, "info:fedora/#{new_image.pid}")
+    source_fedora_object.save
+    
+    #Edit rightsMetadata datastream
     new_image.edit_users=[current_user.user_key]
+    
     new_image.save
     
     respond_to do |wants|

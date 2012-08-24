@@ -119,10 +119,30 @@ class Multiresimage < ActiveFedora::Base
     new_filepath
   end
 
+  #update the VRA ref id value
   def update_ref_id(ref_id)
-    node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
+    #node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
+    node_set = self.datastreams["VRA"].find_by_terms('/vra:vra/vra:image[@refid]')
     node_set[0].set_attribute("refid", ref_id)
     #self.save!
+  end
+  
+  #replace the VRA locationSet_display value
+  def replace_locationset_display_pid(old_pid, new_pid)
+    self.VRA.locationSet_display = [self.VRA.locationSet_display[0].gsub(old_pid, new_pid)]
+  end
+  
+  #replace the VRA locationSet location value
+  def replace_locationset_location_pid(new_pid)
+    node_set = self.datastreams["VRA"].find_by_terms("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")
+    node_set[0].content = new_pid
+  end
+  
+  #replace every instance of old pid with new pid in VRA
+  def replace_pid_in_vra(old_pid, new_pid)
+    update_ref_id(new_pid)
+    replace_locationset_display_pid(old_pid, new_pid)
+    replace_locationset_location_pid(new_pid)
   end
   
   def update_relation_set(work_pid)
