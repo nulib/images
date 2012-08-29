@@ -71,6 +71,7 @@ class MultiresimagesController < ApplicationController
   end
    
   # Create new crop
+  # Todo: Refactor a bunch of this into the model
   def create_crop
 
     image_id = params[:pid]
@@ -139,6 +140,10 @@ class MultiresimagesController < ApplicationController
     new_image.edit_users=[current_user.user_key]
     
     new_image.save
+    
+    #add the detail to the detail collection
+    personal_collection_search_result = current_user.get_details_collection
+    DILCollection.add_image_to_personal_collection(personal_collection_search_result, "details", new_image)
     
     respond_to do |wants|
       wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }

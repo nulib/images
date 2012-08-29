@@ -70,3 +70,9 @@ clear:both;
 /* style the list to maximize the droppable hitarea */
 #imageCollection ul { margin: 0; padding: 1em 0 1em 3em; }
 
+#uploadCollection { width: 174px; float: left; }
+#uploadCollection ul { margin: 0; padding: 1em 0 1em 3em; }
+
+#detailCollection { width: 174px; float: left; }
+#detailCollection ul { margin: 0; padding: 1em 0 1em 3em; }
+

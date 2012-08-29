@@ -4,11 +4,29 @@
     <hr/>
     <h3>Collections</h3>
     <%= form_for DILCollection.new do |f| %>
-      <%= f.label :title%>
+      <%= f.label "Create new collection:"%>
       <%= f.text_field :title %>
     <% end %>
     <br/>
     <!-- Each collection row is a JQuery UI droppable -->
+    <div id="uploadCollection">
+     <% current_user.get_upload_collection.each do |collection| %>
+        <div class="ui-widget-content">
+          <ul> 
+            <li><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+    <div id="detailCollection">
+     <% current_user.get_details_collection.each do |collection| %>
+        <div class="ui-widget-content">
+          <ul> 
+            <li><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
     <div id="imageCollection">
       <% current_user.collections.each do |collection| %>
         <div class="ui-widget-content">
