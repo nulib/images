@@ -96,7 +96,7 @@ module DIL
 				  elsif vra_type == "work"
 					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
 				  end
-			    else
+			    #else
 				  #object already exists, update the object
 				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
 				end
