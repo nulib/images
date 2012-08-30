@@ -140,9 +140,13 @@ class Multiresimage < ActiveFedora::Base
   
   #replace every instance of old pid with new pid in VRA
   def replace_pid_in_vra(old_pid, new_pid)
-    update_ref_id(new_pid)
-    replace_locationset_display_pid(old_pid, new_pid)
-    replace_locationset_location_pid(new_pid)
+    begin
+      update_ref_id(new_pid)
+      replace_locationset_display_pid(old_pid, new_pid)
+      replace_locationset_location_pid(new_pid)
+    rescue Exception => e
+      logger.error("Exception in replace_pid_in_vra:#{e.message}")
+    end
   end
   
   def update_relation_set(work_pid)
