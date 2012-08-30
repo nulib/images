@@ -68,7 +68,7 @@ class User < ActiveRecord::Base
     @groups = res + affiliations.map{ |code| Group.new(:code=>code) }
   end
 
-  def get_upload_collection
+  def get_uploads_collection
     query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:Uploads AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
