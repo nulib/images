@@ -143,7 +143,7 @@ class MultiresimagesController < ApplicationController
     
     #add the detail to the detail collection
     personal_collection_search_result = current_user.get_details_collection
-    DILCollection.add_image_to_personal_collection(personal_collection_search_result, "details", new_image)
+    DILCollection.add_image_to_personal_collection(personal_collection_search_result, "details", new_image, current_user.user_key)
     
     respond_to do |wants|
       wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }
