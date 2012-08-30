@@ -82,6 +82,10 @@ class UploadsController < ApplicationController
       
       
       @image.save!
+      
+      #add image to Uploads collection
+      personal_collection = current_user.get_uploads_collection
+      DILCollection.add_image_to_personal_collection(personal_collection, "uploads", image)
     
       UploadFile.create(:user=>current_user, :pid=>@image.pid)
       
@@ -151,10 +155,6 @@ class UploadsController < ApplicationController
     logger.debug("Save new image")
     image.save()
     logger.debug("Image saved")
-    
-    #add the detail to the detail collection
-    personal_collection = current_user.get_uploads_collection
-    DILCollection.add_image_to_personal_collection(personal_collection, "uploads", image)
     
     image_processing_request.update_attribute(:status, "VALIDATED" + params[:status])
     
