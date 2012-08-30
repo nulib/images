@@ -75,24 +75,25 @@ class DILCollection < ActiveFedora::Base
     return export_xml
   end
   
-  def self.add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image)
+  def self.add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
     
     #If Details collection doesn't exist, create it and add image to it
-    if personal_collection_search_result.nil?
-      authorize!(:create, DILCollection)
-		new_collection = DILCollection.new()
-		new_collection.apply_depositor_metadata(current_user.user_key)
-		new_collection.set_collection_type('dil_collection')
-		new_collection.descMetadata.title = collection_name.capitalize
-		new_collection.save!
+    logger.debug("personal collection search result:" + personal_collection_search_result.to_s)
+    if !personal_collection_search_result.present?
+      logger.debug("POINT1")
+      #authorize!(:create, DILCollection)
+	  new_collection = DILCollection.new()
+	  new_collection.apply_depositor_metadata(user_key)
+	  new_collection.set_collection_type('dil_collection')
+	  new_collection.descMetadata.title = collection_name.capitalize
+	  new_collection.save!
 		
-		#add image to collection
-        new_collection.insert_member(new_image)		
-    end
+	  #add image to collection
+      new_collection.insert_member(new_image)		
  
     #If Details collection does exist, add image to it
-    if !personal_collection_search_result.nil?
-      
+    elsif personal_collection_search_result.present?
+      logger.debug("POINT 2")
       #get pid from array
       pid = personal_collection_search_result[0]["id"]
       
