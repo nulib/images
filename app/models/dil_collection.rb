@@ -75,25 +75,28 @@ class DILCollection < ActiveFedora::Base
     return export_xml
   end
   
+  
+  # Add the detail or upload to their appropriate collections
+  # Called from the multiresimages controller for the detail, and from the uploads controller for the upload 
   def self.add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
     
-    #If Details collection doesn't exist, create it and add image to it
+    #If personal collection (either Details or Uploads) doesn't exist, create it and add image to it
     logger.debug("personal collection search result:" + personal_collection_search_result.to_s)
     if !personal_collection_search_result.present?
-      logger.debug("POINT1")
       #authorize!(:create, DILCollection)
+	  
+	  #create new collection, update it's metadata and save
 	  new_collection = DILCollection.new()
 	  new_collection.apply_depositor_metadata(user_key)
 	  new_collection.set_collection_type('dil_collection')
 	  new_collection.descMetadata.title = collection_name.capitalize
 	  new_collection.save!
 		
-	  #add image to collection
+	  #add image to collection (either a detail or an upload)
       new_collection.insert_member(new_image)		
  
-    #If Details collection does exist, add image to it
+    #If personal collection (either Details or Uploads) does exist, add image to it
     elsif personal_collection_search_result.present?
-      logger.debug("POINT 2")
       #get pid from array
       pid = personal_collection_search_result[0]["id"]
       
