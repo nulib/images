@@ -63,16 +63,39 @@ class DILCollection < ActiveFedora::Base
     return export_xml
   end
   
+  # This is used by the Export to PowerPoint feature.
+  # It generates xml for each image in the collection
   def export_image_info_as_xml(email)
     export_xml = "<collection><email>#{email}</email>"
-    self.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
-      export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
-      logger.debug("PID:" << pid)
-      image = Multiresimage.find(pid.text)
-      export_xml << "<metadata><title>Title: #{image.titleSet_display}</title><agent>Agent: #{image.agentSet_display}</agent><date>Date: #{image.dateSet_display}</date>" << "<description>Description: #{image.descriptionSet_display}</description><subject>Subject: #{image.subjectSet_display}</subject></metadata></image>"  
-    end
+    get_collection_xml(self, export_xml)
     export_xml << "</collection>"
     return export_xml
+    #logger.debug("COLLECTION XML:" << export_xml)
+  end
+  
+  # This goes through the collection and builds the xml for each image.
+  # If the object in the collection is a collection, this method gets called recursively.
+  def get_collection_xml(collection, export_xml)
+    
+    #for each member of the collection
+    collection.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
+      
+      #get object from Fedora
+      fedora_object = ActiveFedora::Base.find(pid.text, :cast=>:true)
+      
+      #if it's a collection, make call recursively
+      if (fedora_object.instance_of?(DILCollection))
+       get_collection_xml(fedora_object, export_xml)
+      
+      #if it's an image, build the xml
+      elsif (fedora_object.instance_of?(Multiresimage))
+        #logger.debug("PID:" << pid)
+        export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
+        export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>"  
+      end
+    end #end each
+    
+   #return export_xml
   end
   
   
