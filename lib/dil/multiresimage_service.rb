@@ -46,6 +46,7 @@ module DIL
 			  #determine if xml represents VRA work or VRA image by running xpath query and checking the result
 			  if document.xpath("/vra:vra/vra:work").present?
 				vra_type = "work"
+				logger.debug("WORK")
 				#attempt to extract the pid by running xpath query
 				if !pid.present?
 				  pid = document.xpath("/vra:vra/vra:work/@vra:refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
@@ -56,6 +57,7 @@ module DIL
 			  elsif document.xpath("/vra:vra/vra:image").present?
 				#debugger
 				vra_type = "image"
+				logger.debug("IMAGE")
 				#attempt to extract the pid by running xpath query
 				if !pid.present?
 				  pid = document.xpath("/vra:vra/vra:image/@vra:refid", "vra"=>"http://www.vraweb.org/vracore4.htm").text
@@ -86,9 +88,12 @@ module DIL
 			#pid was in xml so update the existing Fedora object if the object exists, or create the object if it doesn't exist
 			  #(a pid might have been minted before this web service was called)
 			  else
-				#if object doesn't exist in Fedora, create the object
 				begin
+				  logger.debug("FIND IN AF")
 				  ActiveFedora::Base.find(pid)
+				  #object already exists, update the object
+				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				#if object doesn't exist in Fedora, create the object, then update
 				rescue ActiveFedora::ObjectNotFoundError => e
 				  #create the object
 				  if vra_type == "image"
@@ -97,8 +102,7 @@ module DIL
 					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
 				  end
 			    #else
-				  #object already exists, update the object
-				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				  #returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
 				end
 				
 				#if a work, get a list of it's related images, and re-index those images (because work info
