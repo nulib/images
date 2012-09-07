@@ -69,8 +69,9 @@ class DILCollection < ActiveFedora::Base
     export_xml = "<collection><email>#{email}</email>"
     get_collection_xml(self, export_xml)
     export_xml << "</collection>"
-    return export_xml
+    export_xml = export_xml.gsub('&', '&amp;')
     #logger.debug("COLLECTION XML:" << export_xml)
+    return export_xml
   end
   
   # This goes through the collection and builds the xml for each image.
@@ -92,6 +93,7 @@ class DILCollection < ActiveFedora::Base
         #logger.debug("PID:" << pid)
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
         export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>"  
+        #export_xml = export_xml.gsub('&', '&amp;')
       end
     end #end each
     
