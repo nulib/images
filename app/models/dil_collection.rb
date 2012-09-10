@@ -69,14 +69,14 @@ class DILCollection < ActiveFedora::Base
     export_xml = "<collection><email>#{email}</email>"
     get_collection_xml(self, export_xml)
     export_xml << "</collection>"
+    logger.debug("COLLECTION XML:" << export_xml)
     return export_xml
-    #logger.debug("COLLECTION XML:" << export_xml)
   end
   
   # This goes through the collection and builds the xml for each image.
   # If the object in the collection is a collection, this method gets called recursively.
   def get_collection_xml(collection, export_xml)
-    
+    logger.debug("COLLECTION XML INCREMENT" << export_xml)
     #for each member of the collection
     collection.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
       
