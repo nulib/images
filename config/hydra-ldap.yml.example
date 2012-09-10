@@ -1,0 +1,8 @@
+development:  
+  host: example.northwestern.edu
+  port: 123 
+  username: cn=Test,dc=test,dc=test,dc=test
+  password: test 
+  group_base: ou=test,dc=test,dc=test,dc=test
+  base: ou=test,dc=test,dc=test
+  uid: uid
