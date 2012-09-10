@@ -92,7 +92,7 @@ class DILCollection < ActiveFedora::Base
         #logger.debug("PID:" << pid)
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
         export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>"  
-        #export_xml = export_xml.gsub('&', '&amp;')
+        export_xml = export_xml.gsub('&', '&amp;')
       end
     end #end each
     
