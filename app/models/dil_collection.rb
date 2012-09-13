@@ -67,7 +67,7 @@ class DILCollection < ActiveFedora::Base
   # It generates xml for each image in the collection
   def export_image_info_as_xml(email)
     export_xml = "<collection><email>#{email}</email>"
-    get_collection_xml(self, export_xml)
+    export_xml = get_collection_xml(self, export_xml)
     export_xml << "</collection>"
     export_xml = export_xml.gsub('&', '&amp;')
     return export_xml
@@ -79,24 +79,24 @@ class DILCollection < ActiveFedora::Base
     logger.debug("COLLECTION XML INCREMENT" << export_xml)
     #for each member of the collection
     collection.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
-      
+      logger.debug("PID:" << pid)
       #get object from Fedora
       fedora_object = ActiveFedora::Base.find(pid.text, :cast=>:true)
       
       #if it's a collection, make call recursively
       if (fedora_object.instance_of?(DILCollection))
-       get_collection_xml(fedora_object, export_xml)
-      
+       export_xml = get_collection_xml(fedora_object, export_xml)
       #if it's an image, build the xml
       elsif (fedora_object.instance_of?(Multiresimage))
-        #logger.debug("PID:" << pid)
+        logger.debug("PID:" << pid)
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
         export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>"  
-        export_xml = export_xml.gsub('&', '&amp;')
+        #export_xml = export_xml.gsub('&', '&amp;')
+        logger.debug("export_xml debug:" << export_xml)
       end
     end #end each
     
-   #return export_xml
+   return export_xml
   end
   
   
