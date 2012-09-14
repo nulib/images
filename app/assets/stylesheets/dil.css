@@ -45,6 +45,15 @@ span.page.gap {
         height: 200px;
 }
 
+.listing-collection {
+        float: left;
+        margin: 10px 10px 10px 10px;
+        padding: 8px;
+        border: 1px dotted #cccccc;
+        width: 150px;
+        height: 180px;
+}
+
 .listing img { background-color: #FFFFFF;}
 
 .gallery_container {
