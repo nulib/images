@@ -3,7 +3,7 @@
 		<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
 			<% unless mods.search('relatedItem/identifier').empty? %>
 				<%	pid = mods.search('relatedItem/identifier').first.text() %>
-				<div class="listing">
+				<div class="listing-collection">
           <table>
             <tr>
             <td>
