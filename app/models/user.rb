@@ -39,11 +39,11 @@ class User < ActiveRecord::Base
   # Find an existing user by email or create one with a random password otherwise
   def self.find_for_ldap_oauth(access_token, signed_in_resource=nil)
     info = access_token[:info]
-    if user = User.where(:email => info[:email]).first
+    if user = User.where(:email => info[:email].downcase).first
       user
     else # Create a user with a stub password.
 #puts "Info: #{info.inspect}"
-      User.create!(:uid => info[:nickname], :email => info[:email], :password => Devise.friendly_token[0,20])
+      User.create!(:uid => info[:nickname], :email => info[:email].downcase, :password => Devise.friendly_token[0,20])
     end
   end
 
@@ -69,17 +69,18 @@ class User < ActiveRecord::Base
   end
 
   def get_uploads_collection
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:Uploads AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
   
    def get_details_collection
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:Details AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
   
   def collections
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_t:Uploads AND NOT title_t:Details AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    logger.debug("collection_solr: #{DIL_CONFIG['dil_uploads_collection_solr']}")
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_t:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_t:#{DIL_CONFIG['dil_details_collection']} AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
 
