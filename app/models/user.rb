@@ -79,8 +79,7 @@ class User < ActiveRecord::Base
   end
   
   def collections
-    logger.debug("collection_solr: #{DIL_CONFIG['dil_uploads_collection_solr']}")
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_t:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_t:#{DIL_CONFIG['dil_details_collection']} AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
 

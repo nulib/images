@@ -85,7 +85,7 @@ class UploadsController < ApplicationController
       
       #add image to Uploads collection
       personal_collection = current_user.get_uploads_collection
-      DILCollection.add_image_to_personal_collection(personal_collection, "uploads", @image, current_user.user_key)
+      DILCollection.add_image_to_personal_collection(personal_collection, DIL_CONFIG['dil_uploads_collection'], @image, current_user.user_key)
     
       UploadFile.create(:user=>current_user, :pid=>@image.pid)
       

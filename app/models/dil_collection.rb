@@ -90,8 +90,7 @@ class DILCollection < ActiveFedora::Base
       elsif (fedora_object.instance_of?(Multiresimage))
         logger.debug("PID:" << pid)
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
-        export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>"  
-        #export_xml = export_xml.gsub('&', '&amp;')
+        export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
         logger.debug("export_xml debug:" << export_xml)
       end
     end #end each
@@ -113,7 +112,8 @@ class DILCollection < ActiveFedora::Base
 	  new_collection = DILCollection.new()
 	  new_collection.apply_depositor_metadata(user_key)
 	  new_collection.set_collection_type('dil_collection')
-	  new_collection.descMetadata.title = collection_name.capitalize
+	  logger.debug("collection_name" << collection_name)
+	  new_collection.descMetadata.title = collection_name
 	  new_collection.save!
 		
 	  #add image to collection (either a detail or an upload)
