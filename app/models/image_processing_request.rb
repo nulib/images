@@ -14,7 +14,16 @@ class ImageProcessingRequest < ActiveRecord::Base
       update_attribute(:status, "Not found")
       return
     end
+    
     new_filepath = image.write_out_raw
+    logger.debug("upload1")
+    #if filename has spaces, replace with _
+    if (new_filepath.include? ' ')
+      logger.debug("upload2")
+      FileUtils.mv(new_filepath, new_filepath.gsub(' ', '_'))
+      new_filepath.gsub!(' ', '_')
+      logger.debug("upload3")
+    end
     #create file on server from Fedora object datastream
 
     # new_filepath= File.join(DIL::Application.config.processing_file_path, "#{file.pid.gsub(":","")}.jpg")
