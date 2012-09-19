@@ -16,13 +16,11 @@ class ImageProcessingRequest < ActiveRecord::Base
     end
     
     new_filepath = image.write_out_raw
-    logger.debug("upload1")
     #if filename has spaces, replace with _
+    #the "raw" datastream maintained by Fedora isn't affected by this file move, only the messaging server getting the file for file upload
     if (new_filepath.include? ' ')
-      logger.debug("upload2")
       FileUtils.mv(new_filepath, new_filepath.gsub(' ', '_'))
       new_filepath.gsub!(' ', '_')
-      logger.debug("upload3")
     end
     #create file on server from Fedora object datastream
 
