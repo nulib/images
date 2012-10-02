@@ -49,7 +49,7 @@ DIL::Application.routes.draw do
     resources :users, :only=>[:create, :destroy]
   end
 
-  resources :policies
+#  resources :policies
 
   resources :technical_metadata, :only=>:index
 
