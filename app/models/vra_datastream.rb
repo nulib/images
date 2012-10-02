@@ -407,7 +407,10 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 		#Append to the search_field
 		search_field << extract_values_for_search_field(arraySet)
 		
-		#Merge the arraySet into the solr_doc
+		# Merge the arraySet into the solr_doc
+		# The block is to tell Ruby what to do when it encounters a duplicate key during hash merging.
+		# We add the work's solr fields after the image solr fields are already there, so we tell Ruby
+		# to add indexes to the array from newval to oldval (example: ["1", "2"] and ["3", "4"] are then ["1", "2", "3", "4"]
 		solr_doc = solr_doc.merge(arraySet) { |field_name, oldval, newval|  oldval | newval }
 		
 		#Repeat for each set
@@ -477,23 +480,26 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 		search_field << extract_values_for_search_field(arraySet)
 		solr_doc = solr_doc.merge(arraySet) { |field_name, oldval, newval|  oldval | newval }
 	    
+	    # The block is to tell Ruby what to do when it encounters a duplicate key during hash merging.
+		# We add the work's solr fields after the image solr fields are already there, so we tell Ruby
+		# to append the new string to the old
 	    search_field_hash = Hash["search_field_t" => search_field]
-	    #logger.debug("searchFieldT: " + search_field_hash.to_s)
-	    solr_doc = solr_doc.merge(search_field_hash)
-
-		solr_doc
+	    solr_doc = solr_doc.merge(search_field_hash) { |field_name, oldval, newval | oldval << newval }
+		
+		return solr_doc
 	 end
 	
 	# The array has the solr field names and solr field values
 	# This method just gets the value from each hash and appends it to a string.
 	# The string is returned.
-    def extract_values_for_search_field(arraySet)      
+    def extract_values_for_search_field(arraySet)
       values = ""
       arraySet.each_pair do |k,v|
-		  values << v[0] + " "
+		  v.each do |value| 
+		    values << "#{value} "
+		  end
 	  end
-	  
-	  values
+	  return values
     end
     
     def add_sort_fields(solr_doc)
