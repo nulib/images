@@ -104,7 +104,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
       def to_solr(solr_doc=Hash.new)
         super(solr_doc)
         ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
-        ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "title_t", self.find_by_terms("titleInfo/title"))
+        #::Solrizer::Extractor.insert_solr_field_value(solr_doc, "title_t", self.find_by_terms("mods/titleInfo/title")) unless self.find_by_terms("mods/titleInfo/title").size == 0
         solr_doc
       end
 
