@@ -25,12 +25,10 @@ describe "Catalog" do
         @g1.delete
       end
       it "should be able to discover the image" do
-        visit catalog_index_path
-        fill_in(:q, :with=>'refreshing')
-        click_on('Search')
-pending "That is not working"
-#puts page.body.to_s
-        page.should have_selector('.listing')
+        visit catalog_index_path {
+          fill_in(:q, :with=>'refreshing') }
+        click_on('Search') {
+          page.should have_selector('.listing') }
 
       end
     end
