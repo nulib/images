@@ -12,8 +12,9 @@
 		
 		<%# if preferred work exists %>
 		<% if @multiresimage.preferred_related_work %>
-      <%= render :partial=>'description_metadata', :locals=>{:vraSetArray=>vraSetArray} %>
-
+	      <br/><br/>
+        <%= render :partial=>'description_metadata', :locals=>{:vraSetArray=>vraSetArray} %>
+         <br/><br/>
       <ul class="listexpander">
         <%= render :partial=>'related_images' %>
         <%= render :partial=>'downloads' %>
