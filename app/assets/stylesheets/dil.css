@@ -81,3 +81,18 @@ clear:both;
 #detailCollection { width: 174px; float: left; }
 #detailCollection ul { margin: 0; padding: 1em 0 1em 3em; }
 
+tr.even td{
+	background-color:#CCC;
+}
+
+tr.even td.field{
+	font-weight:bold;
+}
+
+tr.odd td{
+	background-color:#EEE;
+}
+
+tr.odd td.field{
+	font-weight:bold;
+}
