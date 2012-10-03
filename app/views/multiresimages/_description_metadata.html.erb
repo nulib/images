@@ -13,8 +13,11 @@
 								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
 								   <% image_display_value = @multiresimage.VRA.find_by_terms(:image, (setName + "Set").to_sym, (setName + "Set_display").to_sym) %> 
 					               <% image_display_value.each do |value| %>
-					                 <%= value.text %><br/>
-					               <%end%>
+					               <%= value.text %>
+					                 <% if value != image_display_value.last%>
+					                 ;
+					                 <% end %>
+					               <% end %>
 									<%#= [pref_work_display_value, image_display_value].flatten.join(' ; ') %> 
 								 </td>
 							  </tr>
