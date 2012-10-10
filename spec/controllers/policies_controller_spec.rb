@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe PoliciesController do
+  pending("Pending the addition of Policies") do
   describe "edit" do
     before do
       @policy = AdminPolicy.create
@@ -196,5 +197,5 @@ describe PoliciesController do
       edit_policy_pids.should include(@user_policy.pid, @group_policy.pid)
       edit_policy_pids.should_not include(@no_access_policy.pid)
     end
-  end
+  end end
 end
