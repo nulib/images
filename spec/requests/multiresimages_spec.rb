@@ -23,11 +23,11 @@ describe "Images " do
         page.should have_content("Subject")
         page.should have_content("History of Medicine ; Anatomy, Artistic--Early works to 1800")
         page.should have_content("Location")
-        page.should have_content("DIL:inu:dil-dept-access-image-work ; Voyager:259790")
+        page.should have_content("DIL:inu:dil-dept-access-image ; Voyager:259790")
         page.should have_content("Worktype")
         page.should have_content("Art & Science ; Medical Illustration ; Book arts ")
         page.should have_content("Identifier")
-        page.should have_content("inu:dil-dept-access-image-work")
+        page.should have_content("inu:dil-dept-access-image")
       end
       it "Then I should not see the image content & download links" do
         page.should_not have_selector("div#crop-tool")
@@ -55,7 +55,7 @@ describe "Images " do
         page.should have_content("Subject")
         page.should have_content("History of Medicine ; Anatomy, Artistic--Early works to 1800")
         page.should have_content("Location")
-        page.should have_content("Wellcome Institute Library. London ; DIL:inu:dil-nu-read-access-image-work ; Voyager:259835")
+        page.should have_content("Wellcome Institute Library. London ; DIL:inu:dil-nu-read-access-image ; Voyager:259835")
         page.should have_content("Material")
         page.should have_content("Engraving with etching")
         page.should have_content("Measurements")
@@ -99,12 +99,13 @@ describe "Images " do
       it "Then I should see a form for editing descriptive metadata" do
         page.should have_selector "form[action='#{multiresimage_path('inu:dil-nu-read-access-image')}']"
       end
+      pending("Pending the addition of Policies") do
       it "Then I should be able to edit the policy association" do
         page.should have_link "manage policies"
         select 'Policy', :with=>'Default Policy &mdash; Private to Owner'
         click_button 'Save changes'
         page.should have_content('Saved changes to inu:dil-nu-read-access-image')
-      end
+      end end
       it "Then I should see a link to the show/browse page" do
         page.should have_selector("a[href='#{multiresimage_path('inu:dil-nu-read-access-image')}']", :text=>"Browse")
       end

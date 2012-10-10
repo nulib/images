@@ -44,6 +44,7 @@ describe MultiresimagesController do
       sign_in @user
     end
     describe "that I have edit permissions on" do
+      pending("Pending the addition of Policies") do
       before do
         @readable_policy = AdminPolicy.new
         @readable_policy.read_users = [@user.uid]
@@ -60,7 +61,7 @@ describe MultiresimagesController do
         policy_pids.should include @readable_policy.pid
         policy_pids.should_not include @no_access_policy.pid
         response.should be_success
-      end
+      end end
     end
     describe "that I don't have edit permissions on" do
       it "should redirect to catalog" do
@@ -94,6 +95,7 @@ describe MultiresimagesController do
       end
       
       describe "setting a policy" do
+        pending("Pending the addition of Policies") do
         before do
           @policy = AdminPolicy.create
         end
@@ -103,7 +105,7 @@ describe MultiresimagesController do
         it "should save the policy" do
           put :update, :id=>@img.pid, :multiresimage=>{:admin_policy_id=>@policy.pid}
           assigns[:multiresimage].admin_policy.should == @policy
-        end
+        end end
       end
       describe "setting permissions" do
         describe "html requests" do

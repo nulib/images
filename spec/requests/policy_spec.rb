@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "Policies" do
+  pending("Pending the addition of Policies") do
   context "Given I have edit access" do
     let(:user) { FactoryGirl.find_or_create(:joe_creator) }
     let(:policy) { AdminPolicy.new }
@@ -21,6 +22,6 @@ describe "Policies" do
         page.should_not have_selector("#admin_policy_permissions_user_joe_creator")
       end
     end
-  end
+  end end
 end
 
