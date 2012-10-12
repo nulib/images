@@ -140,6 +140,7 @@
             $clone_txt_field.insertAfter('input[id=' + lastDeleteBtnId +']');
             $clone_txt_field.attr("id", newTxtFieldId);
             $clone_txt_field.attr("name", newTxtFieldId);
+            $clone_txt_field.val("");
           
             var $clone_delete_btn= $('input[id=' + lastDeleteBtnId + ']').clone();
             $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId +']');
@@ -158,6 +159,7 @@
             $clone_txt_field.insertBefore('input[id=add' + vraSetName + ' ]');
             $clone_txt_field.attr("id", newTxtFieldId);
             $clone_txt_field.attr("name", newTxtFieldId);
+            $clone_txt_field.val("");
             
             var $clone_delete_btn= $('input[id="multiresimage_delete_titleSet_display_0"]').clone();
             $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId + ']');
