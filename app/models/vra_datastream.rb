@@ -243,13 +243,14 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	t.subjectSet_display(:proxy=>[:image, :subjectSet, :subjectSet_display])
 	t.locationSet_display(:proxy=>[:image, :locationSet, :locationSet_display])
 	t.materialSet_display(:proxy=>[:image, :materialSet, :materialSet_display])
-
 	t.measurementsSet_display(:proxy=>[:image, :measurementsSet, :measurementsSet_display])
 	t.stylePeriodSet_display(:proxy=>[:image, :stylePeriodSet, :stylePeriodSet_display])
 	t.inscriptionSet_display(:proxy=>[:image, :inscriptionSet, :inscriptionSet_display])
 	t.worktypeSet_display(:proxy=>[:image, :worktypeSet, :worktypeSet_display])
-
 	t.culturalContextSet_display(:proxy=>[:image, :culturalContextSet, :culturalContextSet_display])
+	t.techniqueSet_display(:proxy=>[:image, :techniqueSet, :techniqueSet_display])
+	t.sourceSet_display(:proxy=>[:image, :sourceSet, :sourceSet_display])
+	
 	
 	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
 	t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
@@ -257,7 +258,15 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	t.inscriptionSet_display_work(:proxy=>[:work, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display_work(:proxy=>[:work, :dateSet, :dateSet_display])
 	t.subjectSet_display_work(:proxy=>[:work, :subjectSet, :subjectSet_display])
+	t.locationSet_display_work(:proxy=>[:work, :locationSet, :locationSet_display])
+	t.materialSet_display_work(:proxy=>[:work, :materialSet, :materialSet_display])
+	t.measurementsSet_display_work(:proxy=>[:work, :measurementsSet, :measurementsSet_display])
+	t.stylePeriodSet_display_work(:proxy=>[:work, :stylePeriodSet, :stylePeriodSet_display])
+	t.inscriptionSet_display_work(:proxy=>[:work, :inscriptionSet, :inscriptionSet_display])
+	t.worktypeSet_display_work(:proxy=>[:work, :worktypeSet, :worktypeSet_display])
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
+	t.techniqueSet_display_work(:proxy=>[:work, :techniqueSet, :techniqueSet_display])
+	t.sourceSet_display_work(:proxy=>[:work, :sourceSet, :sourceSet_display])
 
   #t.title(:proxy=>[:work, :titleSet, :titleSet_display]) 
 	
