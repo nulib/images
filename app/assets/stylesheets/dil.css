@@ -96,3 +96,9 @@ tr.odd td{
 tr.odd td.field{
 	font-weight:bold;
 }
+
+input.addFieldBtn{
+    width: 175px;
+    color: white;
+    background-color: #380B61;
+}
