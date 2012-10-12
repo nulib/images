@@ -45,6 +45,7 @@ group :development, :test do
   gem 'bcrypt-ruby'
   gem 'debugger'
   gem 'launchy'
+  gem 'simplecov', :require => false, :group => :test
 end
 
 gem 'unicorn'
