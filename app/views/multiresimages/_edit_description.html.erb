@@ -4,37 +4,30 @@
         PID: <%= @multiresimage.id %>
       </div>
       <br/>
+    
+      <% vraSetArray = ["agent", "title", "culturalContext", "date", "subject", "location", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"] %>
+		
+	  <% vraSetArray.each do |vraSetName| %>
+	  <% vraSetNameCamelUpper = vraSetName[0].upcase + vraSetName[1..-1]%>
+  
       <div class="control-group">
-        <%= f.label 'Agent', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :agentSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label 'Date', :class=>"control-label" %>
-        <div class="controls">
-        <%= f.text_field :dateSet_display, :class=>'span6' %>
-        </div>
-      </div>
-      <div class="control-group">
-        <%= f.label 'Description', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :descriptionSet_display, :class=>'span6' %>
-        </div>
-      </div>
-       <div class="control-group">
-        <%= f.label 'Subject', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :subjectSet_display, :class=>'span6' %>
+        <%= f.label "#{vraSetName}", :class=>"control-label" %>
+        <div class="controls" id="#{vraSetName}Set">
+          <%= f.hidden_field (vraSetName+"Set_display").to_sym, :name=>"multiresimage[#{vraSetName}Set_display]", :id=>"multiresimage_#{vraSetName}Set_value", :class=>'span6'%>
+          <% if  @multiresimage.send((vraSetName + "Set_display").to_sym).present?%>
+            <% displays =  @multiresimage.send((vraSetName + "Set_display").to_sym).split(";") %>  
+            <% displays.each_with_index do |display,index| %>
+              <% display.strip! %>
+              <%= text_field_tag "multiresimage_#{vraSetName}Set_display_#{index}", display, :class=>'span6'%>
+              <%= f.submit :-, :type=>"button", :id=>"multiresimage_delete_#{vraSetName}Set_display_#{index}" %>
+            <% end %>
+          <%end%>
+          <%= f.submit :+, :type=>"button", :id=>"add#{vraSetNameCamelUpper}",  :class=>'addFieldBtn' %>
         </div>
       </div>
       
-      <div class="control-group">
-        <%= f.label 'Title', :class=>"control-label" %>
-        <div class="controls">
-          <%= f.text_field :titleSet_display, :class=>'span6' %>
-        </div>
-      </div>
+      <%end%>
+         
       <div class="form-actions force-bottom">
         <%# the submit button has to be the first button on the page, so that pressing enter submits the form correctly %>
         <%= f.submit "Save changes", :class=>'btn btn-primary'%>

@@ -1,73 +1,174 @@
 // For adding and deleting fields for views/multiresimages/_edit_description.html.erb
 	$(function() {
 		
-		$('#btnAddTitle').click(function() {
+		$('#addTitle').live("click", (function() {
 		  addField("title");
-        });
+        }));
       
-        $('#btnAddAgent').click(function() {
+        $('#addAgent').live("click", (function() {
 		  addField("agent");
-        });
+        }));
         
-        $('#btnAddDate').click(function() {
+        $('#addCulturalContext').live("click", (function() {
+		  addField("culturalContext");
+        }));
+        
+        $('#addDate').live("click", (function() {
 		  addField("date");
-        });
+        }));
         
-        $('#btnAddSubject').click(function() {
+        $('#addSubject').live("click", (function() {
 		  addField("subject");
-        });
+        }));
         
-        $('#btnAddLocation').click(function() {
+        $('#addLocation').live("click", (function() {
 		  addField("location");
-        });
+        }));
         
-        $('#btnAddStylePeriod').click(function() {
+        $('#addStylePeriod').live("click", (function() {
 		  addField("stylePeriod");
-        });
+        }));
         
-        $('#btnAddDescription').click(function() {
+        $('#addDescription').live("click", (function() {
 		  addField("description");
-        });
+        }));
         
-        $('#btnAddWorktype').click(function() {
+        $('#addWorktype').live("click", (function() {
 		  addField("worktype");
-        });
+        }));
         
+        $('#addMaterial').live("click", (function() {
+		  addField("material");
+        }));
         
-        $('input[id^="multiresimage_delete_titleSet_display_"]').click(function() {
+        $('#addMeasurements').live("click", (function() {
+		  addField("measurements");
+        }));
+        
+        $('#addInscription').live("click", (function() {
+		  addField("inscription");
+        }));
+        
+        $('input[id^="multiresimage_delete_agentSet_display_"]').live("click", (function() {
+		  deleteField($(this), "agent");
+        }));
+        
+        $('input[id^="multiresimage_delete_titleSet_display_"]').live("click", (function() {
 		  deleteField($(this), "title");
+        }));
+        
+        $('input[id^="multiresimage_delete_descriptionSet_display_"]').live("click", (function() {
+		  deleteField($(this), "description");
+        }));
+        
+        $('input[id^="multiresimage_delete_dateSet_display_"]').live("click", (function() {
+		  deleteField($(this), "date");
+        }));
+        
+        $('input[id^="multiresimage_delete_subjectSet_display_"]').live("click", (function() {
+		  deleteField($(this), "subject");
+        }));
+        
+        $('input[id^="multiresimage_delete_locationSet_display_"]').live("click", (function() {
+		  deleteField($(this), "location");
+        }));
+        
+        $('input[id^="multiresimage_delete_stylePeriodSet_display_"]').live("click", (function() {
+		  deleteField($(this), "stylePeriod");
+        }));
+        
+        $('input[id^="multiresimage_delete_worktypeSet_display_"]').live("click", (function() {
+		  deleteField($(this), "worktype");
+        }));
+        
+        $('input[id^="multiresimage_delete_inscriptionSet_display_"]').live("click", (function() {
+		  deleteField($(this), "inscription");
+        }));
+        
+        $('input[id^="multiresimage_delete_culturalContextSet_display_"]').live("click", (function() {
+		  deleteField($(this), "culturalContext");
+        }));
+        
+        $('input[id^="multiresimage_delete_materialSet_display_"]').live("click", (function() {
+		  deleteField($(this), "material");
+        }));
+        
+        $('input[id^="multiresimage_delete_measurementsSet_display_"]').live("click", (function() {
+		  deleteField($(this), "measurements");
+        }));
+        
+        $('input[class="btn btn-primary"]').click(function() {
+		  concatanateFields("title");
+		  concatanateFields("agent");
+		  concatanateFields("date");
+		  concatanateFields("culturalContext");
+		  concatanateFields("location");
+		  concatanateFields("inscription");
+		  concatanateFields("worktype");
+		  concatanateFields("description");
+		  concatanateFields("subject");
+		  concatanateFields("stylePeriod");
+		  concatanateFields("material");
+		  concatanateFields("measurements");
         });
         
 	});
 	
 	function addField(vraSetName) {
          
+          //get id prefix for text field and delete button
           var txtFieldIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
           var deleteBtnIdPrefix = "multiresimage_delete_" + vraSetName + "Set_display_";
-        
-          var newFieldIndex = $('input[id^=' + txtFieldIdPrefix + ']').length;
-          var lastFieldIndex = newFieldIndex - 1;
-        
-          var newTxtFieldId = txtFieldIdPrefix + newFieldIndex;
-		  var lastTxtFieldId = txtFieldIdPrefix + lastFieldIndex;
-		  
-		  var newDeleteBtnId = deleteBtnIdPrefix + newFieldIndex;
-		  var lastDeleteBtnId = deleteBtnIdPrefix + lastFieldIndex;
-		
-          var $clone_txt_field = $('input[id=' + lastTxtFieldId + ']').clone();
-          $clone_txt_field.insertAfter('input[id=' + lastDeleteBtnId +']');
-          $clone_txt_field.attr("id", newTxtFieldId); 
           
-          var $clone_delete_btn= $('input[id=' + lastDeleteBtnId + ']').clone();
-          $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId +']');
-          $clone_delete_btn.attr("id", newDeleteBtnId); 
+          //id index for new field
+          var newFieldIndex = $('input[id^=' + txtFieldIdPrefix + ']').length;
+          
+          var newTxtFieldId = "";
+          var newDeleteBtnId = "";
+          
+          //if there is already a text field for the set, clone it
+          if (newFieldIndex > 0){
+            var lastFieldIndex = newFieldIndex - 1;
+        
+            newTxtFieldId = txtFieldIdPrefix + newFieldIndex;
+		    var lastTxtFieldId = txtFieldIdPrefix + lastFieldIndex;
+		  
+		    newDeleteBtnId = deleteBtnIdPrefix + newFieldIndex;
+		    var lastDeleteBtnId = deleteBtnIdPrefix + lastFieldIndex;
+		
+            var $clone_txt_field = $('input[id=' + lastTxtFieldId + ']').clone();
+            $clone_txt_field.insertAfter('input[id=' + lastDeleteBtnId +']');
+            $clone_txt_field.attr("id", newTxtFieldId);
+            $clone_txt_field.attr("name", newTxtFieldId);
+          
+            var $clone_delete_btn= $('input[id=' + lastDeleteBtnId + ']').clone();
+            $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId +']');
+            $clone_delete_btn.attr("id", newDeleteBtnId);
+            $clone_delete_btn.attr("name", "commit");
+          }
+          
+          //there isn't a text field for the set, so clone title (that's a required field)
+          else {
+            newTxtFieldId = txtFieldIdPrefix + "0";
+            newDeleteBtnId = deleteBtnIdPrefix + "0";
+            
+            var $clone_txt_field = $('input[id="multiresimage_titleSet_display_0"]').clone();
+            vraSetName = vraSetName.charAt(0).toUpperCase() + vraSetName.substring(1);
+            
+            $clone_txt_field.insertBefore('input[id=add' + vraSetName + ' ]');
+            $clone_txt_field.attr("id", newTxtFieldId);
+            $clone_txt_field.attr("name", newTxtFieldId);
+            
+            var $clone_delete_btn= $('input[id="multiresimage_delete_titleSet_display_0"]').clone();
+            $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId + ']');
+            $clone_delete_btn.attr("id", newDeleteBtnId);
+            $clone_delete_btn.attr("name", "commit");
+            
+          }
       
         }
-    
-        
-
       
-         function deleteField(field, vraSetName) {
+     function deleteField(field, vraSetName) {
           
           //id of field
           var btnId = field.attr("id");
@@ -104,6 +205,26 @@
             
             $('input[id=' + updateTxtId + ']').attr("id", newTxtId);
           }
+          
+        }
+        
+        function concatanateFields(vraSetName){
+          var newValue = "";
+          var txtFieldIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
+          var aggregateFieldId = "multiresimage_" + vraSetName + "Set_value";
+          
+          var numFields = $('input[id^=' + txtFieldIdPrefix + ']').length;
+          
+          for (i=0; i < numFields; i++){
+            if (i !== 0){
+              newValue = newValue + " ; ";
+            }
+            txtFieldId = txtFieldIdPrefix + i;
+            newValue = newValue + $('input[id=' + txtFieldId + ']').val();
+            $('input[id=' + txtFieldId + ']').removeAttr("name");
+          }
+          
+          $('input[id=' + aggregateFieldId + ']').val(newValue);
           
         }
         
