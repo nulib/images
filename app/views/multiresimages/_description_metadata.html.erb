@@ -7,21 +7,16 @@
 					    <%# Get the preferred work's set value from the VRA datastream.  Using to_sym to covert Strings into Symbols %> 
 					    <% pref_work_display_value = vra_work.VRA.find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
 					    <%# image_display_value = @multiresimage.send((setName + "Set_display").to_sym) %>
-						  <% unless pref_work_display_value.empty? %>
+						  <%# unless pref_work_display_value.empty? %>
 							 <tr class="<%= cycle("even", "odd") %>">
 								 <td class="field"><%=setName.capitalize%>:</td>
 								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
-								   <% image_display_value = @multiresimage.VRA.find_by_terms(:image, (setName + "Set").to_sym, (setName + "Set_display").to_sym) %> 
-					               <% image_display_value.each do |value| %>
-					               <%= value.text %>
-					                 <% if value != image_display_value.last%>
-					                 ;
-					                 <% end %>
-					               <% end %>
+								   <% image_display_value = @multiresimage.VRA.find_by_terms(:image, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
+					               <%= image_display_value %>
 									<%#= [pref_work_display_value, image_display_value].flatten.join(' ; ') %> 
 								 </td>
 							  </tr>
-						  <%end%>
+						  <%#end%>
 					  <%end%>
 	
 					  <%# Include its identifier (pid) %>
