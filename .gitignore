@@ -13,11 +13,13 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+/coverage
 
 config/hydra-ldap.yml
 *.swp
 *.swo
 *.swn
 .DS_Store
+Gemfile.lock
 
 vendor/servlet/
