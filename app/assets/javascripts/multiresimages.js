@@ -1,5 +1,148 @@
 // For adding and deleting fields for views/multiresimages/_edit_description.html.erb
-	$(function() {
+	
+	//user wants to add another text field (also adds a delete button)
+	function addField(vraSetName) {
+         
+          //get id prefix for text field and delete button
+          var txtFieldIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
+          var deleteBtnIdPrefix = "multiresimage_delete_" + vraSetName + "Set_display_";
+          
+          //id index for new field
+          var newFieldIndex = $('input[id^=' + txtFieldIdPrefix + ']').length;
+          
+          var newTxtFieldId = "";
+          var newDeleteBtnId = "";
+          
+          //if there is already a text field for the set, clone it
+          if (newFieldIndex > 0){
+            
+            //index of last text field for the set
+            var lastFieldIndex = newFieldIndex - 1;
+           
+            //new text field's id
+            newTxtFieldId = txtFieldIdPrefix + newFieldIndex;
+		    
+		    //last text field's id
+		    var lastTxtFieldId = txtFieldIdPrefix + lastFieldIndex;
+		  
+		    //new button's id
+		    newDeleteBtnId = deleteBtnIdPrefix + newFieldIndex;
+		    
+		    //last button's id
+		    var lastDeleteBtnId = deleteBtnIdPrefix + lastFieldIndex;
+		
+		    //clone the last text field for the set
+            var $clone_txt_field = $('input[id=' + lastTxtFieldId + ']').clone();
+            
+            //insert the clone text field after the last delete button of the set
+            $clone_txt_field.insertAfter('input[id=' + lastDeleteBtnId +']');
+            
+            //assign a new id
+            $clone_txt_field.attr("id", newTxtFieldId);
+            
+            //assign a new name
+            $clone_txt_field.attr("name", newTxtFieldId);
+            
+            //clear the value in the clone
+            $clone_txt_field.val("");
+          
+            //clone button and update attributes
+            var $clone_delete_btn= $('input[id=' + lastDeleteBtnId + ']').clone();
+            $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId +']');
+            $clone_delete_btn.attr("id", newDeleteBtnId);
+            $clone_delete_btn.attr("name", "commit");
+          }
+          
+          //there isn't a text field for the set, so clone title (that's a required field)
+          else {
+            newTxtFieldId = txtFieldIdPrefix + "0";
+            newDeleteBtnId = deleteBtnIdPrefix + "0";
+            
+            //clone the first title field (it's required to be there)
+            var $clone_txt_field = $('input[id="multiresimage_titleSet_display_0"]').clone();
+            vraSetName = vraSetName.charAt(0).toUpperCase() + vraSetName.substring(1);
+            
+            //clone text field and update attributes
+            $clone_txt_field.insertBefore('input[id=add' + vraSetName + ' ]');
+            $clone_txt_field.attr("id", newTxtFieldId);
+            $clone_txt_field.attr("name", newTxtFieldId);
+            $clone_txt_field.val("");
+            
+            //clone button and update attributes
+            var $clone_delete_btn= $('input[id="multiresimage_delete_titleSet_display_0"]').clone();
+            $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId + ']');
+            $clone_delete_btn.attr("id", newDeleteBtnId);
+            $clone_delete_btn.attr("name", "commit");
+            
+          }
+      
+        }
+      
+     //user wants to delete a text field (also deletes it's delete button)
+     function deleteField(field, vraSetName) {
+          
+          //id of field
+          var btnId = field.attr("id");
+          
+          //button id prefix (without index)
+          var btnIdPrefix = "multiresimage_delete_" + vraSetName + "Set_display_";
+          
+          //to get index number
+          var beginIndex = btnId.lastIndexOf("_") + 1;
+          var fieldIndex = btnId.substring(beginIndex);
+          
+          //text field id prefix
+          var txtIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
+          var txtId = txtIdPrefix + fieldIndex;
+          
+          //remove button
+          $('input[id^=' + btnId + ']').remove();
+          
+          //remove text box
+          $('input[id^=' + txtId + ']').remove();
+          
+          //update index numbers for each index after the deleted row (example value[2] becomes value[1] if value[1] was deleted)
+          var numFields = $('input[id^=' + btnIdPrefix + ']').length;
+          fieldIndex++;
+          for(i=fieldIndex; i <= numFields; i++){
+            updateBtnId = btnIdPrefix + (i);
+            newBtnId = btnIdPrefix + (i-1);
+            
+            updateTxtId = txtIdPrefix + (i);
+            newTxtId = txtIdPrefix + (i-1);
+            
+            $('input[id=' + updateBtnId + ']').attr("id", newBtnId);
+            
+            $('input[id=' + updateTxtId + ']').attr("id", newTxtId);
+          }
+          
+        }
+        
+        //Iterate through the set's fields and concanate them, delimited by a semicolon
+        //replace the hidden field's value for each set (this maps to the XML, example: titleSet_display_value field maps to 
+        // <vra:titleSet><vra:display>title1 ; title 2; title 3</vra:display></vra:titleSet>
+        function concatanateFields(vraSetName){
+          var newValue = "";
+          var txtFieldIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
+          var aggregateFieldId = "multiresimage_" + vraSetName + "Set_value";
+          
+          var numFields = $('input[id^=' + txtFieldIdPrefix + ']').length;
+          
+          for (i=0; i < numFields; i++){
+            if (i !== 0){
+              newValue = newValue + " ; ";
+            }
+            txtFieldId = txtFieldIdPrefix + i;
+            newValue = newValue + $('input[id=' + txtFieldId + ']').val();
+            $('input[id=' + txtFieldId + ']').removeAttr("name");
+          }
+          
+          $('input[id=' + aggregateFieldId + ']').val(newValue);
+          
+        }
+        
+//click events for each Add and Delete button
+ $(function() {
 		
 		$('#addTitle').live("click", (function() {
 		  addField("title");
@@ -47,6 +190,14 @@
         
         $('#addInscription').live("click", (function() {
 		  addField("inscription");
+        }));
+        
+        $('#addSource').live("click", (function() {
+		  addField("source");
+        }));
+        
+        $('#addTechnique').live("click", (function() {
+		  addField("technique");
         }));
         
         $('input[id^="multiresimage_delete_agentSet_display_"]').live("click", (function() {
@@ -97,6 +248,19 @@
 		  deleteField($(this), "measurements");
         }));
         
+        $('input[id^="multiresimage_delete_sourceSet_display_"]').live("click", (function() {
+		  deleteField($(this), "source");
+        }));
+        
+        $('input[id^="multiresimage_delete_techniqueSet_display_"]').live("click", (function() {
+		  deleteField($(this), "technique");
+        }));
+        
+        
+        //when submit button is clicked, get all of the fields for each set, concatenate with a semicolon delimiter and
+        //replace the hidden field's value for each set (this maps to the XML, example: titleSet_display_value field maps to 
+        // <vra:titleSet><vra:display>title1 ; title 2; title 3</vra:display></vra:titleSet>
+        
         $('input[class="btn btn-primary"]').click(function() {
 		  concatanateFields("title");
 		  concatanateFields("agent");
@@ -110,125 +274,9 @@
 		  concatanateFields("stylePeriod");
 		  concatanateFields("material");
 		  concatanateFields("measurements");
+		  concatanateFields("source");
+		  concatanateFields("technique");
         });
         
 	});
-	
-	function addField(vraSetName) {
-         
-          //get id prefix for text field and delete button
-          var txtFieldIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
-          var deleteBtnIdPrefix = "multiresimage_delete_" + vraSetName + "Set_display_";
-          
-          //id index for new field
-          var newFieldIndex = $('input[id^=' + txtFieldIdPrefix + ']').length;
-          
-          var newTxtFieldId = "";
-          var newDeleteBtnId = "";
-          
-          //if there is already a text field for the set, clone it
-          if (newFieldIndex > 0){
-            var lastFieldIndex = newFieldIndex - 1;
-        
-            newTxtFieldId = txtFieldIdPrefix + newFieldIndex;
-		    var lastTxtFieldId = txtFieldIdPrefix + lastFieldIndex;
-		  
-		    newDeleteBtnId = deleteBtnIdPrefix + newFieldIndex;
-		    var lastDeleteBtnId = deleteBtnIdPrefix + lastFieldIndex;
-		
-            var $clone_txt_field = $('input[id=' + lastTxtFieldId + ']').clone();
-            $clone_txt_field.insertAfter('input[id=' + lastDeleteBtnId +']');
-            $clone_txt_field.attr("id", newTxtFieldId);
-            $clone_txt_field.attr("name", newTxtFieldId);
-            $clone_txt_field.val("");
-          
-            var $clone_delete_btn= $('input[id=' + lastDeleteBtnId + ']').clone();
-            $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId +']');
-            $clone_delete_btn.attr("id", newDeleteBtnId);
-            $clone_delete_btn.attr("name", "commit");
-          }
-          
-          //there isn't a text field for the set, so clone title (that's a required field)
-          else {
-            newTxtFieldId = txtFieldIdPrefix + "0";
-            newDeleteBtnId = deleteBtnIdPrefix + "0";
-            
-            var $clone_txt_field = $('input[id="multiresimage_titleSet_display_0"]').clone();
-            vraSetName = vraSetName.charAt(0).toUpperCase() + vraSetName.substring(1);
-            
-            $clone_txt_field.insertBefore('input[id=add' + vraSetName + ' ]');
-            $clone_txt_field.attr("id", newTxtFieldId);
-            $clone_txt_field.attr("name", newTxtFieldId);
-            $clone_txt_field.val("");
-            
-            var $clone_delete_btn= $('input[id="multiresimage_delete_titleSet_display_0"]').clone();
-            $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId + ']');
-            $clone_delete_btn.attr("id", newDeleteBtnId);
-            $clone_delete_btn.attr("name", "commit");
-            
-          }
-      
-        }
-      
-     function deleteField(field, vraSetName) {
-          
-          //id of field
-          var btnId = field.attr("id");
-          
-          //button id prefix (without index)
-          var btnIdPrefix = "multiresimage_delete_" + vraSetName + "Set_display_";
-          
-          //to get index number
-          var beginIndex = btnId.lastIndexOf("_") + 1;
-          var fieldIndex = btnId.substring(beginIndex);
-          
-          //text field id prefix
-          var txtIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
-          var txtId = txtIdPrefix + fieldIndex;
-          
-          //remove button
-          $('input[id^=' + btnId + ']').remove();
-          
-          //remove text box
-          $('input[id^=' + txtId + ']').remove();
-          
-          //update index numbers for each index after the deleted row
-          var numFields = $('input[id^=' + btnIdPrefix + ']').length;
-          
-          fieldIndex++;
-          for(i=fieldIndex; i <= numFields; i++){
-            updateBtnId = btnIdPrefix + (i);
-            newBtnId = btnIdPrefix + (i-1);
-            
-            updateTxtId = txtIdPrefix + (i);
-            newTxtId = txtIdPrefix + (i-1);
-            
-            $('input[id=' + updateBtnId + ']').attr("id", newBtnId);
-            
-            $('input[id=' + updateTxtId + ']').attr("id", newTxtId);
-          }
-          
-        }
-        
-        function concatanateFields(vraSetName){
-          var newValue = "";
-          var txtFieldIdPrefix = "multiresimage_" + vraSetName + "Set_display_";
-          var aggregateFieldId = "multiresimage_" + vraSetName + "Set_value";
-          
-          var numFields = $('input[id^=' + txtFieldIdPrefix + ']').length;
-          
-          for (i=0; i < numFields; i++){
-            if (i !== 0){
-              newValue = newValue + " ; ";
-            }
-            txtFieldId = txtFieldIdPrefix + i;
-            newValue = newValue + $('input[id=' + txtFieldId + ']').val();
-            $('input[id=' + txtFieldId + ']').removeAttr("name");
-          }
-          
-          $('input[id=' + aggregateFieldId + ']').val(newValue);
-          
-        }
-        
-
 
