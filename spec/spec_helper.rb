@@ -3,6 +3,7 @@ SimpleCov.start 'rails'
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
@@ -29,21 +30,21 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
-#  config.before(:suite) do
+  config.before(:suite) do
     ## Clean out the repository
-#      begin
-#        Multiresimage.find_each({}, :rows=>1000) do |m|
+      begin
+        Multiresimage.find_each({}, :rows=>1000) do |m|
           ### Delete everything except the fixture
-#          m.delete unless /^inu:dil-/.match(m.pid)
-#        end
-#        DILCollection.find_each({}, :rows=>1000) { |c| c.delete }
-#        AdminPolicy.find_each({}, :rows=>1000) { |c| c.delete }
-#      rescue ActiveFedora::ObjectNotFoundError => e
-#        puts "Index is out of synch with repository. #{e.message}"
-#        puts "Aborting repository cleanup"
+          m.delete unless /^inu:dil-/.match(m.pid)
+        end
+        DILCollection.find_each({}, :rows=>1000) { |c| c.delete }
+        AdminPolicy.find_each({}, :rows=>1000) { |c| c.delete }
+      rescue ActiveFedora::ObjectNotFoundError => e
+        puts "Index is out of synch with repository. #{e.message}"
+        puts "Aborting repository cleanup"
         ##nop - index is out of synch with repository. Try solrizing
-#      end
-#  end
+      end
+  end
 end
 
 module FactoryGirl
