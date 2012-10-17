@@ -51,6 +51,7 @@ describe "Given a Faculty-created image with no custom access set" do
     subject { Ability.new(@user) }
 
     it "should be able to view the image" do
+      puts subject.inspect
       subject.can?(:read, @image).should be_true
     end
     it "should be able to edit, update and destroy the image" do
