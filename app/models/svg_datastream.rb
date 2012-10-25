@@ -67,6 +67,8 @@ class SVGDatastream < ActiveFedora::NokogiriDatastream
 		new_image['xlink:href']=href
 		new_image['width']=width
 		new_image['height']=height
+		new_image['x']="0"
+		new_image['y']="0"
 		self.ng_xml.root.add_child(new_image)
 	    self.dirty = true
 	  end
