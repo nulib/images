@@ -1,0 +1,45 @@
+<h2 class="section-title"><span id="button_id">+</span> Batch Edit VRA fields</h2>
+<br />
+<%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>
+<div id="hide_me">
+	<% vraSetArray = ["agent", "title", "culturalContext", "date", "subject", "location", "source", "technique", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"] %>
+	
+	<% vraSetArray.each do |vraSetName| %>
+		<% vraSetNameCamelUpper = vraSetName[0].upcase + vraSetName[1..-1]%>
+
+		<div class="control-group">
+  			<%= label_tag "multiresimage_#{vraSetName}Set_display", "#{vraSetNameCamelUpper}", :class=>"control-label" %>
+  			<div class="controls" id="<%= vraSetName %>Set">
+        		<%= text_field_tag "#{vraSetName}Set_display", "", :class=>'span6'%>
+  			</div>
+		</div>
+	<%end%>
+</div>
+	<%= submit_tag "Process" %> 
+  <%#= button_to "Process", enqueue_uploads_path %>
+<%end%>
+
+<script>
+
+// bind the click to all headers
+ $(document).ready(function() {
+	
+	$('#hide_me').hide();
+
+	$("#button_id").click(function() {
+
+    // get the li that this header belongs to
+    // check to see if this li is not already being displayed
+    if (!$('#hide_me').is(':visible'))
+    {
+        // loop on all the li elements
+            // slide up the element and set it's marker to '+' 
+        $('#hide_me').slideDown(200);
+        $('#button_id').text('-');
+
+    } else {
+        $('#hide_me').slideUp(200);
+        $('#button_id').text('+');  
+    }
+})});
+</script>
