@@ -66,12 +66,16 @@ describe UploadsController do
       req1.should_receive(:enqueue)
       req2.should_receive(:enqueue)
       @user = FactoryGirl.find_or_create(:archivist)
+      @img1 = Multiresimage.new(:pid=>'pid:one')
+      @img2 = Multiresimage.new(:pid=>'pid:two')
+      @img1.save
+      @img2.save
       UploadFile.create(:pid=>'pid:one', :user=>@user)
       UploadFile.create(:pid=>'pid:two', :user=>@user)
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'm-stroming@northwestern.edu').and_return(req1)
       ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
       sign_in @user
-      post :enqueue
+      post :enqueue, :titleSet_display=>"The title"
     end
     it "should create one image_processing_request for ever file uploaded and enqueue it" do
       flash[:notice].should == "Your files are now being processed"
@@ -79,6 +83,10 @@ describe UploadsController do
     end
     it "should clear the files stored in the uploaded_files" do
       @user.upload_files.should == []
+    end
+    it "should add title to each batch image" do
+      Multiresimage.find("pid:one").titleSet_display.should == "The title"
+      Multiresimage.find("pid:two").titleSet_display.should == "The title"
     end
   end
 
