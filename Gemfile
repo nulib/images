@@ -26,6 +26,7 @@ group :assets do
   gem 'therubyracer'
   gem 'jquery-ui-rails'
   gem "bootstrap-sass-rails", '2.0.3.0'
+  gem 'ruby-xslt'
 end
 
 gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way.
