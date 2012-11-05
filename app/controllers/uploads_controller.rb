@@ -113,11 +113,33 @@ class UploadsController < ApplicationController
   end
 
   def enqueue
-    
+    vraSetArray = ["agent", "title", "culturalContext", "date", "subject", "location", "source", "technique", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"]
+    theItems = Hash.new
+    vraSetArray.each do |itm|
+
+      if(params.has_key?("#{itm}Set_display"))
+        theItems[itm] ||= params["#{itm}Set_display"]
+      end
+    end
+
     current_user.upload_files.each do |file|
       @image_processing_request = ImageProcessingRequest.create!(:status => 'NEW', :pid=>file.pid, :email => 'm-stroming@northwestern.edu')
       @image_processing_request.enqueue
-      
+
+      # This populates the Multiresimages with the batch params
+      aCheck = false
+      img = Multiresimage.find(file.pid)
+
+      vraSetArray.each do |itm|
+        if(not theItems[itm].blank?)
+          img.send("#{itm}Set_display=", theItems[itm])
+          aCheck = true
+        end
+      end unless img == nil
+
+      if(aCheck)
+        img.save unless img == nil
+      end
     end
     
     current_user.upload_files.delete_all
