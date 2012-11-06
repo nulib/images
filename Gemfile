@@ -36,7 +36,7 @@ gem 'uuid'
 gem 'hydra-ldap', '0.0.3'
 gem 'hydra-batch-edit', '~>0.0.6'
 
-group :development, :test do
+group :development, :test, :staging do
   gem 'jettywrapper'
   gem 'rspec-rails', '>=2.9.0'
   gem 'factory_girl_rails'
