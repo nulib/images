@@ -1,5 +1,5 @@
 #!/usr/bin/evn ruby
-
+# Rails runner batch process to migrate collections from the MDID system to DIL
 require 'xml/xslt'
 require 'fileutils'
 
