@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
   
   def collections
     query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
-    ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
+    ActiveFedora::SolrService.query(query, {:fl=>'id title_t', :rows=>'1000'})
   end
 
   def self.admin_groups
