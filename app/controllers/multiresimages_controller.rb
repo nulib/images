@@ -191,10 +191,19 @@ class MultiresimagesController < ApplicationController
   
   def proxy_image
     multiresimage = Multiresimage.find(params[:id])
-     
+    img_length = params[:image_length]
+
+    begin
+      if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i < params[:image_length]
+        img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
+      end
+    rescue Exception
+      #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
+    end
+
     if can?(:read, multiresimage)  
       Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-        resp = http.get("/fedora/get/#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{params[:image_length]}")
+        resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
         #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
           #new_file.write(resp.body)
           #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
