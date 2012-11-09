@@ -3,6 +3,7 @@ class UploadsController < ApplicationController
   include Hydra::Controller::UploadBehavior  
   include Hydra::Controller::RepositoryControllerBehavior  
   include Blacklight::SolrHelper
+  include DIL::PidMinter
   
   require 'net/http'
  
@@ -49,13 +50,13 @@ class UploadsController < ApplicationController
     
     if (scan_result.is_a? Fixnum)
       # create the Multiresimage
-      @image = Multiresimage.create()
+      @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
       @image.attach_file(params[:files])
       @image.apply_depositor_metadata(current_user.user_key)
       @image.titleSet_display = titleSet_display
       @image.save!
     
-      @work = Vrawork.create()
+      @work = Vrawork.new(:pid=>mint_pid("dil-local"))
     
       @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
     

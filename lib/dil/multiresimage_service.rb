@@ -2,6 +2,7 @@ module DIL
   module MultiresimageService
     # include Hydra::AssetsControllerHelper
     # include Blacklight::SolrHelper
+    include DIL::PidMinter
 
     # This method/web service is called from other applications (Orbeon VRA Editor, migration scripts).
     # The URL to call this method/web service is http://localhost:3000/multiresimages/create_update_fedora_object.xml
@@ -401,12 +402,6 @@ module DIL
       return [solr_response, document_list]
     end
 
-    def mint_pid()
-      pid_mint_url="http://gandalf.library.northwestern.edu/cgi-bin/drupal_to_repo/mint_pid.cgi?prefix=dil-" 
-      pid = Net::HTTP.get_response(URI.parse(pid_mint_url)).body.strip
-      #return pid
-    end
-  
     # This method will create a VRA Image object in Fedora.
     # The input is the pid and VRA xml.
     # The output is output indicating a success.
