@@ -1,12 +1,14 @@
 class DilCollectionsController < ApplicationController
   
+  include DIL::PidMinter
+  
   def create
     authorize!(:create, DILCollection)
 	  #make sure collection's name isn't a reserved name for Uploads and Details collections
 	  if params[:dil_collection][:title].downcase == DIL_CONFIG['dil_uploads_collection'].downcase || params[:dil_collection][:title].downcase == DIL_CONFIG['dil_details_collection'].downcase
 	    flash[:alert] = "Cannot use that collection name. That name is reserved."
 	  else	
-	    @dil_collection = DILCollection.new()
+	    @dil_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
 		@dil_collection.apply_depositor_metadata(current_user.user_key)
 		@dil_collection.set_collection_type('dil_collection')
 		@dil_collection.descMetadata.title = params[:dil_collection][:title]

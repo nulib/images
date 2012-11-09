@@ -1,6 +1,7 @@
 require 'dil/multiresimage_service'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
+  include DIL::PidMinter
   #include Vrawork
   helper :permissions
 
@@ -82,7 +83,7 @@ class MultiresimagesController < ApplicationController
     width=params[:width]
     height=params[:height]
     
-    new_image = Multiresimage.new
+    new_image = Multiresimage.new(:pid=>mint_pid("dil-local"))
     puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
 	#@dil_collection.set_collection_type('Multiresimage')
 
