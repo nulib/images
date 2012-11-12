@@ -1,0 +1,18 @@
+development:
+  user: fedoraAdmin
+  password: fedoraAdmin
+  url: http://127.0.0.1:8983/fedora
+test: &TEST  
+  user: fedoraAdmin
+  password: fedoraAdmin
+  url: http://127.0.0.1:8983/fedora-test
+staging: &STAGING
+  user: fedoraAdmin
+  password: fedoraAdmin
+  url: http://127.0.0.1:8983/fedora
+production:
+  user: fedoraAdmin
+  password: fedoraAdmin 
+  url: http://www.example.com/fedora
+cucumber:
+  <<: *TEST
