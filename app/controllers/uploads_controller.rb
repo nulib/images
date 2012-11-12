@@ -30,9 +30,7 @@ class UploadsController < ApplicationController
   # After the image is uploaded, create Multiresimage and Vrawork Fedora objects
   # Called from Jquery uploader, ajax call, respond with JSON
   def create
-    logger.debug("TEST_1")
     titleSet_display = current_user.user_key + " " + params[:files][0].original_filename
-    logger.debug("TEST_2")
     error = false
     
     #Create ClamAV instance for virus scanning
@@ -53,6 +51,8 @@ class UploadsController < ApplicationController
       @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
       @image.attach_file(params[:files])
       @image.apply_depositor_metadata(current_user.user_key)
+      @image.read_users = DIL_CONFIG['admin_staff']
+      @image.edit_users = [current_user.user_key]
       @image.titleSet_display = titleSet_display
       @image.save!
     
@@ -61,7 +61,8 @@ class UploadsController < ApplicationController
       @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
     
       @work.apply_depositor_metadata(current_user.user_key)
-    
+      @work.read_users=DIL_CONFIG['admin_staff']
+      @work.edit_users = [current_user.user_key]
       @work.datastreams["properties"].delete
       @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
     

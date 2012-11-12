@@ -119,7 +119,7 @@ def create_collection_no_images(folder_name)
   #create new collection, update it's metadata and save
   collection = DILCollection.new()
   collection.apply_depositor_metadata('mcs680')
-  collection.edit_users=["mcs680", "ega505", "dzellner", "ngf811", "sbe484", "jdb246", "cfc478"]
+  collection.edit_users=DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
   collection.descMetadata.title = title
   collection.save!
@@ -162,7 +162,7 @@ def create_collection(filename)
   #ToDo: refactor into method
   collection = DILCollection.new()
   collection.apply_depositor_metadata('mcs680')
-  collection.edit_users=["mcs680", "ega505", "dzellner", "ngf811", "sbe484", "jdb246", "cfc478"]
+  collection.edit_users=DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
   collection.descMetadata.title = title
   collection.save!
