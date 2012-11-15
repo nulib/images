@@ -48,21 +48,21 @@ class UploadsController < ApplicationController
     
     if (scan_result.is_a? Fixnum)
       # create the Multiresimage
+      
+      edit_users_array = DIL_CONFIG['admin_staff'] | Array.new([current_user.user_key])
+      
       @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
       @image.attach_file(params[:files])
       @image.apply_depositor_metadata(current_user.user_key)
-      @image.read_users = DIL_CONFIG['admin_staff']
-      @image.edit_users = [current_user.user_key]
+      @image.edit_users = edit_users_array
       @image.titleSet_display = titleSet_display
       @image.save!
     
       @work = Vrawork.new(:pid=>mint_pid("dil-local"))
     
       @image.add_relationship(:is_image_of, "info:fedora/" + @work.pid)
-    
       @work.apply_depositor_metadata(current_user.user_key)
-      @work.read_users=DIL_CONFIG['admin_staff']
-      @work.edit_users = [current_user.user_key]
+      @work.edit_users = edit_users_array
       @work.datastreams["properties"].delete
       @work.add_relationship(:has_image, "info:fedora/" + @image.pid)
     
