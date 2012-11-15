@@ -162,7 +162,7 @@ def create_collection(filename)
   #ToDo: refactor into method
   collection = DILCollection.new()
   collection.apply_depositor_metadata('mcs680')
-  collection.edit_users=DIL_CONFIG['admin_staff']
+  collection.edit_users = DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
   collection.descMetadata.title = title
   collection.save!
