@@ -195,7 +195,7 @@ class MultiresimagesController < ApplicationController
     img_length = params[:image_length]
 
     begin
-      if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length]
+      if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
         img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
       end
     rescue Exception
