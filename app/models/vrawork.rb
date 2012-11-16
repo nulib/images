@@ -39,7 +39,7 @@ class Vrawork  < ActiveFedora::Base
     #Refactor to use proxy/delegates
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
     node_set[0].set_attribute("refid", ref_id)
-    self.datastreams["VRA"].content = vra_xml
+    self.datastreams["VRA"].dirty = true
   end
   
   def update_relation_set(image_pid)
