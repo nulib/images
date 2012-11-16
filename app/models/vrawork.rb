@@ -33,14 +33,13 @@ class Vrawork  < ActiveFedora::Base
     vra_xml = self.datastreams["VRA"].ng_xml.to_s.gsub("<vra:image","<vra:work")
     vra_xml = vra_xml.gsub!("</vra:image>","</vra:work>")
     self.datastreams["VRA"].content = vra_xml
-    #self.save!
   end
   
   def update_ref_id(ref_id)
     #Refactor to use proxy/delegates
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
     node_set[0].set_attribute("refid", ref_id)
-    #self.save!
+    self.datastreams["VRA"].content = vra_xml
   end
   
   def update_relation_set(image_pid)
@@ -49,7 +48,7 @@ class Vrawork  < ActiveFedora::Base
     node_set[0].set_attribute("pref", "true")
     node_set[0].set_attribute("relids", image_pid)
     node_set[0].set_attribute("type", "imageIs")
-	#self.save!
+    self.datastreams["VRA"].dirty = true
   end
   
    #def update_agent_set(agent_set_display)
