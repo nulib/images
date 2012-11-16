@@ -27,3 +27,22 @@ LDAP Authentication:
 <% end %>
 
 <%= render :partial => "devise/shared/links" %>-->
+
+<!-- 
+<%= form_for(resource, :as => resource_name, :url => '/users/auth/ldap/callback') do |f| %>
+  <div><label for='username'>Username</label><br />
+  <input type='text' id='username' name='username'/></div>
+
+  <div><label for='password'>Password</label><br />
+  <input type='password' id='password' name='password'/></div>
+
+  <% if devise_mapping.rememberable? -%>
+    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
+  <% end -%>
+
+  <div><%= f.submit "Sign in" %></div>
+<% end %>
+
+<%= render :partial => "devise/shared/links" %>
+
+-->
