@@ -1,3 +1,6 @@
+<%
+the_logo = "dil_logo.png"
+%>
 <!DOCTYPE html>
 <html>
   <head>
@@ -14,7 +17,9 @@
   <body class="<%= render_body_class %>">
 
 		<div id="hd">
-			<%= render :partial => '/user_util_links' %>
+			<div id="top-menu"><%= render :partial => '/user_util_links' %></div>
+			<div id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), root_url, :title=>"Return Home", :class=>"logo") %></div>
+			<%= render :partial=>'shared/menu' %>
 			<%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %>
 		</div>
 	    
