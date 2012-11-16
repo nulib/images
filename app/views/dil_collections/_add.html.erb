@@ -20,7 +20,7 @@
       <% end %>
     </div>
     <div id="imageCollection">
-      <% current_user.collections.each do |collection| %>
+      <% current_user.get_top_collections.each do |collection| %>
         <div class="ui-widget-content">
           <ul> 
             <li id="<%=collection['id']%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
