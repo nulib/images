@@ -89,7 +89,7 @@ class User < ActiveRecord::Base
 
   def get_top_collections
     query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
-    ActiveFedora::SolrService.query(query, {:fl=>'id title_t', :rows=>'1000'}).reject {|c| DILCollection.find(c["id"]).RELS_EXT.to_rels_ext.include? "fedora-relations-model:isMemberOf" }
+    ActiveFedora::SolrService.query(query, {:fl=>'id title_t', :rows=>'1000'}).select {|c| DILCollection.find(c["id"]).RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf" }
   end
 
   def self.admin_groups
