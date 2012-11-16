@@ -132,5 +132,21 @@ class DILCollection < ActiveFedora::Base
     end
   
   end
-  
-end
+ 
+  def to_solr(solr_doc=Hash.new)
+    super(solr_doc)
+    
+    #if collection is a top-level collection
+    if (self.RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf")
+      value = "true"
+    else
+      value = "false"
+    end
+    
+    parent_collection_hash = Hash["is_top_level_collection_s" => value]
+    solr_doc = solr_doc.merge(parent_collection_hash)
+    
+    solr_doc
+  end
+ 
+ end
