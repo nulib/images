@@ -52,7 +52,7 @@ describe User do
 
   describe "#collections" do
     before :all do
-      DILCollection.find(:all, :rows=>200).each do |d|
+      DILCollection.find(:all, :rows=>500).each do |d|
         d.delete
       end
     end
@@ -61,7 +61,6 @@ describe User do
       @c1 = FactoryGirl.build(:collection)
       @c1.apply_depositor_metadata(@user.uid)
       @c1.save!
-        
       @c2 = FactoryGirl.build(:collection)
       @c2.apply_depositor_metadata(@user.uid)
       @c2.save!
@@ -69,7 +68,20 @@ describe User do
       @c3 = FactoryGirl.create(:collection) #not mine
     end
     it "should return the list" do
+      @c1.add_relationship(:is_member_of, "info:fedora/#{@c3.pid}")
+      @c1.save!
+      @c2.add_relationship(:is_member_of, "info:fedora/#{@c1.pid}")
+      @c2.save!
+      @c3.add_relationship(:is_member_of, "info:fedora/#{@c2.pid}")
+      @c3.save!
       @user.collections.should == [{"id"=>@c1.pid, "title_t"=>[@c1.title]}, {"id"=>@c2.pid, "title_t"=>[@c2.title]}]
+    end
+    it "should have one top collection" do
+      @c2.add_relationship(:is_member_of, "info:fedora/#{@c1.pid}")
+      @c2.save!
+      @c3.add_relationship(:is_member_of, "info:fedora/#{@c2.pid}")
+      @c3.save!
+      @user.get_top_collections.size.should == 1
     end
   end
 
