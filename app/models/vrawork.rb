@@ -39,6 +39,7 @@ class Vrawork  < ActiveFedora::Base
     #Refactor to use proxy/delegates
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
     node_set[0].set_attribute("refid", ref_id)
+    #Need to let Hydra know ds has been updated
     self.datastreams["VRA"].dirty = true
   end
   
@@ -48,6 +49,7 @@ class Vrawork  < ActiveFedora::Base
     node_set[0].set_attribute("pref", "true")
     node_set[0].set_attribute("relids", image_pid)
     node_set[0].set_attribute("type", "imageIs")
+    #Need to let Hydra know ds has been updated
     self.datastreams["VRA"].dirty = true
   end
   
