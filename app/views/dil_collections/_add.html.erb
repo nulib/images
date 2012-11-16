@@ -21,11 +21,13 @@
     </div>
     <div id="imageCollection">
       <% current_user.collections.each do |collection| %>
+		<% if(DILCollection.find(collection["id"]).RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf") %>
         <div class="ui-widget-content">
           <ul> 
             <li id="<%=collection['id']%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
           </ul>
         </div>
+		<% end %>
       <% end %>
     </div>
   </div>
