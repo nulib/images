@@ -479,12 +479,12 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
         #::Solrizer::Extractor.insert_solr_field_value(solr_doc, "search_field_t", self.find_by_terms("titleInfo/title"))
         search_field_hash = Hash["search_field_t" => self.title]
         object_type_hash = Hash["object_type_facet" => "Collection"]
-        title_s_hash = Hash["title_s" => self.title]
+        #title_s_hash = Hash["title_s" => self.title]
         #collection_creator_hash = Hash["collection_creator_t" => current_user.user_key]
         
         solr_doc = solr_doc.merge(search_field_hash)
         solr_doc = solr_doc.merge(object_type_hash)
-        solr_doc = solr_doc.merge(title_s_hash)
+        #solr_doc = solr_doc.merge(title_s_hash)
         #solr_doc = solr_doc.merge(collection_creator_hash)
         solr_doc
       end
