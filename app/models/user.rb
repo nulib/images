@@ -73,23 +73,23 @@ class User < ActiveRecord::Base
   end
 
   def get_uploads_collection
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND active_fedora_model_s:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
   
    def get_details_collection
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t'})
   end
   
   def collections
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_t', :rows=>'1000'})
   end
 
-  def get_top_collections
-    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND has_model_s:info\\:fedora/afmodel\\:DILCollection" 
-    ActiveFedora::SolrService.query(query, {:fl=>'id title_t', :rows=>'1000'}).select {|c| DILCollection.find(c["id"]).RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf" }
+  def top_level_collections
+    query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection AND is_top_level_collection_s:true" 
+    ActiveFedora::SolrService.query(query, {:fl=>'id title_t', :rows=>'1000'})
   end
 
   def self.admin_groups

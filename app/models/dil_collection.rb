@@ -147,7 +147,7 @@ class DILCollection < ActiveFedora::Base
     
     solr_doc = solr_doc.merge(parent_collection_hash)
     solr_doc = solr_doc.merge({"object_type_facet" => 'Collection'})
-    
+    solr_doc = solr_doc.merge({"title_s" => self.title})
     solr_doc
   end
  
