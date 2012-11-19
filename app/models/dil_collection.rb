@@ -144,7 +144,9 @@ class DILCollection < ActiveFedora::Base
     end
     
     parent_collection_hash = Hash["is_top_level_collection_s" => value]
+    
     solr_doc = solr_doc.merge(parent_collection_hash)
+    solr_doc = solr_doc.merge({"object_type_facet" => 'Collection'})
     
     solr_doc
   end
