@@ -16,6 +16,7 @@ DIL::Application.routes.draw do
       get 'delete_fedora_object'
       get 'clone_work'
       get 'create_crop'
+      get 'get_pid_from_accession_number'
     end
     member do
       post 'permissions'
