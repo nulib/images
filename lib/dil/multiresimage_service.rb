@@ -350,8 +350,58 @@ module DIL
       end
 
     end #end method
+    
+    # This web service will return the pid of an object given an accession number.
+    # The URL to call this method/web service is https://localhost:3000/multiresimages/get_pid_from_accession_number.xml
+    # It's expecting the following params in the URL: accessionNbr
+    def get_pid_from_accession_number
+      
+      begin #for exception handling
+        #default return xml
+        
+        returnXml = "<response><returnCode>403</returnCode></response>"
+       
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+		
+			#update returnXml (this is the error xml, will be updated if success)
+			return_xml = "<response><returnCode>Error: Could not find object. Accession Number: #{params[:accessionNumber]}</returnCode><pid/></response>"
+			
+			if params[:accessionNbr].present?
+			
+			  accession_nbr = params[:accessionNbr]
+				  
+			  # Query Solr to find Multiresimage object that has the accession nbr
+			  pids = ActiveFedora::SolrService.query("search_field_t:Voyager#{accession_nbr} AND object_type_facet:Multiresimage")
+			  
+			  #if one image object found
+			  if (pids.present? and pids.size == 1)
+                #get pid from Solr result
+                if (pids[0]["id"].present?)
+                  return_xml = pids[0]["id"]     
+                end
+              # if more than one object found
+              elsif (pids.present? and pids.size > 1)
+                return_xml = "<response><returnCode>Error: More than one object found. Accession Number: #{accession_nbr}</returnCode><pid/></response>" 
+			  end
+			end
+     
+       end #end request_ip if
+    
+      rescue Exception => e
+        #error xml
+        logger.debug("Exception:" + e.message)
+        return_xml = "<response><returnCode>Error: Could not find object.</returnCode></response>"
+        
+      ensure #this will get called even if an exception was raised
+        #respond to request with returnXml
+        respond_with returnXml do |format|
+          format.xml {render :layout => false, :xml => return_xml}
+        end  
+      end
 
-
+    end #end method
+    
+    
     private
 
     def build_related_image_query(user_query)
