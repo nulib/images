@@ -414,13 +414,14 @@ module DIL
        
         if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
 		
-			#update returnXml (this is the error xml, will be updated if success)
-			return_xml = "<response><returnCode>Error: Could not find object. Accession Number: #{params[:accessionNumber]}</returnCode><pid/></response>"
+		  #update returnXml (this is the error xml, will be updated if success)
+		  return_xml = "<response><returnCode>Error: Could not find object. Accession Number: #{params[:accessionNumber]}</returnCode><pid/></response>"
 			
-			if params[:imagePid].present?
-			  image = Multiresimage.find(params[:imagePid])
-			  #object already exists, update the object
-			  work_pid = image.vraworks[0].pid
+		  if params[:imagePid].present?
+		    #find image object in Fedora
+		    image = Multiresimage.find(params[:imagePid])
+			#get the related work's pid
+			work_pid = image.vraworks[0].pid
 			  if work_pid.present?
 			    return_xml = "<response><pid>#{work_pid}</pid></response>"
 			  end
