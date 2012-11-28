@@ -359,7 +359,7 @@ module DIL
       begin #for exception handling
         #default return xml
         
-        returnXml = "<response><returnCode>403</returnCode></response>"
+        return_xml = "<response><returnCode>403</returnCode></response>"
        
         if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
 		
@@ -394,7 +394,47 @@ module DIL
         
       ensure #this will get called even if an exception was raised
         #respond to request with returnXml
-        respond_with returnXml do |format|
+        respond_with return_xml do |format|
+          format.xml {render :layout => false, :xml => return_xml}
+        end  
+      end
+
+    end #end method
+    
+    
+    # This web service will return the pid of an object given an accession number.
+    # The URL to call this method/web service is https://localhost:3000/multiresimages/get_work_pid.xml
+    # It's expecting the following params in the URL: imagePid
+    def get_work_pid
+      
+      begin #for exception handling
+        #default return xml
+        
+        return_xml = "<response><returnCode>403</returnCode></response>"
+       
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+		
+			#update returnXml (this is the error xml, will be updated if success)
+			return_xml = "<response><returnCode>Error: Could not find object. Accession Number: #{params[:accessionNumber]}</returnCode><pid/></response>"
+			
+			if params[:imagePid].present?
+			  image = Multiresimage.find(params[:imagePid])
+			  #object already exists, update the object
+			  work_pid = image.vraworks[0].pid
+			  if work_pid.present?
+			    return_xml = "<response><pid>#{work_pid}</pid></response>"
+			  end
+	        end
+       end #end request_ip if
+    
+      rescue Exception => e
+        #error xml
+        logger.debug("Exception:" + e.message)
+        return_xml = "<response><returnCode>Error: Could not find object.</returnCode></response>"
+        
+      ensure #this will get called even if an exception was raised
+        #respond to request with returnXml
+        respond_with return_xml do |format|
           format.xml {render :layout => false, :xml => return_xml}
         end  
       end
