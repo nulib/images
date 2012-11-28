@@ -17,6 +17,7 @@ DIL::Application.routes.draw do
       get 'clone_work'
       get 'create_crop'
       get 'get_pid_from_accession_number'
+      get 'get_work_pid'
     end
     member do
       post 'permissions'
