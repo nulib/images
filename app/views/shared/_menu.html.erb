@@ -7,7 +7,10 @@
 	 <% current_user.get_uploads_collection.each do |collection| %>
        <li><%= link_to_unless_current collection['title_t'].first, "/dil_collections/#{collection['id']}" %></li>
      <% end %>
-      <li><%= link_to_unless_current "User Groups", groups_path %></li>
+     <% current_user.get_details_collection.each do |collection| %>
+       <li><%= link_to_unless_current collection['title_t'].first, "/dil_collections/#{collection['id']}" %></li>
+     <% end %>
+       <li><%= link_to_unless_current "User Groups", groups_path %></li>
 <!--      <li><%#= link_to_unless_current "Admin Policies", policies_path %></li> -->
     </ul>
   </nav>

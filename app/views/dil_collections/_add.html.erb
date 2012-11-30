@@ -10,15 +10,6 @@
     <br/>
     <!-- Each collection row is a JQuery UI droppable -->
     </div>
-    <div id="detailCollection">
-     <% current_user.get_details_collection.each do |collection| %>
-        <div class="ui-widget-content">
-          <ul> 
-            <li><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
-          </ul>
-        </div>
-      <% end %>
-    </div>
     <div id="imageCollection">
       <% current_user.top_level_collections.each do |collection| %>
 		<div class="ui-widget-content">
