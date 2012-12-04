@@ -382,6 +382,7 @@ module DIL
                   image = Multiresimage.find(image_pid)
 			      #get the related work's pid
 			      
+			      #if image has work, get pid
 			      if (image.vraworks.present?)
 			        work_pid = image.vraworks[0].pid
 			        if (work_pid.present?)
