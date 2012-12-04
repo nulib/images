@@ -381,9 +381,12 @@ module DIL
                   return_xml = "<pids><image_pid>#{image_pid}</image_pid>"
                   image = Multiresimage.find(image_pid)
 			      #get the related work's pid
-			      work_pid = image.vraworks[0].pid
-			      if (work_pid.present?)
-			        return_xml << "<work_pid>#{work_pid}</work_pid>"
+			      
+			      if (image.vraworks.present?)
+			        work_pid = image.vraworks[0].pid
+			        if (work_pid.present?)
+			          return_xml << "<work_pid>#{work_pid}</work_pid>"
+			        end
 			      end
 			      return_xml << "</pid>"
                 end
