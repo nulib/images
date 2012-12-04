@@ -5,16 +5,18 @@
     <div id="images">
       <div>
         <ul>
-			<li pid="<%=document[:id]%>" title="<%=document[:id]%>"><img src="<%=DIL_CONFIG['dil_fedora_url']%><%= document[:id] %><%= DIL_CONFIG['dil_fedora_disseminator_thumbnail']%>"/>
+			<li pid="<%=document[:id]%>" title="<%=document[:id]%>">
+				<a href="/multiresimages/<%=document[:id]%>/edit"><img src="<%=DIL_CONFIG['dil_fedora_url']%><%= document[:id] %><%= DIL_CONFIG['dil_fedora_disseminator_thumbnail']%>"/>
           <br/>
          	<% if document[:title_t].nil? %>
-         	   <a href="/multiresimages/<%=document[:id]%>/edit"><%=document[:id]%></a>
+         	   <%=document[:id]%>
 				<%#= link_to_document(document, :label => document[:id], :counter => (counter + 1 + @response.params[:start].to_i)) %>
 			<% else %>
-			    <a href="/multiresimages/<%=document[:id]%>/edit"><%=document[:title_t]%></a>
+			    <%=document[:title_t]%>
           	
 				<%#= link_to_document(document, :label => Blacklight.config[:show][:heading].to_sym, :counter => (counter + 1 + @response.params[:start].to_i)) %>
           	<% end %>
+			</a>
           </li>
        </ul>
    </div>
