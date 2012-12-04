@@ -389,7 +389,7 @@ module DIL
 			          return_xml << "<work_pid>#{work_pid}</work_pid>"
 			        end
 			      end
-			      return_xml << "</pid>"
+			      return_xml << "</pids>"
                 end
               # if more than one object found
               elsif (pids.present? and pids.size > 1)
