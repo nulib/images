@@ -38,7 +38,7 @@ class DILCollection < ActiveFedora::Base
       #add to the members ds
       members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
       
-      #add to the rels-ext ds      
+      #add to the rels-ext ds
       fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
       self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
       
@@ -134,7 +134,7 @@ class DILCollection < ActiveFedora::Base
   end
  
   def to_solr(solr_doc=Hash.new)
-    super(solr_doc)
+    solr_doc = super(solr_doc)
     
     #if collection is a top-level collection
     if (self.RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf")

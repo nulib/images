@@ -10,7 +10,7 @@ describe "Catalog" do
     it "should have links to upload images and groups " do
       visit catalog_index_path
       page.should have_selector("a[href='#{uploads_path}']", :text=>"Upload Images")
-      page.should have_selector("a[href='#{dil_collections_path}']", :text=>"Collections")
+#      page.should have_selector("a[href='#{dil_collections_path}']", :text=>"Collections")
       page.should have_selector("a[href='#{groups_path}']", :text=>"User Groups")
     end
     describe "who has read access to a collection that contains an image" do
