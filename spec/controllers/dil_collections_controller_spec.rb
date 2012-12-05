@@ -9,8 +9,9 @@ describe DilCollectionsController do
       before do
         @user = FactoryGirl.find_or_create(:archivist)
         @collection = FactoryGirl.build(:collection)
+        @collection.save!
         @collection.edit_users = [@user.uid]
-        @collection.save
+        @collection.save!
         @img = Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26')
         @img.titleSet_display = "foo"
         @img.save!

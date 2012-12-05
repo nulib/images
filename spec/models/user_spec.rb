@@ -52,12 +52,15 @@ describe User do
 
   describe "#collections" do
     before :all do
-      DILCollection.find(:all, :rows=>500).each do |d|
+      DILCollection.find(:all, :rows=>1000).each do |d|
         d.delete
       end
     end
     before do
       @user = FactoryGirl.find_or_create(:archivist)
+      @user.collections.each do |c|
+        DILCollection.find(c["id"]).delete
+      end
       @c1 = FactoryGirl.build(:collection)
       @c1.apply_depositor_metadata(@user.uid)
       @c1.save!
@@ -81,7 +84,7 @@ describe User do
       @c2.save!
       @c3.add_relationship(:is_member_of, "info:fedora/#{@c2.pid}")
       @c3.save!
-      @user.get_top_collections.size.should == 1
+      @user.top_level_collections.size.should == 1
     end
   end
 

@@ -11,6 +11,11 @@ describe DILCollection do
       subject.save.should be_false
       subject.errors[:title].should == ["can't be blank"]
     end
+    it "should solrize" do
+      subject.title = 'bar'
+      subject.save!
+      subject.to_solr['has_model_s'].should == ["info:fedora/afmodel:DILCollection"]
+    end
   end
   describe "a saved instance" do
     before do
