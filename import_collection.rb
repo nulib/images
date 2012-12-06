@@ -36,7 +36,7 @@
 
 require 'xml/xslt'
 require 'fileutils'
-
+include DIL::PidMinter
 
 # This is the main method of this process. This will read a folder at a specified path
 # and from there it decides how to create the collections. This gets called recursively.
