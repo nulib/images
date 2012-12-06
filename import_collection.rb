@@ -117,7 +117,7 @@ def create_collection_no_images(folder_name)
   end
   
   #create new collection, update it's metadata and save
-  collection = DILCollection.new()
+  collection = DILCollection.new({:pid=>mint_pid()})
   collection.apply_depositor_metadata('mcs680')
   collection.edit_users=DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
@@ -144,7 +144,7 @@ def create_collection(filename)
   #Use XSLT to extract needed info from MDID export xml
   xml_path = "#{filename}/slideshow.xml"
   xsl_path = "extract_collection_info_import.xsl"
-  new_xml = "#{filename}/collection.xml"
+  #new_xml = "#{filename}/collection.xml"
   
   xslt = XML::XSLT.new()
   xslt.xml = xml_path
@@ -160,7 +160,7 @@ def create_collection(filename)
 
   #create new collection, update it's metadata and save
   #ToDo: refactor into method
-  collection = DILCollection.new()
+  collection = DILCollection.new({:pid=>mint_pid()})
   collection.apply_depositor_metadata('mcs680')
   collection.edit_users = DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
