@@ -117,7 +117,7 @@ def create_collection_no_images(folder_name)
   end
   
   #create new collection, update it's metadata and save
-  collection = DILCollection.new({:pid=>mint_pid()})
+  collection = DILCollection.new({:pid=>mint_pid("dil-local")})
   collection.apply_depositor_metadata('mcs680')
   collection.edit_users=DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
@@ -160,7 +160,7 @@ def create_collection(filename)
 
   #create new collection, update it's metadata and save
   #ToDo: refactor into method
-  collection = DILCollection.new({:pid=>mint_pid()})
+  collection = DILCollection.new({:pid=>mint_pid("dil-local")})
   collection.apply_depositor_metadata('mcs680')
   collection.edit_users = DIL_CONFIG['admin_staff']
   collection.set_collection_type('dil_collection')
