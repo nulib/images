@@ -55,7 +55,8 @@ describe UploadsController do
     end
     it "should set user metadata" do
       obj = Multiresimage.find(assigns[:image].pid)
-      obj.rightsMetadata.individuals.should == {"archivist1"=>"edit"}
+      #new superusers get added to everything
+      obj.rightsMetadata.individuals.should == {"mcs680"=>"edit", "ega505"=>"edit", "dzellner"=>"edit", "ngf811"=>"edit", "sbe484"=>"edit", "jdb246"=>"edit", "cfc478"=>"edit", "steve"=>"edit", "archivist1"=>"edit"}
     end
   end
 

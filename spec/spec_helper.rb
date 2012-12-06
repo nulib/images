@@ -81,7 +81,7 @@ def login(user)
 
   visit '/'
   click_link "Login"
-  click_link "sign in with LDAP"
+#  click_link "sign in with LDAP"
   page.should have_selector("a[href='/users/edit']", :text=> user.email)
   
 end
