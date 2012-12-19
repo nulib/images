@@ -4,8 +4,19 @@ class DILCollection < ActiveFedora::Base
   include Hydra::ModelMixins::RightsMetadata
   
   has_and_belongs_to_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_image
-  has_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
-  #has_many :subcollections, :class_name=> "DILCollection", :property=> :has_subcollection
+  
+  #### 
+  # Each collection can belong to many parent collections and have many subcollections.
+  # We were manually setting the RELS-EXT relationships before without the :parent_collections and :subcollections,
+  # but this makes it easier to do things like collection.subcollections and collection.parent_collections for the
+  # new collection UI.
+  #
+  # This isn't how it would be done in a DB Rails app, but it works here (RDF based)
+  # Also, the has_many :subcollections didn't work correctly
+  ####
+  
+  has_and_belongs_to_many :parent_collections, :class_name=> "DILCollection", :property=> :is_member_of
+  has_and_belongs_to_many :subcollections, :class_name=> "DILCollection", :property=> :has_subcollection
   #belongs_to :parent, :class_name=> "DILCollection", :property=> :is_member_of
   
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
@@ -34,18 +45,32 @@ class DILCollection < ActiveFedora::Base
       #self.add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
       
     elsif (fedora_object.instance_of?(DILCollection))
+          
+      #Check to see if subcollection is already in collection
+      subcollection_not_found = true
+      self.subcollections.each do |subcollection|
+        if (subcollection.pid == fedora_object.pid)
+          subcollection_not_found = false
+          break
+        end
+      end
       
-      #add to the members ds
-      members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
+      # Add subcollection if not found
+      if subcollection_not_found
+        #add to the members ds
+        members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
       
-      #add to the rels-ext ds
-      fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
-      self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
+        #add to the rels-ext ds
+        #fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+        fedora_object.parent_collections << self
+        #self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
       
-      #logger.debug("self:#{self}")
-      #logger.debug("fedora_object:#{fedora_object}")
-      #self.subcollections << fedora_object
-      #fedora_object.parent = self
+        #logger.debug("self:#{self}")
+        #logger.debug("fedora_object:#{fedora_object}")
+        self.subcollections << fedora_object
+        #fedora_object.parent = self
+      end
+      
       
     end
     
