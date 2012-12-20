@@ -5,6 +5,10 @@
 			appendTo: "body",
 			helper: "clone"
 		});
+		$( "#imageCollection ul li" ).draggable({
+			appendTo: "body",
+			helper: "clone"
+		});
 		$( "#imageCollection ul" ).droppable({
 			activeClass: "ui-state-default",
 			hoverClass: "ui-state-hover",
