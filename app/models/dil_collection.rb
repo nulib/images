@@ -44,33 +44,35 @@ class DILCollection < ActiveFedora::Base
       self.multiresimages << fedora_object
       #self.add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
       
-    elsif (fedora_object.instance_of?(DILCollection))
-          
-      #Check to see if subcollection is already in collection
-      subcollection_not_found = true
-      self.subcollections.each do |subcollection|
-        if (subcollection.pid == fedora_object.pid)
-          subcollection_not_found = false
-          break
+     elsif (fedora_object.instance_of?(DILCollection))
+         
+       #Can't add a collection to itself
+       if (fedora_object.pid != self.pid)
+         #Check to see if subcollection is already in collection
+         subcollection_not_found = true
+         self.subcollections.each do |subcollection|
+           if (subcollection.pid == fedora_object.pid)
+            subcollection_not_found = false
+            break
+           end
+         end
+      
+        # Add subcollection if not found
+        if subcollection_not_found
+          #add to the members ds
+          members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
+      
+          #add to the rels-ext ds
+          #fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+          fedora_object.parent_collections << self
+          #self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
+      
+          #logger.debug("self:#{self}")
+          #logger.debug("fedora_object:#{fedora_object}")
+          self.subcollections << fedora_object
+          #fedora_object.parent = self
         end
       end
-      
-      # Add subcollection if not found
-      if subcollection_not_found
-        #add to the members ds
-        members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
-      
-        #add to the rels-ext ds
-        #fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
-        fedora_object.parent_collections << self
-        #self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
-      
-        #logger.debug("self:#{self}")
-        #logger.debug("fedora_object:#{fedora_object}")
-        self.subcollections << fedora_object
-        #fedora_object.parent = self
-      end
-      
       
     end
     
