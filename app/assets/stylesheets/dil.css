@@ -74,12 +74,16 @@ clear:both;
 #imageCollection { width: 174px; float: left; }
 /* style the list to maximize the droppable hitarea */
 #imageCollection ul { margin: 0; padding: 1em 0 1em 3em; }
+#imageCollection li ul { margin: 0px; padding: 1em 0 1em 3em; }
 
 #uploadCollection { width: 174px; float: left; }
 #uploadCollection ul { margin: 0; padding: 1em 0 1em 3em; }
 
 #detailCollection { width: 174px; float: left; }
 #detailCollection ul { margin: 0; padding: 1em 0 1em 3em; }
+
+div.subcollection { margin-left: 20px !important; }
+div.subcollection ul { border-bottom: 1px solid black !important; }
 
 tr.even td{
 	background-color:#CCC;
