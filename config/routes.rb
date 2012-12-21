@@ -23,7 +23,13 @@ DIL::Application.routes.draw do
     end
   end
   
-  resources :dil_collections  
+  resources :dil_collections do
+    collection do
+      get 'get_subcollections'
+    end
+  end
+  
+  #resources :dil_collections  
   
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
   #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
@@ -32,10 +38,10 @@ DIL::Application.routes.draw do
   match "multiresimages/aware_details" => "multiresimages#aware_details"
   match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   match "external_search/search_hydra" => "external_search#index"
-  match "dil_collections/add/:id/:member_id" => "dil_collections#add"
-  match "dil_collections/remove/:id/:pid" => "dil_collections#remove"
-  match "dil_collections/new" => "dil_collections#new"
-  match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
+  match "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
+  match "dil_collections/remove/:id/:pid" => "dil_collections#remove", :via => :post
+  match "dil_collections/new" => "dil_collections#new", :via => :post
+  match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
   match "dil_collections/export/:id" => "dil_collections#export", :via => :post
 
   resources :uploads, :only => [:index] do
