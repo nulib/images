@@ -101,5 +101,17 @@ class DilCollectionsController < ApplicationController
     
     redirect_to edit_dil_collection_path(@collection)
   end
+  
+  
+  
+  #This will return all the subcollections of the collection for the pid
+  
+  def get_subcollections
+    logger.debug("DEBUG A")
+    collection = DILCollection.find(params[:id])
+    respond_to do |format|
+      format.json { render :layout =>  false, :json => collection.to_json(:methods=>:get_subcollections) }
+    end
+  end
 
 end

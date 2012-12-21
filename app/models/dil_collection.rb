@@ -2,7 +2,7 @@ class DILCollection < ActiveFedora::Base
   
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
-  
+  require 'json'
   has_and_belongs_to_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_image
   
   #### 
@@ -158,6 +158,22 @@ class DILCollection < ActiveFedora::Base
       collection.insert_member(new_image)
     end
   
+  end
+  
+  def get_subcollections
+    json_array = []
+    
+    if self.subcollections.present?
+      json_size_hash = {"numberSubcollections" => self.subcollections.size}
+      json_array = [json_size_hash]
+      self.subcollections.each do |subcollection|
+        json_array << {"title" => self.titleSet_display, "pid" => self.pid}
+      end
+    else
+      json_size_hash = {"numberSubcollections"=>"0"}
+    end
+    logger.debug("JSON:#{json_array.to_json}")
+    json_array.to_json
   end
  
   def to_solr(solr_doc=Hash.new)
