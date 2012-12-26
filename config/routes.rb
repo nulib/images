@@ -23,13 +23,7 @@ DIL::Application.routes.draw do
     end
   end
   
-  resources :dil_collections do
-    collection do
-      get 'get_subcollections'
-    end
-  end
-  
-  #resources :dil_collections  
+  resources :dil_collections  
   
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
   #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
@@ -43,6 +37,7 @@ DIL::Application.routes.draw do
   match "dil_collections/new" => "dil_collections#new", :via => :post
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
   match "dil_collections/export/:id" => "dil_collections#export", :via => :post
+  match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections"
 
   resources :uploads, :only => [:index] do
     collection do
