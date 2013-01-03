@@ -9,7 +9,7 @@
 			appendTo: "body",
 			helper: "clone"
 		});
-		$( "#imageCollection ul" ).droppable({
+		$( "#imageCollection li" ).droppable({
 			activeClass: "ui-state-default",
 			hoverClass: "ui-state-hover",
 			accept: ":not(.ui-sortable-helper)",
@@ -26,7 +26,8 @@
 				//var memberType = $(ui.draggable).attr("member_type");
 
 				//get id attribute for droppable <li> item (collection)
-				var collectionID = $( this ).find("li").attr("id");
+				//var collectionID = $( this ).find("li").attr("pid");
+				var collectionID = $( this ).attr("pid");
 				
 				
 				
@@ -66,7 +67,7 @@
 		$('.gallery_container').sortable({
 			update: function(event, ui) {
 				//var fruitOrder = $(this).sortable('toArray').toString();
-				var collection_id= $(this).attr('id');
+				var collection_id= $(this).attr('pid');
 				// Note: ui.item.attr('id') is id of dragged item 
 				var url='/dil_collections/move/' + collection_id + '/' + start_index + '/' + $(this).children().index(ui.item);
 				//$.get('update-sort.cfm', {fruitOrder:fruitOrder});
@@ -79,6 +80,19 @@
 				}
 				});//end ajax
 			}
+		});
+		
+		$('.accordion h2').click(function() {
+		  
+		  var collection_id = $(this).attr('id')	
+		  $.ajax({
+				type: "POST",
+				url: "dil_collections/get_subcollections/" + collection_id,
+				//data: "id=10",
+				async: false,
+				success: function(msg){
+				}
+				});//end ajax
 		});
 	});
 
