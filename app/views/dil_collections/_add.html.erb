@@ -14,11 +14,10 @@
       <% current_user.top_level_collections.each do |collection| %>
 		<div class="ui-widget-content">
           <ul> 
-            <li id="<%=collection['id']%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
+            <li id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
           </ul>
         </div>
       <% end %>
     </div>
   </div>
 <% end %>
-
