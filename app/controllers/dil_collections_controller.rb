@@ -115,6 +115,7 @@ class DilCollectionsController < ApplicationController
     rescue Exception => e
       #error
       return_json = "Exception"
+      logger.debug("get_subcollections exception: #{e.to_s}")
         
     ensure #this will get called even if an exception was raised
       respond_to do |format|
