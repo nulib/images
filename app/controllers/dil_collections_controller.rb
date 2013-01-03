@@ -48,11 +48,10 @@ class DilCollectionsController < ApplicationController
   end
   
   def remove
-    collection_id = params[:id];
     member_index = params[:member_index];
     collection = DILCollection.find(params[:id])
     ds = collection.datastreams["members"]
-    ds.remove_member_by_pid(params[:pid])
+    ds.remove_member_by_pid(params[:id])
     collection.save!
     
     redirect_to edit_dil_collection_path(collection)
