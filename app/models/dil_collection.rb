@@ -167,8 +167,8 @@ class DILCollection < ActiveFedora::Base
       #json_array = [json_size_hash]
       self.subcollections.each do |subcollection|
         numberSubcollections = nil
-        if subcollections.subcollections.present?
-          numberSubcollections = self.subcollections.size
+        if subcollection.subcollections.present?
+          numberSubcollections = subcollection.subcollections.size
         else
           numberSubcollections = 0
         end
