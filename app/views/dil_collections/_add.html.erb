@@ -11,13 +11,13 @@
     <!-- Each collection row is a JQuery UI droppable -->
     </div>
     <div id="imageCollection">
-      <% current_user.top_level_collections.each do |collection| %>
 		<div class="ui-widget-content">
-          <ul> 
-            <li id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection"><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></li>
-          </ul>
-        </div>
-      <% end %>
+			<ul class="accordion">
+		<% current_user.top_level_collections.each do |collection| %>
+					<li pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection"><h2 id="<%=collection['id']%>"><%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %></h2><div><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></div></li>
+		<% end %>
+		  </ul>
+		</div>
     </div>
-  </div>
 <% end %>
+
