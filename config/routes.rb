@@ -37,7 +37,7 @@ DIL::Application.routes.draw do
   match "dil_collections/new" => "dil_collections#new", :via => :post
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
   match "dil_collections/export/:id" => "dil_collections#export", :via => :post
-  match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections"
+  match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
 
   resources :uploads, :only => [:index] do
     collection do
