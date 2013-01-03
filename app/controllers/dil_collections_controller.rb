@@ -106,17 +106,23 @@ class DilCollectionsController < ApplicationController
   
   #This will return all the subcollections of the collection
   def get_subcollections
-    collection = DILCollection.find(params[:id])
+    begin 
+      collection = DILCollection.find(params[:id])
     
-    #get the json
-    return_json = collection.get_subcollections_json
+      #get the json
+      return_json = collection.get_subcollections_json
     
-    respond_to do |format|
-      
-      #This wasn't working quite right, so just storing JSON in a variable instead of using .to_json
-      #format.json { render :layout =>  false, :json => collection.to_json(:methods=>:get_subcollections) }
-      
-      format.json { render :layout =>  false, :json => return_json}
+    rescue Exception => e
+      #error
+      return_json = "Exception"
+        
+    ensure #this will get called even if an exception was raised
+      respond_to do |format|
+        #This wasn't working quite right, so just storing JSON in a variable instead of using .to_json
+        #format.json { render :layout =>  false, :json => collection.to_json(:methods=>:get_subcollections) }
+        format.json { render :layout =>  false, :json => return_json}
+      end  
+    
     end
   end
   
