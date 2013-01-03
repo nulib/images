@@ -73,10 +73,10 @@ clear:both;
 /* #products { float:left; width: 300px; margin-right: 2em; } */
 #imageCollection { width: 174px; float: left; }
 /* style the list to maximize the droppable hitarea */
-/*
+
 #imageCollection ul { margin: 0; padding: 1em 0 1em 3em; }
 #imageCollection li ul { margin: 0px; padding: 1em 0 1em 3em; }
-*/
+
 #uploadCollection { width: 174px; float: left; }
 #uploadCollection ul { margin: 0; padding: 1em 0 1em 3em; }
 
