@@ -94,5 +94,11 @@ form.form-search {
 	margin-right: 5px;
 }
 .accordion div {
-	float: left;
+	clear: both;
+}
+.accordion h2 span {
+	width: 18px;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
 }

@@ -11,16 +11,14 @@
     <!-- Each collection row is a JQuery UI droppable -->
     </div>
     <div id="imageCollection">
-		<div class="ui-widget-content">
-		<ul class="accordion">
+		<div>
+		<ul class="accordion ui-widget-content">
 		 <% current_user.top_level_collections.each do |collection| %>
 		  <li pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection">
+		    <h2 id="<%=collection['id']%>" toggle="plus"> <span><% if collection["has_subcollection_s"].present? %><%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %> <% end %></span><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></h2>
+		 
 		  
-		  <% if collection["has_subcollection_s"].present? %>
-		    <h2 id="<%=collection['id']%>" toggle="plus"><%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %></h2>
-		  <% end %>
-		  
-		  <div><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></div></li>
+		  <div class="inner"></div></li>
 		<% end %>
 		  </ul>
 		</div>
