@@ -12,9 +12,15 @@
     </div>
     <div id="imageCollection">
 		<div class="ui-widget-content">
-			<ul class="accordion">
-		<% current_user.top_level_collections.each do |collection| %>
-					<li pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection"><h2 id="<%=collection['id']%>" toggle="plus"><%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %></h2><div><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></div></li>
+		<ul class="accordion">
+		 <% current_user.top_level_collections.each do |collection| %>
+		  <li pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection">
+		  
+		  <% if collection["has_subcollection_s"].present? %>
+		    <h2 id="<%=collection['id']%>" toggle="plus"><%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %></h2>
+		  <% end %>
+		  
+		  <div><a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a></div></li>
 		<% end %>
 		  </ul>
 		</div>
