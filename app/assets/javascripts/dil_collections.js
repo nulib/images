@@ -83,7 +83,6 @@
 		});
 		
 		$('.accordion h2').live("click", (function() {
-		  
 		  var collection_id = $(this).attr('id');
 		  var theObj = $(this);
 		  var doAjax = false;
@@ -113,19 +112,21 @@
 				title = map['title'];
 				pid = map['pid'];
 				numSub = map['numSubcollections'];
-
-			    items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></h2><div><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></div></li>');
+				if(numSub > 0)
+			    	items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><span><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></h2><div class="inner"></div></li>');
+				else
+		    		items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><span></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></h2><div class="inner"></div></li>');
 
 			  });//End each row
 
 			  $('<ul/>', {
-			    'class': 'accordion',
+			    'class': 'accordion ui-widget-content',
 			    html: items.join('')
-			  }).appendTo(theObj.closest('li'));
+			  }).appendTo(theObj.siblings('div'));
 			});//End Ajax call
 
 		} else {
-			theObj.nextAll('ul').fadeOut('fast', function(obj) {
+			theObj.siblings('div').children('ul').fadeOut('fast', function(obj) {
 				$(this).remove();
 			});
 		}

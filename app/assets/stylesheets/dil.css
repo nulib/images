@@ -74,8 +74,8 @@ clear:both;
 #imageCollection { width: 174px; float: left; }
 /* style the list to maximize the droppable hitarea */
 
-#imageCollection ul { margin: 0; padding: 1em 0 1em 3em; }
-#imageCollection li ul { margin: 0px; padding: 1em 0 1em 3em; }
+#imageCollection ul { margin: 0; padding: 1em 0 1em 2em; }
+#imageCollection li ul { margin: 0px; padding: 1em 0 1em 2em; }
 
 #uploadCollection { width: 174px; float: left; }
 #uploadCollection ul { margin: 0; padding: 1em 0 1em 3em; }
@@ -104,3 +104,21 @@ input.addFieldBtn{
     color: white;
     background-color: #380B61;
 }
+
+/* --- Accordion --- */
+.accordion {margin:0; padding:0 10px; display: table-cell;}
+
+.accordion li {list-style-type:none}
+
+.accordion li.last-child {margin-left:19px; list-style-type:disc}
+
+.accordion .outer {border:1px solid #dadada; border-width:0 1px 1px; background: #fff}
+
+.accordion .inner {margin-bottom:0; padding:.5em 20px 1em; }/* overflow:hidden */
+
+.accordion .inner .inner {padding-bottom:0}
+
+.accordion .h {padding-top:.3em}
+
+.accordion p {margin:.5em 0 1em}
+
