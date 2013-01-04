@@ -82,18 +82,52 @@
 			}
 		});
 		
-		$('.accordion h2').click(function() {
+		$('.accordion h2').live("click", (function() {
 		  
-		  var collection_id = $(this).attr('id')	
-		  $.ajax({
-				type: "POST",
-				url: "dil_collections/get_subcollections/" + collection_id,
-				//data: "id=10",
-				async: false,
-				success: function(msg){
-				}
-				});//end ajax
-		});
-	});
+		  var collection_id = $(this).attr('id');
+		  var theObj = $(this);
+		  var doAjax = false;
+		
+		//The plus/minus
+		if(theObj.attr('toggle') == 'plus') {
+			theObj.attr('toggle', 'minus');
+			theObj.find('img').attr('src', '/assets/listexpander/expanded.gif');
+			doAjax = true;
+		} else {
+			theObj.attr('toggle', 'plus');
+			theObj.find('img').attr('src', '/assets/listexpander/collapsed.gif');
+			doAjax = false;
+		};//End the plus/minus
 
+		if(doAjax) {
+			//The Ajax call
+			$.getJSON("dil_collections/get_subcollections/" + collection_id, function(data) {
+			  var items = [];
+			  var title = '';
+			  var pid = '';
+			  var numSub = 0;
 
+			  //Each row
+			  $.each(data, function(i, map) {
+
+				title = map['title'];
+				pid = map['pid'];
+				numSub = map['numSubcollections'];
+
+			    items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></h2><div><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></div></li>');
+
+			  });//End each row
+
+			  $('<ul/>', {
+			    'class': 'accordion',
+			    html: items.join('')
+			  }).appendTo(theObj.closest('li'));
+			});//End Ajax call
+
+		} else {
+			theObj.nextAll('ul').fadeOut('fast', function(obj) {
+				$(this).remove();
+			});
+		}
+	}));
+});
