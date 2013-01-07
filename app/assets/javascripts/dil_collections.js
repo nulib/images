@@ -83,7 +83,6 @@
 		});
 		
 		$('.accordion h2').live("click", (function() {
-		  
 		  var collection_id = $(this).attr('id');
 		  var theObj = $(this);
 		  var doAjax = false;
@@ -120,16 +119,17 @@
                 else{
                   items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"></h2><div><a href="/dil_collections/' + pid + '">' + title + '</a></div></li>');
                 }
+
 			  });//End each row
 
 			  $('<ul/>', {
-			    'class': 'accordion',
+			    'class': 'accordion ui-widget-content',
 			    html: items.join('')
-			  }).appendTo(theObj.closest('li'));
+			  }).appendTo(theObj.siblings('div'));
 			});//End Ajax call
 
 		} else {
-			theObj.nextAll('ul').fadeOut('fast', function(obj) {
+			theObj.siblings('div').children('ul').fadeOut('fast', function(obj) {
 				$(this).remove();
 			});
 		}
