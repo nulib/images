@@ -114,8 +114,12 @@
 				pid = map['pid'];
 				numSub = map['numSubcollections'];
 
-			    items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></h2><div><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></div></li>');
-
+			    if (numSub > 0){
+			      items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></h2><div><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></div></li>');
+                }
+                else{
+                  items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"></h2><div><a href="/dil_collections/' + pid + '">' + title + '</a></div></li>');
+                }
 			  });//End each row
 
 			  $('<ul/>', {
