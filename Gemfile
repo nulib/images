@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-  gem 'rails', '3.2.6'
+  gem 'rails', '3.2.11'
   gem 'blacklight'
 
   gem 'hydra-access-controls', '0.0.5'
