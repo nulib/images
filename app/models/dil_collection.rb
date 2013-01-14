@@ -63,10 +63,8 @@ class DILCollection < ActiveFedora::Base
           members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
       
           #add to the rels-ext ds
-          #fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
           fedora_object.parent_collections << self
-          #self.add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
-      
+    
           #logger.debug("self:#{self}")
           #logger.debug("fedora_object:#{fedora_object}")
           self.subcollections << fedora_object
@@ -79,6 +77,28 @@ class DILCollection < ActiveFedora::Base
     fedora_object.save!
     self.save!
 
+  end
+  
+  #remove the member (image or subcollection) from a collection
+  def remove_member_by_pid (pid)
+  
+   #remove from mods_collection_members datastream
+   members.remove_member_by_pid(pid)
+   
+   #remove from RELS-EXT for both the member and the collection
+   object_to_delete = ActiveFedora::Base.find(pid, :cast=>true)
+   
+   if object_to_delete.instance_of?(Multiresimage)
+     self.remove_relationship(:has_image, object_to_delete)
+     object_to_delete.remove_relationship(:is_member_of, self)
+   elsif object_to_delete.instance_of?(DILCollection)
+     self.remove_relationship(:has_subcollection, object_to_delete)
+     object_to_delete.remove_relationship(:is_member_of, self)
+   end
+   
+   self.save!
+   object_to_delete.save!
+   
   end
   
   def export_pids_as_xml

@@ -41,18 +41,15 @@ class DilCollectionsController < ApplicationController
     authorize! :edit, @collection
     @fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
     authorize! :show, @fedora_object
-#  puts "Inserting #{@image.pid} to #{@collection.pid}"
     @collection.insert_member(@fedora_object)
-    @collection.save!
     render :nothing => true
   end
   
+  #remove an image or subcollection from the collection
   def remove
     member_index = params[:member_index];
     collection = DILCollection.find(params[:id])
-    ds = collection.datastreams["members"]
-    ds.remove_member_by_pid(params[:pid])
-    collection.save!
+    collection.remove_member_by_pid(params[:pid])
     
     redirect_to edit_dil_collection_path(collection)
   end
@@ -60,8 +57,8 @@ class DilCollectionsController < ApplicationController
   #move a member item in a collection from original position to new position
   def move
     collection = DILCollection.find(params[:id])
-	#ds = collection.members
 	ds = collection.datastreams["members"]
+    
     #call the move_member method within mods_collection_members
     ds.move_member(params[:from_index], params[:to_index])
     collection.save!
