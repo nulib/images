@@ -74,14 +74,14 @@ clear:both;
 #imageCollection { width: 174px; float: left; }
 /* style the list to maximize the droppable hitarea */
 
-#imageCollection ul { margin: 0; padding: 1em 0 1em 2em; }
-#imageCollection li ul { margin: 0px; padding: 1em 0 1em 2em; }
+#imageCollection ul { margin: 0; width: 100%; }/* padding: .25em 0 .25em .5em; } */
+#imageCollection li ul { margin: 0px;} /* padding: .25em 0 .25em .5em; } */
 
 #uploadCollection { width: 174px; float: left; }
-#uploadCollection ul { margin: 0; padding: 1em 0 1em 3em; }
+#uploadCollection ul { margin: 0; padding: .5em 0 .5em 1.5em; }
 
 #detailCollection { width: 174px; float: left; }
-#detailCollection ul { margin: 0; padding: 1em 0 1em 3em; }
+#detailCollection ul { margin: 0; padding: .5em 0 .5em 1.5em; }
 
 tr.even td{
 	background-color:#CCC;
@@ -105,20 +105,49 @@ input.addFieldBtn{
     background-color: #380B61;
 }
 
-/* --- Accordion --- */
-.accordion {margin:0; padding:0 10px; display: table-cell;}
+#imageCollection div {
+	width: 100%;
+}
 
-.accordion li {list-style-type:none}
+/* --- Accordion --- */
+.accordion {margin:0; padding:0px; display: inline-block;}
+
+.accordion li {list-style-type:none; padding: 0;}
 
 .accordion li.last-child {margin-left:19px; list-style-type:disc}
 
+.accordion .outer {background: #fff}
+
+.accordion .inner {margin-left: .5em; margin-bottom:0; padding:.5em 20px 1em;}
+/*
+
 .accordion .outer {border:1px solid #dadada; border-width:0 1px 1px; background: #fff}
 
-.accordion .inner {margin-bottom:0; padding:.5em 20px 1em; }/* overflow:hidden */
+.accordion .inner {clear: both; margin-bottom: 0; padding: .5em;} */ /* overflow:hidden */
 
-.accordion .inner .inner {padding-bottom:0}
+.accordion .inner .inner {padding-bottom:0; width: 95%}
 
 .accordion .h {padding-top:.3em}
 
 .accordion p {margin:.5em 0 1em}
 
+.accordion h2 {
+	clear: both;
+	font-size: 100%;
+	line-height: 100%;
+	margin-top: 0px;
+	background-color: #583587;
+	color: white;
+	padding: .5em;
+}
+
+.accordion h2 a, .accordion h2 a:visited {
+	color: white;
+}
+
+.accordion h2 span {
+	width: 18px;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
