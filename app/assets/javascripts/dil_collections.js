@@ -1,15 +1,20 @@
-// For adding items to the collection
 
-	$(function() {
-		$( "#images li" ).draggable({
+	start_index='';
+	$(document).ready(function(){
+		// For adding items to the collection
+		//For sidebar drag/drop
+		$( "#images li" ).live('mouseover', function() {
+			$(this).draggable({
 			appendTo: "body",
 			helper: "clone"
-		});
-		$( "#imageCollection ul li" ).draggable({
+		})});
+		$( ".accordion h2" ).live('mouseover', function() {
+			$(this).draggable({
 			appendTo: "body",
 			helper: "clone"
-		});
-		$( "#imageCollection li" ).droppable({
+		})});
+		$( ".accordion h2" ).live('mousedown', function() {
+			$(this).droppable({
 			activeClass: "ui-state-default",
 			hoverClass: "ui-state-hover",
 			accept: ":not(.ui-sortable-helper)",
@@ -43,7 +48,7 @@
 				});//end ajax
 				
 			}//end droppable
-		}).sortable({
+		})}).sortable({
 			items: "li:not(.placeholder)",
 			sort: function() {
 				// gets added unintentionally by droppable interacting with sortable
@@ -51,14 +56,10 @@
 				$( this ).removeClass( "ui-state-default" );
 			}
 		});
-	});
-	
-	
-	
-//For moving items around in the collection
 
-	start_index='';
-	$(document).ready(function(){
+		//End for sidebar drag/drop
+
+		//For moving items around in the collection
 		$('.gallery_container').sortable({
 			start: function(event, ui) {
 			    start_index=$(this).children().index(ui.item)
@@ -82,9 +83,9 @@
 			}
 		});
 		
-		$('.accordion h2').live("click", (function() {
-		  var collection_id = $(this).attr('id');
-		  var theObj = $(this);
+		$('.accordion h2 img').live("click", (function() {
+		  var collection_id = $(this).closest('h2').attr('id');
+		  var theObj = $(this).closest('h2');
 		  var doAjax = false;
 		
 		//The plus/minus
@@ -114,10 +115,10 @@
 				numSub = map['numSubcollections'];
 
 			    if (numSub > 0){
-			      items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></h2><div><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></div></li>');
+			      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');
                 }
                 else{
-                  items.push('<li pid="' + pid + '" title="' + title + '" class="collection"><h2 id="' + pid + '"></h2><div><a href="/dil_collections/' + pid + '">' + title + '</a></div></li>');
+                  items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
                 }
 
 			  });//End each row
@@ -125,12 +126,12 @@
 			  $('<ul/>', {
 			    'class': 'accordion ui-widget-content',
 			    html: items.join('')
-			  }).appendTo(theObj.siblings('div'));
+			  }).appendTo(theObj.siblings('div').children('div.inner'));
 			});//End Ajax call
 
 		} else {
 			theObj.siblings('div').children('ul').fadeOut('fast', function(obj) {
-				$(this).remove();
+				$(this).closest('h2').remove();
 			});
 		}
 	}));

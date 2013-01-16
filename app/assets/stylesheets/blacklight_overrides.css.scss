@@ -86,19 +86,12 @@ form.form-search {
  margin: 0;
 }
 
-
-.accordion h2 {
-	float: left;
-	font-size: 100%;
-	line-height: 100%;
-	margin-right: 5px;
+#bd #sidebar {
+	width:	24%;
+	overflow:	auto;
+	vertical-align: top;
 }
-.accordion div {
-	clear: both;
-}
-.accordion h2 span {
-	width: 18px;
-	display: inline-block;
-	margin: 0;
-	padding: 0;
+#bd #main {
+	padding-left: 0;
+	width: 75%;
 }
