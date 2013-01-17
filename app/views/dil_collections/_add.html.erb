@@ -14,8 +14,8 @@
 		<div>
 		<ul class="accordion"> <!-- ui-widget-content -->
 		 <% current_user.top_level_collections.each do |collection| %>
-		  <li pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" class="collection">
-		    <h2 id="<%=collection['id']%>" toggle="plus">
+		  <li class="collection">
+		    <h2 id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" toggle="plus">
 		    <% if collection["has_subcollection_s"].present? %>
 		      <span>
 		        <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %>
