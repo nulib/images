@@ -103,7 +103,7 @@ module DIL
 					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
 				  end
 			    #else
-				  #returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
 				end
 				
 				#if a work, get a list of it's related images, and re-index those images (because work info
