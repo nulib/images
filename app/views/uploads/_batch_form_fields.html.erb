@@ -15,7 +15,10 @@
 		</div>
 	<%end%>
 </div>
-	<%= submit_tag "Process" %> 
+  <%= check_box_tag 'depositors_agreement'%> By checking this box you agree to the following <%= link_to "Terms and Conditions", "upload_agreement.html", :target=>"_blank" %>
+  <br/><br/>
+  <%= submit_tag "Process", :id=>"process_uploads", :disabled=>'true'%> 
+
   <%#= button_to "Process", enqueue_uploads_path %>
 <%end%>
 
@@ -41,5 +44,18 @@
         $('#hide_me').slideUp(200);
         $('#button_id').text('+');  
     }
-})});
+    })
+    
+    $("#depositors_agreement").click(function(){
+      
+      if ($(this).is(':checked')){
+        $("#process_uploads").attr("disabled", false);
+      }
+      
+      else {
+        $("#process_uploads").attr("disabled", true);
+      }
+      
+    })
+});
 </script>
