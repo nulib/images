@@ -89,22 +89,23 @@ module DIL
 			#pid was in xml so update the existing Fedora object if the object exists, or create the object if it doesn't exist
 			  #(a pid might have been minted before this web service was called)
 			  else
-				begin
+				#begin
 				  logger.debug("FIND IN AF")
-				  ActiveFedora::Base.find(pid)
-				  #object already exists, update the object
-				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
-				#if object doesn't exist in Fedora, create the object, then update
-				rescue ActiveFedora::ObjectNotFoundError => e
-				  #create the object
-				  if vra_type == "image"
-					returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
-				  elsif vra_type == "work"
-					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
+				  if (ActiveFedora::Base.exists?(pid))
+				    #object already exists, update the object
+				    returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				  else  
+				    #if object doesn't exist in Fedora, create the object, then update
+			        #create the object
+				    if vra_type == "image"
+					  returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
+				    elsif vra_type == "work"
+					  returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
+				    end
 				  end
 			    #else
-				  returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
-				end
+				  #returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				#end
 				
 				#if a work, get a list of it's related images, and re-index those images (because work info
 				#is indexed with the image, need to update the image index after the work index has been updated)
@@ -414,7 +415,7 @@ module DIL
     end #end method
     
     
-    private
+    #private
 
     def build_related_image_query(user_query)
       q = "#{user_query}"
