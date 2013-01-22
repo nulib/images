@@ -107,6 +107,7 @@ function dropMe(theObj) {
 			  var title = '';
 			  var pid = '';
 			  var numSub = 0;
+			  var numImages = 0;
 
 			  //Each row
 			  $.each(data, function(i, map) {
@@ -114,12 +115,13 @@ function dropMe(theObj) {
 				title = map['title'];
 				pid = map['pid'];
 				numSub = map['numSubcollections'];
+				numImages = map['numImages'];
 
 			    if (numSub > 0){
-			      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numSub + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');
+			      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numImages + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');
                 }
                 else{
-                  items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
+                  items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + ' (' + numImages + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');
                 }
 
 			  });//End each row
