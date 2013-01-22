@@ -415,7 +415,7 @@ module DIL
     end #end method
     
     
-    #private
+    private
 
     def build_related_image_query(user_query)
       q = "#{user_query}"
@@ -493,7 +493,7 @@ module DIL
       fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
       
       #add rels-ext CModel relationship
-      fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
+      #fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
       
       #save Fedora object
       fedora_object.save
@@ -531,7 +531,7 @@ module DIL
       fedora_object.add_relationship(:has_image, "info:fedora/" + rel_pid)
       
       #add rels-ext CModel relationship
-      fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
+      #fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
       
       #save Fedora object
       fedora_object.save
