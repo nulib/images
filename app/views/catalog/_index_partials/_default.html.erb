@@ -1,3 +1,4 @@
+<% document_counter = document_counter || 0 %>
 <tr class="document <%= cycle("even","odd") %>">
   <td>
     <%= link_to_document(document, :label => '', :counter => (document_counter + 1 + @response.params[:start].to_i)) %>
@@ -12,7 +13,7 @@
     <%= (document.fetch(:medium_t,nil) || document_type(document)).gsub("Hydrangea","") %>
   </td>
   <td>
-    <%= get_file_asset_count(document)%>
+    <%= get_file_asset_count(document) unless Error %>
   </td>
   <td>
     Created
