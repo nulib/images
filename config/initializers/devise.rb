@@ -197,7 +197,8 @@ Devise.setup do |config|
     :host => Hydra::LDAP.ldap_config[:host],
     :base => Hydra::LDAP.ldap_config[:base],
     :uid => Hydra::LDAP.ldap_config[:uid],
-    :port => Hydra::LDAP.ldap_config[:port]
+    :port => Hydra::LDAP.ldap_config[:port],
+    :method => Hydra::LDAP.ldap_config[:method]
     # :bind_dn => 'uid=vanessa,ou=people,dc=example,dc=com',
     # :password => 'vanessa1'
 
