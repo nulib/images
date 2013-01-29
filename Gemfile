@@ -1,20 +1,21 @@
 source 'http://rubygems.org'
 
   gem 'rails', '3.2.11'
-  gem 'blacklight'
+  gem 'blacklight', '3.5.0'
 
   gem 'hydra-access-controls', '0.0.5'
   gem 'hydra-head', '4.1.1'
-  gem 'hydra-mods'
-  gem 'sqlite3'
+  gem 'hydra-mods', '0.0.5'
+  gem 'sqlite3', '1.3.6'
   
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
-  gem 'devise'
-  gem 'omniauth-ldap'
-  gem 'mysql2'
-  gem 'clamav'
-  gem 'rdf'
+  gem 'devise', '2.1.2'
+  gem 'omniauth-ldap', '1.0.2'
+  gem 'mysql2', '0.3.11'
+  gem 'clamav', '0.4.1'
+  gem 'rdf', '0.3.7'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -23,30 +24,30 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
   gem 'compass-rails', '~> 1.0.0'
   gem 'compass-susy-plugin', '~> 0.9.0', :require => 'susy'
-  gem 'therubyracer'
-  gem 'jquery-ui-rails'
+  gem 'therubyracer', '0.10.1'
+  gem 'jquery-ui-rails', '1.0.0'
   gem "bootstrap-sass-rails", '2.0.3.0'
-  gem 'ruby-xslt'
+  gem 'ruby-xslt', '0.9.9'
 end
 
-gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way.
-gem 'jquery-rails'
-gem 'jquery.fileupload-rails'
+gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way
+gem 'jquery-rails', '2.0.2'
+gem 'jquery.fileupload-rails', '0.1.1'
 
-gem 'uuid'
+gem 'uuid', '2.3.5'
 gem 'hydra-ldap', '0.0.3'
 gem 'hydra-batch-edit', '~>0.0.6'
 
 group :development, :test, :staging do
-  gem 'jettywrapper'
+  gem 'jettywrapper', '1.3.0'
   gem 'rspec-rails', '>=2.9.0'
-  gem 'factory_girl_rails'
-  gem 'database_cleaner'
-  gem 'capybara'
-  gem 'bcrypt-ruby'
-  gem 'debugger'
-  gem 'launchy'
-  gem 'simplecov', :require => false, :group => :test
+  gem 'factory_girl_rails', '3.5.0' 
+  gem 'database_cleaner', '0.8.0'
+  gem 'capybara', '1.1.2'
+  gem 'bcrypt-ruby', '3.0.1'
+  gem 'debugger', '1.1.4'
+  gem 'launchy', '2.1.0'
+  gem 'simplecov', '0.7.1', :require => false, :group => :test
 end
 
-gem 'unicorn'
+gem 'unicorn', '4.3.1'
