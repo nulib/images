@@ -10,7 +10,7 @@ source 'http://rubygems.org'
   
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
-  gem 'devise', '2.2.3'
+  gem 'devise', '2.1.3'
   gem 'omniauth-ldap', '1.0.2'
   gem 'mysql2', '0.3.11'
   gem 'clamav', '0.4.1'
