@@ -2,19 +2,19 @@ GEM
   remote: http://rubygems.org/
   specs:
     RedCloth (4.2.9)
-    actionmailer (3.2.6)
-      actionpack (= 3.2.6)
+    actionmailer (3.2.11)
+      actionpack (= 3.2.11)
       mail (~> 2.4.4)
-    actionpack (3.2.6)
-      activemodel (= 3.2.6)
-      activesupport (= 3.2.6)
+    actionpack (3.2.11)
+      activemodel (= 3.2.11)
+      activesupport (= 3.2.11)
       builder (~> 3.0.0)
       erubis (~> 2.7.0)
-      journey (~> 1.0.1)
+      journey (~> 1.0.4)
       rack (~> 1.4.0)
       rack-cache (~> 1.2)
       rack-test (~> 0.6.1)
-      sprockets (~> 2.1.3)
+      sprockets (~> 2.2.1)
     active-fedora (4.4.0)
       activeresource (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -26,18 +26,18 @@ GEM
       rsolr
       rubydora (~> 0.5.10)
       solrizer (~> 1.2.0)
-    activemodel (3.2.6)
-      activesupport (= 3.2.6)
+    activemodel (3.2.11)
+      activesupport (= 3.2.11)
       builder (~> 3.0.0)
-    activerecord (3.2.6)
-      activemodel (= 3.2.6)
-      activesupport (= 3.2.6)
+    activerecord (3.2.11)
+      activemodel (= 3.2.11)
+      activesupport (= 3.2.11)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
-    activeresource (3.2.6)
-      activemodel (= 3.2.6)
-      activesupport (= 3.2.6)
-    activesupport (3.2.6)
+    activeresource (3.2.11)
+      activemodel (= 3.2.11)
+      activesupport (= 3.2.11)
+    activesupport (3.2.11)
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.2.8)
@@ -63,7 +63,7 @@ GEM
     bootstrap-sass-rails (2.0.3.0)
       rails (~> 3.1)
       sass-rails (~> 3.1)
-    builder (3.0.0)
+    builder (3.0.4)
     cancan (1.6.7)
     capybara (1.1.2)
       mime-types (>= 1.16)
@@ -103,7 +103,7 @@ GEM
     debugger-ruby_core_source (1.1.3)
     deprecation (0.0.5)
       activesupport
-    devise (2.1.2)
+    devise (2.1.3)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (~> 3.1)
@@ -128,7 +128,7 @@ GEM
     hike (1.2.1)
     httpi (1.1.1)
       rack
-    hydra-access-controls (5.0.0.pre1)
+    hydra-access-controls (0.0.5)
       active-fedora
       activesupport
       blacklight
@@ -136,14 +136,14 @@ GEM
       deprecation
     hydra-batch-edit (0.0.6)
       blacklight
-    hydra-core (5.0.0.pre1)
+    hydra-head (4.1.1)
       RedCloth (= 4.2.9)
       active-fedora (~> 4.1)
       blacklight (~> 3.4)
       block_helpers
       deprecation (>= 0.0.5)
       devise
-      hydra-access-controls (= 5.0.0.pre1)
+      hydra-access-controls (>= 0.0.5)
       hydra-mods (>= 0.0.5)
       jquery-rails
       rails (~> 3.2.3)
@@ -152,7 +152,7 @@ GEM
       net-ldap
     hydra-mods (0.0.5)
       active-fedora (~> 4.1)
-    i18n (0.6.0)
+    i18n (0.6.1)
     jettywrapper (1.3.0)
       activesupport (>= 3.0.0)
       childprocess
@@ -168,7 +168,7 @@ GEM
       railties (>= 3.1.0)
     jquery.fileupload-rails (0.1.1)
       sprockets (~> 2.0)
-    json (1.7.3)
+    json (1.7.6)
     kaminari (0.13.0)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -189,7 +189,7 @@ GEM
     marc (0.5.0)
     mediashelf-loggable (0.4.9)
     mime-types (1.19)
-    multi_json (1.3.6)
+    multi_json (1.5.0)
     mysql2 (0.3.11)
     net-ldap (0.2.2)
     nokogiri (1.5.5)
@@ -205,33 +205,33 @@ GEM
       omniauth (~> 1.0)
       pyu-ruby-sasl (~> 0.0.3.1)
       rubyntlm (~> 0.1.1)
-    orm_adapter (0.3.0)
+    orm_adapter (0.4.0)
     polyglot (0.3.3)
     pyu-ruby-sasl (0.0.3.3)
-    rack (1.4.1)
+    rack (1.4.4)
     rack-cache (1.2)
       rack (>= 0.4)
-    rack-ssl (1.3.2)
+    rack-ssl (1.3.3)
       rack
-    rack-test (0.6.1)
+    rack-test (0.6.2)
       rack (>= 1.0)
-    rails (3.2.6)
-      actionmailer (= 3.2.6)
-      actionpack (= 3.2.6)
-      activerecord (= 3.2.6)
-      activeresource (= 3.2.6)
-      activesupport (= 3.2.6)
+    rails (3.2.11)
+      actionmailer (= 3.2.11)
+      actionpack (= 3.2.11)
+      activerecord (= 3.2.11)
+      activeresource (= 3.2.11)
+      activesupport (= 3.2.11)
       bundler (~> 1.0)
-      railties (= 3.2.6)
-    railties (3.2.6)
-      actionpack (= 3.2.6)
-      activesupport (= 3.2.6)
+      railties (= 3.2.11)
+    railties (3.2.11)
+      actionpack (= 3.2.11)
+      activesupport (= 3.2.11)
       rack-ssl (~> 1.3.2)
       rake (>= 0.8.7)
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     raindrops (0.10.0)
-    rake (0.9.2.2)
+    rake (10.0.3)
     rdf (0.3.7)
       addressable (>= 2.2.6)
     rdf-rdfxml (0.3.8)
@@ -262,6 +262,7 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.10.0)
+    ruby-xslt (0.9.9)
     rubydora (0.5.10)
       activemodel
       activesupport
@@ -292,6 +293,10 @@ GEM
       libwebsocket (~> 0.1.3)
       multi_json (~> 1.0)
       rubyzip
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
     solrizer (1.2.1)
       daemons
       mediashelf-loggable (~> 0.4.7)
@@ -299,8 +304,9 @@ GEM
       om (>= 1.5.0)
       stomp
       xml-simple
-    sprockets (2.1.3)
+    sprockets (2.2.2)
       hike (~> 1.2)
+      multi_json (~> 1.0)
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.6)
@@ -308,12 +314,12 @@ GEM
     systemu (2.5.1)
     therubyracer (0.10.1)
       libv8 (~> 3.3.10)
-    thor (0.15.4)
+    thor (0.17.0)
     tilt (1.3.3)
-    treetop (1.4.10)
+    treetop (1.4.12)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.33)
+    tzinfo (0.3.35)
     uglifier (1.2.6)
       execjs (>= 0.3.0)
       multi_json (~> 1.3)
@@ -337,37 +343,40 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bcrypt-ruby
-  blacklight
+  bcrypt-ruby (= 3.0.1)
+  blacklight (= 3.5.0)
   bootstrap-sass-rails (= 2.0.3.0)
   cancan (= 1.6.7)
-  capybara
-  clamav
+  capybara (= 1.1.2)
+  clamav (= 0.4.1)
   coffee-rails (~> 3.2.1)
   compass-rails (~> 1.0.0)
   compass-susy-plugin (~> 0.9.0)
-  database_cleaner
-  debugger
-  devise
-  factory_girl_rails
-  hydra-access-controls (= 5.0.0.pre1)
+  database_cleaner (= 0.8.0)
+  debugger (= 1.1.4)
+  devise (= 2.1.3)
+  factory_girl_rails (= 3.5.0)
+  hydra-access-controls (= 0.0.5)
   hydra-batch-edit (~> 0.0.6)
-  hydra-core (= 5.0.0.pre1)
-  hydra-ldap (~> 0.0.3)
-  hydra-mods
-  jettywrapper
-  jquery-rails
-  jquery-ui-rails
-  jquery.fileupload-rails
-  launchy
-  mysql2
-  omniauth-ldap
-  rails (= 3.2.6)
-  rdf
+  hydra-head (= 4.1.1)
+  hydra-ldap (= 0.0.3)
+  hydra-mods (= 0.0.5)
+  jettywrapper (= 1.3.0)
+  jquery-rails (= 2.0.2)
+  jquery-ui-rails (= 1.0.0)
+  jquery.fileupload-rails (= 0.1.1)
+  kaminari (= 0.13.0)
+  launchy (= 2.1.0)
+  mysql2 (= 0.3.11)
+  omniauth-ldap (= 1.0.2)
+  rails (= 3.2.11)
+  rdf (= 0.3.7)
   rspec-rails (>= 2.9.0)
+  ruby-xslt (= 0.9.9)
   sass-rails (~> 3.2.3)
-  sqlite3
-  therubyracer
+  simplecov (= 0.7.1)
+  sqlite3 (= 1.3.6)
+  therubyracer (= 0.10.1)
   uglifier (>= 1.0.3)
-  unicorn
-  uuid
+  unicorn (= 4.3.1)
+  uuid (= 2.3.5)
