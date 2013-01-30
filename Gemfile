@@ -2,6 +2,7 @@ source 'http://rubygems.org'
 
   gem 'rails', '3.2.11'
   gem 'blacklight', '3.5.0'
+  gem 'kaminari', '0.13.0'
 
   gem 'hydra-access-controls', '0.0.5'
   gem 'hydra-head', '4.1.1'
