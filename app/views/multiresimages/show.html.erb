@@ -11,9 +11,9 @@
 
 <%= render :partial=>'/shared/page_header' %>
 
-<img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/600"/>
 <br />
 
+<%= render :partial => 'multiresimages/crop' %>
 
 <%= render :partial => 'multiresimages/show_description' %>
 
