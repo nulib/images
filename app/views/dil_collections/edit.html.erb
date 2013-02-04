@@ -1,6 +1,6 @@
 
   <div id="accordion">
-    <a href="/catalog?f[object_type_facet][]=Collection&display_type=grid">← Return to Collections</a>
+  <!--  <a href="/catalog?f[object_type_facet][]=DILCollection&display_type=grid">← Return to Collections</a>-->
     <span class="edit-browse">
       <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit
     </span>
@@ -42,6 +42,6 @@
   </div>-->
   
 <% sidebar_items << capture do %>
-  <%= delete_asset_link(params[:id], "collection") %>
+  <%= link_to "Delete This Image Group", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
 <% end %>
 
