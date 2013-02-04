@@ -50,5 +50,6 @@ DIL::Application.configure do
   # Location where dil puts files to be processed
   config.processing_file_path = "/usr/local/rails_uploaded_images"
   
+  # Log level for production
   config.log_level = :error
 end
