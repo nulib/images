@@ -54,6 +54,35 @@ class DilCollectionsController < ApplicationController
     redirect_to edit_dil_collection_path(collection)
   end
   
+  #delete the collection
+  def destroy
+    begin
+      collection = DILCollection.find(params[:id])
+    
+      #remove all images from collection
+      collection.multiresimages.each do |image|
+        collection.remove_member_by_pid(image.pid)
+      end
+    
+      #remove all subcollections from collection
+      collection.subcollections.each do |subcollection|
+        collection.remove_member_by_pid(subcollection.pid)
+      end
+    
+      #delete the DILCollection object
+      collection.delete
+      flash[:notice] = "Image Group deleted"
+    
+    rescue Exception => e
+      flash[:error] = "Error deleting Image Group"
+      logger.debug("ERROR ERROR #{e.to_s}")
+    
+    ensure 
+      redirect_to catalog_index_path
+    end
+  
+  end
+  
   #move a member item in a collection from original position to new position
   def move
     collection = DILCollection.find(params[:id])
