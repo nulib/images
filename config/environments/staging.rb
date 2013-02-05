@@ -38,4 +38,11 @@ DIL::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  # For emailing exceptions that occur in the app
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[DIL-Exception STAGING] ",
+    :sender_address => %{"notifier" <m-stroming@northwestern.edu>},
+    :exception_recipients => %w{m-stroming@northwestern.edu, edgar-garcia@northwestern.edu}
+    
 end
