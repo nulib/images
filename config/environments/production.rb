@@ -52,4 +52,11 @@ DIL::Application.configure do
   
   # Log level for production
   config.log_level = :error
+  
+  # For emailing exceptions that occur in the app
+  config.middleware.use ExceptionNotifier,
+    :email_prefix => "[DIL-Exception STAGING] ",
+    :sender_address => %{"notifier" <m-stroming@northwestern.edu>},
+    :exception_recipients => %w{m-stroming@northwestern.edu, edgar-garcia@northwestern.edu}
+
 end

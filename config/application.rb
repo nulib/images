@@ -56,7 +56,18 @@ module DIL
     # Default SASS Configuration, check out https://github.com/rails/sass-rails for details
     config.assets.compress = !Rails.env.development?
     #config.sass.line_comments = Rails.env.development?
-
+    
+    #Use SMTP to send emails
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+    :address              => "hostsmtp.northwestern.edu",
+    :port                 => 25,
+    #:domain               => "blah.com",
+    #:user_name            => "user@blah.com",
+    #:password             => "pwd",
+    #:authentication       => 'plain',
+    #:enable_starttls_auto => true
+    }
 
 
     # Version of your assets, change this if you want to expire all your assets
