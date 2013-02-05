@@ -68,7 +68,12 @@ class DilCollectionsController < ApplicationController
       collection.subcollections.each do |subcollection|
         collection.remove_member_by_pid(subcollection.pid)
       end
-    
+      
+       #remove collection from parent collections
+      collection.parent_collections.each do |parent_collection|
+        parent_collection.remove_member_by_pid(collection.pid)
+      end
+      
       #delete the DILCollection object
       collection.delete
       flash[:notice] = "Image Group deleted"
