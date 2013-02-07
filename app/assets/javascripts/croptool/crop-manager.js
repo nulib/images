@@ -100,7 +100,7 @@ CropManager.createNewCrop = function()
 			zce = CoordinateManager.zoomCoefficientForLevel(level);
 		}
 
-		level = level - 1;
+		//level = level - 1;
 		zce = CoordinateManager.zoomCoefficientForLevel(level);
 				
 		x = (this.cx * ImageServer.details.width) / zce;
