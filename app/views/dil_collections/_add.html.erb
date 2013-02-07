@@ -2,10 +2,10 @@
 
   <div>
     <hr/>
-    <h3>Collections</h3>
+    <h3>Image Groups</h3>
     <%= form_for DILCollection.new do |f| %>
-      <%= f.label "Create new collection:"%>
-      <%= f.text_field :title %>
+      <%= f.label "Create new image group:"%>
+      <%= f.text_field :title, :placeholder => "New group name..." %>
     <% end %>
     <br/>
     <!-- Each collection row is a JQuery UI droppable -->
