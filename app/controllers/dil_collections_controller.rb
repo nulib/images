@@ -69,7 +69,7 @@ class DilCollectionsController < ApplicationController
         collection.remove_member_by_pid(subcollection.pid)
       end
       
-       #remove collection from parent collections
+      #remove collection from parent collections
       collection.parent_collections.each do |parent_collection|
         parent_collection.remove_member_by_pid(collection.pid)
       end
@@ -127,7 +127,7 @@ class DilCollectionsController < ApplicationController
 	logger.debug("After CGI call for export")
 	logger.debug("response:" + cgi_response)
 
-    flash[:notice] = "Collection exported"
+    flash[:notice] = "Image Group exported.  Please check your Northwestern University email account for a link to your presentation."
     
     redirect_to edit_dil_collection_path(@collection)
   end
