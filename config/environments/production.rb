@@ -55,7 +55,7 @@ DIL::Application.configure do
   
   # For emailing exceptions that occur in the app
   config.middleware.use ExceptionNotifier,
-    :email_prefix => "[DIL-Exception STAGING] ",
+    :email_prefix => "[DIL-Exception Production] ",
     :sender_address => %{"notifier" <m-stroming@northwestern.edu>},
     :exception_recipients => %w{m-stroming@northwestern.edu, edgar-garcia@northwestern.edu}
 
