@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
   gem 'rails', '3.2.11'
+  gem 'rack', '1.4.5'
   gem 'blacklight', '3.5.0'
   gem 'kaminari', '0.13.0'
   gem 'exception_notification', '3.0.1'
