@@ -104,3 +104,11 @@ form.form-search {
 	padding: 0 25px;
 	width: 100%;
 }
+
+#main_container nav#downloads {
+	width: 600px;
+	display: inline-table;
+}
+#main_container nav#downloads ul {
+	float: right;
+}

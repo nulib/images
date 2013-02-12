@@ -1,21 +1,13 @@
 <% if can?(:read, @multiresimage) %>
               <% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
-                  <li>Downloads
+				<nav id="downloads">
                     <ul>
-                      <li>
-                        <table>
-                          <tbody>
-                          <tr>
                             <% image_max = @multiresimage.longside_max %>
-                            <td><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></td>
-                            <td><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 800 < image_max ? 800 : image_max %>">medium</a></td>
-                            <td><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">large</a></td>
-                          </tr>
-                          </tbody>
-                        </table>
-                      </li>
+                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></li>
+                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 800 < image_max ? 800 : image_max %>">medium</a></li>
+                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">large</a></li>
                     </ul>
-                  </li>
+				</nav>
               <% end %>
 <% end %>
 
