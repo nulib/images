@@ -2,7 +2,7 @@
   <div id="accordion">
   <!--  <a href="/catalog?f[object_type_facet][]=DILCollection&display_type=grid">← Return to Collections</a>-->
     <span class="edit-browse">
-      <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit
+      <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit | <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %></a>
     </span>
     
     <% if @collection.members %>
@@ -40,8 +40,3 @@
     <% end %>
    
   </div>-->
-  
-<% sidebar_items << capture do %>
-  <%= link_to "Delete This Image Group", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
-<% end %>
-
