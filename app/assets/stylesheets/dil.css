@@ -40,18 +40,33 @@ span.page.gap {
         float: left;
         margin: 10px 10px 10px 10px;
         padding: 8px;
-        border: 1px dotted #cccccc;
+		padding-right: 20px;
+//        border: 1px dotted #cccccc;
+		word-wrap: break-word;
         width: 120px;
         height: 200px;
+		text-align: center;
+}
+
+.listing #images {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.listing #images ul {
+	margin: 0px;
 }
 
 .listing-collection {
         float: left;
         margin: 10px 10px 10px 10px;
         padding: 8px;
-        border: 1px dotted #cccccc;
+		padding-right: 20px;
+//        border: 1px dotted #cccccc;
+		word-wrap: break-word;
         width: 150px;
         height: 180px;
+		text-align: center;
 }
 
 .listing img { background-color: #FFFFFF;}
