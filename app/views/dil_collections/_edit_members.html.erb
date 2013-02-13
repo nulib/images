@@ -1,4 +1,4 @@
-		<div class="gallery_container" id="<%= params[:id] %>">
+		<div id="gallery_container" class="gallery_container" pid="<%= params[:id] %>">
 		
 		<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
 			<% unless mods.search('relatedItem/identifier').empty? %>

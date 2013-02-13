@@ -61,12 +61,12 @@ function dropMe(theObj) {
 		//End for sidebar drag/drop
 
 		//For moving items around in the collection
-		$('.gallery_container').sortable({
+		$('#gallery_container').sortable({
 			start: function(event, ui) {
 			    start_index=$(this).children().index(ui.item)
 			}
 		});
-		$('.gallery_container').sortable({
+		$('#gallery_container').sortable({
 			update: function(event, ui) {
 				//var fruitOrder = $(this).sortable('toArray').toString();
 				var collection_id= $(this).attr('pid');
