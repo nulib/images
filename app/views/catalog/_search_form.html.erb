@@ -1,5 +1,5 @@
 <div id="search" class="search">
-  <%= form_tag catalog_index_path, :method => :get, :class=>'form-search form-inline' do %>
+  <%= form_tag catalog_index_path, :align=>:left, :method => :get, :class=>'form-search form-inline' do %>
     <%= text_field_tag :q, params[:q], :class => "q search-query", :placeholder => "Enter search terms..." %>
     <%= hidden_field_tag(:search_field, 'all_fields') %>
     <%= search_as_hidden_fields(:omit_keys => [:q, :search_field, :qt, :page]).html_safe %>        
