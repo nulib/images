@@ -21,21 +21,21 @@
   
   <!--Description, permissions-->
 
-<!--    <%= form_for @collection do |f| %>
+<!--    <%#= form_for @collection do |f| %>
       <div class="control-group-collection">
-        <%= f.label :title, :class=>"control-label" %>
+        <%#= f.label :title, :class=>"control-label" %>
         <div class="controls">
-          <%= f.text_field :title, :class=>'span6' %>
+          <%#= f.text_field :title, :class=>'span6' %>
         </div>
       </div>
       <div class="control-group-collection"> <%= f.label :read_groups, :class=>"control-label" %>
         <div class="controls">
-          <%= f.select :read_groups, current_user.owned_groups.map{|x| [x.name, x.code]}, {}, :multiple=>true %>
+          <%#= f.select :read_groups, current_user.owned_groups.map{|x| [x.name, x.code]}, {}, :multiple=>true %>
         </div>
       </div>
       
       <div class="form-actions">
-        <%= f.submit "Save changes", :class=>'btn btn-primary'%>
+        <%#= f.submit "Save changes", :class=>'btn btn-primary'%>
       </div>
     <% end %>
    
