@@ -193,7 +193,7 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', :scope => 'user,public_repo'
-  config.omniauth :ldap, :title => 'DIL local ldap',
+  config.omniauth :ldap, :title => 'Northwestern University NetID',
     :host => Hydra::LDAP.ldap_config[:host],
     :base => Hydra::LDAP.ldap_config[:base],
     :uid => Hydra::LDAP.ldap_config[:uid],
