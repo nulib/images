@@ -1,5 +1,6 @@
-<h2 class="section-title"><span id="button_id">+</span> Batch Edit VRA fields</h2>
-<br />
+<span class="btn btn-success fileinput-button" id="button_id"><i class="icon-plus icon-white"></i><span>Add description</span></span>
+<br/>
+<br/>
 <%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>
 <div id="hide_me">
 	<% vraSetArray = ["agent", "title", "culturalContext", "date", "subject", "location", "source", "technique", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"] %>
@@ -15,11 +16,7 @@
 		</div>
 	<%end%>
 </div>
-  <%= check_box_tag 'depositors_agreement'%> By checking this box you agree to the following <%= link_to "Terms and Conditions", "upload_agreement.html", :target=>"_blank" %>
-  <br/><br/>
-  <%= submit_tag "Process", :id=>"process_uploads", :disabled=>'true'%> 
 
-  <%#= button_to "Process", enqueue_uploads_path %>
 <%end%>
 
 <script>
@@ -38,11 +35,11 @@
         // loop on all the li elements
             // slide up the element and set it's marker to '+' 
         $('#hide_me').slideDown(200);
-        $('#button_id').text('-');
+        $('#button_id').text('- Add Description');
 
     } else {
         $('#hide_me').slideUp(200);
-        $('#button_id').text('+');  
+        $('#button_id').text('+ Add Description');  
     }
     })
     
