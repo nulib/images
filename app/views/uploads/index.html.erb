@@ -1,5 +1,14 @@
+  <h1>Step One:</h1><h3>Add Your Files and Start the Upload</h3><br/>
   <%= render :partial=>'multiupload' %>
+  <h1>Step Two (optional):</h1><h3>Add Description to All Images</h3><br/>
   <%= render :partial=>'batch_form_fields' %>
+  <h1>Step Three:</h1><h3>Agree to Terms and Conditions</h3><br/>
+  <%= render :partial=>'terms_and_conditions' %>
+  <br/>
+  <br/>
+  <br/>
+  <h1>Step Four:</h1><br/>
+  <%= submit_tag "Submit Your Upload", :class=>"btn", :id=>"process_uploads", :disabled=>'true'%> 
   <% sidebar_items << capture do %>
     <%= link_to 'Search', catalog_index_path  %>
   <% end %>
