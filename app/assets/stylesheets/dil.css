@@ -5,21 +5,6 @@
 label.batch_toggle {
   display: inline;
 }
-.pagination .prev_page {
-    border-bottom: medium none;
-    left: 26%;
-    margin-left: 1em;
-    position: right;
-}
-
-
-.pagination .next_page {
-    border-bottom: medium none;
-    right: 2.5%;
-    margin-left: 1em;
-    position: right;
-}
-
 
 span.page a, span.page.current {
     border-bottom: medium none;
