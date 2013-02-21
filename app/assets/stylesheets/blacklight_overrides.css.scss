@@ -5,7 +5,7 @@ body {
  spacing-top: 0;
 }
 nav {
- margin-top: 7.4em;
+ margin-top: 0;
 }
 nav ul {
  list-style-type:none;
@@ -97,6 +97,25 @@ form.form-search {
 	width: 75%;
 }
 
+.pagination .prev_page{
+    #border-bottom: medium none;
+    #left: 26%;
+    margin: 0 auto;
+    position: inherit;
+}
+
+.pagination .next_page {
+    #border-bottom: medium none;
+    #right: 2.5%;
+    margin-left: 1em;
+    position: inherit;
+}
+.pagination {
+    height: 100px;
+    margin: 0 auto;
+    width: 50%;
+}
+
 .home_text {
 	color: #222;
 	float: left;
@@ -113,3 +132,4 @@ form.form-search {
 #main_container nav#downloads ul {
 	float: right;
 }
+
