@@ -3,9 +3,10 @@
 				<nav id="downloads">
                     <ul>
                             <% image_max = @multiresimage.longside_max %>
-                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 150 < image_max ? 150 : image_max %>">thumbnail</a></li>
-                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 800 < image_max ? 800 : image_max %>">medium</a></li>
-                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">large</a></li>
+                            <li>Downloads:</li>
+                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 150 < image_max ? 150 : image_max %>">Thumbnail</a></li>
+                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 800 < image_max ? 800 : image_max %>">Medium</a></li>
+                            <li><a class="download_links" target="_blank" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">Large</a></li>
                     </ul>
 				</nav>
               <% end %>
