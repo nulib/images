@@ -133,3 +133,13 @@ form.form-search {
 	float: right;
 }
 
+
+#facets div h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+#facets div h3:hover {
+    cursor: pointer;
+}
