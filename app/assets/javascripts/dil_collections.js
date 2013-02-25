@@ -21,7 +21,7 @@ function dropMe(theObj) {
 		
 		
 		
-		$( "<li></li>" ).text(ui.draggable.attr("title")+" added!").appendTo(this);
+	    //$( "<li></li>" ).text(ui.draggable.attr("title")+" added!").appendTo(this);
 		
 		$.ajax({
 		type: "POST",
