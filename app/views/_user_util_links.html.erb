@@ -1,11 +1,8 @@
 <% if current_user %>
   
     <%= link_to "Log Out", destroy_user_session_path %> [<%= link_to current_user.to_s, edit_user_registration_path %>] |
- 	<%= link_to 'Your Bookmarks', bookmarks_path %>	|
     <%= link_to "Saved Searches", saved_searches_path %>
 <% else %>
-	<%#= link_to 'Login', new_user_session_path %>
     <%= link_to 'Login', user_omniauth_authorize_path(:ldap) %>
 <% end %>	|
-	<%= link_to "Selected Items", folder_index_path %> (<span id="folder_number"><%= "#{session[:folder_document_ids] ? session[:folder_document_ids].length : 0}" %></span>)	|
 	<%= link_to "Search History", search_history_path %>
