@@ -136,13 +136,18 @@ input.addFieldBtn{
 	font-size: 100%;
 	line-height: 100%;
 	margin-top: 0px;
-	background-color: #583587;
-	color: white;
+	//background-color: #583587;
+	background-color: #F5F5F5;
+	color: #444444;
+	font-weight: normal;
 	padding: .5em;
+	border-radius: 2px 2px 2px 2px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	-moz-border-radius: 2px 2px 2px 2px;;
 }
 
 .accordion h2 a, .accordion h2 a:visited {
-	color: white;
+	color: #444444;
 }
 
 .accordion h2 span {
@@ -150,4 +155,11 @@ input.addFieldBtn{
 	display: inline-block;
 	margin: 0;
 	padding: 0;
+}
+
+.ui-state-hover {
+    background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6;
+    border: 9px solid #CCCCCC;
+    color: #2E4F81;
+    font-weight: normal;
 }
