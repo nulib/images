@@ -1,7 +1,7 @@
 function dropMe(theObj) {
 	$(theObj).droppable({
 	activeClass: "ui-state-default",
-	hoverClass: "ui-state-hover",
+	hoverClass: "dil-ui-state-hover",
 	accept: ":not(.ui-sortable-helper)",
 	drop: function( event, ui ) {
 		$( this ).find( ".placeholder" ).remove();
@@ -84,7 +84,7 @@ function dropMe(theObj) {
 			}
 		});
 		
-		$('.accordion h2 img').live("click", (function() {
+		$('.accordion h2 img.collection_plus_minus').live("click", (function() {
 		  var collection_id = $(this).closest('h2').attr('id');
 		  var theObj = $(this).closest('h2');
 		  var doAjax = false;
@@ -118,7 +118,7 @@ function dropMe(theObj) {
 				numImages = map['numImages'];
 
 			    if (numSub > 0){
-			      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numImages + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');
+			      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" class="collection_plus_minus" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + ' (' + numImages + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');
                 }
                 else{
                   items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + ' (' + numImages + ')</a></h2><div class="outer"><div class="inner"></div></div></li>');

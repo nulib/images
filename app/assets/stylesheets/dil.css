@@ -163,5 +163,5 @@ img.collection_plus_minus{
     border: 0 none;
     max-width: 100%;
     vertical-align: middle;
-    cursor: default;
+    cursor: pointer;
 }
