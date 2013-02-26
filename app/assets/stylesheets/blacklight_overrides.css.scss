@@ -7,13 +7,14 @@ body {
 #hd nav {
  margin-top: 7.5em;
 }
-#hd nav ul {
+#hd nav ul,
+nav#downloads ul {
  list-style-type:none;
  margin:0;
  padding:0;
 }
-#hd nav li
-{
+#hd nav li,
+nav#downloads ul li {
  display:inline;
  padding-right:10px;
 }
