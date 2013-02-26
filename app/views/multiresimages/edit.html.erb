@@ -1,5 +1,5 @@
 <% sidebar_items << capture do %>
-  <%= render :partial=>'shared/menu' %>
+  <%= render :partial=>'shared/back_to_previous' %>
 <% end %>
 
 <% if can?(:read, @multiresimage) %>
@@ -8,10 +8,5 @@
     <span class="inactive edit">Edit</span>
   </div>
 <% end %>
-      <%=render :partial=>'edit_description' %>
-    <div class="tab-pane" id="tab2">
-      <%=render :partial=>'crop' %>
-    </div>
-  </div>
 
-
+<%=render :partial=>'edit_description' %>
