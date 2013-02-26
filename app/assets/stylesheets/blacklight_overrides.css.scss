@@ -89,7 +89,7 @@ form.form-search {
 
 #bd #sidebar {
 	width:	24%;
-	overflow:	auto;
+	overflow: hidden;
 	vertical-align: top;
 }
 #bd #main {
@@ -142,4 +142,9 @@ form.form-search {
 
 #facets div h3:hover {
     cursor: pointer;
+}
+
+#facets li.more_facets_link {
+    text-align: left;
+    font-weight: bold;
 }
