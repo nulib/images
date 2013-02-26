@@ -202,10 +202,10 @@ class MultiresimagesController < ApplicationController
       #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
     end
 
-    default_image = File.open("app/assets/images/site/missing.png", 'rb') do |f|
+    default_image = File.open("app/assets/images/site/missing2.png", 'rb') do |f|
       f.read
     end
-    filename = "missing.png"
+    filename = "missing2.png"
     resp = ''
 
     if can?(:read, multiresimage)
