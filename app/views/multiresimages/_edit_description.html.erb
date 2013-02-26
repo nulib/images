@@ -33,12 +33,12 @@
         <%= f.submit "Save changes", :class=>'btn btn-primary'%>
       </div>
       
-      <fieldset class="permissions">
-        <legend>Permissions</legend>
+      <!--<fieldset class="permissions">
+        <legend>Permissions</legend>-->
         <%#=render :partial=>'shared/select_policy', :locals=>{:f=>f, :blank_label=>'Default Policy &mdash; Private to Owner'.html_safe} %>
 <!--        <p id="object-permissions-heading">Also grant access to:</p> -->
-        <%= render :partial=>'shared/edit_groups_and_users', :locals=>{:fedora_object=>@multiresimage, :field=>:permissions} %>
-      </fieldset>
+        <%#= render :partial=>'shared/edit_groups_and_users', :locals=>{:fedora_object=>@multiresimage, :field=>:permissions} %>
+      <!--</fieldset>-->
       
     <%end%>
 
