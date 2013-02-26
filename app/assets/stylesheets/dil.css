@@ -125,13 +125,15 @@ input.addFieldBtn{
 
 .accordion .inner {clear: both; margin-bottom: 0; padding: .5em;} */ /* overflow:hidden */
 
-.accordion .inner .inner {padding-bottom:0; width: 95%}
+.accordion .inner
+.inner {padding-bottom:0; width: 95%}
 
 .accordion .h {padding-top:.3em}
 
 .accordion p {margin:.5em 0 1em}
 
 .accordion h2 {
+    cursor: move;
 	clear: both;
 	font-size: 100%;
 	line-height: 100%;
@@ -143,7 +145,7 @@ input.addFieldBtn{
 	padding: .5em;
 	border-radius: 2px 2px 2px 2px;
 	border: 1px solid rgba(0, 0, 0, 0.1);
-	-moz-border-radius: 2px 2px 2px 2px;;
+	-moz-border-radius: 2px 2px 2px 2px;
 }
 
 .accordion h2 a, .accordion h2 a:visited {
@@ -157,9 +159,9 @@ input.addFieldBtn{
 	padding: 0;
 }
 
-.ui-state-hover {
-    background: url("images/ui-bg_glass_100_f6f6f6_1x400.png") repeat-x scroll 50% 50% #F6F6F6;
-    border: 9px solid #CCCCCC;
-    color: #2E4F81;
-    font-weight: normal;
+img.collection_plus_minus{
+    border: 0 none;
+    max-width: 100%;
+    vertical-align: middle;
+    cursor: default;
 }

@@ -18,7 +18,7 @@
 		    <h2 id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_t'].first%>" toggle="plus">
 		    <% if collection["has_subcollection_s"].present? %>
 		      <span>
-		        <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus" ) %>
+		        <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus", :class=>"collection_plus_minus") %>
 		      </span>
 		      <% if collection["has_image_s"].present? %>
 		        <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a> (<%=collection['has_image_s'].size%>)
