@@ -6,21 +6,6 @@ label.batch_toggle {
   display: inline;
 }
 
-span.page a, span.page.current {
-    border-bottom: medium none;
-    padding: 0.5em 0.5em;
-    float: left;
-    left: 50%;
-    text-decoration: none;
-}
-
-
-span.page.gap {
-    vertical-align: bottom;
-    float: left;
-}
-
-
 .listing {
         float: left;
         margin: 10px 10px 10px 10px;
