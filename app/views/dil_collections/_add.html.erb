@@ -26,8 +26,8 @@
 		        <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a> (0)
 		      <% end %>
 		    <% else %>
-		       <span>
-		       </span>
+		       <!--<span>
+		       </span>-->
 		       <% if collection["has_image_s"].present? %>
 		        <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_t'].first%></a> (<%=collection['has_image_s'].size%>)
 		      <% else %>
