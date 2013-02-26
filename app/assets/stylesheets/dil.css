@@ -150,3 +150,10 @@ img.collection_plus_minus{
     vertical-align: middle;
     cursor: pointer;
 }
+
+.dil-ui-state-hover {
+    background: url("images/ui-bg_glass_100_fdf5ce_1x400.png") repeat-x scroll 50% 50% #FDF5CE;
+    border: 1px solid #FBCB09;
+    color: #2E4F81;
+    font-weight: normal;
+}
