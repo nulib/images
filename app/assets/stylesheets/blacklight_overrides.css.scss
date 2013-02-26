@@ -4,15 +4,15 @@ body {
  padding-top: 0;
  spacing-top: 0;
 }
-nav {
- margin-top: 0;
+#hd nav {
+ margin-top: 7.5em;
 }
-nav ul {
+#hd nav ul {
  list-style-type:none;
  margin:0;
  padding:0;
 }
-nav li
+#hd nav li
 {
  display:inline;
  padding-right:10px;
@@ -97,25 +97,6 @@ form.form-search {
 	width: 75%;
 }
 
-.pagination .prev_page{
-    #border-bottom: medium none;
-    #left: 26%;
-    margin: 0 auto;
-    position: inherit;
-}
-
-.pagination .next_page {
-    #border-bottom: medium none;
-    #right: 2.5%;
-    margin-left: 1em;
-    position: inherit;
-}
-.pagination {
-    height: 100px;
-    margin: 0 auto;
-    width: 50%;
-}
-
 .home_text {
 	color: #222;
 	float: left;
@@ -142,4 +123,61 @@ form.form-search {
 
 #facets div h3:hover {
     cursor: pointer;
+}
+
+/* Pagination CSS */
+
+div.pagination {
+	margin: 18px auto;
+	text-align: center;
+}
+ul.pagination-container {border:0; margin:0; padding:0; position: relative;}
+
+.pagination-container li {
+	float:left;
+	border:0; margin:0; padding:0;
+	font-size:11px;
+	list-style:none;
+	margin-right:2px;
+	position: relative !important;
+}
+.pagination-container a {
+	border:solid 1px #DDD;
+	margin-right:2px;
+}
+.pagination-container .disabled {
+	border:solid 1px #DEDEDE;
+	color:#888888;
+	display:block;
+	float:left;
+	font-weight:bold;
+	margin-right:2px;
+	padding:3px 4px;
+}
+.pagination-container .next a,
+.pagination-container .prev a {
+	font-weight:bold;
+} 
+.pagination-container .current {
+	background:#2e4f81;
+	color:#FFFFFF;
+	font-weight:bold;
+	display:block;
+	float:left;
+	padding:4px 6px;
+}
+.pagination-container a:link,
+.pagination-container a:visited {
+	color:#2e4f81;
+	display:block;
+	float:left;
+	padding: 6px 6px;
+	text-decoration:none;
+}
+.pagination-container a:hover{
+	border:solid 1px #2e4f81;
+}
+
+.pagination a {
+	line-height: normal;
 }
