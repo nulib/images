@@ -110,24 +110,31 @@ input.addFieldBtn{
 
 .accordion .inner {clear: both; margin-bottom: 0; padding: .5em;} */ /* overflow:hidden */
 
-.accordion .inner .inner {padding-bottom:0; width: 95%}
+.accordion .inner
+.inner {padding-bottom:0; width: 95%}
 
 .accordion .h {padding-top:.3em}
 
 .accordion p {margin:.5em 0 1em}
 
 .accordion h2 {
+    cursor: move;
 	clear: both;
 	font-size: 100%;
 	line-height: 100%;
 	margin-top: 0px;
-	background-color: #583587;
-	color: white;
+	//background-color: #583587;
+	background-color: #F5F5F5;
+	color: #444444;
+	font-weight: normal;
 	padding: .5em;
+	border-radius: 2px 2px 2px 2px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	-moz-border-radius: 2px 2px 2px 2px;
 }
 
 .accordion h2 a, .accordion h2 a:visited {
-	color: white;
+	color: #444444;
 }
 
 .accordion h2 span {
@@ -135,4 +142,11 @@ input.addFieldBtn{
 	display: inline-block;
 	margin: 0;
 	padding: 0;
+}
+
+img.collection_plus_minus{
+    border: 0 none;
+    max-width: 100%;
+    vertical-align: middle;
+    cursor: pointer;
 }
