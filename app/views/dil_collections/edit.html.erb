@@ -1,22 +1,20 @@
+<% sidebar_items << capture do %>
+  <%= render :partial=>'parent_collections' %>
+<% end %>
 
-  <div id="accordion">
-  <!--  <a href="/catalog?f[object_type_facet][]=DILCollection&display_type=grid">← Return to Collections</a>-->
-    <span class="edit-browse">
-      <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit | <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %></a>
-    </span>
+<div id="accordion">
+  <span class="edit-browse">
+    <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit | <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %></a>
+  </span>
     
-    <% if @collection.members %>
-      <p/>
-      <%= form_for @collection, :url => { :action => "export" } , :method => "post" do |f| %>
-        <%= f.submit "Export to PowerPoint" %>
-      <% end %>
-      <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
-      <%= render :partial => 'dil_collections/edit_members' %>
+  <% if @collection.members %>
+    <%= form_for @collection, :url => { :action => "export" } , :method => "post" do |f| %>
+      <%= f.submit "Export to PowerPoint" %>
     <% end %>
-  </div>
-  
-  <p>
-  </p>
-  
-  
+      
+   <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
+     <%= render :partial => 'dil_collections/edit_members' %>
+   <% end %>
+</div>
+
   <!--Description, permissions-->
