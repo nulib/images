@@ -6,8 +6,11 @@
   <%= render :partial=>'multiupload' %>
   
   <h1>Step Two (optional):</h1><h3>Add Description to All Images</h3><br/>
-  <%= render :partial=>'batch_form_fields' %>
-  
+  <span class="btn btn-success fileinput-button" id="button_id"><i class="icon-plus icon-white"></i><span>Add description</span></span>
+  <br/>
+  <br/>
+  <%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>  
+    <%= render :partial=>'batch_form_fields' %>
   <h1>Step Three:</h1><h3>Agree to Terms and Conditions</h3><br/>
   <%= render :partial=>'terms_and_conditions' %>
   
@@ -17,5 +20,43 @@
   
   <h1>Step Four:</h1><br/>
   <%= submit_tag "Submit Your Upload", :class=>"btn", :id=>"process_uploads", :disabled=>'true'%> 
-  
+<%end%>
+
+<script>
+
+// bind the click to all headers
+ $(document).ready(function() {
+	
+	$('#hide_me').hide();
+
+	$("#button_id").click(function() {
+
+    // get the li that this header belongs to
+    // check to see if this li is not already being displayed
+    if (!$('#hide_me').is(':visible'))
+    {
+        // loop on all the li elements
+            // slide up the element and set it's marker to '+' 
+        $('#hide_me').slideDown(200);
+        $('#button_id').text('- Add Description');
+
+    } else {
+        $('#hide_me').slideUp(200);
+        $('#button_id').text('+ Add Description');  
+    }
+    })
+    
+    $("#depositors_agreement").click(function(){
+      
+      if ($(this).is(':checked')){
+        $("#process_uploads").attr("disabled", false);
+      }
+      
+      else {
+        $("#process_uploads").attr("disabled", true);
+      }
+      
+    })
+});
+</script>
 
