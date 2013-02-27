@@ -1,7 +1,3 @@
-<span class="btn btn-success fileinput-button" id="button_id"><i class="icon-plus icon-white"></i><span>Add description</span></span>
-<br/>
-<br/>
-<%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>
 <div id="hide_me">
 	<% vraSetArray = ["agent", "title", "culturalContext", "date", "subject", "location", "source", "technique", "material", "measurements", "stylePeriod", "inscription", "description", "worktype"] %>
 	
@@ -16,43 +12,3 @@
 		</div>
 	<%end%>
 </div>
-
-<%end%>
-
-<script>
-
-// bind the click to all headers
- $(document).ready(function() {
-	
-	$('#hide_me').hide();
-
-	$("#button_id").click(function() {
-
-    // get the li that this header belongs to
-    // check to see if this li is not already being displayed
-    if (!$('#hide_me').is(':visible'))
-    {
-        // loop on all the li elements
-            // slide up the element and set it's marker to '+' 
-        $('#hide_me').slideDown(200);
-        $('#button_id').text('- Add Description');
-
-    } else {
-        $('#hide_me').slideUp(200);
-        $('#button_id').text('+ Add Description');  
-    }
-    })
-    
-    $("#depositors_agreement").click(function(){
-      
-      if ($(this).is(':checked')){
-        $("#process_uploads").attr("disabled", false);
-      }
-      
-      else {
-        $("#process_uploads").attr("disabled", true);
-      }
-      
-    })
-});
-</script>
