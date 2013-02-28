@@ -101,6 +101,10 @@ class DilCollectionsController < ApplicationController
   
   def show
     @collection = DILCollection.find(params[:id])
+    if can?(:edit, @collection)
+      render :action => 'edit', :id => params[:id]
+    end
+    
   end
   
   def edit

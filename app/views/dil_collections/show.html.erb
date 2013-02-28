@@ -3,11 +3,6 @@
 <% end %>
 
 <div id="accordion">
-  <% if can?(:edit, @collection) %>  
-    <span class="edit-browse">
-       Browse | <a href="/dil_collections/<%=@collection.id%>/edit">Edit</a> | <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %></a>
-    </span>
-  <% end %>
     
   <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
   <%= render :partial => 'dil_collections/show_members', :locals => { :collection_id => @collection.id } %>
