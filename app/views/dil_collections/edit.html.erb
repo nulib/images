@@ -4,13 +4,10 @@
 
 <div id="accordion">
   <span class="edit-browse">
-    <a href="/dil_collections/<%=@collection.id%>">Browse</a> | Edit | <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %></a>
+    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %> <% if @collection.members %>| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %><% end %>
   </span>
     
   <% if @collection.members %>
-    <%= form_for @collection, :url => { :action => "export" } , :method => "post" do |f| %>
-      <%= f.submit "Export to PowerPoint" %>
-    <% end %>
       
    <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
      <%= render :partial => 'dil_collections/edit_members' %>
