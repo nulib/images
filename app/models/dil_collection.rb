@@ -186,15 +186,20 @@ class DILCollection < ActiveFedora::Base
     numberImages = nil
     numberSubcollections = nil
     
-    if self.multiresimages.present?
-      numberImages = self.multiresimages.size
-    else
-      numberImages = 0
-    end
-     
+    #if collection has subcollections
     if self.subcollections.present? and self.subcollections.size > 0
+      
+      #for each subcollection
       self.subcollections.each do |subcollection|
         
+        #get the number of images in this subcollection
+        if subcollection.multiresimages.present?
+          numberImages = subcollection.multiresimages.size
+        else
+          numberImages = 0
+        end
+         
+        #if the subcollection has subcollections
         if subcollection.subcollections.present?
           numberSubcollections = subcollection.subcollections.size
         else
@@ -203,6 +208,7 @@ class DILCollection < ActiveFedora::Base
         
         json_array << {"title" => subcollection.title, "pid" => subcollection.pid, "numSubcollections" => numberSubcollections, "numImages" =>  numberImages}
       end
+    #no subcollections
     else
       json_size_hash = {"numberSubcollections"=>"0", "numberImages"=>numberImages}
       json_array = [json_size_hash]
