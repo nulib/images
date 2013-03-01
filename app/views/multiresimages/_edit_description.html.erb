@@ -18,11 +18,11 @@
             <% displays =  @multiresimage.send((vraSetName + "Set_display").to_sym).split(";") %>  
             <% displays.each_with_index do |display,index| %>
               <% display.strip! %>
-              <%= text_field_tag "multiresimage_#{vraSetName}Set_display_#{index}", display, :class=>'span6'%>
-              <%= f.submit :-, :type=>"button", :id=>"multiresimage_delete_#{vraSetName}Set_display_#{index}" %>
+              <p><%= text_field_tag "multiresimage_#{vraSetName}Set_display_#{index}", display, :class=>'span5'%>
+              <%= f.submit :-, :type=>"button", :id=>"multiresimage_delete_#{vraSetName}Set_display_#{index}", :class=>'minusFieldBtn' %>
             <% end %>
           <%end%>
-          <%= f.submit :+, :type=>"button", :id=>"add#{vraSetNameCamelUpper}",  :class=>'addFieldBtn' %>
+          <p><%= f.submit :+, :type=>"button", :id=>"add#{vraSetNameCamelUpper}",  :class=>'addFieldBtn' %>
         </div>
       </div>
       

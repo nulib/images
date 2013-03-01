@@ -37,6 +37,8 @@
             //insert the clone text field after the last delete button of the set
             $clone_txt_field.insertAfter('input[id=' + lastDeleteBtnId +']');
             
+			$("<p>").insertAfter('input[id=' + lastDeleteBtnId +']');
+
             //assign a new id
             $clone_txt_field.attr("id", newTxtFieldId);
             
@@ -51,6 +53,7 @@
             $clone_delete_btn.insertAfter('input[id=' + newTxtFieldId +']');
             $clone_delete_btn.attr("id", newDeleteBtnId);
             $clone_delete_btn.attr("name", "commit");
+
           }
           
           //there isn't a text field for the set, so clone title (that's a required field)
