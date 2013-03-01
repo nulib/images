@@ -29,6 +29,7 @@ function dropMe(theObj) {
 		//data: "id=10",
 		async: false,
 		success: function(msg){
+		 location.reload();
 		}
 		});//end ajax
 		
