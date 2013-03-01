@@ -84,10 +84,11 @@ tr.odd td.field{
 	font-weight:bold;
 }
 
-input.addFieldBtn{
-    width: 175px;
-    color: white;
-    background-color: #380B61;
+input.addFieldBtn,
+input.minusFieldBtn {
+    width: 50px;
+    color: #444;
+    background-color: #F5F5F5;
 }
 
 #imageCollection div {
@@ -125,7 +126,7 @@ input.addFieldBtn{
 	margin-top: 0px;
 	//background-color: #583587;
 	background-color: #F5F5F5;
-	color: #444444;
+	color: #444;
 	font-weight: normal;
 	padding: .5em;
 	border-radius: 2px 2px 2px 2px;
