@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
 
   def top_level_collections
     query="rightsMetadata_edit_access_machine_person_t:#{uid} AND NOT title_s:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_s:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection AND is_top_level_collection_s:true" 
-    ActiveFedora::SolrService.query(query, {:fl=>'id title_t has_subcollection_s has_image_s', :rows=>'1000'})
+    ActiveFedora::SolrService.query(query, {:fl=>'id title_t has_subcollection_s has_image_s', :rows=>'1000', :sort=>'title_s asc'})
   end
 
   def self.admin_groups
