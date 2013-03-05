@@ -31,7 +31,7 @@ function dropMe(theObj) {
 		success: function(msg){
 		 
 		 //hide the loading gif
-		 $('.modal').hide();
+		 //$('.modal').hide();
 		 
 		 //reload the page to refresh the collections
 		 location.reload();

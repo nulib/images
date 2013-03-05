@@ -31,12 +31,16 @@ PersistenceManager.requestNewCrop = function()
 		vp.height = ImageServer.details.height - vp.y;
 	
 	var fetch_url = Site.createCropUrl(vp.x, vp.y, vp.width, vp.height, ImageServer.image);
-
+     
+    //show the loading gif 
+    
+    $('.modal-collection').show();
 	$.get(fetch_url, function(data) 
 	{
 		// TODO: Check for <error /> return
 		var pid = $(data).find("success").attr("pid");
-
+        
+        //redirect to crop's show view
 		window.location = Site.multiresimagePathForPid(pid);
 	});
 };
