@@ -18,10 +18,10 @@ function dropMe(theObj) {
 		//get id attribute for droppable <li> item (collection)
 		//var collectionID = $( this ).find("li").attr("pid");
 		var collectionID = $( this ).attr("pid");
-		
-		
-		
-	    //$( "<li></li>" ).text(ui.draggable.attr("title")+" added!").appendTo(this);
+  
+    
+        //show the loading gif
+        $('.modal-collection').show();
 		
 		$.ajax({
 		type: "POST",
@@ -29,7 +29,16 @@ function dropMe(theObj) {
 		//data: "id=10",
 		async: false,
 		success: function(msg){
+		 
+		 //hide the loading gif
+		 $('.modal').hide();
+		 
+		 //reload the page to refresh the collections
 		 location.reload();
+	    },
+		
+		 error: function(msg){ 
+		 $('.modal-collection').hide();
 		}
 		});//end ajax
 		
@@ -42,6 +51,7 @@ function dropMe(theObj) {
 		$( this ).removeClass( "ui-state-default" );
 	}
 })};
+
 
 	start_index='';
 	$(document).ready(function(){
