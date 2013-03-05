@@ -3,7 +3,9 @@ function dropMe(theObj) {
 	activeClass: "ui-state-default",
 	hoverClass: "dil-ui-state-hover",
 	accept: ":not(.ui-sortable-helper)",
+	tolerance: "pointer",
 	drop: function( event, ui ) {
+    
 		$( this ).find( ".placeholder" ).remove();
 		
 		//get id attribute for draggable <li> item (image)
@@ -19,10 +21,9 @@ function dropMe(theObj) {
 		//var collectionID = $( this ).find("li").attr("pid");
 		var collectionID = $( this ).attr("pid");
   
-    
-        //show the loading gif
+		//show the loading gif
         $('.modal-collection').show();
-		
+        
 		$.ajax({
 		type: "POST",
 		url: "dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
