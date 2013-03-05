@@ -110,7 +110,9 @@
 <script type="text/javascript" charset="utf-8">
     $(function () {
         // Initialize the jQuery File Upload widget:
-        $('#fileupload').fileupload();
+        $('#fileupload').fileupload({
+           acceptFileTypes: /(\.|\/)(tif|TIFF|jpe?g|JPE?G)$/i              
+        });
         // Load existing files:
         $('#fileupload').each(function () {
             var that = this;
