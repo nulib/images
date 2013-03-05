@@ -1,3 +1,10 @@
+/**
+*  This is for the drag-drop for adding an image or collection to another collection.
+*  This is also the code to sort items within collections.
+*  REFACTOR NEEDED
+**/
+
+
 function dropMe(theObj) {
 	$(theObj).droppable({
 	activeClass: "ui-state-default",
@@ -22,7 +29,7 @@ function dropMe(theObj) {
 		var collectionID = $( this ).attr("pid");
   
 		//show the loading gif
-        $('.modal-collection').show();
+        $('.modal-collection').show('fast');
         
 		$.ajax({
 		type: "POST",
@@ -32,7 +39,7 @@ function dropMe(theObj) {
 		success: function(msg){
 		 
 		 //hide the loading gif
-		 //$('.modal').hide();
+		 $('.modal').hide();
 		 
 		 //reload the page to refresh the collections
 		 location.reload();
