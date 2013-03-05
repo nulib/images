@@ -75,7 +75,7 @@ CoordinateManager.currentActualViewport = function()
     vp.width = $(CropTool.rootDiv).width() * zoom;
     vp.height = $(CropTool.rootDiv).height() * zoom;
 
-	alert("Start crop with dimensions (" + vp.x + ", " + vp.y + " -- " + vp.width + "x" + vp.height + ")");
+	//alert("Start crop with dimensions (" + vp.x + ", " + vp.y + " -- " + vp.width + "x" + vp.height + ")");
 
 	return vp;
 }
