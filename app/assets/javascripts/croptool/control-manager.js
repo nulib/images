@@ -452,10 +452,12 @@ ControlManager.initialize = function ()
 	var controls = {};
 		
 	var base = ControlManager.BASE_SIDE;
-
-	var mode = CropTool.paper.rect(width - base, height - base, base, base);
-	mode.attr("fill", ControlManager.FILL);
-	mode.attr("stroke", ControlManager.STROKE);
+    
+    var mode = CropTool.paper.rect();
+	// Draw the area for the move tool
+	//var mode = CropTool.paper.rect(width - base, height - base, base, base);
+	//mode.attr("fill", ControlManager.FILL);
+	//mode.attr("stroke", ControlManager.STROKE);
 
 	var toggleFunction = function(event)
 	{
@@ -499,7 +501,8 @@ ControlManager.initialize = function ()
 
 	controls.mode = mode;	
 	
-	var modeIcon = CropTool.paper.image(Site.iconPath() + "move-24.png", width - base + 5, height - base + 5, 24, 24);
+	//Add the move icon
+	var modeIcon = CropTool.paper.image();
 	modeIcon.click(toggleFunction);
 	controls.modeIcon = modeIcon;	
 
