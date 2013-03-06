@@ -172,3 +172,11 @@ img.collection_plus_minus{
                 50% 50% 
                 no-repeat;
 }
+
+svg rect {
+  cursor: move;
+}
+
+svg image {
+  cursor: pointer;
+}
