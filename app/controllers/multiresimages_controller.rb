@@ -23,6 +23,7 @@ class MultiresimagesController < ApplicationController
   def get_svg
 	  expires_in(1.hours, :private => false, :public => true)
 	  source_fedora_object = Multiresimage.find(params[:id])
+	  authorize! :show, source_fedora_object
 	  @svg = source_fedora_object.DELIV_OPS.content()
     respond_to do |wants|
        wants.xml  { render :xml => @svg }
@@ -43,13 +44,14 @@ class MultiresimagesController < ApplicationController
   end
    
   def edit
-    @multiresimage = Multiresimage.find(params[:id]) 
+    @multiresimage = Multiresimage.find(params[:id])
+    authorize! :update, @multiresimage
     @policies = AdminPolicy.readable_by_user(current_user)
-    authorize! :destroy, @multiresimage
   end
    
   def show
     @multiresimage = Multiresimage.find(params[:id])
+    authorize! :read, @multiresimage
     @page_title = @multiresimage.titleSet_display
   end
    
@@ -74,9 +76,14 @@ class MultiresimagesController < ApplicationController
   # Create new crop
   # Todo: Refactor a bunch of this into the model
   def create_crop
-
+    
+    
     image_id = params[:pid]
-      
+    
+    # Get source Fedora object
+    source_fedora_object = Multiresimage.find(image_id)
+    authorize! :show, source_fedora_object
+    
     # Get the new crop boundaries
     x=params[:x]
     y=params[:y]
@@ -86,9 +93,6 @@ class MultiresimagesController < ApplicationController
     new_image = Multiresimage.new(:pid=>mint_pid("dil-local"))
     puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
 	#@dil_collection.set_collection_type('Multiresimage')
-
-    # Get source Fedora object
-    source_fedora_object = Multiresimage.find(image_id)
 
     # Get source SVG datastream
     source_svg_ds = source_fedora_object.DELIV_OPS   

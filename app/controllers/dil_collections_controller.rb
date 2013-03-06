@@ -49,6 +49,7 @@ class DilCollectionsController < ApplicationController
   def remove
     member_index = params[:member_index];
     collection = DILCollection.find(params[:id])
+    authorize! :update, collection
     collection.remove_member_by_pid(params[:pid])
     
     redirect_to edit_dil_collection_path(collection)
@@ -58,6 +59,7 @@ class DilCollectionsController < ApplicationController
   def destroy
     begin
       collection = DILCollection.find(params[:id])
+      authorize! :destroy, collection
     
       #remove all images from collection
       collection.multiresimages.each do |image|
@@ -91,6 +93,7 @@ class DilCollectionsController < ApplicationController
   #move a member item in a collection from original position to new position
   def move
     collection = DILCollection.find(params[:id])
+    authorize! :update, collection
 	ds = collection.datastreams["members"]
     
     #call the move_member method within mods_collection_members
@@ -101,6 +104,7 @@ class DilCollectionsController < ApplicationController
   
   def show
     @collection = DILCollection.find(params[:id])
+    authorize! :show, @collection
     if can?(:edit, @collection)
       render :action => 'edit', :id => params[:id]
     end
@@ -142,6 +146,7 @@ class DilCollectionsController < ApplicationController
   def get_subcollections
     begin 
       collection = DILCollection.find(params[:id])
+      authorize! :show, collection
     
       #get the json
       return_json = collection.get_subcollections_json
