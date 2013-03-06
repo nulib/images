@@ -173,6 +173,7 @@ img.collection_plus_minus{
                 no-repeat;
 }
 
+/** For Crop Tool**/
 svg rect {
   cursor: move;
 }
