@@ -522,7 +522,7 @@ ControlManager.initialize = function ()
 
 		controls.create = create;	
 
-		var createIcon = CropTool.paper.image(Site.iconPath() + "crop-24.png", width - base + 6, 7, 20, 20);
+		var createIcon = CropTool.paper.image(Site.iconPath() + "camera.png", width - base + 6, 7, 20, 20);
 		createIcon.click(createFunction);
 		controls.createIcon = createIcon;	
 	}
