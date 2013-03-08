@@ -29,7 +29,7 @@ function dropMe(theObj) {
 		var collectionID = $( this ).attr("pid");
   
 		//show the loading gif
-        $('.modal-collection').show('fast');
+        $('.modal-collection').show();
         
 		$.ajax({
 		type: "POST",
