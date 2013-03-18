@@ -160,5 +160,11 @@ function dropMe(theObj) {
 				$(this).remove();
 			});
 		}
+	
 	}));
+
+	$('a[data-method="delete"]').bind('confirm:complete', function(e, answer) {
+		if(answer)
+			$('.modal-collection').show();
+	});
 });
