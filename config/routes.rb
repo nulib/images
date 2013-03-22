@@ -3,10 +3,15 @@ DIL::Application.routes.draw do
   HydraHead.add_routes(self)
   Hydra::BatchEdit.add_routes(self)
 
-
-  root :to => "catalog#index"
+  authenticated :user do
+    root :to => "catalog#index"
+  end
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+
+  devise_scope :user do
+    root :to => "devise/sessions#new"
+  end
   
   resources :multiresimages do
     collection do
