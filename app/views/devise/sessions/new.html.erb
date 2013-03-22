@@ -1,7 +1,4 @@
-<h2>Sign in</h2>
-
-<hr>
-
+<!--
 LDAP Authentication:
 
 <% if user_signed_in? %>
@@ -11,7 +8,7 @@ LDAP Authentication:
 <% end %>
 
 <hr>
-
+-->
 <!--<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
   <div><%= f.label :uid, 'Username' %><br />
   <%= f.text_field :uid %></div>
@@ -28,21 +25,34 @@ LDAP Authentication:
 
 <%= render :partial => "devise/shared/links" %>-->
 
-<!-- 
-<%= form_for(resource, :as => resource_name, :url => '/users/auth/ldap/callback') do |f| %>
-  <div><label for='username'>Username</label><br />
-  <input type='text' id='username' name='username'/></div>
-
-  <div><label for='password'>Password</label><br />
-  <input type='password' id='password' name='password'/></div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div><%= f.check_box :remember_me %> <%= f.label :remember_me %></div>
-  <% end -%>
-
-  <div><%= f.submit "Sign in" %></div>
-<% end %>
-
-<%= render :partial => "devise/shared/links" %>
-
--->
+<div class="sign-in">
+	<div class="signin-box">
+  		<h2>Sign in with a NetID</h2>
+		<hr>
+		<%= form_for(resource, :id=>'loginform', :as => resource_name, :url => '/users/auth/ldap/callback', :noValidate=>'') do |f| %>
+			<div class="email-div">
+				<label for='username'><strong class="email-label">Username</strong></label>
+				<input type='text' id='username' name='username'/>
+			</div>
+			<div class="passwd-div">
+				<label for='password'><strong class="passwd-label">Password</strong></label>
+				<input type='password' id='password' name='password'/>
+			</div>
+			<%= f.submit "Sign in", :name=>'signIn', :id=>'signIn' %>
+			<% if devise_mapping.rememberable? -%>
+			<label class="remember" onclick="">
+				<%= f.check_box :remember_me %>
+				<strong class="remember-label">
+					Remember me
+				</strong>
+			</label>
+			<% end -%>
+		<% end %>
+		<ul>
+			<li>
+				<a href="https://validate.it.northwestern.edu/idm/user/login.jsp" target="_blank">Forgot your password?</a>
+				<%#= render :partial => "devise/shared/links" %>
+			</li>
+		</ul>
+	</div>
+</div>
