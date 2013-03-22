@@ -181,3 +181,62 @@ svg rect {
 svg image {
   cursor: pointer;
 }
+
+/** Sign In **/
+.sign-in {
+//	width: 335px;
+	width: 250px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+.signin-box {
+	margin: 12px 0 0;
+	padding: 20px 25px 15px;
+	background: #f1f1f1;
+	border: 1px solid #e5e5e5;
+	display: inherit;
+	width: inherit;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+-webkit-box-shadow: 2px 2px 7px rgba(0,0,0,0.3);
+}
+.signin-box input[type=submit] {
+	margin: 0 1.5em 1.2em 0;
+	height: 32px;
+	font-size: 13px;
+}
+.signin-box input[type=text], .signin-box input[type=password], .signin-box textarea {
+	width: 18em;
+}
+
+
+.signin-box label.remember {
+	display: inline-table;
+	vertical-align: top;
+	margin: 9px 0;
+}
+.signin-box .remember-label {
+	font-weight: normal;
+	color: #666;
+	line-height: 0px;
+	padding: 0 0 0 .4em;
+	margin-top: .4em;
+	display: inline-block;
+}
+.signin-box input[type=checkbox] {
+	width: 13px;
+	height: 13px;
+	margin: 0;
+	cursor: pointer;
+	vertical-align: bottom;
+	background: #fff;
+	border: 1px solid #dcdcdc;
+	-webkit-border-radius: 1px;
+	-moz-border-radius: 1px;
+	border-radius: 1px;
+	position: relative;
+	display: inline-table;
+}
