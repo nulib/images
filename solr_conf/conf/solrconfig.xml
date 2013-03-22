@@ -79,6 +79,11 @@
   <requestHandler name="standard" class="solr.SearchHandler">
      <lst name="defaults">
        <str name="echoParams">explicit</str>
+       <str name="qf">
+          title_t^1
+          agentSet_display_t^1
+          search_field_t^.75
+       </str>
      </lst>
   </requestHandler>
 
