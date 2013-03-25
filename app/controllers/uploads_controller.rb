@@ -30,6 +30,21 @@ class UploadsController < ApplicationController
   # After the image is uploaded, create Multiresimage and Vrawork Fedora objects
   # Called from Jquery uploader, ajax call, respond with JSON
   def create
+ 
+  #filename the user gave the file
+  #filename = params[:files][0].original_filename
+  
+  # Sanitize the filename - upload security - Code from Rails security guide
+  params[:files][0].original_filename.strip.tap do |name|
+    # NOTE: File.basename doesn't work right with Windows paths on Unix
+    # get only the filename, not the whole path
+    name.sub! /\A.*(\\|\/)/, ''
+    # Finally, replace all non alphanumeric, underscore
+    # or periods with underscore
+    name.gsub! /[^\w\.\-]/, '_'
+   end
+   
+    
     titleSet_display = current_user.user_key + " " + params[:files][0].original_filename
     error = false
     
@@ -41,8 +56,10 @@ class UploadsController < ApplicationController
     
     #Scan file (will return fixnum if ok, string with virus name if not ok)
     if params[:files][0].is_a? Tempfile
+      logger.debug("TEMPFILE: #{params[:files][0].tempfile.path}")
       scan_result = clam.scanfile(params[:files][0].tempfile.path)
     else
+      logger.debug("FILE: #{params[:files][0].path}")
       scan_result = clam.scanfile(params[:files][0].path)
     end
     
@@ -52,6 +69,7 @@ class UploadsController < ApplicationController
       edit_users_array = DIL_CONFIG['admin_staff'] | Array.new([current_user.user_key])
       
       @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
+      logger.debug("FILES:#{params[:files]}")
       @image.attach_file(params[:files])
       @image.apply_depositor_metadata(current_user.user_key)
       @image.edit_users = edit_users_array
