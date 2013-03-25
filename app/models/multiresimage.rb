@@ -109,6 +109,7 @@ class Multiresimage < ActiveFedora::Base
     {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
   end
 
+  # Moving file from temp location to config location.  Messing server will pull from here.
   def write_out_raw
     new_filepath = temp_filename(file_name, DIL::Application.config.processing_file_path)
     File.open(new_filepath, 'wb') do |f|
