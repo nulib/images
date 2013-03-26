@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
     render :file => "#{Rails.root}/public/404", :status => 404, :layout => false
   end
 
+
   # Adds a few additional behaviors into the application controller 
    include Blacklight::Controller  
 # Adds Hydra behaviors into the application controller 
