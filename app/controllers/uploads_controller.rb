@@ -30,23 +30,32 @@ class UploadsController < ApplicationController
   # After the image is uploaded, create Multiresimage and Vrawork Fedora objects
   # Called from Jquery uploader, ajax call, respond with JSON
   def create
- 
-  #filename the user gave the file
-  #filename = params[:files][0].original_filename
-  
-  # Sanitize the filename - upload security - Code from Rails security guide
-  params[:files][0].original_filename.strip.tap do |name|
-    # NOTE: File.basename doesn't work right with Windows paths on Unix
-    # get only the filename, not the whole path
-    name.sub! /\A.*(\\|\/)/, ''
-    # Finally, replace all non alphanumeric, underscore
-    # or periods with underscore
-    name.gsub! /[^\w\.\-]/, '_'
-   end
-   
+
+    # Run the "file" command in the shell to determine file type
+    # Note: Using file.read(4) was not reliable
+    user_file_type = `file #{params[:files][0].tempfile.path}`
     
-    titleSet_display = current_user.user_key + " " + params[:files][0].original_filename
+    # Verify the file is a JPEG or TIFF
+    # Note:  This protects against a spoofed content-type header
+    # and also does not rely on file type extension
+    if !["JPEG", "JPG", "TIF", "TIFF"].any?{|valid_file_type|  user_file_type.include?valid_file_type}
+      raise Exception, "Invalid file type"
+    end
+    
+  
+      #filename the user gave the file
+      # Sanitize the filename - upload security - Code from Rails security guide
+      params[:files][0].original_filename.strip.tap do |name|
+        # NOTE: File.basename doesn't work right with Windows paths on Unix
+        # get only the filename, not the whole path
+        name.sub! /\A.*(\\|\/)/, ''
+        # Finally, replace all non alphanumeric, underscore
+        # or periods with underscore
+        name.gsub! /[^\w\.\-]/, '_'
+       end
+   
     error = false
+    titleSet_display = current_user.user_key + " " + params[:files][0].original_filename
     
     #Create ClamAV instance for virus scanning
     clam = ClamAV.instance
