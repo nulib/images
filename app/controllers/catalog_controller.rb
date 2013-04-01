@@ -47,7 +47,7 @@ class CatalogController < ApplicationController
     #
     # :show may be set to false if you don't want the facet to be drawn in the 
     # facet bar
-    config.add_facet_field 'agent_name_facet', :label => 'Agent', :limit=>5 
+    config.add_facet_field 'agent_name_facet', :label => 'Creator', :limit=>5 
     config.add_facet_field 'culturalContext_facet', :label => 'Cultural Context', :limit=>5 
     config.add_facet_field 'date_display_facet', :label => 'Date', :limit=>5 
     config.add_facet_field 'stylePeriod_facet', :label => 'Style/Period', :limit=>5
