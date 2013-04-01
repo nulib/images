@@ -16,7 +16,7 @@ class DilCollectionsController < ApplicationController
 		@dil_collection.descMetadata.title = params[:dil_collection][:title]
 		@dil_collection.save!
 	  end
-	  redirect_to catalog_index_path
+	  redirect_to :back
   end
 
   def update
