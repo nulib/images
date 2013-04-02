@@ -36,12 +36,19 @@ class DilCollectionsController < ApplicationController
     redirect_to edit_dil_collection_path(@collection)
   end
  
+  # This method is for adding an image or collection to an existing collection
+  # It was originally for adding one item at a time, with that item's id in the params.
+  # It can now add multiple items in one call. The hydra-batch-edit gem already had a way to
+  # select multiple items from a search result.  It stores the list of selected items in the session.
+  # This code now checks to see if there are multiple items in the list.  If so, it will make a call to
+  # collection.insert_member for each one.
   def add
     @collection = DILCollection.find(params[:id])
     authorize! :edit, @collection
     @fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
     authorize! :show, @fedora_object
     @collection.insert_member(@fedora_object)
+    logger.debug("TEST TEST #{session.inspect}")
     render :nothing => true
   end
   
@@ -153,7 +160,7 @@ class DilCollectionsController < ApplicationController
     
     rescue Exception => e
       #error
-      return_json = "Exception"
+      return_json = "{\"status\":exception}"
       logger.debug("get_subcollections exception: #{e.to_s}")
         
     ensure #this will get called even if an exception was raised
@@ -161,6 +168,46 @@ class DilCollectionsController < ApplicationController
         #This wasn't working quite right, so just storing JSON in a variable instead of using .to_json
         #format.json { render :layout =>  false, :json => collection.to_json(:methods=>:get_subcollections) }
         format.json { render :layout =>  false, :json => return_json}
+      end  
+    
+    end
+  end
+  
+  # This API is called when a user selects one image using the checkbox to add it to the batch selection list.
+  # The list is stored in the session as :batch_select_ids
+  # JSON is returned
+  def add_to_batch_select
+    begin 
+     (session[:batch_select_ids] ||= []) << params[:id]
+     return_json = "{\"status\":success}"
+    rescue Exception => e
+      #error
+       return_json = "{\"status\":exception}"
+      logger.debug("get_subcollections exception: #{e.to_s}")
+        
+    ensure #this will get called even if an exception was raised
+      respond_to do |format|
+       format.json { render :layout =>  false, :json => return_json}
+      end  
+    
+    end
+  end
+  
+  # This API is called when a user de-selects one image using the checkbox to remove it from the batch selection list.
+  # The list is stored in the session as :batch_select_ids
+  # JSON is returned
+  def remove_from_batch_select
+    begin 
+     (session[:batch_select_ids] ||= []).delete(params[:id])
+     return_json = "{\"status\":success}"
+    rescue Exception => e
+      #error
+       return_json = "{\"status\":exception}"
+      logger.debug("get_subcollections exception: #{e.to_s}")
+        
+    ensure #this will get called even if an exception was raised
+      respond_to do |format|
+       format.json { render :layout =>  false, :json => return_json}
       end  
     
     end
