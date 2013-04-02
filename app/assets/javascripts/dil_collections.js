@@ -13,7 +13,7 @@ function dropMe(theObj) {
 	tolerance: "pointer",
 	drop: function( event, ui ) {
     
-		$( this ).find( ".placeholder" ).remove();
+		$(this).find( ".placeholder" ).remove();
 		
 		//get id attribute for draggable <li> item (image)
 		var imageID = $(ui.draggable).attr("pid");
@@ -168,3 +168,18 @@ function dropMe(theObj) {
 			$('.modal-collection').show();
 	});
 });
+
+//When a user clicks the checkbox for batch selecting images
+$('input[id^="batch_select_"]').live("click", (function() {
+  //$(this).attr("checked"));
+  item_id = $(this).attr("id").substring(13);
+  			$.ajax({
+		    type: "POST",
+		    url: "dil_collections/add_to_batch_select/" + item_id,
+		    success: function(msg){
+	        },
+		
+		    error: function(msg){ 
+		    }
+		});//end ajax
+}));
