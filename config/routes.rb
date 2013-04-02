@@ -43,7 +43,9 @@ DIL::Application.routes.draw do
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"#, :via => :post
   match "dil_collections/export/:id" => "dil_collections#export", :via => :post
   match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
-
+  match "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
+  match "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }, :via => :post
+  
   resources :uploads, :only => [:index] do
     collection do
       post :enqueue

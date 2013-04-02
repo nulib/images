@@ -10,6 +10,7 @@
   <a href="/multiresimages/<%=document[:id]%>">
     <%= document[:title_display].nil?  ? document[:id] : document[:title_display].truncate(50) %>
   </a>
+  <%= check_box_tag "batch_select_#{document[:id]}" %>
   <%= batch_edit_select(document) %>
 </div>
 
