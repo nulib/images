@@ -171,15 +171,26 @@ function dropMe(theObj) {
 
 //When a user clicks the checkbox for batch selecting images
 $('input[id^="batch_select_"]').live("click", (function() {
-  //$(this).attr("checked"));
+  //"batch_select_" is prepended to each checkbox
   item_id = $(this).attr("id").substring(13);
-  			$.ajax({
-		    type: "POST",
-		    url: "dil_collections/add_to_batch_select/" + item_id,
-		    success: function(msg){
-	        },
+  
+  //if checked, add to batch_select list
+  if ($(this).attr("checked")!=null && $(this).attr("checked")=="checked"){
+    url="dil_collections/add_to_batch_select/" + item_id
+  }
+  //if unchecked, remove from batch_select list
+  else {
+    url="dil_collections/remove_from_batch_select/" + item_id
+  }
+
+    $.ajax({
+      type: "POST",
+      url: url,
+      success: function(msg){
+    },
 		
-		    error: function(msg){ 
-		    }
-		});//end ajax
+    error: function(msg){ 
+    }
+  });//end ajax
+
 }));

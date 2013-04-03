@@ -43,12 +43,40 @@ class DilCollectionsController < ApplicationController
   # This code now checks to see if there are multiple items in the list.  If so, it will make a call to
   # collection.insert_member for each one.
   def add
-    @collection = DILCollection.find(params[:id])
-    authorize! :edit, @collection
-    @fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
-    authorize! :show, @fedora_object
-    @collection.insert_member(@fedora_object)
-    logger.debug("TEST TEST #{session.inspect}")
+    collection = DILCollection.find(params[:id])
+    # Does user have edit access on the collection?
+    authorize! :edit, collection
+        
+    # Check to see if there is a batch_select_ids session variable that has values.
+    # If so, iterate through and add those items to the collection
+    if session[:batch_select_ids].present?
+      
+      # Make sure the selected image is in the list (user might not have checked it)
+      if !session[:batch_select_ids].include? (params[:member_id])
+        session[:batch_select_ids] << params[:member_id]
+      end
+      
+      session[:batch_select_ids].each do |pid|
+        fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
+        
+        # Does user have read access on the item?
+        authorize! :show, fedora_object
+        
+        # Add to collection
+        collection.insert_member(fedora_object)
+        
+        #Clear the session variable
+        session.delete(:batch_select_ids)
+      end
+    
+    else
+      fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
+    
+      # Does user have read access on the item?
+      authorize! :show, fedora_object
+      collection.insert_member(fedora_object)
+    end
+    
     render :nothing => true
   end
   
@@ -178,8 +206,19 @@ class DilCollectionsController < ApplicationController
   # JSON is returned
   def add_to_batch_select
     begin 
-     (session[:batch_select_ids] ||= []) << params[:id]
-     return_json = "{\"status\":success}"
+     
+     # If session variable exists and doesn't include the id already, add it to the array
+     if session[:batch_select_ids].present? and !session[:batch_select_ids].include? (params[:id])
+       return_json = "{\"status\":success}"
+       session[:batch_select_ids] << params[:id]
+     elsif !session[:batch_select_ids].present?
+     # Create the session variable and add the pid
+       return_json = "{\"status\":success,first}"
+       (session[:batch_select_ids] ||= []) << params[:id]
+     else
+       return_json = "{\"status\":success,dup}"
+     end
+
     rescue Exception => e
       #error
        return_json = "{\"status\":exception}"
