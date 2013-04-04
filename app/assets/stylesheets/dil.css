@@ -159,6 +159,10 @@ img.collection_plus_minus{
     font-weight: normal;
 }
 
+div.batch_select_count_label {
+   float:left;
+}
+
 .modal-collection {
     display:    none;
     position:   fixed;
