@@ -209,21 +209,20 @@ class DilCollectionsController < ApplicationController
      
      # If session variable exists and doesn't include the id already, add it to the array
      if session[:batch_select_ids].present? and !session[:batch_select_ids].include? (params[:id])
-       return_json = "{\"status\":success}"
        session[:batch_select_ids] << params[:id]
+       return_json = "{\"status\":\"success\", \"size\":\"#{session[:batch_select_ids].size}\"}"
      elsif !session[:batch_select_ids].present?
      # Create the session variable and add the pid
-       return_json = "{\"status\":success,first}"
        (session[:batch_select_ids] ||= []) << params[:id]
+       return_json = "{\"status\":\"success\", \"size\":\"1\"}"
      else
-       return_json = "{\"status\":success,dup}"
+       return_json = "{\"status\":\"success,dup\"}"
      end
 
     rescue Exception => e
       #error
-       return_json = "{\"status\":exception}"
-      logger.debug("get_subcollections exception: #{e.to_s}")
-        
+       return_json = "{\"status\":\"exception\"}"
+  
     ensure #this will get called even if an exception was raised
       respond_to do |format|
        format.json { render :layout =>  false, :json => return_json}
@@ -236,14 +235,16 @@ class DilCollectionsController < ApplicationController
   # The list is stored in the session as :batch_select_ids
   # JSON is returned
   def remove_from_batch_select
-    begin 
-     (session[:batch_select_ids] ||= []).delete(params[:id])
-     return_json = "{\"status\":success}"
+    begin
+      if session[:batch_select_ids].present?
+        session[:batch_select_ids].delete(params[:id])
+        return_json = "{\"status\":\"success\", \"size\":\"#{session[:batch_select_ids].size}\"}"
+      else
+        return_json = "{\"status\":\"was_empty\"}"
+      end
     rescue Exception => e
-      #error
-       return_json = "{\"status\":exception}"
-      logger.debug("get_subcollections exception: #{e.to_s}")
-        
+       #error
+       return_json = "{\"status\":\"exception\"}"
     ensure #this will get called even if an exception was raised
       respond_to do |format|
        format.json { render :layout =>  false, :json => return_json}
