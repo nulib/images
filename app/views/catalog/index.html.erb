@@ -18,7 +18,6 @@
 	<%= render 'constraints', :localized_params=>params %>
   
 	<%= render 'sort_and_per_page' %>
-    
    
    <!--<div class="pageEntriesInfo">-->
     <%= render_pagination_info @response, :entry_name=>'item' %>
@@ -26,6 +25,8 @@
    <!--</div>--> 
    
     <%= render 'results_pagination' %>
+    
+    <%= render 'batch_select_counter' %>
     
 	<%= render :partial => 'document_list' %>
 

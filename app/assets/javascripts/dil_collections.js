@@ -186,10 +186,13 @@ $('input[id^="batch_select_"]').live("click", (function() {
     $.ajax({
       type: "POST",
       url: url,
-      success: function(msg){
-    },
+      dataType: 'json',
+      success: function(output){
+        //Change the selected items count
+        $('div[id="batch_select_count"]').text(output.size);
+      },
 		
-    error: function(msg){ 
+    error: function(output){
     }
   });//end ajax
 

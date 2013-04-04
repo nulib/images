@@ -1,0 +1,7 @@
+<div class="batch_select_count_label">Number of Images Selected:&nbsp;</div><div id="batch_select_count">
+<% if session[:batch_select_ids].present?%>
+  <%=session[:batch_select_ids].size%>
+<% else %>
+  0
+<% end %>
+</div>
