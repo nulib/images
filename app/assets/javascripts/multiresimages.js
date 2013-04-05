@@ -293,11 +293,6 @@ $(function() {
   $("input[id='dil_collection_title']").attr('title', 'Create a new collection by entering the name.  You can then drag-and-drop images to it.').tooltip();
 });
 
-//JQuery tooltip for batch_select checkboxes
-$(function() {
-  $("input[id^='batch_select_']").attr('title', 'TEST').tooltip();
-});
-
 //When a user clicks the checkbox for batch selecting images
 $('input[id^="batch_select_"]').live("click", (function() {
   //"batch_select_" is prepended to each checkbox
