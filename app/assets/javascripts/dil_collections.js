@@ -168,32 +168,3 @@ function dropMe(theObj) {
 			$('.modal-collection').show();
 	});
 });
-
-//When a user clicks the checkbox for batch selecting images
-$('input[id^="batch_select_"]').live("click", (function() {
-  //"batch_select_" is prepended to each checkbox
-  item_id = $(this).attr("id").substring(13);
-  
-  //if checked, add to batch_select list
-  if ($(this).attr("checked")!=null && $(this).attr("checked")=="checked"){
-    url="dil_collections/add_to_batch_select/" + item_id
-  }
-  //if unchecked, remove from batch_select list
-  else {
-    url="dil_collections/remove_from_batch_select/" + item_id
-  }
-
-    $.ajax({
-      type: "POST",
-      url: url,
-      dataType: 'json',
-      success: function(output){
-        //Change the selected items count
-        $('div[id="batch_select_count"]').text(output.size);
-      },
-		
-    error: function(output){
-    }
-  });//end ajax
-
-}));
