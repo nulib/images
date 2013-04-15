@@ -3,20 +3,20 @@
 class SVGDatastream < ActiveFedora::NokogiriDatastream       
 
   set_terminology do |t|
-    t.root(:path=>"svg", :xmlns=>"http://www.w3.org/2000/svg", :schema=>"http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd")
-  	t.svg_note(:path=>"note")
-	t.svg_image(:path=>"image") {
-		t.svg_height(:path=>{:attribute=>"height"})
-		t.svg_width(:path=>{:attribute=>"width"})
-		t.svg_x(:path=>{:attribute=>"x"})
-		t.svg_y(:path=>{:attribute=>"y"})
-		t.svg_image_path(:path=>{:attribute=>"xlink:href",:xmlns=>"xlink:http://www.w3.org/1999/xlink" })
+    t.root(:path=>"svg", :xmlns=>"http://www.w3.org/2000/svg", :schema=>"http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd", :index_as=>[:searchable])
+  	t.svg_note(:path=>"note", :index_as=>[:searchable])
+	t.svg_image(:path=>"image", :index_as=>[:searchable]) {
+		t.svg_height(:path=>{:attribute=>"height"}, :index_as=>[:searchable])
+		t.svg_width(:path=>{:attribute=>"width"}, :index_as=>[:searchable])
+		t.svg_x(:path=>{:attribute=>"x"}, :index_as=>[:searchable])
+		t.svg_y(:path=>{:attribute=>"y"}, :index_as=>[:searchable])
+		t.svg_image_path(:path=>{:attribute=>"xlink:href",:xmlns=>"xlink:http://www.w3.org/1999/xlink" }, :index_as=>[:searchable])
 	}
-	t.svg_rect(:path=>"rect") {
-		t.svg_rect_height(:path=>{:attribute=>"height"})
-		t.svg_rect_width(:path=>{:attribute=>"width"})
-		t.svg_rect_x(:path=>{:attribute=>"x"})
-		t.svg_rect_y(:path=>{:attribute=>"y"})
+	t.svg_rect(:path=>"rect", :index_as=>[:searchable]) {
+		t.svg_rect_height(:path=>{:attribute=>"height"}, :index_as=>[:searchable])
+		t.svg_rect_width(:path=>{:attribute=>"width"}, :index_as=>[:searchable])
+		t.svg_rect_x(:path=>{:attribute=>"x"}, :index_as=>[:searchable])
+		t.svg_rect_y(:path=>{:attribute=>"y"}, :index_as=>[:searchable])
 	}
   end
   
