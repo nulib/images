@@ -10,7 +10,7 @@ class CatalogController < ApplicationController
   before_filter :enforce_access_controls
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
-  CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
+  CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
   CatalogController.solr_search_params_logic << :multiresimage_object_type_facet
   configure_blacklight do |config|
     config.default_solr_params = { 
