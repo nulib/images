@@ -4,194 +4,194 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
     t.root(:path=>"vra", :xmlns=>"http://www.vraweb.org/vracore4.htm", :schema=>"http://www.loc.gov/standards/vracore/vra.xsd" )
 
 	# titleSet OM definition
-	t.titleSet_ref(:path=>"titleSet", :label=>"Titles") {
-		t.titleSet_display(:path=>"display", :label=>"display") 
+	t.titleSet_ref(:path=>"titleSet", :label=>"Titles", :index_as=>[:searchable]) {
+		t.titleSet_display(:path=>"display", :label=>"display", :index_as=>[:searchable]) 
 		t.title(:path=>"title", :label=>"title", :index_as=>[:searchable, :displayable]) 
-		t.title_pref(:path=>"title", :attributes=>{:pref=>"true"}) 
+		t.title_pref(:path=>"title", :attributes=>{:pref=>"true"}, :index_as=>[:searchable]) 
 	}
 		
 	# agentSet OM definitions
-	t.agentSet_ref(:path=>"agentSet", :label=>"Agents") {
-		t.agentSet_display(:path=>"display") 
-		t.agent(:ref=>[:agent_ref])
+	t.agentSet_ref(:path=>"agentSet", :label=>"Agents", :index_as=>[:searchable]) {
+		t.agentSet_display(:path=>"display", :index_as=>[:searchable]) 
+		t.agent(:ref=>[:agent_ref], :index_as=>[:searchable])
 	}
 
-    t.agent_ref(:path=>"agent"){
+    t.agent_ref(:path=>"agent", :index_as=>[:searchable]){
 		t.name {
-		  t.name_content(:path=>'text()')
-		  t.name_vocab(:path=>{:attribute =>"vocab"})
-		  t.name_refid(:path=>{:attribute =>"refid"})
-		  t.name_type(:path=>{:attribute =>"type"})
+		  t.name_content(:path=>'text()', :index_as=>[:searchable])
+		  t.name_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
+		  t.name_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
+		  t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		}
 		t.dates {
-		  t.life(:path=>{:attribute =>"life"})
-		  t.earliestDate
-		  t.latestDate
+		  t.life(:path=>{:attribute =>"life"}, :index_as=>[:searchable])
+		  t.earliestDate(:index_as=>[:searchable])
+		  t.latestDate(:index_as=>[:searchable])
 		}
-		t.role
-		t.attribution
-		t.culture
+		t.role(:index_as=>[:searchable])
+		t.attribution(:index_as=>[:searchable])
+		t.culture(:index_as=>[:searchable])
 	  }
 
 	# descriptionSet OM definition
-	t.descriptionSet_ref(:path=>"descriptionSet", :label=>"Descriptions") {
-		t.descriptionSet_display(:path=>"display", :label=>"display description")
-		t.description(:path=>"description", :label=>"description") 
+	t.descriptionSet_ref(:path=>"descriptionSet", :label=>"Descriptions", :index_as=>[:searchable]) {
+		t.descriptionSet_display(:path=>"display", :label=>"display description", :index_as=>[:searchable])
+		t.description(:path=>"description", :label=>"description", :index_as=>[:searchable]) 
 	}
 
 	# inscriptionSet_ref OM definition
-	t.inscriptionSet_ref(:path=>"inscriptionSet", :label=>"Inscriptions") {
-		t.inscriptionSet_display(:path=>"display")
-		t.inscription(:path=>"inscription", :label=>"inscription") 
+	t.inscriptionSet_ref(:path=>"inscriptionSet", :label=>"Inscriptions", :index_as=>[:searchable]) {
+		t.inscriptionSet_display(:path=>"display", :index_as=>[:searchable])
+		t.inscription(:path=>"inscription", :label=>"inscription", :index_as=>[:searchable]) 
 	}
 
 	# dateSet OM definition
-    t.dateSet_ref(:path=>"dateSet", :label=>"Dates") {
-      t.dateSet_display(:path=>"display")
+    t.dateSet_ref(:path=>"dateSet", :label=>"Dates", :index_as=>[:searchable]) {
+      t.dateSet_display(:path=>"display", :index_as=>[:searchable])
       t.date{
-		t.date_content(:path=>'text()')
-        t.date_type(:path=>{:attribute =>"type"})
+		t.date_content(:path=>'text()', :index_as=>[:searchable])
+        t.date_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
         t.earliestDate
         t.latestDate
       }
     }
 
 	# stylePeriod OM definition
-	t.stylePeriodSet_ref(:path=>"stylePeriodSet", :label=>"Periods") {
-		t.stylePeriodSet_display(:path=>"display")
+	t.stylePeriodSet_ref(:path=>"stylePeriodSet", :label=>"Periods", :index_as=>[:searchable]) {
+		t.stylePeriodSet_display(:path=>"display", :index_as=>[:searchable])
 		t.stylePeriod {
-			t.stylePeriod_content(:path=>'text()')
-			t.stylePeriod_vocab(:path=>{:attribute =>"vocab"})
-			t.stylePeriod_refid(:path=>{:attribute =>"refid"})
+			t.stylePeriod_content(:path=>'text()', :index_as=>[:searchable])
+			t.stylePeriod_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
+			t.stylePeriod_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
 		}
 	}
 
 	# materialSet OM definition
-	t.materialSet_ref(:path=>"materialSet", :label=>"Materials") {
-		t.materialSet_display(:path=>"display")
+	t.materialSet_ref(:path=>"materialSet", :label=>"Materials", :index_as=>[:searchable]) {
+		t.materialSet_display(:path=>"display", :index_as=>[:searchable])
 		t.material
 	}
 
 	# culturalContextSet OM definition
-	t.culturalContextSet_ref(:path=>"culturalContextSet", :label=>"Cultural Contexts") {
-		t.culturalContextSet_display(:path=>"display")
+	t.culturalContextSet_ref(:path=>"culturalContextSet", :label=>"Cultural Contexts", :index_as=>[:searchable]) {
+		t.culturalContextSet_display(:path=>"display", :index_as=>[:searchable])
 		t.culturalContext {
-			t.culturalContext_content(:path=>'text()')
-			t.culturalContext_refid(:path=>{:attribute =>"refid"})
-			t.culturalContext_vocab(:path=>{:attribute =>"vocab"})
+			t.culturalContext_content(:path=>'text()', :index_as=>[:searchable])
+			t.culturalContext_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
+			t.culturalContext_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
 		}
 	}
 
 	# measurementsSet OM definition
-	t.measurementsSet_ref(:path=>"measurementsSet", :label=>"Measurements") {
-		t.measurementsSet_display(:path=>"display")
+	t.measurementsSet_ref(:path=>"measurementsSet", :label=>"Measurements", :index_as=>[:searchable]) {
+		t.measurementsSet_display(:path=>"display", :index_as=>[:searchable])
 		t.measurements {
-			t.measurements_type(:path=>{:attribute =>"type"})
-			t.measurements_unit(:path=>{:attribute =>"unit"})
-			t.measurements_extent(:path=>{:attribute =>"extent"})
+			t.measurements_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
+			t.measurements_unit(:path=>{:attribute =>"unit"}, :index_as=>[:searchable])
+			t.measurements_extent(:path=>{:attribute =>"extent"}, :index_as=>[:searchable])
 		}
 	}
 
 	# techniqueSet OM definition
-	t.techniqueSet_ref(:path=>"techniqueSet", :label=>"Technique") {
-		t.techniqueSet_display(:path=>"display")
+	t.techniqueSet_ref(:path=>"techniqueSet", :label=>"Technique", :index_as=>[:searchable]) {
+		t.techniqueSet_display(:path=>"display", :index_as=>[:searchable])
 		t.technique {
-			t.technique_content(:path=>'text()')
-			t.technique_refid(:path=>{:attribute =>"refid"})
-			t.technique_vocab(:path=>{:attribute =>"vocab"})
+			t.technique_content(:path=>'text()', :index_as=>[:searchable])
+			t.technique_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
+			t.technique_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
 		}
 	}
 
 	# worktypeSet OM definition
-	t.worktypeSet_ref(:path=>"worktypeSet", :label=>"Work Type") {
-		t.worktypeSet_display(:path=>"display")
+	t.worktypeSet_ref(:path=>"worktypeSet", :label=>"Work Type", :index_as=>[:searchable]) {
+		t.worktypeSet_display(:path=>"display", :index_as=>[:searchable])
 		t.worktype {
-			t.worktype_content(:path=>'text()')
-			t.worktype_refid(:path=>{:attribute =>"refid"})
-			t.worktype_vocab(:path=>{:attribute =>"vocab"})
+			t.worktype_content(:path=>'text()', :index_as=>[:searchable])
+			t.worktype_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
+			t.worktype_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
 		}
 	}
 
 	# locationSet OM definitions
-	t.locationSet_ref(:path=>"locationSet", :label=>"Locations") {
-		t.locationSet_display(:path=>"display") 
-		t.location(:ref=>[:location_ref])
+	t.locationSet_ref(:path=>"locationSet", :label=>"Locations", :index_as=>[:searchable]) {
+		t.locationSet_display(:path=>"display", :index_as=>[:searchable]) 
+		t.location(:ref=>[:location_ref], :index_as=>[:searchable])
 	}
 
-    t.location_ref(:path=>"location"){
-        t.location_type(:path=>{:attribute =>"type"})
+    t.location_ref(:path=>"location", :index_as=>[:searchable]){
+        t.location_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		t.name {
-		  t.name_content(:path=>'text()')
-		  t.name_type(:path=>{:attribute =>"type"})
-		  t.name_vocab(:path=>{:attribute =>"vocab"})
-		  t.name_refid(:path=>{:attribute =>"refid"})
+		  t.name_content(:path=>'text()', :index_as=>[:searchable])
+		  t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
+		  t.name_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
+		  t.name_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
 		}
 		t.refid {
-		  t.refid_content(:path=>'text()')
-		  t.name_type(:path=>{:attribute =>"type"})
+		  t.refid_content(:path=>'text()', :index_as=>[:searchable])
+		  t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		}
 	  }
 
 	# sourceSet OM definitions
-	t.sourceSet_ref(:path=>"sourceSet", :label=>"Sources") {
-		t.sourceSet_display(:path=>"display") 
-		t.source(:ref=>[:source_ref])
+	t.sourceSet_ref(:path=>"sourceSet", :label=>"Sources", :index_as=>[:searchable]) {
+		t.sourceSet_display(:path=>"display", :index_as=>[:searchable]) 
+		t.source(:ref=>[:source_ref], :index_as=>[:searchable])
 	}
 
-    t.source_ref(:path=>"source"){
+    t.source_ref(:path=>"source", :index_as=>[:searchable]){
 		t.name {
-		  t.name_content(:path=>'text()')
-		  t.name_type(:path=>{:attribute =>"type"})
+		  t.name_content(:path=>'text()', :index_as=>[:searchable])
+		  t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		}
 		t.refid {
-		  t.refid_content(:path=>'text()')
-		  t.name_type(:path=>{:attribute =>"type"})
+		  t.refid_content(:path=>'text()', :index_as=>[:searchable])
+		  t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		}
 	  }
 
 	# subjectSet OM definition
-	t.subjectSet_ref(:path=>"subjectSet", :label=>"Subjects") {
-		t.subjectSet_display(:path=>"display")
+	t.subjectSet_ref(:path=>"subjectSet", :label=>"Subjects", :index_as=>[:searchable]) {
+		t.subjectSet_display(:path=>"display", :index_as=>[:searchable])
 		t.subject {
 			t.term {
-				t.subject_term_content(:path=>'text()')
-				t.subject_term_type(:path=>{:attribute =>"type"})
-				t.subject_term_vocab(:path=>{:attribute =>"vocab"})
-				t.subject_term_refid(:path=>{:attribute =>"refid"})
+				t.subject_term_content(:path=>'text()', :index_as=>[:searchable])
+				t.subject_term_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
+				t.subject_term_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
+				t.subject_term_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
 			}
 		}
 	}
 
 	# relationSet OM definitions
-	t.relationSet_ref(:path=>"relationSet") {
-	  t.relationSet_display(:path=>"display", :label=>"Relation")
-    t.imageOf_others(:path=>"relation", :attributes=>{:pref=>:none, :type=>"imageOf"}) do
-      t.relation_relids(:path=>{:attribute=>"relids"})
+	t.relationSet_ref(:path=>"relationSet", :index_as=>[:searchable]) {
+	  t.relationSet_display(:path=>"display", :label=>"Relation", :index_as=>[:searchable])
+    t.imageOf_others(:path=>"relation", :attributes=>{:pref=>:none, :type=>"imageOf"}, :index_as=>[:searchable]) do
+      t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
     end
-	  t.imageOf_preferred(:path=>"relation", :attributes=>{:pref=>"true", :type=>"imageOf"}, :label=>"Preferred Work") {
-      t.relation_type(:path=>{:attribute=>"type"})
-      t.relation_relids(:path=>{:attribute=>"relids"})
+	  t.imageOf_preferred(:path=>"relation", :attributes=>{:pref=>"true", :type=>"imageOf"}, :label=>"Preferred Work", :index_as=>[:searchable]) {
+      t.relation_type(:path=>{:attribute=>"type"}, :index_as=>[:searchable])
+      t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
       #t.relation_href(:path=>{:attribute=>"href"})
 	  }
-	  t.imageOf(:path=>"relation", :attributes=>{:type=>"imageOf"}, :label=>"Image of Work") {
-		t.relation_type(:path=>{:attribute=>"type"})
-		t.relation_relids(:path=>{:attribute=>"relids"})
+	  t.imageOf(:path=>"relation", :attributes=>{:type=>"imageOf"}, :label=>"Image of Work", :index_as=>[:searchable]) {
+		t.relation_type(:path=>{:attribute=>"type"}, :index_as=>[:searchable])
+		t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
 		#t.relation_href(:path=>{:attribute=>"href"})
 	  }
 
-	  t.imageIs_preferred(:path=>"relation", :attributes=>{:pref=>"true", :type=>"imageIs"}, :label=>"Preferred Image") {
-		t.relation_type(:path=>{:attribute=>"type"})
-		t.relation_relids(:path=>{:attribute=>"relids"})
+	  t.imageIs_preferred(:path=>"relation", :attributes=>{:pref=>"true", :type=>"imageIs"}, :label=>"Preferred Image", :index_as=>[:searchable]) {
+		t.relation_type(:path=>{:attribute=>"type"}, :index_as=>[:searchable])
+		t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
 		#t.relation_href(:path=>{:attribute=>"href"})
 	  }
-	  t.imageIs(:path=>"relation", :attributes=>{:type=>"imageIs"}, :label=>"Image of Work") {
-		t.relation_type(:path=>{:attribute=>"type"})
-		t.relation_relids(:path=>{:attribute=>"relids"})
+	  t.imageIs(:path=>"relation", :attributes=>{:type=>"imageIs"}, :label=>"Image of Work", :index_as=>[:searchable]) {
+		t.relation_type(:path=>{:attribute=>"type"}, :index_as=>[:searchable])
+		t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
 		#t.relation_href(:path=>{:attribute=>"href"})
 	  }
-	  t.relation(:path=>"relation", :label=>"Relation") {
-		t.relation_type(:path=>{:attribute=>"type"})
-		t.relation_relids(:path=>{:attribute=>"relids"})
+	  t.relation(:path=>"relation", :label=>"Relation", :index_as=>[:searchable]) {
+		t.relation_type(:path=>{:attribute=>"type"}, :index_as=>[:searchable])
+		t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
 		#t.relation_href(:path=>{:attribute=>"href"})
 	  }
 

@@ -5,18 +5,18 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
   set_terminology do |t|
     t.root(:path=>"modsCollection", :xmlns=>"http://www.loc.gov/mods/v3", :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-2.xsd") 
 		t.mods {
-			t.title_info(:path=>"titleInfo") {
-			  t.main_title(:path=>"title", :label=>"title")
+			t.title_info(:path=>"titleInfo", :index_as=>[:searchable]) {
+			  t.main_title(:path=>"title", :label=>"title", :index_as=>[:searchable])
 			}
-			t.relatedItem {
-				t.identifier
+			t.relatedItem(:index_as=>[:searchable]) {
+				t.identifier(:index_as=>[:searchable])
 			}
-			t.relatedItem {
-				t.identifier
+			t.relatedItem(:index_as=>[:searchable]) {
+				t.identifier(:index_as=>[:searchable])
 			}
-			t.type
+			t.type(:index_as=>[:searchable])
 			
-			t.title(:path=>"titleInfo/title")
+			t.title(:path=>"titleInfo/title", :index_as=>[:searchable])
 			
 			
 		}
