@@ -1,3 +1,41 @@
+* {
+	margin: 0;
+}
+
+html, body {
+	height: 100%;
+}
+
+.wrapper {
+	min-height: 100%;
+	margin: 0 auto -4em;
+}
+
+#ft, .push {
+	height: 4em;
+}
+
+#top-menu {
+	background-color: black;
+	border-bottom: 1px solid white;
+	color: white;
+	overflow: hidden;
+}
+
+#top-menu-links {
+	float: right;
+	padding: .5em 1em;
+}
+
+#top-menu-links a {
+	color: #999;
+}
+
+#top-menu-links a:hover {
+	color: white;
+	text-decoration: none;
+}
+
 #browselinks {
   float: right;
   width: 100px;
@@ -49,10 +87,6 @@ clear:both;
 .member-remove 
 { 
 	vertical-align:top;
-}
-
-#hd {
-  text-align: right;
 }
 
 /* #products { float:left; width: 300px; margin-right: 2em; } */
@@ -195,7 +229,7 @@ svg image {
 	border: 0;
 }
 .signin-box {
-	margin: 12px 0 0;
+	margin: 12px 0;
 	padding: 20px 25px 15px;
 	background: #f1f1f1;
 	border: 1px solid #e5e5e5;

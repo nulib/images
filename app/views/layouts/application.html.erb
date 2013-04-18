@@ -1,5 +1,5 @@
 <%
-the_logo = "dil_logo.png"
+the_logo = "repository-images.png"
 %>
 <!DOCTYPE html>
 <html>
@@ -15,23 +15,29 @@ the_logo = "dil_logo.png"
 	</head>
   
   <body class="<%= render_body_class %>">
+    
+    <div class="wrapper">
 
-		<div id="hd">
-			<div id="top-menu"><%= render :partial => '/user_util_links' %></div>
-			<div id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
-			<%= render :partial=>'shared/menu' %>
-			<%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %>
-		</div>
-	    
-    <div id="bd">
-      <div id="main">
-        <div id="main_container">
-          <%= render :partial=>'/flash_msg' %>
-          <%= yield %>
+  		<div id="hd">
+  			<div id="top-menu"><%= render :partial => '/user_util_links' %></div>
+  			<div id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
+  			<%= render :partial=>'shared/menu' %>
+  			<%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %>
+  		</div>
+  	    
+      <div id="bd">
+        <div id="main">
+          <div id="main_container">
+            <%= render :partial=>'/flash_msg' %>
+            <%= yield %>
+          </div>
         </div>
-      </div>
-      <div id="sidebar"><%= sidebar_items.join().html_safe %></div>	
-	  </div>
+        <div id="sidebar"><%= sidebar_items.join().html_safe %></div>	
+  	  </div>
+
+      <div class="push"></div>
+
+    </div><!-- end .wrapper -->
 	    
 	    
 		<div id="ft">
