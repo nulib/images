@@ -9,7 +9,7 @@ function dropMe(theObj) {
 	$(theObj).droppable({
 	activeClass: "ui-state-default",
 	hoverClass: "dil-ui-state-hover",
-	accept: ":not(.ui-sortable-helper)",
+	accept: ".accordion h2, div#images, #images li",//":not(.ui-sortable-helper)",
 	tolerance: "pointer",
 	drop: function( event, ui ) {
     
@@ -33,7 +33,7 @@ function dropMe(theObj) {
         
 		$.ajax({
 		type: "POST",
-		url: "dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
+		url: "/dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
 		//data: "id=10",
 		async: false,
 		success: function(msg){
@@ -83,9 +83,7 @@ function dropMe(theObj) {
 		$('#gallery_container').sortable({
 			start: function(event, ui) {
 			    start_index=$(this).children().index(ui.item)
-			}
-		});
-		$('#gallery_container').sortable({
+			},
 			update: function(event, ui) {
 				//var fruitOrder = $(this).sortable('toArray').toString();
 				var collection_id= $(this).attr('pid');
@@ -121,7 +119,7 @@ function dropMe(theObj) {
 
 		if(doAjax) {
 			//The Ajax call
-			$.getJSON("dil_collections/get_subcollections/" + collection_id, function(data) {
+			$.getJSON("/dil_collections/get_subcollections/" + collection_id, function(data) {
 			  var items = [];
 			  var title = '';
 			  var pid = '';
