@@ -1,37 +1,35 @@
-		<div id="gallery_container" class="gallery_container" pid="<%= params[:id] %>">
+	<div id="gallery_container" class="gallery_container" pid="<%= params[:id] %>">
 		
 		<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
-			<% unless mods.search('relatedItem/identifier').empty? %>
-				<%	pid = mods.search('relatedItem/identifier').first.text() %>
-				<div class="listing-collection">
-          <table>
-            <tr>
-            <td>
-            
-            <% if !mods.search('type').text.present? || mods.search('type').text=='image'%>
-			  <a href="/multiresimages/<%=pid%>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= pid%>/150"/></a></td>
-			<% elsif mods.search('type').text=='collection' %>
-			  <a href="/dil_collections/<%=pid%>"><img src="/assets/folder.jpg" width="102px" height="102px"/></a>
-			<% end %>
-            
-            <a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>"><img src="/assets/remove.gif" class="member-remove"/></a></td>
-            
-            </tr>
-            <% unless mods.search('titleInfo/title').empty? %>
-              <%	title = mods.search('titleInfo/title').first.text() %>
-              <tr>
-              <% if !mods.search('type').text.present? || mods.search('type').text=='image'%>
-			    <td><font size="-2"><a href="/multiresimages/<%=pid%>"><%=title%></a></font></td>
-			  <% elsif mods.search('type').text=='collection' %>
-				<td><font size="-2"><a href="/dil_collections/<%=pid%>"><%=title%></a></font></td>
-	          <% end %>
-              </tr>
-            <% end %>
-          </table>
-				</div>
-		 	<% end %>
-		 <% end %>
-		 </div>
-	 <%# end %>
+			<%
+				pid = '' 
+				title = ''
+				img = ''
+				ref = ''
+				type = ''
 
-
+				pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
+				title = mods.search('titleInfo/title').first.text() unless mods.search('titleInfo/title').empty?
+				if !mods.search('type').text.present? || mods.search('type').text=='image'
+					img = "#{DIL_CONFIG['dil_app_url']}multiresimages/get_image/#{pid}/150"
+					ref = '/multiresimages/' + pid
+					type = 'image'
+				elsif mods.search('type').text == 'collection'
+					img = '/assets/folder.jpg'
+					ref = '/dil_collections/' + pid
+					type = 'collection'
+				end
+			%>
+			<div id="images" class="listing-collection" pid="<%=pid%>" title="<%=title%>">
+				<ul>
+					<li pid="<%=pid%>" title="<%=title%>">
+						<a href="<%=ref%>"><img src="<%=img%>"/></a>
+						<a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>"><img src="/assets/remove.gif" class="member-remove"/></a>
+				</ul>
+		  <a href="<%=ref%>">
+		    <%= title.nil?  ? pid : title.truncate(50) %>
+		  </a>
+		</div>
+		  <%#= batch_edit_select(type == 'image' ? Multiresimage.find(pid) : DILCollection.find(pid)) %>
+		<% end %>
+	</div>
