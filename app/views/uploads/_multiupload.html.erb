@@ -3,16 +3,16 @@
         <div class="row fileupload-buttonbar">
             <div class="span7">
                 <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-success fileinput-button">
-                    <i class="icon-plus icon-white"></i>
+                <span class="btn fileinput-button">
+                    <i class="icon-plus"></i>
                     <span>Add images...</span>
                     <input type="file" name="files[]" multiple>
                 </span>
-                <button type="submit" class="btn btn-primary start">
+                <button type="submit" class="btn btn-success start">
                     <i class="icon-upload icon-white"></i>
                     <span>Start all</span>
                 </button>
-                <button type="reset" class="btn btn-warning cancel">
+                <button type="reset" class="btn btn-danger cancel">
                     <i class="icon-ban-circle icon-white"></i>
                     <span>Cancel all</span>
                 </button>
@@ -60,7 +60,7 @@
                 <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
             </td>
             <td class="start">{% if (!o.options.autoUpload) { %}
-                <button class="btn btn-primary">
+                <button class="btn btn-success">
                     <i class="icon-upload icon-white"></i>
                     <span>Start</span>
                 </button>
@@ -69,9 +69,9 @@
             <td colspan="2"></td>
         {% } %}
         <td class="cancel">{% if (!i) { %}
-            <button class="btn btn-warning">
+            <button class="btn btn-danger">
                 <i class="icon-ban-circle icon-white"></i>
-                <span>Cancel</span>
+                <span>Remove</span>
             </button>
         {% } %}</td>
     </tr>
