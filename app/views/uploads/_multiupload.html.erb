@@ -1,27 +1,34 @@
 <%= form_for Multiresimage.new, :url=>uploads_create_path(), :html => { :multipart => true, :id => "fileupload"  } do |f| %>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row fileupload-buttonbar">
-            <div class="span7">
+        <div class="fileupload-buttonbar">
                 <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn fileinput-button">
+                <div class="btn fileinput-button">
                     <i class="icon-plus"></i>
                     <span>Add images...</span>
                     <input type="file" name="files[]" multiple>
-                </span>
+                </div>
+                        <!-- The loading indicator is shown during image processing -->
+        <div class="fileupload-loading"></div>
+        <br>
+        <!-- The table listing the files available for upload/download -->
+        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+            <br/>
+            <br/>
+            <h3>Step 2: <span class="muted">Start Your Upload</span></h3><br/>
                 <button type="submit" class="btn btn-success start">
                     <i class="icon-upload icon-white"></i>
-                    <span>Start all</span>
+                    <span>Start Upload</span>
                 </button>
                 <button type="reset" class="btn btn-danger cancel">
                     <i class="icon-ban-circle icon-white"></i>
-                    <span>Cancel all</span>
+                    <span>Cancel</span>
                 </button>
                 <!--<button type="button" class="btn btn-danger delete">
                     <i class="icon-trash icon-white"></i>
                     <span>Delete</span>
                 </button>
                 <input type="checkbox" class="toggle">-->
-            </div>
+                <br/>
             <div class="span5">
                 <!-- The global progress bar -->
                 <div class="progress progress-success progress-striped active fade">
@@ -29,11 +36,6 @@
                 </div>
             </div>
         </div>
-        <!-- The loading indicator is shown during image processing -->
-        <div class="fileupload-loading"></div>
-        <br>
-        <!-- The table listing the files available for upload/download -->
-        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
 <% end %>
 
 <script>
@@ -60,7 +62,7 @@
                 <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
             </td>
             <td class="start">{% if (!o.options.autoUpload) { %}
-                <button class="btn btn-success">
+                <button class="btn btn-success" style="display:none">
                     <i class="icon-upload icon-white"></i>
                     <span>Start</span>
                 </button>
