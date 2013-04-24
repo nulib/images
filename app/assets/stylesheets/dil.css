@@ -2,19 +2,6 @@
 	margin: 0;
 }
 
-html, body {
-	height: 100%;
-}
-
-.wrapper {
-	min-height: 100%;
-	margin: 0 auto -4em;
-}
-
-#ft, .push {
-	height: 4em;
-}
-
 #top-menu {
 	background-color: black;
 	border-bottom: 1px solid white;
@@ -277,4 +264,45 @@ svg image {
 	border-radius: 1px;
 	position: relative;
 	display: inline-table;
+}
+
+#footer_logo {
+	padding: 1em;
+}
+
+/* Sticky footer */
+
+html, body {
+	height: 100%;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+
+  /* Negative indent footer by its height */
+  margin: 0 auto -180px;
+}
+
+.push, #ft {
+  height: 180px;
+}
+
+@media all and (max-width: 709px) {
+	.wrapper { 
+		margin: 0 auto -280px;
+  }
+	.push, #ft {
+    height: 280px;
+  }
+	#ft {
+ 		text-align: center;
+	}
+	#footer_logo {
+		float: none;
+	}
+	#bottom_text {
+		float: none;
+	}
 }
