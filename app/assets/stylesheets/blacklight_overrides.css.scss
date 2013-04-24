@@ -35,8 +35,33 @@ nav#downloads ul li {
  display:inline;
  padding-right:10px;
 }
+
+#bd {
+	margin-bottom: 0;
+}
+
+#ft {
+	background-color: #333;
+	margin: 0;
+}
+
 #footer_notices {
 	padding-top: 0;
+}
+
+#bottom_text {
+	padding: 1em;
+	color: white;
+	a {
+		color: #999;
+		&:hover {
+			color: white;
+		}
+	}
+}
+
+#results {
+	min-height: 200px;
 }
 
 .pageEntriesInfo {
