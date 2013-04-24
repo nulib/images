@@ -8,12 +8,11 @@
     <p>Uploads will not be saved until you hit the "Submit Your Upload" button in Step Four.</p>
   </div> -->
 
-  <h3>Step 1: <span class="muted">Add Your Files and Start Your Upload</span></h3><br/>
+  <h3>Step 1: <span class="muted">Add Your Files</span></h3><br/>
   <%= render :partial=>'multiupload' %>
   <br/>
   <br/>
-  <h3>Step 2: <span class="muted">Add Description to All Images (optional)</span></h3>
-  <br/>
+  <h3>Step 3: <span class="muted">Add Description to All Images (optional)</span></h3>
   <br/>
   <span class="btn fileinput-button" id="button_id"><i class="icon-plus"></i><span> Add description</span></span>
   <br/>
@@ -21,13 +20,14 @@
   <%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>  
     <%= render :partial=>'batch_form_fields' %>
   <br/>
-  <h3>Step 3: <span class="muted">Agree to Terms and Conditions</span></h3>
+  <br/>
+  <h3>Step 4: <span class="muted">Agree to Terms and Conditions</span></h3>
   <br/>
   <%= render :partial=>'terms_and_conditions' %>
   <br/>
   <br/>
   <br/>
-  <h3>Step 4:</h3>
+  <h3>Step 5: <span class="muted">Upload</span></h3>
   <br/>
   <%= submit_tag "Submit Your Upload", :class=>"btn btn-primary", :id=>"process_uploads", :disabled=>'true'%> 
 <%end%>
