@@ -1,5 +1,5 @@
 <%
-the_logo = "dil_logo.png"
+the_logo = "repository-images.png"
 %>
 <!DOCTYPE html>
 <html>
@@ -15,31 +15,56 @@ the_logo = "dil_logo.png"
 	</head>
   
   <body class="<%= render_body_class %>">
+    
+    <div class="wrapper">
 
-		<div id="hd">
-			<div id="top-menu"><%= render :partial => '/user_util_links' %></div>
-			<div id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
-			<%= render :partial=>'shared/menu' %>
-			<%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %>
-		</div>
-	    
-    <div id="bd">
-      <div id="main">
-        <div id="main_container">
-          <%= render :partial=>'/flash_msg' %>
-          <%= yield %>
+  		<div id="hd">
+  			<div id="top-menu"><%= render :partial => '/user_util_links' %></div>
+  			<div id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
+  			<%= render :partial=>'shared/menu' %>
+  			<%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %>
+  		</div>
+  	    
+      <div id="bd">
+        <div id="main">
+          <div id="main_container">
+            <%= render :partial=>'/flash_msg' %>
+            <%= yield %>
+          </div>
         </div>
-      </div>
-      <div id="sidebar"><%= sidebar_items.join().html_safe %></div>	
-	  </div>
+        <div id="sidebar"><%= sidebar_items.join().html_safe %></div>	
+  	  </div>
+
+      <div class="push"></div>
+
+    </div><!-- end .wrapper -->
 	    
 	    
 		<div id="ft">
       <div class="contact_info"></div> 
         <div class="aux_links"> </div>
       <div id="footer_notices">
-        <div id="bottom_text">
-          <div id="hydra_logo"><%= image_tag('hydra/powered_by_hydra.png', :width => 80, :height => 50, :alt => "Hydra logo") %></div>
+          <div id="footer_logo" class="pull-left"><%= image_tag('site/NU_Logo_white.png', :height => 120, :alt => "Northwestern University logo") %></div>
+        <div id="bottom_text" class="pull-left">
+          <p>
+          For more information contact <a href="http://www.library.northwestern.edu/about/library-administration/departments-offices/digital-collections">Digital Collections</a>
+        </p>
+
+            <p> 
+              <a href="http://www.library.northwestern.edu/">Northwestern University Library</a>; 1970 Campus Drive; Evanston, IL 60208-2300
+            </p>
+
+            <p>
+              Phone: 847-491-7658;
+              Fax: 847-491-8306;
+              E-mail: <a href="mailto:library@northwestern.edu">library@northwestern.edu</a>
+            </p>
+
+            <p>
+              <a href="http://www.northwestern.edu/disclaimer.html">Disclaimer</a> and
+              <a href="http://policies.northwestern.edu/">University Policy Statements</a>
+              &copy; 2012 Northwestern University
+            </p>
         </div>
       </div>
 		</div>
