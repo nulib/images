@@ -1,5 +1,4 @@
 	<div id="gallery_container" class="gallery_container" pid="<%= params[:id] %>">
-		
 		<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
 			<%
 				pid = '' 
@@ -10,6 +9,7 @@
 
 				pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
 				title = mods.search('titleInfo/title').first.text() unless mods.search('titleInfo/title').empty?
+				document = SolrDocument.new ActiveFedora::Base.find(pid, :cast=>true).to_solr
 				if !mods.search('type').text.present? || mods.search('type').text=='image'
 					img = "#{DIL_CONFIG['dil_app_url']}multiresimages/get_image/#{pid}/150"
 					ref = '/multiresimages/' + pid
@@ -29,7 +29,11 @@
 		  <a href="<%=ref%>">
 		    <%= title.nil?  ? pid : title.truncate(50) %>
 		  </a>
+		<% if current_user.get_uploads_collection.first["id"] == @collection.id %>
+	  	<%= batch_edit_select(document) %>
+		<% end %>
 		</div>
-		  <%#= batch_edit_select(type == 'image' ? Multiresimage.find(pid) : DILCollection.find(pid)) %>
+
+		<%#= batch_edit_select(type == 'image' ? Multiresimage.find(pid) : DILCollection.find(pid)) %>
 		<% end %>
 	</div>

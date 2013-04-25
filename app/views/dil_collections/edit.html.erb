@@ -4,6 +4,10 @@
 <% end %>
 
 <div id="accordion">
+	<% if current_user.get_uploads_collection.first["id"] == @collection.id %>
+	<%= batch_edit_tools %>
+	<%= batch_edit_continue %>
+	<% end %>
   <span class="edit-browse">
     <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %> <% if @collection.members %>| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %><% end %>
   </span>
@@ -14,5 +18,6 @@
      <%= render :partial => 'dil_collections/edit_members' %>
    <% end %>
 </div>
+
 <div class="modal-collection"></div>
   <!--Description, permissions-->
