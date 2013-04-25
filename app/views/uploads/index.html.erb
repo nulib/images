@@ -2,24 +2,34 @@
     <%= render :partial=>'shared/back_to_previous' %>
   <% end %>
   
-  <h1>Step One:</h1><h3>Add Your Files and Start the Upload</h3><br/>
+<!--   <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h3>Please note:</h3>
+    <p>Uploads will not be saved until you hit the "Submit Your Upload" button in Step Four.</p>
+  </div> -->
+  <p class="muted">Steps marked with an asterisk (*) are required</p><br/>
+  <h3 class="required"><span class="muted">Step 1: </span>Add Your Files</h3><br/>
   <%= render :partial=>'multiupload' %>
-  
-  <h1>Step Two (optional):</h1><h3>Add Description to All Images</h3><br/>
-  <span class="btn btn-success fileinput-button" id="button_id"><i class="icon-plus icon-white"></i><span>Add description</span></span>
+  <br/>
+  <br/>
+  <h3><span class="muted">Step 3: </span>Describe the Batch of Uploaded Images</h3>
+  <br/>
+  <span class="btn fileinput-button" id="button_id"><i class="icon-plus"></i><span> Add description</span></span>
   <br/>
   <br/>
   <%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>  
     <%= render :partial=>'batch_form_fields' %>
-  <h1>Step Three:</h1><h3>Agree to Terms and Conditions</h3><br/>
+  <br/>
+  <br/>
+  <h3 class="required"><span class="muted">Step 4: </span>Agree to Terms and Conditions</h3>
+  <br/>
   <%= render :partial=>'terms_and_conditions' %>
-  
   <br/>
   <br/>
   <br/>
-  
-  <h1>Step Four:</h1><br/>
-  <%= submit_tag "Submit Your Upload", :class=>"btn", :id=>"process_uploads", :disabled=>'true'%> 
+  <h3 class="required"><span class="muted">Step 5: </span>Save</h3>
+  <br/>
+  <%= submit_tag "Save", :class=>"btn btn-primary", :id=>"process_uploads", :disabled=>'true'%> 
 <%end%>
 
 <script>
