@@ -1,7 +1,9 @@
 class DilCollectionsController < ApplicationController
   
+  include Blacklight::Catalog
+
   include DIL::PidMinter
-  
+
   def create
     authorize!(:create, DILCollection)
 	  #make sure collection's name isn't a reserved name for Uploads and Details collections
