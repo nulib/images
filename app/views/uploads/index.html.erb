@@ -7,12 +7,12 @@
     <h3>Please note:</h3>
     <p>Uploads will not be saved until you hit the "Submit Your Upload" button in Step Four.</p>
   </div> -->
-
-  <h3><span class="muted">Step 1: </span>Add Your Files</h3><br/>
+  <p class="muted">Steps marked with an asterisk (*) are required</p><br/>
+  <h3 class="required"><span class="muted">Step 1: </span>Add Your Files</h3><br/>
   <%= render :partial=>'multiupload' %>
   <br/>
   <br/>
-  <h3><span class="muted">Step 3: </span>Add Description to All Images (optional)</h3>
+  <h3><span class="muted">Step 3: </span>Describe the Batch of Uploaded Images</h3>
   <br/>
   <span class="btn fileinput-button" id="button_id"><i class="icon-plus"></i><span> Add description</span></span>
   <br/>
@@ -21,15 +21,15 @@
     <%= render :partial=>'batch_form_fields' %>
   <br/>
   <br/>
-  <h3><span class="muted">Step 4: </span>Agree to Terms and Conditions</h3>
+  <h3 class="required"><span class="muted">Step 4: </span>Agree to Terms and Conditions</h3>
   <br/>
   <%= render :partial=>'terms_and_conditions' %>
   <br/>
   <br/>
   <br/>
-  <h3><span class="muted">Step 5: </span>Upload</h3>
+  <h3 class="required"><span class="muted">Step 5: </span>Save</h3>
   <br/>
-  <%= submit_tag "Submit Your Upload", :class=>"btn btn-primary", :id=>"process_uploads", :disabled=>'true'%> 
+  <%= submit_tag "Save", :class=>"btn btn-primary", :id=>"process_uploads", :disabled=>'true'%> 
 <%end%>
 
 <script>
