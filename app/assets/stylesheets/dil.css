@@ -270,6 +270,10 @@ svg image {
 	padding: 1em;
 }
 
+.required:after { 
+	content:" *"; 
+}
+
 /* Sticky footer */
 
 html, body {
