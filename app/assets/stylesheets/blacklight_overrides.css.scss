@@ -1,11 +1,28 @@
 body {
- background: url("/assets/site/header_bg.png") repeat-x scroll 0 0 transparent !important;
+ background: none;
  margin-top: 0;
- padding-top: 0;
+ padding: 0;
  spacing-top: 0;
 }
+#hd {
+ background-color: #490059;
+ width: 100%;
+ margin: 0;
+ padding: 0;
+ spacing-top: 0;
+}
+#hd #logo {
+	float: none;
+	display: block;
+	padding: 2.5em 2em;
+}
 #hd nav {
- margin-top: 7.5em;
+ background-color: #efefef;
+ overflow: hidden;
+ padding: .5em 0;
+ ul {
+ 	float: right;
+ }
 }
 #hd nav ul,
 nav#downloads ul {
@@ -18,11 +35,33 @@ nav#downloads ul li {
  display:inline;
  padding-right:10px;
 }
-#hd {
- height: 105px;
- margin-top: 0;
- padding-top: 0;
- spacing-top: 0;
+
+#bd {
+	margin-bottom: 0;
+}
+
+#ft {
+	background-color: #333;
+	margin: 0;
+}
+
+#footer_notices {
+	padding-top: 0;
+}
+
+#bottom_text {
+	padding: 1em;
+	color: white;
+	a {
+		color: #999;
+		&:hover {
+			color: white;
+		}
+	}
+}
+
+#results {
+	min-height: 200px;
 }
 
 .pageEntriesInfo {
@@ -90,6 +129,10 @@ form.form-search {
 
 .msg.notice{
  margin: 0;
+}
+
+#bd {
+	padding-top: 1em;
 }
 
 #bd #sidebar {
