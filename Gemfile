@@ -8,7 +8,7 @@ source 'http://rubygems.org'
   gem 'exception_notification', '3.0.1'
 
   #gem 'hydra-access-controls', '0.0.5'
-  gem 'hydra-head', '5.4.0'
+  gem 'hydra-head', '6.0'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
   
@@ -18,7 +18,7 @@ source 'http://rubygems.org'
   gem 'omniauth-ldap', '1.0.2'
   gem 'mysql2', '0.3.11'
   gem 'clamav', '0.4.1'
-  gem 'rdf', '0.3.7'
+  gem 'rdf', '1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -42,7 +42,7 @@ gem 'hydra-ldap', '0.0.3'
 gem 'hydra-batch-edit', '~>0.0.6'
 
 group :development, :test, :staging do
-  gem 'jettywrapper', '1.3.0'
+  gem 'jettywrapper', '1.4.1'
   gem 'rspec-rails', '>=2.9.0'
   gem 'factory_girl_rails', '3.5.0' 
   gem 'database_cleaner', '0.8.0'
