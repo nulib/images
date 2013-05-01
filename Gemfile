@@ -6,6 +6,7 @@ source 'http://rubygems.org'
   gem 'blacklight', '4.0'
   gem 'kaminari', '0.13.0'
   gem 'exception_notification', '3.0.1'
+  gem 'ruby-prof'
 
   #gem 'hydra-access-controls', '0.0.5'
   gem 'hydra-head', '6.0'
