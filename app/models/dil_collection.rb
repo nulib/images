@@ -135,9 +135,12 @@ class DILCollection < ActiveFedora::Base
        export_xml = get_collection_xml(fedora_object, export_xml)
       #if it's an image, build the xml
       elsif (fedora_object.instance_of?(Multiresimage))
+        img_width = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_width[0].to_i
+        img_height = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_height[0].to_i
+        size = img_width > img_height ? img_width > 950 ? 950 : img_width : img_height > 700 ? 700 : img_height
         logger.debug("PID:" << pid)
-        export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
-        export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
+        export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}#{size}</url><metadata></metadata></image>"
+        #export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
         logger.debug("export_xml debug:" << export_xml)
       end
     end #end each
