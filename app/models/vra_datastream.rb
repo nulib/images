@@ -492,7 +492,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	    # The block is to tell Ruby what to do when it encounters a duplicate key during hash merging.
 		# We add the work's solr fields after the image solr fields are already there, so we tell Ruby
 		# to append the new string to the old
-	    search_field_hash = Hash["search_field_t" => search_field]
+	    search_field_hash = Hash["search_field_tesim" => search_field]
 	    solr_doc = solr_doc.merge(search_field_hash) { |field_name, oldval, newval | oldval << newval }
 		
 		return solr_doc
@@ -598,13 +598,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 
 	# Add the display field for agentSet
     self.find_by_terms('//vra:agentSet/vra:display').each do |agent_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(agentSet_array, "agent_display_t", agent_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(agentSet_array, "agent_display_tesim", agent_display.text) 
     end
 
 	# Add a name facet for each agent
     self.find_by_terms('//vra:agentSet/vra:agent').each do |agent| 
 	 agent.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |agent_name| 
-		::Solrizer::Extractor.insert_solr_field_value(agentSet_array, "agent_name_t", agent_name.text) 
+		::Solrizer::Extractor.insert_solr_field_value(agentSet_array, "agent_name_tesim", agent_name.text) 
 		::Solrizer::Extractor.insert_solr_field_value(agentSet_array, "agent_name_facet", agent_name.text) 
 	}
     end
@@ -625,17 +625,17 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 
 	# Add the display field for titleSet
     self.find_by_terms('//vra:titleSet/vra:display').each do |title_display|
-      ::Solrizer::Extractor.insert_solr_field_value(titleSet_array, "title_display_t", title_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(titleSet_array, "title_display_tesim", title_display.text) 
     end
 
 	# Add a field for each title
     self.find_by_terms('//vra:titleSet/vra:title').each do |title| 
-		::Solrizer::Extractor.insert_solr_field_value(titleSet_array, "title_t", title.text) 
+		::Solrizer::Extractor.insert_solr_field_value(titleSet_array, "title_tesim", title.text) 
     end
 
 	# Add a field for preferred title
     self.find_by_terms('//vra:titleSet/vra:title[@pref="true"]').each do |title_pref| 
-		::Solrizer::Extractor.insert_solr_field_value(titleSet_array, "title_pref_t", title_pref.text) 
+		::Solrizer::Extractor.insert_solr_field_value(titleSet_array, "title_pref_tesim", title_pref.text) 
     end
 
     return titleSet_array
@@ -653,12 +653,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
  
 	# Add the display field for descriptionSet
 	self.find_by_terms('//vra:descriptionSet/vra:display').each do |description_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(descriptionSet_array, "description_display_t", description_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(descriptionSet_array, "description_display_tesim", description_display.text) 
     end
 
 	# Add a field for each description
     self.find_by_terms('//vra:descriptionSet/vra:description').each do |description| 
-		::Solrizer::Extractor.insert_solr_field_value(descriptionSet_array, "description_t", description.text) 
+		::Solrizer::Extractor.insert_solr_field_value(descriptionSet_array, "description_tesim", description.text) 
     end
 
     return descriptionSet_array
@@ -676,13 +676,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
  
 	# Add the display field for inscriptionSet
 	self.find_by_terms('//vra:inscriptionSet/vra:display').each do |inscription_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(inscriptionSet_array, "inscription_display_t", inscription_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(inscriptionSet_array, "inscription_display_tesim", inscription_display.text) 
     end
 
 	# Add a field for each inscription
     self.find_by_terms('//vra:inscriptionSet/vra:inscription').each do |inscription| 
 		inscription.xpath('vra:text', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |inscription_text| 
-			::Solrizer::Extractor.insert_solr_field_value(inscriptionSet_array, "inscription_t", inscription_text.text)
+			::Solrizer::Extractor.insert_solr_field_value(inscriptionSet_array, "inscription_tesim", inscription_text.text)
 		}
     end
 
@@ -700,7 +700,7 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_dateSet
     dateSet_array = {}
     self.find_by_terms('//vra:dateSet/vra:display').each do |date_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(dateSet_array, "date_display_t", date_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(dateSet_array, "date_display_tesim", date_display.text) 
       ::Solrizer::Extractor.insert_solr_field_value(dateSet_array, "date_display_facet", date_display.text)
     end
 
@@ -727,12 +727,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_stylePeriodSet
     stylePeriodSet_array = {}
     self.find_by_terms('//vra:stylePeriodSet/vra:display').each do |stylePeriodSet_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(stylePeriodSet_array, "stylePeriodSet_display_t", stylePeriodSet_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(stylePeriodSet_array, "stylePeriodSet_display_tesim", stylePeriodSet_display.text) 
     end
 
 	# Add a facet for each period
     self.find_by_terms('//vra:stylePeriodSet/vra:stylePeriod').each do |stylePeriod| 
-		::Solrizer::Extractor.insert_solr_field_value(stylePeriodSet_array, "stylePeriod_t", stylePeriod.text) 
+		::Solrizer::Extractor.insert_solr_field_value(stylePeriodSet_array, "stylePeriod_tesim", stylePeriod.text) 
 		::Solrizer::Extractor.insert_solr_field_value(stylePeriodSet_array, "stylePeriod_facet", stylePeriod.text) 
     end
     return stylePeriodSet_array
@@ -748,12 +748,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_culturalContextSet
     culturalContextSet_array = {}
     self.find_by_terms('//vra:culturalContextSet/vra:display').each do |culturalContextSet_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(culturalContextSet_array, "culturalContextSet_display_t", culturalContextSet_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(culturalContextSet_array, "culturalContextSet_display_tesim", culturalContextSet_display.text) 
     end
 
 	# Add a field for each culturalContext
     self.find_by_terms('//vra:culturalContextSet/vra:culturalContext').each do |culturalContext| 
-		::Solrizer::Extractor.insert_solr_field_value(culturalContextSet_array, "culturalContext_t", culturalContext.text) 
+		::Solrizer::Extractor.insert_solr_field_value(culturalContextSet_array, "culturalContext_tesim", culturalContext.text) 
 		::Solrizer::Extractor.insert_solr_field_value(culturalContextSet_array, "culturalContext_facet", culturalContext.text) 
     end
     return culturalContextSet_array
@@ -769,12 +769,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_materialSet
     materialSet_array = {}
     self.find_by_terms('//vra:materialSet/vra:display').each do |materialSet_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(materialSet_array, "materialSet_display_t", materialSet_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(materialSet_array, "materialSet_display_tesim", materialSet_display.text) 
     end
 
 	# Add a field for each material
     self.find_by_terms('//vra:materialSet/vra:material').each do |material| 
-		::Solrizer::Extractor.insert_solr_field_value(materialSet_array, "material_t", material.text) 
+		::Solrizer::Extractor.insert_solr_field_value(materialSet_array, "material_tesim", material.text) 
     end
     return materialSet_array
   end
@@ -789,12 +789,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_measurementsSet
     measurementsSet_array = {}
     self.find_by_terms('//vra:measurementsSet/vra:display').each do |measurementsSet_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(measurementsSet_array, "measurementsSet_display_t", measurementsSet_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(measurementsSet_array, "measurementsSet_display_tesim", measurementsSet_display.text) 
     end
 
 	# Add a field for each measurement
     self.find_by_terms('//vra:measurementsSet/vra:measurements').each do |measurements| 
-		::Solrizer::Extractor.insert_solr_field_value(measurementsSet_array, "measurements_t", measurements.text) 
+		::Solrizer::Extractor.insert_solr_field_value(measurementsSet_array, "measurements_tesim", measurements.text) 
     end
 
     return measurementsSet_array
@@ -810,12 +810,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_techniqueSet
     techniqueSet_array = {}
     self.find_by_terms('//vra:techniqueSet/vra:display').each do |techniqueSet_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(techniqueSet_array, "techniqueSet_display_t", techniqueSet_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(techniqueSet_array, "techniqueSet_display_tesim", techniqueSet_display.text) 
     end
 
 	# Add a field for each technique
     self.find_by_terms('//vra:techniqueSet/vra:technique').each do |technique| 
-		::Solrizer::Extractor.insert_solr_field_value(techniqueSet_array, "technique_t", technique.text)
+		::Solrizer::Extractor.insert_solr_field_value(techniqueSet_array, "technique_tesim", technique.text)
 		::Solrizer::Extractor.insert_solr_field_value(techniqueSet_array, "technique_facet", technique.text)
     end
     return techniqueSet_array
@@ -831,12 +831,12 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_worktypeSet
     worktypeSet_array = {}
     self.find_by_terms('//vra:worktypeSet/vra:display').each do |worktypeSet_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(worktypeSet_array, "worktypeSet_display_t", worktypeSet_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(worktypeSet_array, "worktypeSet_display_tesim", worktypeSet_display.text) 
     end
 
 	# Add a field for each workType
     self.find_by_terms('//vra:worktypeSet/vra:worktype').each do |worktype| 
-		::Solrizer::Extractor.insert_solr_field_value(worktypeSet_array, "worktype_t", worktype.text) 
+		::Solrizer::Extractor.insert_solr_field_value(worktypeSet_array, "worktype_tesim", worktype.text) 
 		::Solrizer::Extractor.insert_solr_field_value(worktypeSet_array, "worktype_facet", worktype.text) 
     end
     return worktypeSet_array
@@ -852,13 +852,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_locationSet
     locationSet_array = {}
     self.find_by_terms('//vra:locationSet/vra:display').each do |location_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(locationSet_array, "location_display_t", location_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(locationSet_array, "location_display_tesim", location_display.text) 
     end
 
 	# Add a field for each location
     self.find_by_terms('//vra:locationSet/vra:location').each do |location| 
 	 location.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
-		::Solrizer::Extractor.insert_solr_field_value(locationSet_array, "location_name_t", name.text) 
+		::Solrizer::Extractor.insert_solr_field_value(locationSet_array, "location_name_tesim", name.text) 
 	 }
     end
     return locationSet_array
@@ -874,13 +874,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_sourceSet
     sourceSet_array = {}
     self.find_by_terms('//vra:sourceSet/vra:display').each do |source_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(sourceSet_array, "source_display_t", source_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(sourceSet_array, "source_display_tesim", source_display.text) 
     end
 
 	# Add a field for each source
     self.find_by_terms('//vra:sourceSet/vra:source').each do |source| 
 	 source.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
-		::Solrizer::Extractor.insert_solr_field_value(sourceSet_array, "source_name_t", name.text) 
+		::Solrizer::Extractor.insert_solr_field_value(sourceSet_array, "source_name_tesim", name.text) 
 	 }
     end
     return sourceSet_array
@@ -896,13 +896,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
   def extract_subjectSet
     subjectSet_array = {}
     self.find_by_terms('//vra:subjectSet/vra:display').each do |subject_display| 
-      ::Solrizer::Extractor.insert_solr_field_value(subjectSet_array, "subject_display_t", subject_display.text) 
+      ::Solrizer::Extractor.insert_solr_field_value(subjectSet_array, "subject_display_tesim", subject_display.text) 
     end
 
 	# Add a subject term facet for each subject
     self.find_by_terms('//vra:subjectSet/vra:subject').each do |subject| 
 	 subject.xpath('vra:term', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |term| 
-		::Solrizer::Extractor.insert_solr_field_value(subjectSet_array, "subject_term_t", term.text) 
+		::Solrizer::Extractor.insert_solr_field_value(subjectSet_array, "subject_term_tesim", term.text) 
 		::Solrizer::Extractor.insert_solr_field_value(subjectSet_array, "subject_term_facet", term.text) 
 	}
     end
@@ -921,22 +921,22 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 
 	# Add any "imageOf" relationships
 	self.find_by_terms(:image,:relationSet,:imageOf, :relation_relids).each do |relation_imageOf| 
-	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "imageOf_t", relation_imageOf.text) 
+	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "imageOf_tesim", relation_imageOf.text) 
 	end
 
 	# And its preferred "imageOf" relationship
 	self.find_by_terms(:image,:relationSet,:imageOf_preferred, :relation_relids).each do |relation_preferred| 
-	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "preferred_imageOf_t", relation_preferred.text) 
+	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "preferred_imageOf_tesim", relation_preferred.text) 
 	end		
 
 	# Add any "imageIs" relationships
 	self.find_by_terms(:work,:relationSet,:imageIs, :relation_relids).each do |relation_imageIs| 
-	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "imageIs_t", relation_imageIs.text) 
+	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "imageIs_tesim", relation_imageIs.text) 
 	end
 
 	# And its preferred "imageIs" relationship
 	 self.find_by_terms(:work,:relationSet,:imageIs_preferred, :relation_relids).each do |relation_preferred| 
-	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "preferred_imageIs_t", relation_preferred.text) 
+	  ::Solrizer::Extractor.insert_solr_field_value(work_image_relationship_array, "preferred_imageIs_tesim", relation_preferred.text) 
 	end
 
     return work_image_relationship_array

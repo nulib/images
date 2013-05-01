@@ -6,9 +6,9 @@ module PolicyAwareAbility
   # Returns nil if no policy associated with the object
   def policy_pid_for(object_pid)
     return @policy_pid if @policy_pid
-    solr_result = ActiveFedora::Base.find_with_conditions({:id=>object_pid}, :fl=>'is_governed_by_s')
+    solr_result = ActiveFedora::Base.find_with_conditions({:id=>object_pid}, :fl=>'is_governed_by_ssim')
     begin
-      @policy_pid = value_from_solr_field(solr_result, 'is_governed_by_s').first.gsub("info:fedora/", "")
+      @policy_pid = value_from_solr_field(solr_result, 'is_governed_by_ssim').first.gsub("info:fedora/", "")
     rescue NoMethodError
       @policy_pid = nil
     end
