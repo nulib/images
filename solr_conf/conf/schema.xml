@@ -175,7 +175,7 @@
 
    <!--<dynamicField name="random*" type="random" />-->
    <!-- FIXME: Solr can't sort on a multivalued field -->
-   <dynamicField name="*_sort" type="string" indexed="true" stored="false" multiValued="true"/>
+   <dynamicField name="*_sort" type="string" indexed="true" stored="false" multiValued="false"/>
    <!-- FIXME: generally, facet fields are not stored -->
    <dynamicField name="*_facet" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="*_display" type="string" indexed="false" stored="true" multiValued="true" />
