@@ -7,7 +7,7 @@ class CatalogController < ApplicationController
   include Blacklight::SolrHelpers::ObjectTypeFacet
 
   # These before_filters apply the hydra access controls
-  before_filter :enforce_access_controls
+  #before_filter :enforce_access_controls
   before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
   CatalogController.solr_search_params_logic += [:add_access_controls_to_solr_params]
@@ -99,10 +99,10 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'relevance'
-    config.add_sort_field 'pub_date_sort desc, title_sort asc', :label => 'year'
+    config.add_sort_field 'score desc, title_sort asc', :label => 'relevance'
+    config.add_sort_field 'title_sort asc', :label => 'year'
     config.add_sort_field 'author_sort asc, title_sort asc', :label => 'author'
-    config.add_sort_field 'title_sort asc, pub_date_sort desc', :label => 'title'
+    #config.add_sort_field 'title_sort asc', :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you 
     # mean") suggestion is offered.
