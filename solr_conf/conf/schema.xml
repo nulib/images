@@ -173,7 +173,7 @@
     <!-- you must define copyField source and dest fields explicity or schemaBrowser doesn't work -->
     <field name="all_text_timv" type="text" stored="false" indexed="true" multiValued="true" termVectors="true" termPositions="true" termOffsets="true"/>
 
-   <dynamicField name="random*" type="random" />
+   <!--<dynamicField name="random*" type="random" />-->
    <!-- FIXME: Solr can't sort on a multivalued field -->
    <dynamicField name="*_sort" type="string" indexed="true" stored="false" multiValued="true"/>
    <!-- FIXME: generally, facet fields are not stored -->
