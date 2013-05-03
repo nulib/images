@@ -158,7 +158,7 @@ class DILCollection < ActiveFedora::Base
 	  #create new collection, update it's metadata and save
 	  new_collection = DILCollection.new()
 	  new_collection.apply_depositor_metadata(user_key)
-	  new_collection.set_collection_type('dil_collection')
+	  #new_collection.set_collection_type('dil_collection')
 	  logger.debug("collection_name" << collection_name)
 	  new_collection.descMetadata.title = collection_name
 	  new_collection.save!
@@ -231,7 +231,7 @@ class DILCollection < ActiveFedora::Base
     
     solr_doc = solr_doc.merge(parent_collection_hash)
     solr_doc = solr_doc.merge({"object_type_facet" => 'Collection'})
-    solr_doc = solr_doc.merge({"title_s" => self.title})
+    solr_doc = solr_doc.merge({"title_ssim" => self.title})
     solr_doc
   end
  

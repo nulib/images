@@ -1,4 +1,4 @@
-class ModsCollection < ActiveFedora::NokogiriDatastream       
+class ModsCollection < ActiveFedora::OmDatastream       
   #include Hydra::Datastream::CommonModsIndexMethods
 
   set_terminology do |t|
@@ -6,7 +6,7 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
 
     t.title_info(:path=>"titleInfo", :index_as=>[:searchable]) {
       t.main_title(:path=>"title", :label=>"title", :index_as=>[:searchable])
-      t.language(:index_as=>[:facetable],:path=>{:attribute=>"lang"}, :index_as=>[:searchable])
+      t.language(:path=>{:attribute=>"lang"}, :index_as=>[:searchable])
     } 
     t.title(:proxy=>[:mods, :title_info, :main_title], :index_as=>[:searchable])
     
