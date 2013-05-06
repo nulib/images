@@ -8,7 +8,7 @@ class ModsCollection < ActiveFedora::OmDatastream
       t.main_title(:path=>"title", :label=>"title", :index_as=>[:searchable])
       t.language(:path=>{:attribute=>"lang"}, :index_as=>[:searchable])
     } 
-    t.title(:proxy=>[:mods, :title_info, :main_title], :index_as=>[:searchable])
+    t.title(:proxy=>[:title_info, :main_title], :index_as=>[:searchable])
     
     
     t.language{
