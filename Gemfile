@@ -7,7 +7,7 @@ source 'http://rubygems.org'
   gem 'kaminari', '0.13.0'
   gem 'exception_notification', '3.0.1'
   gem 'ruby-prof'
-
+  gem 'om', '2.1.2'
   #gem 'hydra-access-controls', '0.0.5'
   gem 'hydra-head', '6.0'
   #gem 'hydra-mods', '0.0.5'
