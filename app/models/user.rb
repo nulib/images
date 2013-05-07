@@ -74,22 +74,22 @@ class User < ActiveRecord::Base
   end
 
   def get_uploads_collection
-    query="rightsMetadata_edit_access_machine_person_tesim:#{uid} AND title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND active_fedora_model_s:DILCollection" 
+    query="edit_access_person_ssim:#{uid} AND title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND active_fedora_model_ssi:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim'})
   end
   
    def get_details_collection
-    query="rightsMetadata_edit_access_machine_person_tesim:#{uid} AND title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection" 
+    query="edit_access_person_ssim:#{uid} AND title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_ssi:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim'})
   end
   
   def collections
-    query="rightsMetadata_edit_access_machine_person_tesim:#{uid} AND NOT title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection" 
+    query="edit_access_person_ssim:#{uid} AND NOT title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_ssi:DILCollection" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim', :rows=>'1000'})
   end
 
   def top_level_collections
-    query="rightsMetadata_edit_access_machine_person_tesim:#{uid} AND NOT title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_s:DILCollection AND is_top_level_collection_ssim:true" 
+    query="edit_access_person_ssim:#{uid} AND NOT title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_ssi:DILCollection AND is_top_level_collection_ssim:true" 
     ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim has_subcollection_ssim has_image_ssim', :rows=>'1000', :sort=>'system_create_dtsi desc'})
   end
 
