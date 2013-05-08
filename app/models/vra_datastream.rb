@@ -1,4 +1,4 @@
-class VRADatastream < ActiveFedora::NokogiriDatastream       
+class VRADatastream < ActiveFedora::OmDatastream       
  
   set_terminology do |t|
     t.root(:path=>"vra", :xmlns=>"http://www.vraweb.org/vracore4.htm", :schema=>"http://www.loc.gov/standards/vracore/vra.xsd" )
