@@ -9,7 +9,7 @@ source 'http://rubygems.org'
   gem 'ruby-prof'
   gem 'om', '2.1.2'
   #gem 'hydra-access-controls', '0.0.5'
-  gem 'hydra-head', '6.0'
+  gem 'hydra-head', '6.1'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
   
@@ -49,9 +49,9 @@ group :development, :test, :staging do
   gem 'database_cleaner', '0.8.0'
   gem 'capybara', '1.1.2'
   gem 'bcrypt-ruby', '3.0.1'
-  gem 'debugger', '1.1.4'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
+  gem 'debugger'
 end
 
 gem 'unicorn', '4.3.1'
