@@ -1,6 +1,6 @@
 # This class should be moved out of the Hydra code
 
-class SVGDatastream < ActiveFedora::NokogiriDatastream       
+class SVGDatastream < ActiveFedora::OmDatastream       
 
   set_terminology do |t|
     t.root(:path=>"svg", :xmlns=>"http://www.w3.org/2000/svg", :schema=>"http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd", :index_as=>[:searchable])
