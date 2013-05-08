@@ -503,10 +503,13 @@ class VRADatastream < ActiveFedora::NokogiriDatastream
 	# The string is returned.
     def extract_values_for_search_field(arraySet)
       values = ""
+      
       arraySet.each_pair do |k,v|
-		  v.each do |value| 
+	   if v.present?
+	      v.each do |value| 
 		    values << "#{value} "
-		  end
+	      end
+	   end
 	  end
 	  return values
     end
