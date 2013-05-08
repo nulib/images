@@ -1,5 +1,5 @@
 #module Hydra
-class ModsCollectionMembers < ActiveFedora::NokogiriDatastream       
+class ModsCollectionMembers < ActiveFedora::OmDatastream       
   #include Hydra::Datastream::CommonModsIndexMethods
 
   set_terminology do |t|
@@ -54,14 +54,13 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
       return builder.doc
     end    
 	
-		     
     # Inserts a new MODS record into a modsCollection, representing a collection member
     def insert_member(parms)
 	  node = ModsCollectionMembers.mods_template({:title => parms[:member_title], :type => parms[:member_type], :pid => parms[:member_id]}).root()
 	  nodeset = self.find_by_terms(:modsCollection)
       unless nodeset.nil?
 		self.ng_xml.root.add_child(node)
-        self.dirty = true
+        #self.dirty = true
       end
       return node
      end
@@ -69,7 +68,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
       # Remove the mods entry identified by @index
 	  def remove_member_by_index(member_index)
 		self.find_by_terms({:mods=>member_index.to_i}).first.remove
-		self.dirty = true
+		#self.dirty = true
 	  end
 	  
 	# Remove the mods entry identified by pid
@@ -78,7 +77,7 @@ class ModsCollectionMembers < ActiveFedora::NokogiriDatastream
         #logger.debug("debug xpath" + self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).to_s)
 		#self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
 		self.ng_xml.xpath('//mods:identifier[.="' + pid + '"]/ancestor::mods:mods', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
-	    self.dirty = true
+	    #self.dirty = true
 	  end
 	  
 	# Moves the mods record to a different index within the datastream

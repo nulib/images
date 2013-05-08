@@ -12,7 +12,7 @@ class DilCollectionsController < ApplicationController
 	    @dil_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
 		@dil_collection.apply_depositor_metadata(current_user.user_key)
 		@dil_collection.edit_users = edit_users_array
-		@dil_collection.set_collection_type('dil_collection')
+		#@dil_collection.set_collection_type('dil_collection')
 		@dil_collection.descMetadata.title = params[:dil_collection][:title]
 		@dil_collection.save!
 	  end
