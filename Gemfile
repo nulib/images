@@ -12,6 +12,7 @@ source 'http://rubygems.org'
   gem 'hydra-head', '6.1'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
+  gem 'bootstrap-sass'
   
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
