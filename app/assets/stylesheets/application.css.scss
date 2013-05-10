@@ -1,12 +1,10 @@
+@import 'bootstrap';
+@import 'bootstrap-responsive';
+@import 'blacklight/blacklight'; 
 /*
- *
- @import 'bootstrap';
- @import 'bootstrap-responsive';
- @import 'blacklight/blacklight';   
  *= require jquery.ui.all
  *= require jquery.fileupload-ui.css
  *= require twitter/bootstrap
- *= require blacklight_overrides
  *= require batch_edit
  *= require policies 
  *= require dil
