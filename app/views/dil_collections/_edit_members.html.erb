@@ -24,14 +24,14 @@
 				<ul>
 					<li pid="<%=pid%>" title="<%=title%>">
 						<a href="<%=ref%>"><img src="<%=img%>"/></a>
-						<a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>"><img src="/assets/remove.gif" class="member-remove"/></a>
+						<a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>" class="member-remove">&#x2715;</a>
 				</ul>
-		  <a href="<%=ref%>">
-		    <%= title.nil?  ? pid : title.truncate(50) %>
-		  </a>
-		<% if current_user.get_uploads_collection.first["id"] == @collection.id %>
-	  	<%= batch_edit_select(document) %>
-		<% end %>
+				<a href="<%=ref%>">
+					<%= title.nil?  ? pid : title.truncate(50) %>
+				</a>
+				<% if current_user.get_uploads_collection.first["id"] == @collection.id %>
+			  	<%= batch_edit_select(document) %>
+				<% end %>
 		</div>
 
 		<%#= batch_edit_select(type == 'image' ? Multiresimage.find(pid) : DILCollection.find(pid)) %>
