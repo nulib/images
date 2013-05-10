@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+layout "blacklight"
 
   rescue_from CanCan::AccessDenied do |exception|
     redirect_to root_url, :alert => exception.message
@@ -11,11 +12,6 @@ class ApplicationController < ActionController::Base
 
   # Adds a few additional behaviors into the application controller 
    include Blacklight::Controller  
-# Adds Hydra behaviors into the application controller 
-  include Hydra::Controller::ControllerBehavior
-  def layout_name
-   'application'
-  end
 
   # Please be sure to impelement current_user and user_session. Blacklight depends on 
   # these methods in order to perform user specific actions. 
