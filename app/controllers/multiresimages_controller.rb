@@ -112,7 +112,7 @@ class MultiresimagesController < ApplicationController
     #Add properties datastream with depositor (user) info
     new_image.apply_depositor_metadata(current_user.user_key)
     
-    new_svg_ds.dirty = true
+    #new_svg_ds.dirty = true
     new_image.save
 
     # Get source VRA datastream
