@@ -33,7 +33,7 @@ class SVGDatastream < ActiveFedora::OmDatastream
 			rect_node.attr('width', width)
 			rect_node.attr('height', height)
 		end
-        self.dirty = true
+        #self.dirty = true
 	  end
 
     # Add crop geometry
@@ -42,7 +42,7 @@ class SVGDatastream < ActiveFedora::OmDatastream
 			xml.rect(:x=>x, :y=>y, :width=>width, :height=>height)
 		end
 		self.ng_xml.root.add_child(builder.doc.root)
-	   self.dirty = true
+	   #self.dirty = true
 	  end
 
     # Add image 
