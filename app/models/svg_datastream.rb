@@ -55,7 +55,7 @@ class SVGDatastream < ActiveFedora::OmDatastream
 		new_image['width']=image_node.attribute('width')
 		new_image['height']=image_node.attribute('height')
 		self.ng_xml.root.add_child(new_image)
-	    self.dirty = true
+	    #self.dirty = true
 	  end
 
     # Add image from parameters
@@ -70,7 +70,7 @@ class SVGDatastream < ActiveFedora::OmDatastream
 		new_image['x']="0"
 		new_image['y']="0"
 		self.ng_xml.root.add_child(new_image)
-	    self.dirty = true
+	    #self.dirty = true
 	  end
 
     # create rect 
