@@ -1,8 +1,11 @@
+require 'json'
+require 'dil/pid_minter'
+
 class DILCollection < ActiveFedora::Base
   
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
-  require 'json'
+  include DIL::PidMinter
   has_and_belongs_to_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_image
   
   #### 
@@ -148,7 +151,9 @@ class DILCollection < ActiveFedora::Base
   
   # Add the detail or upload to their appropriate collections
   # Called from the multiresimages controller for the detail, and from the uploads controller for the upload 
-  def self.add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
+  class << self
+  include DIL::PidMinter
+  def add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
     
     #If personal collection (either Details or Uploads) doesn't exist, create it and add image to it
     logger.debug("personal collection search result:" + personal_collection_search_result.to_s)
@@ -156,10 +161,11 @@ class DILCollection < ActiveFedora::Base
       #authorize!(:create, DILCollection)
 	  
 	  #create new collection, update it's metadata and save
-	  new_collection = DILCollection.new()
+	  new_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
+	  #new_collection.pid(mint_pid("dil-local"))
 	  new_collection.apply_depositor_metadata(user_key)
 	  #new_collection.set_collection_type('dil_collection')
-	  logger.debug("collection_name" << collection_name)
+	  logger.debug("collection_name: " << collection_name)
 	  new_collection.descMetadata.title = collection_name
 	  new_collection.save!
 		
@@ -177,6 +183,8 @@ class DILCollection < ActiveFedora::Base
       #add image to collection
       collection.insert_member(new_image)
     end
+  
+  end
   
   end
   
