@@ -107,10 +107,10 @@ GEM
       railties (>= 3.0.0)
     fastercsv (1.5.5)
     ffi (1.8.1)
-    hashie (2.0.4)
+    hashie (2.0.5)
     hike (1.2.2)
     hooks (0.2.2)
-    hydra-access-controls (6.1.0)
+    hydra-access-controls (6.1.1)
       active-fedora (~> 6.1)
       activesupport
       blacklight
@@ -118,17 +118,17 @@ GEM
       deprecation
     hydra-batch-edit (0.0.7)
       blacklight
-    hydra-core (6.1.0)
+    hydra-core (6.1.1)
       active-fedora
       blacklight (~> 4.0)
       block_helpers
       deprecation (>= 0.0.5)
-      hydra-access-controls (= 6.1.0)
+      hydra-access-controls (= 6.1.1)
       jettywrapper (>= 1.4.1)
       rails (~> 3.2.3)
-    hydra-head (6.1.0)
-      hydra-access-controls (= 6.1.0)
-      hydra-core (= 6.1.0)
+    hydra-head (6.1.1)
+      hydra-access-controls (= 6.1.1)
+      hydra-core (= 6.1.1)
       rails (>= 3.2.6)
     hydra-ldap (0.0.3)
       net-ldap
@@ -256,7 +256,7 @@ GEM
       rest-client
     rubyntlm (0.1.1)
     rubyzip (0.9.9)
-    sass (3.2.8)
+    sass (3.2.9)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -327,7 +327,7 @@ DEPENDENCIES
   exception_notification (= 3.0.1)
   factory_girl_rails (= 3.5.0)
   hydra-batch-edit (~> 0.0.6)
-  hydra-head (= 6.1)
+  hydra-head (= 6.1.1)
   hydra-ldap (= 0.0.3)
   jettywrapper (= 1.4.1)
   jquery-rails (= 2.0.2)
