@@ -1,4 +1,4 @@
-class ModsArticleDatastream < ActiveFedora::NokogiriDatastream       
+class ModsArticleDatastream < ActiveFedora::OmDatastream       
 #  include Hydra::Datastream::CommonModsIndexMethods
 
   set_terminology do |t|
