@@ -1,7 +1,9 @@
 require 'dil/multiresimage_service'
+#require 'dil/pid_minter'
+
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
-  include DIL::PidMinter
+  #include DIL::PidMinter
   #include Vrawork
   helper :permissions
 
