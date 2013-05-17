@@ -200,7 +200,7 @@ class ModsCollection < ActiveFedora::OmDatastream
           nodeset.after(node)
           index = nodeset.length
         end
-        #self.dirty = true
+        self.content = self.ng_xml.to_s
       end
       
       return node, index
@@ -209,7 +209,7 @@ class ModsCollection < ActiveFedora::OmDatastream
     # Remove the contributor entry identified by @contributor_type and @index
     def remove_contributor(contributor_type, index)
       self.find_by_terms( {contributor_type.to_sym => index.to_i} ).first.remove
-      #self.dirty = true
+      self.content = self.ng_xml.to_s
     end
     
     def self.common_relator_terms
