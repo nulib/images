@@ -1,0 +1,207 @@
+body {
+ background: url("/assets/site/header_bg.png") repeat-x scroll 0 0 transparent !important;
+ margin-top: 0;
+ padding-top: 0;
+ spacing-top: 0;
+}
+#hd nav {
+ margin-top: 7.5em;
+}
+#hd nav ul,
+nav#downloads ul {
+ list-style-type:none;
+ margin:0;
+ padding:0;
+}
+#hd nav li,
+nav#downloads ul li {
+ display:inline;
+ padding-right:10px;
+}
+#hd {
+ height: 105px;
+ margin-top: 0;
+ padding-top: 0;
+ spacing-top: 0;
+}
+
+.pageEntriesInfo {
+  background-color: inherit;
+  border-bottom: 1px solid #AAAAAA;
+  border-top: 0;
+  border-left: 0;
+ border-right: 0;
+  text-align: left;
+}
+
+#sortAndPerPage label {
+  display: inline;
+}
+
+th, td {
+  border: 0;
+}
+
+ul li {
+  list-style: none;
+}
+
+li {
+  list-style: none;
+}
+
+#search {
+  text-align: left;
+}
+
+#search .submit {
+  margin: 0;
+  padding: 4px 10px 4px;
+}
+
+#search #q {
+  width: 400px;
+}
+a:link, a:visited, a:active {
+  color: #825991;
+  border-bottom: none;
+}
+
+
+/* this is actually a bootstrap override */
+form.form-search {
+  margin-bottom: 0;
+}
+
+#documents {
+    margin: 0 10px;
+    padding: 0;
+    width: 800px;
+display: inline;
+}
+
+/** Grid view **/
+.document{
+  border-bottom:0;
+  padding-bottom:0;
+  clear:none;
+}
+
+.msg.alert{
+ margin: 0;
+}
+
+.msg.error{
+ margin: 0;
+}
+
+.msg.notice{
+ margin: 0;
+}
+
+#bd #sidebar {
+width:	24%;
+overflow: hidden;
+vertical-align: top;
+}
+#bd #main {
+padding-left: 0;
+width: 75%;
+}
+
+.home_text {
+color: #222;
+float: left;
+font-size: 18px;
+margin-top: 30px;
+padding: 0 25px;
+width: 100%;
+}
+
+#main_container nav#downloads {
+display: inline-table;
+}
+#main_container nav#downloads ul {
+float: right;
+}
+
+
+#facets div h3 {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+#facets div h3:hover {
+    cursor: pointer;
+}
+
+#facets li.more_facets_link {
+    text-align: left;
+    font-weight: bold;
+}
+/* Pagination CSS */
+
+div.pagination {
+margin: 18px auto;
+text-align: center;
+}
+ul.pagination-container {border:0; margin:0; padding:0; position: relative;}
+
+.pagination-container li {
+float:left;
+border:0; margin:0; padding:0;
+font-size:11px;
+list-style:none;
+margin-right:2px;
+position: relative !important;
+}
+.pagination-container a {
+border:solid 1px #DDD;
+margin-right:2px;
+}
+.pagination-container .disabled {
+border:solid 1px #DEDEDE;
+color:#888888;
+display:block;
+float:left;
+font-weight:bold;
+margin-right:2px;
+padding:3px 4px;
+}
+.pagination-container .next a,
+.pagination-container .prev a {
+font-weight:bold;
+}
+.pagination-container .current {
+background:#2e4f81;
+color:#FFFFFF;
+font-weight:bold;
+display:block;
+float:left;
+padding:4px 6px;
+}
+.pagination-container a:link,
+.pagination-container a:visited {
+color:#2e4f81;
+display:block;
+float:left;
+padding: 6px 6px;
+text-decoration:none;
+}
+.pagination-container a:hover{
+border:solid 1px #2e4f81;
+}
+
+.pagination a {
+line-height: normal;
+}
+
+#appliedParams .label {
+position: relative;
+display: none;
+}
+
+.blacklight-multiresimages-show {
+  cursor: default !important;
+}
