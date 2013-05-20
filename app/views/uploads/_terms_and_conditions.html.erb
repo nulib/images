@@ -1,1 +1,19 @@
-  <%= check_box_tag 'depositors_agreement'%> By checking this box you agree to the following <%= link_to "Terms and Conditions", "upload_agreement.html", :target=>"_blank" %>
+  <%= check_box_tag 'depositors_agreement'%> By checking this box you agree to the following <a id="terms-opener">Terms and Conditions</a>
+
+  <div id="dialog" title="Terms and Conditions">
+	  By using DIL's software tools, you agree to upload content (images and text) and use it for noncommercial, educational and scholarly purposes. NUL is not responsible for reviewing copyright on content that is uploaded directly into Personal Image Groups.
+  </div>
+
+  <script>
+  	$( "#terms-opener" ).click(function(e){
+  		$('#dialog').dialog('open');
+  		e.preventDefault();
+  	});
+
+  	$('#dialog').dialog({
+  		modal: true,
+  		autoOpen: false,
+  		height: 255,
+  		width: 300
+  	});
+  </script>
