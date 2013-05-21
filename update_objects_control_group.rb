@@ -1,8 +1,8 @@
 #!/usr/bin/evn ruby
 
+datastreams = ["ARCHV_TECHMD", "ARCHV_EXIF", "DELIV_TECHMD"]
+  
 Multiresimage.find_each {|image|
-
-  datastreams = ["ARCHV_TECHMD", "ARCHV_EXIF", "DELIV_TECHMD"]
 
   datastreams.each {|ds_name|
     if !image.send(ds_name).nil? and image.send(ds_name).controlGroup != "M"
