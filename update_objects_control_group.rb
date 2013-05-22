@@ -14,7 +14,7 @@ Multiresimage.find_each {|image|
   # For each datastream
   datastreams.each {|ds_name|
     # If the object has the datastream with a controlGroup that isn't "M"
-    if !image.send(ds_name).nil? and image.send(ds_name).controlGroup != "M"
+    if image.send(ds_name).present? and image.send(ds_name).controlGroup != "M"
  
       begin
         #get the xml from the ds
