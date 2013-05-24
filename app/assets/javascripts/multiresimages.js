@@ -300,11 +300,13 @@ $('input[id^="batch_select_"]').live("click", (function() {
   
   //if checked, add to batch_select list
   if ($(this).attr("checked")!=null && $(this).attr("checked")=="checked"){
-    url="dil_collections/add_to_batch_select/" + item_id
+    url="dil_collections/add_to_batch_select/" + item_id;
+    $(this).parent().addClass("thumbnailSelected");
   }
   //if unchecked, remove from batch_select list
   else {
-    url="dil_collections/remove_from_batch_select/" + item_id
+    url="dil_collections/remove_from_batch_select/" + item_id;
+    $(this).parent(   ).removeClass("thumbnailSelected");
   }
 
     $.ajax({

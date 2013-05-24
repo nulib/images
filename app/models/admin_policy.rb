@@ -31,11 +31,11 @@ class AdminPolicy < ActiveFedora::Base
     or_query = [] 
     RoleMapper.roles(user).each do |group|
       permissions.each do |permission|
-        or_query << "#{permission}_access_group_t:#{group}"
+        or_query << "#{permission}_access_group_tesim:#{group}"
       end
     end
     permissions.each do |permission|
-      or_query << "#{permission}_access_person_t:#{user.user_key}"
+      or_query << "#{permission}_access_person_tesim:#{user.user_key}"
     end
     find_with_conditions(or_query.join(" OR "))
   end
@@ -73,7 +73,7 @@ class AdminPolicy < ActiveFedora::Base
 
   def to_solr(solr_doc = {}) 
     super
-    solr_doc['title_display'] = solr_doc['title_t'].first if solr_doc['title_t']
+    solr_doc['title_display'] = solr_doc['title_tesim'].first if solr_doc['title_tesim']
     solr_doc
   end
 end

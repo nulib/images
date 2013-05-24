@@ -1,7 +1,9 @@
 require 'dil/multiresimage_service'
+#require 'dil/pid_minter'
+
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
-  include DIL::PidMinter
+  #include DIL::PidMinter
   #include Vrawork
   helper :permissions
 
@@ -91,7 +93,7 @@ class MultiresimagesController < ApplicationController
     height=params[:height]
     
     new_image = Multiresimage.new(:pid=>mint_pid("dil-local"))
-    puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
+    #puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
 	#@dil_collection.set_collection_type('Multiresimage')
 
     # Get source SVG datastream
@@ -112,8 +114,8 @@ class MultiresimagesController < ApplicationController
     #Add properties datastream with depositor (user) info
     new_image.apply_depositor_metadata(current_user.user_key)
     
-    new_svg_ds.dirty = true
-    new_image.save
+    #new_svg_ds.dirty = true
+    new_image.save!
 
     # Get source VRA datastream
     source_vra_ds = source_fedora_object.datastreams["VRA"]
