@@ -5,7 +5,7 @@ development:
 test: &TEST
   url: http://127.0.0.1:8983/solr/test
 staging: &STAGING
-  url: http://127.0.0.1:8983/solr/development
+  url: http://127.0.0.1:8983/solr/test
 cucumber:
   <<: *TEST
 production:

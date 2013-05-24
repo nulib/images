@@ -3,14 +3,16 @@ source 'http://rubygems.org'
   gem 'rails', '3.2.12'
   gem 'rack', '1.4.5'
   gem 'json', '1.7.7'
-  gem 'blacklight', '3.5.0'
+  gem 'blacklight', '4.0'
   gem 'kaminari', '0.13.0'
   gem 'exception_notification', '3.0.1'
-
-  gem 'hydra-access-controls', '0.0.5'
-  gem 'hydra-head', '4.1.1'
-  gem 'hydra-mods', '0.0.5'
+  gem 'ruby-prof'
+  gem 'om', '2.1.2'
+  #gem 'hydra-access-controls', '0.0.5'
+  gem 'hydra-head', '6.1.1'
+  #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
+  gem 'bootstrap-sass'
   
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
@@ -18,7 +20,7 @@ source 'http://rubygems.org'
   gem 'omniauth-ldap', '1.0.2'
   gem 'mysql2', '0.3.11'
   gem 'clamav', '0.4.1'
-  gem 'rdf', '0.3.7'
+  gem 'rdf', '1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -26,9 +28,8 @@ group :assets do
   gem 'sass-rails', '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
-  gem 'compass-rails', '~> 1.0.0'
-  gem 'compass-susy-plugin', '~> 0.9.0', :require => 'susy'
   gem 'therubyracer', '0.10.1'
+  gem 'bootstrap-sass'
   gem 'jquery-ui-rails', '1.0.0'
   gem "bootstrap-sass-rails", '2.0.3.0'
   gem 'ruby-xslt', '0.9.9'
@@ -43,15 +44,15 @@ gem 'hydra-ldap', '0.0.3'
 gem 'hydra-batch-edit', '~>0.0.6'
 
 group :development, :test, :staging do
-  gem 'jettywrapper', '1.3.0'
+  gem 'jettywrapper', '1.4.1'
   gem 'rspec-rails', '>=2.9.0'
   gem 'factory_girl_rails', '3.5.0' 
   gem 'database_cleaner', '0.8.0'
   gem 'capybara', '1.1.2'
   gem 'bcrypt-ruby', '3.0.1'
-  gem 'debugger', '1.1.4'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
+  gem 'debugger'
 end
 
 gem 'unicorn', '4.3.1'

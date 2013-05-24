@@ -4,29 +4,29 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
   include Hydra::Controller::ControllerBehavior
-  include Blacklight::SolrHelpers::ObjectTypeFacet
+  include DIL_Blacklight::SolrHelpers::ObjectTypeFacet
 
   # These before_filters apply the hydra access controls
-  before_filter :enforce_access_controls
-  before_filter :enforce_viewing_context_for_show_requests, :only=>:show
+  #before_filter :enforce_access_controls
+  #before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
-  CatalogController.solr_search_params_logic << :add_access_controls_to_solr_params
-  CatalogController.solr_search_params_logic << :multiresimage_object_type_facet
+  self.solr_search_params_logic += [:add_access_controls_to_solr_params]
+  self.solr_search_params_logic << :multiresimage_object_type_facet
   configure_blacklight do |config|
     config.default_solr_params = { 
       :qt => 'search',
-      :qf => 'title_display_t search_field_t', # List all the fields you want to search here
+      :qf => 'title_display_tesim search_field_tesim', # List all the fields you want to search here
       :rows => 10 
     }
 
     # solr field configuration for search results/index views
     config.index.show_link = 'title_display'
-    config.index.record_display_type = 'has_model_s'
+    config.index.record_display_type = 'has_model_ssim'
 
     # solr field configuration for document/show views
     config.show.html_title = 'title_display'
     config.show.heading = 'title_display'
-    config.show.display_type = 'has_model_s'
+    config.show.display_type = 'has_model_ssim'
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
@@ -68,30 +68,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'title_display', :label => 'Title:' 
     config.add_index_field 'title_vern_display', :label => 'Title:' 
     config.add_index_field 'author_display', :label => 'Author:' 
-    config.add_index_field 'author_vern_display', :label => 'Author:' 
-    config.add_index_field 'format', :label => 'Format:' 
-    config.add_index_field 'language_facet', :label => 'Language:'
-    config.add_index_field 'published_display', :label => 'Published:'
-    config.add_index_field 'published_vern_display', :label => 'Published:'
-    config.add_index_field 'lc_callnum_display', :label => 'Call number:'
 
-    # solr fields to be displayed in the show (single result) view
-    #   The ordering of the field names is the order of the display 
-    config.add_show_field 'title_display', :label => 'Title:' 
-    config.add_show_field 'title_vern_display', :label => 'Title:' 
-    config.add_show_field 'subtitle_display', :label => 'Subtitle:' 
-    config.add_show_field 'subtitle_vern_display', :label => 'Subtitle:' 
-    config.add_show_field 'author_display', :label => 'Author:' 
-    config.add_show_field 'author_vern_display', :label => 'Author:' 
-    config.add_show_field 'format', :label => 'Format:' 
-    config.add_show_field 'url_fulltext_display', :label => 'URL:'
-    config.add_show_field 'url_suppl_display', :label => 'More Information:'
-    config.add_show_field 'material_type_display', :label => 'Physical description:'
-    config.add_show_field 'language_facet', :label => 'Language:'
-    config.add_show_field 'published_display', :label => 'Published:'
-    config.add_show_field 'published_vern_display', :label => 'Published:'
-    config.add_show_field 'lc_callnum_display', :label => 'Call number:'
-    config.add_show_field 'isbn_t', :label => 'ISBN:'
 
     
 
@@ -99,10 +76,10 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc, pub_date_sort desc, title_sort asc', :label => 'relevance'
-    config.add_sort_field 'pub_date_sort desc, title_sort asc', :label => 'year'
+    config.add_sort_field 'score desc, title_sort asc', :label => 'relevance'
+    config.add_sort_field 'title_sort asc', :label => 'year'
     config.add_sort_field 'author_sort asc, title_sort asc', :label => 'author'
-    config.add_sort_field 'title_sort asc, pub_date_sort desc', :label => 'title'
+    #config.add_sort_field 'title_sort asc', :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you 
     # mean") suggestion is offered.

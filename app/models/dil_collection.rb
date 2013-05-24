@@ -1,8 +1,11 @@
+require 'json'
+require 'dil/pid_minter'
+
 class DILCollection < ActiveFedora::Base
   
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
-  require 'json'
+  include DIL::PidMinter
   has_and_belongs_to_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_image
   
   #### 
@@ -135,9 +138,12 @@ class DILCollection < ActiveFedora::Base
        export_xml = get_collection_xml(fedora_object, export_xml)
       #if it's an image, build the xml
       elsif (fedora_object.instance_of?(Multiresimage))
+        img_width = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_width[0].to_i
+        img_height = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_height[0].to_i
+        size = img_width > img_height ? img_width > 950 ? 950 : img_width : img_height > 700 ? 700 : img_height
         logger.debug("PID:" << pid)
-        export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}</url>"
-        export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
+        export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}#{size}</url><metadata></metadata></image>"
+        #export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
         logger.debug("export_xml debug:" << export_xml)
       end
     end #end each
@@ -148,7 +154,9 @@ class DILCollection < ActiveFedora::Base
   
   # Add the detail or upload to their appropriate collections
   # Called from the multiresimages controller for the detail, and from the uploads controller for the upload 
-  def self.add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
+  class << self
+  include DIL::PidMinter
+  def add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
     
     #If personal collection (either Details or Uploads) doesn't exist, create it and add image to it
     logger.debug("personal collection search result:" + personal_collection_search_result.to_s)
@@ -156,10 +164,11 @@ class DILCollection < ActiveFedora::Base
       #authorize!(:create, DILCollection)
 	  
 	  #create new collection, update it's metadata and save
-	  new_collection = DILCollection.new()
+	  new_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
+	  #new_collection.pid(mint_pid("dil-local"))
 	  new_collection.apply_depositor_metadata(user_key)
-	  new_collection.set_collection_type('dil_collection')
-	  logger.debug("collection_name" << collection_name)
+	  #new_collection.set_collection_type('dil_collection')
+	  logger.debug("collection_name: " << collection_name)
 	  new_collection.descMetadata.title = collection_name
 	  new_collection.save!
 		
@@ -177,6 +186,8 @@ class DILCollection < ActiveFedora::Base
       #add image to collection
       collection.insert_member(new_image)
     end
+  
+  end
   
   end
   
@@ -227,11 +238,12 @@ class DILCollection < ActiveFedora::Base
       value = "false"
     end
     
-    parent_collection_hash = Hash["is_top_level_collection_s" => value]
+    parent_collection_hash = Hash["is_top_level_collection_ssim" => value]
     
     solr_doc = solr_doc.merge(parent_collection_hash)
     solr_doc = solr_doc.merge({"object_type_facet" => 'Collection'})
-    solr_doc = solr_doc.merge({"title_s" => self.title})
+    solr_doc = solr_doc.merge({"title_ssim" => self.title})
+    solr_doc = solr_doc.merge({"title_tesim" => self.title})
     solr_doc
   end
  

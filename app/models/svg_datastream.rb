@@ -1,22 +1,22 @@
 # This class should be moved out of the Hydra code
 
-class SVGDatastream < ActiveFedora::NokogiriDatastream       
+class SVGDatastream < ActiveFedora::OmDatastream       
 
   set_terminology do |t|
-    t.root(:path=>"svg", :xmlns=>"http://www.w3.org/2000/svg", :schema=>"http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd")
-  	t.svg_note(:path=>"note")
-	t.svg_image(:path=>"image") {
-		t.svg_height(:path=>{:attribute=>"height"})
-		t.svg_width(:path=>{:attribute=>"width"})
-		t.svg_x(:path=>{:attribute=>"x"})
-		t.svg_y(:path=>{:attribute=>"y"})
-		t.svg_image_path(:path=>{:attribute=>"xlink:href",:xmlns=>"xlink:http://www.w3.org/1999/xlink" })
+    t.root(:path=>"svg", :xmlns=>"http://www.w3.org/2000/svg", :schema=>"http://www.w3.org/TR/2002/WD-SVG11-20020108/SVG.xsd", :index_as=>[:searchable])
+  	t.svg_note(:path=>"note", :index_as=>[:searchable])
+	t.svg_image(:path=>"image", :index_as=>[:searchable]) {
+		t.svg_height(:path=>{:attribute=>"height"}, :index_as=>[:searchable])
+		t.svg_width(:path=>{:attribute=>"width"}, :index_as=>[:searchable])
+		t.svg_x(:path=>{:attribute=>"x"}, :index_as=>[:searchable])
+		t.svg_y(:path=>{:attribute=>"y"}, :index_as=>[:searchable])
+		t.svg_image_path(:path=>{:attribute=>"xlink:href",:xmlns=>"xlink:http://www.w3.org/1999/xlink" }, :index_as=>[:searchable])
 	}
-	t.svg_rect(:path=>"rect") {
-		t.svg_rect_height(:path=>{:attribute=>"height"})
-		t.svg_rect_width(:path=>{:attribute=>"width"})
-		t.svg_rect_x(:path=>{:attribute=>"x"})
-		t.svg_rect_y(:path=>{:attribute=>"y"})
+	t.svg_rect(:path=>"rect", :index_as=>[:searchable]) {
+		t.svg_rect_height(:path=>{:attribute=>"height"}, :index_as=>[:searchable])
+		t.svg_rect_width(:path=>{:attribute=>"width"}, :index_as=>[:searchable])
+		t.svg_rect_x(:path=>{:attribute=>"x"}, :index_as=>[:searchable])
+		t.svg_rect_y(:path=>{:attribute=>"y"}, :index_as=>[:searchable])
 	}
   end
   
@@ -33,7 +33,7 @@ class SVGDatastream < ActiveFedora::NokogiriDatastream
 			rect_node.attr('width', width)
 			rect_node.attr('height', height)
 		end
-        self.dirty = true
+        self.content = self.ng_xml.to_s
 	  end
 
     # Add crop geometry
@@ -42,7 +42,7 @@ class SVGDatastream < ActiveFedora::NokogiriDatastream
 			xml.rect(:x=>x, :y=>y, :width=>width, :height=>height)
 		end
 		self.ng_xml.root.add_child(builder.doc.root)
-	   self.dirty = true
+	    self.content = self.ng_xml.to_s
 	  end
 
     # Add image 
@@ -55,7 +55,7 @@ class SVGDatastream < ActiveFedora::NokogiriDatastream
 		new_image['width']=image_node.attribute('width')
 		new_image['height']=image_node.attribute('height')
 		self.ng_xml.root.add_child(new_image)
-	    self.dirty = true
+	    self.content = self.ng_xml.to_s
 	  end
 
     # Add image from parameters
@@ -70,7 +70,7 @@ class SVGDatastream < ActiveFedora::NokogiriDatastream
 		new_image['x']="0"
 		new_image['y']="0"
 		self.ng_xml.root.add_child(new_image)
-	    self.dirty = true
+	    self.content = self.ng_xml.to_s
 	  end
 
     # create rect 

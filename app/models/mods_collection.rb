@@ -1,14 +1,14 @@
-class ModsCollection < ActiveFedora::NokogiriDatastream       
-  include Hydra::Datastream::CommonModsIndexMethods
+class ModsCollection < ActiveFedora::OmDatastream       
+  #include Hydra::Datastream::CommonModsIndexMethods
 
   set_terminology do |t|
     t.root(:path=>"mods", :xmlns=>"http://www.loc.gov/mods/v3", :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-2.xsd")
 
-    t.title_info(:path=>"titleInfo") {
-      t.main_title(:path=>"title", :label=>"title")
-      t.language(:index_as=>[:facetable],:path=>{:attribute=>"lang"})
+    t.title_info(:path=>"titleInfo", :index_as=>[:searchable]) {
+      t.main_title(:path=>"title", :label=>"title", :index_as=>[:searchable])
+      t.language(:path=>{:attribute=>"lang"}, :index_as=>[:searchable])
     } 
-    t.title(:proxy=>[:mods, :title_info, :main_title])
+    t.title(:proxy=>[:title_info, :main_title], :index_as=>[:searchable])
     
     
     t.language{
@@ -200,7 +200,7 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
           nodeset.after(node)
           index = nodeset.length
         end
-        self.dirty = true
+        self.content = self.ng_xml.to_s
       end
       
       return node, index
@@ -209,7 +209,7 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
     # Remove the contributor entry identified by @contributor_type and @index
     def remove_contributor(contributor_type, index)
       self.find_by_terms( {contributor_type.to_sym => index.to_i} ).first.remove
-      self.dirty = true
+      self.content = self.ng_xml.to_s
     end
     
     def self.common_relator_terms
@@ -477,7 +477,7 @@ class ModsCollection < ActiveFedora::NokogiriDatastream
         solr_doc = super(solr_doc)
         #::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
         #::Solrizer::Extractor.insert_solr_field_value(solr_doc, "search_field_t", self.find_by_terms("titleInfo/title"))
-        search_field_hash = Hash["search_field_t" => self.title]
+        search_field_hash = Hash["search_field_tesim" => self.title]
         object_type_hash = Hash["object_type_facet" => "Collection"]
         #title_s_hash = Hash["title_s" => self.title]
         #collection_creator_hash = Hash["collection_creator_t" => current_user.user_key]
