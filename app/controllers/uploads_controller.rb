@@ -1,7 +1,7 @@
 class UploadsController < ApplicationController
 
   include Hydra::Controller::UploadBehavior  
-  include Hydra::Controller::RepositoryControllerBehavior  
+  #include Hydra::Controller::RepositoryControllerBehavior  
   include Blacklight::SolrHelper
   include DIL::PidMinter
   

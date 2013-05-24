@@ -1,20 +1,11 @@
-/*
- * Required by Blacklight:
- *= require 'jquery/ui-lightness/jquery-ui-1.8.1.custom.css'
- *
- * This is the default theme. You can modify many of the settings 
- * by editing your local app/assets/stylesheets/blacklight_themes/standard.css
- *= require 'blacklight_themes/standard'         
-
- * Required by Hydra
- *= require 'hydra/styles'   
-
- *= require jquery.ui.all
- *= require jquery.fileupload-ui.css
- *= require twitter/bootstrap
- *= require blacklight_overrides
- *= require batch_edit
- *= require policies 
- *= require dil
-*/
+@import 'jquery.ui.all';
+@import 'jquery.fileupload-ui.css';
+@import 'twitter/bootstrap';
+@import 'batch_edit';
+@import 'policies';
+@import 'dil';
+@import 'bootstrap';
+@import 'bootstrap-responsive';
+@import 'blacklight/blacklight'; 
+@import 'blacklight_overrides';
 

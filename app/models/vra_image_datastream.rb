@@ -97,7 +97,7 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
 	  nodeset = self.find_by_terms(:vra)
 	  image_node.first.add_namespace_definition("vra","http://www.vraweb.org/vracore4.htm")
 	  nodeset.first.add_child(image_node)
-      self.dirty = true
+      self.content = self.ng_xml.to_s
       return nodeset
      end
 
@@ -136,7 +136,7 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
 	  nodeset = self.find_by_terms(:vra)
       unless nodeset.nil?
 		self.ng_xml.root.add_child(node)
-        self.dirty = true
+        self.content = self.ng_xml.to_s
       end
       return node
      end
