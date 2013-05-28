@@ -7,32 +7,7 @@
                             <a target="_blank" class="btn" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">Download</a></li>
                     </ul>
 
-                    <input class="submit btn" id="addToCollectionButton" value="Add to Collection" style="margin-right: 1em" >
-                      <div id="addToCollection" title="Add To Collection">
-						<%= render :partial=>'dil_collections/add' %>
-  					  </div>
 				</nav>
               <% end %>
 <% end %>
 
-  <script>
-  	$( "#addToCollectionButton" ).click(function(e){
-  		$('#addToCollection').dialog('open');
-  		e.preventDefault();
-  	});
-
-  	$('#addToCollection').dialog({
-  		modal: true,
-  		autoOpen: false,
-  		height: 400,
-  		width: 300,
-  		buttons: {
-  			"Submit": function() {
-  				$( this ).dialog( "close" );
-  			},
-  			Cancel: function() {
-  				$( this ).dialog( "close" );
-  			}
-  		}
-  	});
-  </script>
