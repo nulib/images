@@ -11,10 +11,8 @@ body {
  padding: 0;
  spacing-top: 0;
 }
-#hd #logo {
-	float: none;
-	display: block;
-	padding: 2.5em 2em;
+#hd .logo-search {
+  padding: 2em 0;
 }
 #hd nav {
  background-color: #efefef;
@@ -247,4 +245,12 @@ display: none;
 
 .blacklight-multiresimages-show {
   cursor: default !important;
+}
+
+/* New Stuff */
+
+
+
+#main-container {
+  padding-top: 2em;
 }
