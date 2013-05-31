@@ -124,6 +124,7 @@ class Multiresimage < ActiveFedora::Base
   def update_ref_id(ref_id)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
     node_set[0].set_attribute("refid", ref_id)
+    self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
   
@@ -136,6 +137,7 @@ class Multiresimage < ActiveFedora::Base
   def replace_locationset_location_pid(new_pid)
     node_set = self.datastreams["VRA"].find_by_terms("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")
     node_set[0].content = new_pid
+    self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
   
@@ -156,6 +158,7 @@ class Multiresimage < ActiveFedora::Base
     node_set[0].set_attribute("relids", work_pid)
     node_set[0].set_attribute("type", "imageOf")
     node_set[0].set_attribute("label", "Image")
+    self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
   
