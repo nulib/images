@@ -4,7 +4,7 @@
 <% end %>
 
 <div id="accordion">
-	<% if current_user.get_uploads_collection.present? current_user.get_uploads_collection.first["id"] == @collection.id %>
+	<% if current_user.get_uploads_collection.first.present? current_user.get_uploads_collection.first["id"] == @collection.id %>
 	  <%= batch_edit_tools %>
 	  <%= batch_edit_continue %>
 	<% end %>
