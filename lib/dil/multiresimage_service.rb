@@ -372,7 +372,7 @@ module DIL
 			  accession_nbr = params[:accessionNbr]
 				  
 			  # Query Solr to find Multiresimage object that has the accession nbr
-			  pids = ActiveFedora::SolrService.query("search_field_tesim:Voyager\:#{accession_nbr} AND object_type_facet:Multiresimage")
+			  pids = ActiveFedora::SolrService.query("search_field_tesim:Voyager\\:#{accession_nbr} AND object_type_facet:Multiresimage")
 			  
 			  #if one image object found
 			  if (pids.present? and pids.size == 1)
