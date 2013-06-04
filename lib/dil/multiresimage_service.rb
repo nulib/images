@@ -386,10 +386,14 @@ module DIL
 			      #if image has work, get pid
 			      if (image.vraworks.present?)
 			        work_pid = image.vraworks[0].pid
-			        if (work_pid.present?)
-			          return_xml << "<work_pid>#{work_pid}</work_pid>"
-			        end
+			      elsif (image.VRA.relationSet_ref.imageOf.relation_relids.first.present?)
+			        work_pid = image.VRA.relationSet_ref.imageOf.relation_relids.first
 			      end
+			      
+			      if (work_pid.present?)
+			        return_xml << "<work_pid>#{work_pid}</work_pid>"
+			      end
+			      
 			      return_xml << "</pids>"
                 end
               # if more than one object found
