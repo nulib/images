@@ -29,8 +29,9 @@
 				<a href="<%=ref%>">
 					<%= title.nil?  ? pid : title.truncate(50) %>
 				</a>
-				<% if current_user.get_uploads_collection.first["id"] == @collection.id %>
-			  	<%= batch_edit_select(document) %>
+				<% uploads_collection = current_user.get_uploads_collection %>
+				<% if uploads_collection.first.present? and uploads_collection.first["id"] == @collection.id %>
+			  	  <%= batch_edit_select(document) %>
 				<% end %>
 		</div>
 
