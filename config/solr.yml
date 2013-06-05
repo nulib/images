@@ -9,4 +9,4 @@ staging: &STAGING
 cucumber:
   <<: *TEST
 production:
-  url: http://localhost:80/solr/#/dil
+  url: http://localhost:80/solr/dil
