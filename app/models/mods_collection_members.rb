@@ -68,7 +68,7 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
       # Remove the mods entry identified by @index
 	  def remove_member_by_index(member_index)
 		self.find_by_terms({:mods=>member_index.to_i}).first.remove
-		 self.content = self.ng_xml.to_s
+		 #self.content = self.ng_xml.to_s
 	  end
 	  
 	# Remove the mods entry identified by pid
@@ -77,7 +77,7 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
         #logger.debug("debug xpath" + self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).to_s)
 		#self.ng_xml.xpath('//mods:mods/mods:relatedItem/mods:identifier[.="' + pid + '"]', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
 		self.ng_xml.xpath('//mods:identifier[.="' + pid + '"]/ancestor::mods:mods', {'mods'=>'http://www.loc.gov/mods/v3'}).first.remove
-	     self.content = self.ng_xml.to_s
+	    self.content = self.ng_xml.to_s
 	  end
 	  
 	# Moves the mods record to a different index within the datastream
@@ -97,6 +97,8 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
 	      to_node.before(moving_node)
 	      #to_node.add_previous_sibling(moving_node)
 	    end
+	    
+	    self.content = self.ng_xml.to_s
 	    
       end
     

@@ -372,7 +372,7 @@ module DIL
 			  accession_nbr = params[:accessionNbr]
 				  
 			  # Query Solr to find Multiresimage object that has the accession nbr
-			  pids = ActiveFedora::SolrService.query("search_field_t:Voyager#{accession_nbr} AND object_type_facet:Multiresimage")
+			  pids = ActiveFedora::SolrService.query("search_field_tesim:Voyager\\:#{accession_nbr} AND object_type_facet:Multiresimage")
 			  
 			  #if one image object found
 			  if (pids.present? and pids.size == 1)
@@ -386,10 +386,14 @@ module DIL
 			      #if image has work, get pid
 			      if (image.vraworks.present?)
 			        work_pid = image.vraworks[0].pid
-			        if (work_pid.present?)
-			          return_xml << "<work_pid>#{work_pid}</work_pid>"
-			        end
+			      elsif (image.VRA.relationSet_ref.imageOf.relation_relids.first.present?)
+			        work_pid = image.VRA.relationSet_ref.imageOf.relation_relids.first
 			      end
+			      
+			      if (work_pid.present?)
+			        return_xml << "<work_pid>#{work_pid}</work_pid>"
+			      end
+			      
 			      return_xml << "</pids>"
                 end
               # if more than one object found
@@ -454,7 +458,7 @@ module DIL
     #This method calls a method within Blacklight::SolrHelper.  It needs to invoked from a view helper, but the view helper can't invoke it
     #directly.  The view helper (multiresimage_helper) invokes this method, which invokes the get_search_results method in Blacklight::SolrHelper
     def get_solr_search_results(escaped_pid)
-      (solr_response, document_list) = get_search_results(:q=>build_related_image_query("imageOf_t:#{escaped_pid}"))
+      (solr_response, document_list) = get_search_results(:q=>build_related_image_query("imageOf_tesim:#{escaped_pid}"))
       return solr_response, document_list
     end
 
