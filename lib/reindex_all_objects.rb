@@ -6,8 +6,8 @@
 require 'fileutils'
 
 # Configs
-pids_file_path = 'path_to_file'
-script_logger = Logger.new('path_to_logfile')
+pids_file_path = '/usr/local/src/dil_hydra/lib/production_pids_test.txt'
+script_logger = Logger.new('/usr/local/src/dil_hydra/lib/logfile.log')
 
 begin
   #For each line in file, load the object and remo
