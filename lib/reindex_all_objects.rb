@@ -7,7 +7,7 @@ require 'fileutils'
 
 # Configs
 pids_file_path = 'path_to_logfile'
-script_logger = Logger.new('path_to_logfile')
+script_logger = Logger.new(pids_file_path)
 
 begin
   #For each line in file, load the object and remo
