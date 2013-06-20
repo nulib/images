@@ -6,7 +6,8 @@
 require 'fileutils'
 
 # Configs
-pids_file_path = "path_to_file"
+pids_file_path = 'path_to_logfile'
+script_logger = Logger.new('path_to_logfile')
 
 begin
   #For each line in file, load the object and remo
@@ -20,23 +21,26 @@ begin
       pid.strip!
      
       fedora_object = ActiveFedora::Base.find(pid)
-      fedora_object.save
-      logger.debug("Save successful: #{pid}")
+      fedora_object.update_index
+      script_logger.debug("Save successful: #{pid}")
     
     rescue StandardError => s
-      logger.debug("StandardError: #{s.message}")
+     script_logger.debug("StandardError: #{s.message}")
   
     rescue Exception => e
-      logger.debug("Exception: #{e.message}")
+      script_logger.debug("Exception: #{e.message}")
     
     end #end exception handling for loop
     
 end
 
 rescue StandardError => s
-  logger.debug("StandardError: #{s.message}")
+  script_logger.debug("StandardError: #{s.message}")
   
 rescue Exception => e
-  logger.debug("Exception: #{e.message}")
+  script_logger.debug("Exception: #{e.message}")
+  
+ensure
+  script_logger.close
 
 end
