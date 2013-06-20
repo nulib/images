@@ -1,7 +1,7 @@
 # This script reads a file that has a list of Fedora pids (one per line)
 # and reindexs the objects
 # Make sure to set the config variables!
-# To run the script: rails runner -e development|staging|production lib/reindex_all_objects.rb
+# To run the script (from root dir of app): rails runner -e development|staging|production lib/reindex_all_objects.rb
 
 require 'fileutils'
 
