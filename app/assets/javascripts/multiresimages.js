@@ -324,4 +324,7 @@ $('input[id^="batch_select_"]').live("click", (function() {
 
 }));
 
+$(document).ready(function(){
+  $('input[checked="checked"]').closest('.listing').addClass("thumbnailSelected");
+});
 
