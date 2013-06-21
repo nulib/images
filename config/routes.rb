@@ -13,6 +13,8 @@ DIL::Application.routes.draw do
     root :to => "devise/sessions#new"
   end
   
+  #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
+  
   resources :multiresimages do
     collection do
       get 'aware_tile'
@@ -28,7 +30,11 @@ DIL::Application.routes.draw do
     end
   end
   
-  resources :dil_collections  
+  resources :dil_collections do
+    collection do
+      get "get_collections"=>"dil_collections#get_collections"
+    end
+  end
   
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
   #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
