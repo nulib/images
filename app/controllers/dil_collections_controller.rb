@@ -208,13 +208,11 @@ class DilCollectionsController < ApplicationController
    def get_collections
     begin
       return_json = ""
+      collection_json = current_user.collections.to_json
       #if user logged in
-      if current_user.present?
+      if current_user.present? and collection_json.present?
         # get the array of Solr results for the user's collections
-          current_user.collections.each do |collection|
-            # convert the Hash in each index to json
-            return_json += collection.to_json
-          end
+        return_json = collection_json
       else
         return_json = "{\"status\":exception}"
       end
