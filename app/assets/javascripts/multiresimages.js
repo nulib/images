@@ -326,5 +326,47 @@ $('input[id^="batch_select_"]').live("click", (function() {
 
 $(document).ready(function(){
   $('input[checked="checked"]').closest('.listing').addClass("thumbnailSelected");
+  
+  // When a user wants to add an image to a collection from the image show view, they click a button.
+  // This will get the collection titles and pids by calling an API and show a select list with the collections
+  $("#addToImageGroupBtn").click(function() {
+   //make ajax call to get collections
+   var select_list = "<select id='collection_list'>"
+   $.ajax({
+      type: "GET",
+      url: '/dil_collections/get_collections.json',
+      dataType: 'json',
+      success: function(jsonObject){
+        //loop through each collection the json
+        var selectList = "<select id='collection_list'>"
+        $.each(jsonObject, function(){
+          selectList += "<option val='" + this.id + "' id='" + this.id + "'>" + this.title_tesim[0] + "</option>" 
+        });
+        
+        selectList += "</select>"
+        $("#downloads").append(selectList);
+        $("#downloads").append("<input class='btn' id='submitCollection' value='Save'/>");
+      },
+		
+    error: function(output){
+      alert("Could not add image to Image Group");
+    }
+  });//end ajax
+  
+   
+  });
+  
+  $("#submitCollection").live("click", (function() {
+    var collectionPid = $("#collection_list option:selected").attr("id");
+    var url = document.location.href.substr(document.location.href.lastIndexOf('/')+1);
+    alert(collectionPid);
+    alert(url);
+     
+  }));
+  
+  
 });
+
+  
+
 
