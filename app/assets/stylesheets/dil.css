@@ -132,8 +132,17 @@ a.member-remove:active {
 #detailCollection { width: 174px; float: left; }
 #detailCollection ul { margin: 0; padding: .5em 0 .5em 1.5em; }
 
+#addToImageGroup {
+	padding: 0 0 1em 0;
+}
+
+
+tr.even td, tr.odd td {
+	padding: .5em 1.5em;
+}
+
 tr.even td{
-	background-color:#CCC;
+	background-color:#EEE;
 }
 
 tr.even td.field{
@@ -141,7 +150,7 @@ tr.even td.field{
 }
 
 tr.odd td{
-	background-color:#EEE;
+	background-color:#FAFAFA;
 }
 
 tr.odd td.field{
