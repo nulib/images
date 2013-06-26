@@ -347,7 +347,7 @@ $(document).ready(function(){
         
           selectList += "</select>"
           $("#downloads").append(selectList);
-          $("#downloads").append("<input class='btn btn-small' id='submitCollection' value='Save'/>");
+          $("#downloads").append("<br/><button class='btn btn-primary' id='submitCollection'>Save</button><br/><br/>");
         },
 		
       error: function(output){
