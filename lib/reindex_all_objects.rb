@@ -20,7 +20,7 @@ begin
       #trim whitespace
       pid.strip!
      
-      fedora_object = ActiveFedora::Base.find(pid)
+      fedora_object = ActiveFedora::Base.find(pid, :cast=>:true)
       fedora_object.update_index
       script_logger.debug("Indexing successful: #{pid}")
     
