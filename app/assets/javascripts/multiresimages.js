@@ -324,4 +324,65 @@ $('input[id^="batch_select_"]').live("click", (function() {
 
 }));
 
+$(document).ready(function(){
+  $('input[checked="checked"]').closest('.listing').addClass("thumbnailSelected");
+  
+  // When a user wants to add an image to a collection from the image show view, they click a button.
+  // This will get the collection titles and pids by calling an API and show a select list with the collections
+  $("#addToImageGroupBtn").click(function() {
+   
+   if ($("#collection_list").length==0){
+     //make ajax call to get collections and build select list
+     var select_list = "<select id='collection_list'>"
+     $.ajax({
+        type: "GET",
+        url: '/dil_collections/get_collections.json',
+        dataType: 'json',
+        success: function(jsonObject){
+          //loop through each collection the json
+          var selectList = "<select id='collection_list'>"
+          $.each(jsonObject, function(){
+            selectList += "<option val='" + this.id + "' id='" + this.id + "'>" + this.title_tesim[0] + "</option>" 
+          });
+        
+          selectList += "</select>"
+          $("#downloads").append(selectList);
+          $("#downloads").append("<input class='btn btn-small' id='submitCollection' value='Save'/>");
+        },
+		
+      error: function(output){
+        alert("Could not add image to Image Group");
+      }
+     });//end ajax
+   }//end if
+  });
+  
+  
+  // This method is called when a user clicks the Save button to add an image to an image group from the image show view.
+  // An API is called to add the image to the collection.
+  $("#submitCollection").live("click", (function() {
+    //get the collection pid from the select list selected option 
+    var collectionPid = $("#collection_list option:selected").attr("id");
+    //get the image pid from the url
+    var imagePid = document.location.href.substr(document.location.href.lastIndexOf('/')+1);
+    
+    //make the API call
+    $.ajax({
+      type: "GET",
+      url: "/dil_collections/add/" + collectionPid + "/" + imagePid,
+      success: function(jsonObject){
+        },
+		
+    error: function(output){
+      alert("Could not add image to Image Group");
+    }
+  });//end ajax
+     
+  }));
+  
+  
+});
+
+  
+
 

@@ -249,8 +249,12 @@ display: none;
 
 /* New Stuff */
 
-
-
 #main-container {
   padding-top: 2em;
+}
+
+.sidenav {
+  h5, h4 {
+    margin: 0;
+  }
 }
