@@ -203,6 +203,35 @@ class DilCollectionsController < ApplicationController
     end
   end
   
+   #TODO: Move code to lib directory as this is an API
+   # API to return a user's collections' titles and pids as JSON
+   def get_collections
+    begin
+      return_json = ""
+      collection_json = current_user.collections.to_json
+      #if user logged in
+      if current_user.present? and collection_json.present?
+        # get the array of Solr results for the user's collections
+        return_json = collection_json
+      else
+        return_json = "{\"status\":exception}"
+      end
+    rescue Exception => e
+      #error
+      return_json = "{\"status\":exception}"
+      logger.error("get_collections exception: #{e.to_s}")
+        
+    ensure #this will get called even if an exception was raised
+      respond_to do |format|
+        #This wasn't working quite right, so just storing JSON in a variable instead of using .to_json
+        #format.json { render :layout =>  false, :json => collection.to_json(:methods=>:get_subcollections) }
+        format.json { render :layout =>  false, :json => return_json}
+      end  
+    
+    end
+    
+  end
+  
   # This API is called when a user selects one image using the checkbox to add it to the batch selection list.
   # The list is stored in the session as :batch_select_ids
   # JSON is returned
