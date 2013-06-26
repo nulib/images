@@ -4,6 +4,7 @@
 # This script reads a file that has a list of Fedora pids (one per line)
 # and removes a datastream.
 # Make sure to set the config variables!
+# To run this script: nohup ruby ./delete_policy_ds.rb &
 
 require 'fileutils'
 require 'net/http'
@@ -21,7 +22,7 @@ begin
   #For each line in file, remove the datastream
   File.readlines(pids_file_path).each do |pid|
     begin
-      
+     sleep(0.20) 
       #remove newline
       pid.gsub!(/\n/,'')
       
