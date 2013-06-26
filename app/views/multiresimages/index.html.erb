@@ -1,7 +1,0 @@
-<% @multiresimages.each do |multiresimage| %>
-  <p>PID: <%= multiresimage.pid %></p>
-  <p>Title: <%= multiresimage.titleset_display %></p>
-  <p><img src=<%=DIL_CONFIG['dil_fedora_url']%><%= multiresimage.id %><%=DIL_CONFIG['dil_fedora_disseminator_thumbnail']%>"/></p>
-  <p><%= document.get(:creator_t) %></p>
-  <hr/>
-<% end %>
