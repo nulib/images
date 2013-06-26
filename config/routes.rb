@@ -20,6 +20,7 @@ DIL::Application.routes.draw do
       get 'aware_tile'
       post 'add_datastream'
       post 'add_external_datastream'
+      #TODO change to post or delete
       get 'delete_fedora_object'
       get 'clone_work'
       get 'create_crop'
