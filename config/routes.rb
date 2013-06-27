@@ -45,7 +45,7 @@ DIL::Application.routes.draw do
   match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   match "external_search/search_hydra" => "external_search#index"
   match "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
-  match "dil_collections/remove/:id/:pid" => "dil_collections#remove", :via => :post
+  match "dil_collections/remove/:id/:pid" => "dil_collections#remove"#, :via => :post
   match "dil_collections/new" => "dil_collections#new", :via => :post
   match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
   match "dil_collections/export/:id" => "dil_collections#export", :via => :post
