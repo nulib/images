@@ -20,9 +20,15 @@ fedora_username = 'username'
 fedora_password = 'password'
 datastream_name = 'datastream_name_here'
 
+
+missing_ds = {}
 img_ds_missing = []
 vra_ds_missing = []
 rels_ext_ds_missing = []
+
+img_ds = ["DELIV-OPS", "ARCHV-EXIF", "ARCHV-TECHMD", "DELIV-TECHMD"]
+records = {}
+
 
 
 begin
@@ -30,22 +36,33 @@ begin
   #For each line in file, check the datastreams
   File.readlines(pids_file_path).each do |pid|
     begin
+      
       #remove newline
       pid.gsub!(/\n/,'')
 
       #trim whitespace
       pid.strip!
 
-      img = Multiresimage.find(pid)
+      img = ActiveFedora::Base.find(pid, :cast => true)
+      
+      if img.class == Multiresimage
+        # IMG ds should check dsLocation.nil?
+        if img.ARCHV_IMG.dsLocation.nil?
+          records[img.pid] << "ARCHV-IMG"
+        end
+        if img.DELIV_IMG.dsLocation.nil?
+          records.[img.pid] << "DELIV-IMG"
+        end
+        
+        
+      elsif img.class == Vrawork
+        
+      end
 
       if img_ds?(img)
         img_ds_missing << pid
-      else
-        # true - they all exist check for the img
-        # get the path to the img then convert it into an actual link and do an http get of the img
-        img.datastreams["DELIV-OPS"]
-
       end
+
       # Check for the other DC'S
       if !img.datastreams["VRA"].present?
         vra_ds_missing << pid
