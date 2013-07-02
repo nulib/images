@@ -85,6 +85,7 @@ begin
          #add auth
          request.basic_auth(@fedora_username, @fedora_password)
          #run the request
+         sleep(0.1)
          response = http.request(request)
          
          #if the datastream is does not exist, log
