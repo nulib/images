@@ -17,10 +17,6 @@ require 'net/http'
 @fedora_url = "http://localhost:8983/fedora/objects/"
 @fedora_username = 'fedoraAdmin'
 @fedora_password = 'fedoraAdmin'
-@missing_ds = {}
-@img_ds_missing = []
-@vra_ds_missing = []
-@rels_ext_ds_missing = []
 #log for every missing datastream for each object
 @missing_ds_aggregate_file = File.new('/usr/local/src/dil_hydra/lib/audit_missing_ds_aggregate.log', 'w')
 #log for pids that have a missing datastream
@@ -29,7 +25,7 @@ require 'net/http'
 @complete_object_pid_file = File.new('/usr/local/src/dil_hydra/lib/audit_complete_pids.log', 'w')
 @error_file = File.new('/usr/local/src/dil_hydra/lib/audit_errors.log', 'w')
 @all_ds = ["RELS-EXT", "ARCHV-IMG", "DELIV-IMG", "DELIV-OPS", "ARCHV-EXIF", "ARCHV-TECHMD", "DELIV-TECHMD", "VRA", "DC", "rightsMetadata"]
-@records = {}
+@sleep_value = 0.1
 
 
 # Get the accession number from the content of the VRA datastream.
@@ -48,6 +44,8 @@ def get_accession_nbr(pid)
   request.basic_auth(@fedora_username, @fedora_password)
   #run the request
   response = http.request(request)
+  sleep(@sleep_value)
+  accession_nbr=""
   if response.code.eql? "200"
     vra = response.body if !response.body.nil?
     #this should be easier to follow than a regex and faster than using an xml parser
@@ -59,6 +57,7 @@ def get_accession_nbr(pid)
     index_end_node = vra.index(node_end, index_start_node) - 1
     accession_nbr = vra[index_start_node..index_end_node]
   end
+  return accession_nbr
 end
 
 begin
@@ -85,26 +84,26 @@ begin
          #add auth
          request.basic_auth(@fedora_username, @fedora_password)
          #run the request
-         sleep(0.1)
+         sleep(@sleep_value)
          response = http.request(request)
          
          #if the datastream is does not exist, log
-         if response.code.eql? "404" or response.code.eql? "500"
+         if !response.code.eql? "200"
             if object_logged 
-               @missing_ds_aggregate_file.write("#{pid}:#{datastream} 404")
+               @missing_ds_aggregate_file.write("#{pid}|#{datastream}|#{response.code}\n")
             else
                #get accession nbr to add to log
                accession_nbr = get_accession_nbr(pid)
                #log to aggregate log and pid log
-               @missing_ds_aggregate_file.write("#{pid}:#{datastream} 404")
-               @missing_ds_pid_file.write("#{pid}|#{accession_nbr}")
+               @missing_ds_aggregate_file.write("#{pid}|#{datastream}|#{response.code}\n")
+               @missing_ds_pid_file.write("#{pid}|#{accession_nbr}\n")
             end
             object_logged = true
          end
        end
        
        if !object_logged
-         @complete_object_pid_file.write("#{pid}")
+         @complete_object_pid_file.write("#{pid}\n")
        end
     
       # Check for missing work.
