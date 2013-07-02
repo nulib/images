@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
 
-# Author: Edgar Garcia
+# Author: Edgar Garcia and Mike S
 # This notice along with part of this code was lifted from delete_policy_ds.rb as written by Mike Stroming
 
 # BE CAREFUL!!!
 # This script reads a file that has a list of Fedora pids (one per line)
-# and checks to make sure it has all it's datastreams.
+# and checks to make sure it has all it's datastreams. There is some VRA specific code in here that
+# can be commented out (getting the accession nbrs)
 # Make sure to set the config variables!
 require 'fileutils'
 require 'net/http'
@@ -27,8 +28,6 @@ require 'net/http'
 #log for pids that are complete objects
 @complete_object_pid_file = File.new('/usr/local/src/dil_hydra/lib/audit_complete_pids.log', 'w')
 @error_file = File.new('/usr/local/src/dil_hydra/lib/audit_errors.log', 'w')
-#img_ds = ["ARCHV-IMG", "DELIV-IMG", "DELIV-OPS", "ARCHV-EXIF", "ARCHV-TECHMD", "DELIV-TECHMD"]
-#other_ds = ["VRA", "DC", "rightsMetadata"]
 @all_ds = ["RELS-EXT", "ARCHV-IMG", "DELIV-IMG", "DELIV-OPS", "ARCHV-EXIF", "ARCHV-TECHMD", "DELIV-TECHMD", "VRA", "DC", "rightsMetadata"]
 @records = {}
 
