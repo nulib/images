@@ -108,17 +108,17 @@ begin
     
       # Check for missing work.
     rescue StandardError => s
-      @error_file.write(s.message)
+      @error_file.write("#{s.message}\n")
     rescue Exception => e
-      @error_file.write(e.message)
+      @error_file.write("#{s.message}\n")
     end
     
   end
 
 rescue StandardError => s
-  @error_file.write(s.message)
+  @error_file.write("#{s.message}\n")
 rescue Exception => e
-  @error_file.write(e.message)
+  @error_file.write("#{s.message}\n")
 ensure
   @missing_ds_aggregate_file.close
   @missing_ds_pid_file.close
