@@ -33,6 +33,14 @@ require 'net/http'
 @all_ds = ["RELS-EXT", "ARCHV-IMG", "DELIV-IMG", "DELIV-OPS", "ARCHV-EXIF", "ARCHV-TECHMD", "DELIV-TECHMD", "VRA", "DC", "rightsMetadata"]
 @records = {}
 
+
+# Get the accession number from the content of the VRA datastream.
+# It's extracted from a node that looks like this:
+#<vra:location>
+#  <vra:refid source="DIL">inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26</vra:refid>
+#  <vra:refid source="Voyager">16245</vra:refid>
+#</vra:location>
+# This method uses string manipulation instead of regex and xml parsing for performance
 def get_accession_nbr(pid)
   uri = URI.parse("#{@fedora_url}#{pid}/datastreams/VRA/content")
   http = Net::HTTP.new(uri.host, uri.port)
@@ -42,8 +50,17 @@ def get_accession_nbr(pid)
   request.basic_auth(@fedora_username, @fedora_password)
   #run the request
   response = http.request(request)
-  vra = response.body if !response.body.nil?
-  puts vra
+  if response.code.eql? "200"
+    vra = response.body if !response.body.nil?
+    #this should be easier to follow than a regex and faster than using an xml parser
+    #get the index of the start of the Voyager node and add the nbr of characters to it to get to the end
+    #of the string
+    node_start = "<vra:refid source=\"Voyager\">"
+    node_end= "</vra:refid>"
+    index_start_node = vra.index(node_start) + node_start.length
+    index_end_node = vra.index(node_end, index_start_node) - 1
+    accession_nbr = vra[index_start_node..index_end_node]
+  end
 end
 
 begin
@@ -74,13 +91,14 @@ begin
          
          #if the datastream is does not exist, log
          if response.code.eql? "404" or response.code.eql? "500"
-            if object_logged
+            if object_logged 
                @missing_ds_aggregate_logger.debug("#{pid}:#{datastream} 404")
             else
+               #get accession nbr to add to log
+               accession_nbr = get_accession_nbr(pid)
                #log to aggregate log and pid log
-              @missing_ds_aggregate_logger.debug("#{pid}:#{datastream} 404")
-               #also get accession_nbr and related work
-               @missing_ds_pid_logger.debug("#{pid}")
+               @missing_ds_aggregate_logger.debug("#{pid}:#{datastream} 404")
+               @missing_ds_pid_logger.debug("#{pid}|#{accession_nbr}")
             end
             object_logged = true
          end
@@ -90,7 +108,7 @@ begin
          @complete_object_pid_logger.debug("#{pid}")
        end
      
-      get_accession_nbr(pid)
+      puts get_accession_nbr(pid)
        
       #if img_ds?(img)
        # img_ds_missing << pid
