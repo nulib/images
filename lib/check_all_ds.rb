@@ -110,7 +110,7 @@ begin
     rescue StandardError => s
       @error_file.write("#{s.message}\n")
     rescue Exception => e
-      @error_file.write("#{s.message}\n")
+      @error_file.write("#{e.message}\n")
     end
     
   end
@@ -118,7 +118,7 @@ begin
 rescue StandardError => s
   @error_file.write("#{s.message}\n")
 rescue Exception => e
-  @error_file.write("#{s.message}\n")
+  @error_file.write("#{e.message}\n")
 ensure
   @missing_ds_aggregate_file.close
   @missing_ds_pid_file.close
