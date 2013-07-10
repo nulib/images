@@ -2,7 +2,7 @@
 # This script deletes objects using an input file to load pids
 # THE DELETES ARE COMMENTED OUT 
 # Make sure to set the config variables.
-# To run this script: rails runner -e environment object_cleanup.rb
+# To run this script from app root: rails runner -e lib/environment object_cleanup.rb
 
 require 'fileutils'
 
