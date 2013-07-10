@@ -23,7 +23,7 @@ DIL::Application.routes.draw do
       #TODO change to post or delete
       get 'delete_fedora_object'
       get 'clone_work'
-      post 'create_crop'
+      get 'create_crop'
       get 'get_pids_from_accession_number'
     end
     member do
