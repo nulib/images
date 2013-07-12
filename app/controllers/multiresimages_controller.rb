@@ -52,6 +52,11 @@ class MultiresimagesController < ApplicationController
   end
    
   def show
+    if !params[:pid].nil?
+      @collection = DILCollection.find(params[:pid])
+    else
+      @collection = nil
+    end
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
     @page_title = @multiresimage.titleSet_display
