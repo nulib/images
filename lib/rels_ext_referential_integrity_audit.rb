@@ -49,13 +49,15 @@ begin
       #get the RELS-EXT content
       response = call_fedora_api("#{fedora_url}#{pid}/datastreams/RELS-EXT/content")
       
+      #get the object's rels-ext
       if response.code == '200'
         rels_ext = Nokogiri::XML(response.body)
       else
-        log_file.write(response.code)
+        error_file.write(response.code)
         raise RefIntegrityException, "#{pid}\n"
       end
       
+      #get the object's related pid from the rels-ext
       related_pid = rels_ext.xpath(rels_ext_node).text
       
       if related_pid.nil? or related_pid.empty?
