@@ -16,8 +16,8 @@ error_file = File.new('/usr/local/src/dil_hydra/lib/ref_integrity_error.log', 'w
 fedora_url = "http://localhost:8983/fedora/objects/"
 @fedora_username = 'fedoraAdmin'
 @fedora_password = 'fedoraAdmin'
-#note: the nullib-rel namespace isn't in the RDF on staging, so if running on staging, remove it in line below
-rels_ext_node = '/rdf:RDF/rdf:Description/nullib-rel:isImageOf/@rdf:resource'
+#note: the nulib-rel namespace isn't in the RDF on staging, so if running on staging, remove it in line below
+rels_ext_node = '/rdf:RDF/rdf:Description/nulib-rel:isImageOf/@rdf:resource'
 @sleep_value = 0.1
 
 def call_fedora_api(uri)
