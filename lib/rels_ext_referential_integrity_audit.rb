@@ -80,20 +80,20 @@ begin
       ref_integrity_fail_file.write(e.message)
       
     rescue StandardError => s
-      error_file.write("StandardError|#{s.message}|#{s.backtrace}\n")
+      error_file.write("StandardError|#{pid}|#{s.message}|#{s.backtrace}\n")
   
     rescue Exception => e
-      error_file.write("Exception|#{e.message}|#{e.backtrace}\n")
+      error_file.write("Exception|#{pid}|#{e.message}|#{e.backtrace}\n")
     
     end #end exception handling for loop
   
   end
 
 rescue StandardError => s
-  log_file.write("StandardError|#{s.message}|#{s.backtrace}\n")
+  log_file.write("StandardError|#{pid}|#{s.message}|#{s.backtrace}\n")
   
 rescue Exception => e
-  log_file.write("Exception|#{e.message}|#{e.backtrace}\n")
+  log_file.write("Exception|#{pid}|#{e.message}|#{e.backtrace}\n")
 
 ensure
   log_file.close
