@@ -37,6 +37,7 @@ DIL::Application.routes.draw do
     end
   end
   
+  match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
   #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
