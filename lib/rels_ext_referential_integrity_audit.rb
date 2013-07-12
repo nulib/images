@@ -16,7 +16,7 @@ error_file = File.new('/usr/local/src/dil_hydra/lib/ref_integrity_error.log', 'w
 fedora_url = "http://localhost:8983/fedora/objects/"
 @fedora_username = 'fedoraAdmin'
 @fedora_password = 'fedoraAdmin'
-rels_ext_node = '/RDF/Description/isImageOf/resource'
+rels_ext_node = '/rdf:RDF/rdf:Description/isImageOf/@rdf:resource'
 @sleep_value = 0.1
 
 def call_fedora_api(uri)
@@ -39,7 +39,7 @@ end
 begin
   File.readlines(pids_file_path).each do |pid|
     begin
-      rel_pid = ""
+      related_pid = ""
       #remove newline
       pid.gsub!(/\n/,'')
       
@@ -48,27 +48,29 @@ begin
       
       #get the RELS-EXT content
       response = call_fedora_api("#{fedora_url}#{pid}/datastreams/RELS-EXT/content")
+      
       if response.code == '200'
         rels_ext = Nokogiri::XML(response.body)
       else
+        log_file.write(response.code)
         raise RefIntegrityException, "#{pid}\n"
       end
       
-      rel_pid = rels_ext.xpath(rels_ext_node).text
+      related_pid = rels_ext.xpath(rels_ext_node).text
       
-      if rel_pid.nil? or rel_pid.empty?
+      if related_pid.nil? or related_pid.empty?
         raise RefIntegrityException, "#{pid}\n"
-        #ref_integrity_fail_file.write("#{pid}\n")
       end
       
-      #check to see if related pid exists
-      response = call_fedora_api("#{fedora_url}#{rel_pid}")
+      related_pid.slice!("info:fedora/")
+      
+      #check to see if related pid object exists
+      response = call_fedora_api("#{fedora_url}#{related_pid}")
       
       if response.code == '200'
-        log_file.write("#{pid}|#{rel_pid}\n")
+        log_file.write("#{pid}|#{related_pid}\n")
       else
-        raise RefIntegrityException, "#{pid}|#{rel_pid}\n"
-        #ref_integrity_fail_file.write("#{pid}|#{rel_pid}\n")
+        raise RefIntegrityException, "#{pid}|#{related_pid}\n"
       end
     
     rescue RefIntegrityException => e
