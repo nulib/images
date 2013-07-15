@@ -24,7 +24,8 @@ DIL::Application.routes.draw do
       get 'delete_fedora_object'
       get 'clone_work'
       get 'create_crop'
-      get 'get_pids_from_accession_number'
+      get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
+      get 'get_number_of_objects', :defaults => { :format => 'xml' }
     end
     member do
       post 'permissions'
