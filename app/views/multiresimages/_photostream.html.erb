@@ -1,17 +1,6 @@
 <% if !@collection.nil? && @collection.multiresimages.size > 1 %>
-	<% prev_img = nil %>
-	<% next_img = nil %>
-	<% if @multiresimage == @collection.multiresimages.first
-			prev_img = @collection.multiresimages.last
-			next_img = @collection.multiresimages[1]
-		elsif @multiresimage == @collection.multiresimages.last
-			prev_img = @collection.multiresimages[@collection.multiresimages.size-2]
-			next_img = @collection.multiresimages.first
-		else
-			prev_img = @collection.multiresimages[@collection.multiresimages.find_index(@multiresimage) - 1]
-			next_img = @collection.multiresimages[@collection.multiresimages.find_index(@multiresimage) + 1]
-		end
-	%>
+	<% prev_img = @collection.get_prev_img(@multiresimage) %>
+	<% next_img = @collection.get_next_img(@multiresimage) %>
 	<div id="photostream" class="photostream">
 	    <ul>
 	       <li pid="<%=prev_img.pid%>" title="<%=prev_img.titleSet_display%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=prev_img.pid%>"><img src="<%=  DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= prev_img.pid%>/120" alt><br /> Previous</a></p>
