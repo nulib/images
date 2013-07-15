@@ -9,7 +9,7 @@ require 'nokogiri'
 require 'open-uri'
 
 # Configs
-marc_records_path = '/Users/mcs680/Desktop/ArtDbExtract_initial_migration'
+marc_records_path = 'path/to/folder'
 log_file = File.new('/usr/local/src/dil_hydra/lib/marc_audit.log', 'w')
 error_file = File.new('/usr/local/src/dil_hydra/lib/marc_audit_error.log', 'w')
 success_file = File.new('/usr/local/src/dil_hydra/lib/marc_audit_success.log', 'w')
