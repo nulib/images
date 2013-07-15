@@ -12,7 +12,7 @@
 				document = SolrDocument.new ActiveFedora::Base.find(pid, :cast=>true).to_solr
 				if !mods.search('type').text.present? || mods.search('type').text=='image'
 					img = "#{DIL_CONFIG['dil_app_url']}multiresimages/get_image/#{pid}/150"
-					ref = '/multiresimages/' + pid
+					ref = '/dil_collections/' + @collection.pid + '/' + pid
 					type = 'image'
 				elsif mods.search('type').text == 'collection'
 					img = '/assets/folder.jpg'
