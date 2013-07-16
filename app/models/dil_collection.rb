@@ -246,5 +246,24 @@ class DILCollection < ActiveFedora::Base
     solr_doc = solr_doc.merge({"title_tesim" => self.title})
     solr_doc
   end
- 
- end
+
+  def get_prev_img(img = self.multiresimages.first)
+  	if img == self.multiresimages.first
+  			self.multiresimages.last
+  		elsif img == self.multiresimages.last
+  			self.multiresimages[self.multiresimages.size-2]
+  		else
+  			self.multiresimages[self.multiresimages.find_index(img) - 1]
+  		end
+  end
+
+  def get_next_img(img = self.multiresimages.first)
+  	if img == self.multiresimages.first
+  			self.multiresimages[1]
+  		elsif img == self.multiresimages.last
+  			self.multiresimages.first
+  		else
+  			self.multiresimages[self.multiresimages.find_index(img) + 1]
+  		end
+  end
+end
