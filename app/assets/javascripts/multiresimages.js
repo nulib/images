@@ -347,7 +347,7 @@ $(document).ready(function(){
         
           selectList += "</select>"
           $("#downloads").append(selectList);
-          $("#downloads").append("<br/><div id='submitCollectionDiv'><button class='btn btn-primary' id='submitCollectionBtn'>Save</button></div><br/><br/><br/><br/>");
+          $("#downloads").append("<br/><div id='submitCollectionDiv' style='position:relative;'><button class='btn btn-primary' id='submitCollectionBtn'>Save</button><span id='spinnerElement' style='position:absolute; top:12px; left:68px; background-color:red;'></span></div><br/><br/><br/>");
         },
 		
       error: function(output){
@@ -367,8 +367,16 @@ $(document).ready(function(){
     var imagePid = document.location.href.substr(document.location.href.lastIndexOf('/')+1);
     
     //This is spin.js code to show a spinner
-    var spinner = new Spinner().spin();
-    $("#submitCollectionDiv").after(spinner.el);
+    var spinOpts = {
+      lines: 8, // The number of lines to draw
+      length: 4, // The length of each line
+      width: 4, // The line thickness
+      radius: 4, // The radius of the inner circle
+      top: 'auto', // Top position relative to parent in px
+      left: 'auto' // Left position relative to parent in px
+    };
+    var target = document.getElementById('spinnerElement');
+    var spinner = new Spinner(spinOpts).spin(target);
     
     //make the API call
     $.ajax({
