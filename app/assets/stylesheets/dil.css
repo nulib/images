@@ -2,6 +2,14 @@
 	margin: 0;
 }
 
+.clear {
+	clear: both;
+}
+.desc-metadata-table {
+	margin-left:   0px;
+	margin-right:  0px;
+	margin-bottom: 0px;
+}
 #top-menu {
 	background-color: black;
 	border-bottom: 1px solid white;
