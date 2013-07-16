@@ -9,7 +9,7 @@ require 'nokogiri'
 require 'open-uri'
 
 # Configs
-marc_records_path = 'path/to/folder'
+marc_records_path = '/path/to/folder'
 log_file = File.new('/usr/local/src/dil_hydra/lib/marc_audit.log', 'w')
 error_file = File.new('/usr/local/src/dil_hydra/lib/marc_audit_error.log', 'w')
 success_file = File.new('/usr/local/src/dil_hydra/lib/marc_audit_success.log', 'w')
@@ -18,7 +18,7 @@ api_url = "https://localhost:3000/multiresimages/get_number_of_objects?"
 accession_nbr_xpath="//marc:subfield[@code='j'][1]"
 title_one_xpath="//marc:datafield[@tag='245']/marc:subfield[@code='a']"
 title_two_xpath="//marc:datafield[@tag='245']/marc:subfield[@code='p']"
-sleep_value = 0.1
+sleep_value = 0.25
 
 class MarcAuditException < Exception
 end
@@ -38,7 +38,7 @@ begin
       accession_nbr = marc_xml.xpath(accession_nbr_xpath).text
       
       if accession_nbr.nil?
-        raise MarcAuditException, "#{file}|Could not find accession nbr"
+        raise MarcAuditException, "Could not find accession nbr"
       end
       
       #get the titles
@@ -46,7 +46,7 @@ begin
       title += " #{marc_xml.xpath(title_two_xpath).text}"
       
       if title.nil?
-        raise MarcAuditException, "#{file}|Could not find title"
+        raise MarcAuditException, "Could not find title"
       end
       
       log_file.write("#{file}|#{accession_nbr}|#{title}")
@@ -59,20 +59,21 @@ begin
       log_file.write("|#{response}\n")
       
       if response.include? "Error"
-        raise MarcAuditException, "#{file}|API error|#{response}"
+        raise MarcAuditException, "API error|#{response}"
       end
       
       #generate Nokogiri doc
       response_xml = Nokogiri::XML(response)
       
+      #get the number of objects from the return xml
       nbr_objects = response_xml.xpath("/numberObjects").text
       
-      if nbr_objects == 2
-        log_file.write(file)
-        success_file.write(file)
-      elsif nbr_objects == 0
-        log_file.write(file)
-        fail_file.write(file)
+      if nbr_objects == '2'
+        log_file.write("SUCCESS\n")
+        success_file.write("#{file}|#{nbr_objects}\n")
+      else
+        log_file.write("FAIL\n")
+        fail_file.write("#{file}|#{nbr_objects}\n")
       end
       
     rescue MarcAuditException => e
