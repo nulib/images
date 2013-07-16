@@ -440,7 +440,7 @@ module DIL
 			  return_xml = "<numberObjects>#{pids.size}</numberObjects>"
 			
 			else
-			  return_xml = "<response><returnCode>Invalid params</returnCode></response>"
+			  return_xml = "<response><returnCode>Error: Invalid params</returnCode></response>"
 			end
      
        end #end request_ip if
