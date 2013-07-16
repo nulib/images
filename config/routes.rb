@@ -23,8 +23,9 @@ DIL::Application.routes.draw do
       #TODO change to post or delete
       get 'delete_fedora_object'
       get 'clone_work'
-      post 'create_crop'
-      get 'get_pids_from_accession_number'
+      get 'create_crop'
+      get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
+      get 'get_number_of_objects', :defaults => { :format => 'xml' }
     end
     member do
       post 'permissions'
@@ -37,6 +38,7 @@ DIL::Application.routes.draw do
     end
   end
   
+  match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
   #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"

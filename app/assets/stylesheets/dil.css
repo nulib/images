@@ -2,6 +2,14 @@
 	margin: 0;
 }
 
+.clear {
+	clear: both;
+}
+.desc-metadata-table {
+	margin-left:   0px;
+	margin-right:  0px;
+	margin-bottom: 0px;
+}
 #top-menu {
 	background-color: black;
 	border-bottom: 1px solid white;
@@ -249,8 +257,26 @@ div.batch_select_count_label {
                 50% 50% 
                 no-repeat;
 }
+/** For photostream in Multiresimage **/
+.photostream {
+	float: left;
+}
+.photostream ul {
+	display: block;
+	list-style: none;
+	overflow: visible;
+}
+.photostream ul li {
+	display: block;
+	text-align: center;
+	float: left;
+	padding: 3px 3px 0;
+}
 
 /** For Crop Tool**/
+#crop-tool {
+	float: left;
+}
 svg rect {
   cursor: move;
 }
