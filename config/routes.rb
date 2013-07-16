@@ -24,7 +24,8 @@ DIL::Application.routes.draw do
       get 'delete_fedora_object'
       get 'clone_work'
       get 'create_crop'
-      get 'get_pids_from_accession_number'
+      get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
+      get 'get_number_of_objects', :defaults => { :format => 'xml' }
     end
     member do
       post 'permissions'
@@ -37,6 +38,7 @@ DIL::Application.routes.draw do
     end
   end
   
+  match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
   #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
@@ -44,10 +46,10 @@ DIL::Application.routes.draw do
   match "multiresimages/aware_details" => "multiresimages#aware_details"
   match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   match "external_search/search_hydra" => "external_search#index"
-  match "dil_collections/add/:id/:member_id" => "dil_collections#add"#, :via => :post
+  match "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
   match "dil_collections/remove/:id/:pid" => "dil_collections#remove"#, :via => :post
-  match "dil_collections/new" => "dil_collections#new"#, :via => :post
-  match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"#, :via => :post
+  match "dil_collections/new" => "dil_collections#new", :via => :post
+  match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
   match "dil_collections/export/:id" => "dil_collections#export", :via => :post
   match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
   match "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
