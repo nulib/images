@@ -9,7 +9,7 @@
 
 				pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
 				title = mods.search('titleInfo/title').first.text() unless mods.search('titleInfo/title').empty?
-				document = SolrDocument.new ActiveFedora::Base.find(pid, :cast=>true).to_solr
+				#document = SolrDocument.new ActiveFedora::Base.find(pid, :cast=>true).to_solr
 				if !mods.search('type').text.present? || mods.search('type').text=='image'
 					img = "#{DIL_CONFIG['dil_app_url']}multiresimages/get_image/#{pid}/150"
 					ref = '/dil_collections/' + @collection.pid + '/' + pid
@@ -31,7 +31,7 @@
 				</a>
 				<% uploads_collection = current_user.get_uploads_collection %>
 				<% if uploads_collection.first.present? and uploads_collection.first["id"] == @collection.id %>
-			  	  <%= batch_edit_select(document) %>
+			  	  <%= batch_edit_select(@solr_docs[index]) %>
 				<% end %>
 		</div>
 
