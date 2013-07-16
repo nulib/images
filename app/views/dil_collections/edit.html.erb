@@ -3,7 +3,9 @@
   <%= render :partial=>'dil_collections/add' %>
 <% end %>
 
-<div id="accordion">
+<div id="sidebar" class="span3"><%= sidebar_items.join().html_safe %></div>
+
+<div id="accordion" class="span9">
     <% uploads_collection = current_user.get_uploads_collection %>
 	<% if uploads_collection.first.present? and uploads_collection.first["id"] == @collection.id %>
 	  <%= batch_edit_tools %>
