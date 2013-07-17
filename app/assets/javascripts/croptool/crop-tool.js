@@ -12,11 +12,13 @@ var CropTool = {};
 
 CropTool.paper = null;
 CropTool.editable = false;
+CropTool.isCrop = false;
 
-CropTool.initialize = function(identifier, editable, rootDiv)
+CropTool.initialize = function(identifier, editable, rootDiv, isCrop)
 {
 	CropTool.editable = editable;
 	CropTool.rootDiv = rootDiv.get(0);
+	CropTool.isCrop = isCrop;
 	
 	// Establish a drawing area with a 10px border from the edges of the browser frame.
 	
