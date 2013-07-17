@@ -143,12 +143,13 @@ class DilCollectionsController < ApplicationController
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
     if can?(:edit, @collection)
+       #NEEDED FOR BATCH EDIT
        #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view) 
-       @solr_docs = []
-       @collection.members.find_by_terms(:mods).each_with_index do |mods|
-         pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
-         @solr_docs << get_solr_response_for_doc_id(pid)
-      end
+       #@solr_docs = []
+       #@collection.members.find_by_terms(:mods).each_with_index do |mods|
+        # pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
+         #@solr_docs << get_solr_response_for_doc_id(pid)
+      #end
       
       render :action => 'edit', :id => params[:id]
     
@@ -159,12 +160,13 @@ class DilCollectionsController < ApplicationController
   def edit
     @collection = DILCollection.find(params[:id])
     authorize! :edit, @collection
+    #NEEDED FOR BATCH EDIT
     #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view) 
-    @solr_docs = []
-    @collection.members.find_by_terms(:mods).each_with_index do |mods|
-      pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
-      @solr_docs << get_solr_response_for_doc_id(pid)
-    end
+    #@solr_docs = []
+    #@collection.members.find_by_terms(:mods).each_with_index do |mods|
+      #pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
+      #@solr_docs << get_solr_response_for_doc_id(pid)
+    #end
     
   end
   
