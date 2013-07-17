@@ -505,8 +505,8 @@ ControlManager.initialize = function ()
 	var modeIcon = CropTool.paper.image();
 	modeIcon.click(toggleFunction);
 	controls.modeIcon = modeIcon;	
-
-	if (CropTool.editable)
+	
+	if (CropTool.editable && !CropTool.isCrop)
 	{
 		var create = CropTool.paper.rect(width - base, 0, base, base);
 		create.attr("fill", ControlManager.FILL);
