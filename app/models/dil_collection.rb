@@ -251,9 +251,9 @@ class DILCollection < ActiveFedora::Base
     loc = loc.to_i
     img = self.members.find_by_terms(:mods, :type => :image)[loc]
   	if img == self.members.find_by_terms(:mods, :type => :image).first
-  		{ :pid => self.members.find_by_terms(:mods, :type => :image).last.search('relatedItem/identifier').first.text(), :titleSet_display => self.members.find_by_terms(:mods, :type => :image).last.search('titleInfo/title').first.text(), :index => self.members.find_by_terms(:mods, :type => :image).size - 1 }
+  		{ :pid => self.members.find_by_terms(:mods, :type => :image).last.search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image).last.search('titleInfo/title').first), :index => self.members.find_by_terms(:mods, :type => :image).size - 1 }
   	else
-  		{ :pid => self.members.find_by_terms(:mods, :type => :image)[loc].previous.search('relatedItem/identifier').first.text(), :titleSet_display => self.members.find_by_terms(:mods, :type => :image)[loc].previous.search('titleInfo/title').first.text(), :index => loc - 1 }
+  		{ :pid => self.members.find_by_terms(:mods, :type => :image)[loc].previous.search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image)[loc].previous.search('titleInfo/title').first), :index => loc - 1 }
   	end
   end
 
@@ -261,9 +261,17 @@ class DILCollection < ActiveFedora::Base
     loc = loc.to_i
     img = self.members.find_by_terms(:mods, :type => :image)[loc]
   	if img == self.members.find_by_terms(:mods, :type => :image).last
-			{ :pid => self.members.find_by_terms(:mods, :type => :image).first.search('relatedItem/identifier').first.text(), :titleSet_display => self.members.find_by_terms(:mods, :type => :image).first.search('titleInfo/title').first.text(), :index => 0 }
+			{ :pid => self.members.find_by_terms(:mods, :type => :image).first.search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image).first.search('titleInfo/title').first), :index => 0 }
 		else
-			{ :pid => self.members.find_by_terms(:mods, :type => :image)[loc].next.search('relatedItem/identifier').first.text(), :titleSet_display => self.members.find_by_terms(:mods, :type => :image)[loc].next.search('titleInfo/title').first.text(), :index => loc + 1 }
+			{ :pid => self.members.find_by_terms(:mods, :type => :image)[loc].next.search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image)[loc].next.search('titleInfo/title').first), :index => loc + 1 }
 		end
+  end
+  
+  def get_value_from_mods(xml = nil)
+	  if xml.nil?
+	    ''
+    else
+      xml.text()
+    end
   end
 end
