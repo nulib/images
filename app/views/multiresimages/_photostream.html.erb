@@ -1,11 +1,11 @@
 <% if !@collection.nil? && @collection.multiresimages.size > 1 %>
-	<% prev_img = @collection.get_prev_img(@multiresimage) %>
-	<% next_img = @collection.get_next_img(@multiresimage) %>
+	<% prev_img = @collection.get_prev_img(@index) %>
+	<% next_img = @collection.get_next_img(@index) %>
 	<div id="photostream" class="photostream">
 	    <ul>
-	       <li pid="<%=prev_img.pid%>" title="<%=prev_img.titleSet_display%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=prev_img.pid%>"><img src="<%=  DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= prev_img.pid%>/120" alt><br /> Previous</a></p>
+	       <li pid="<%=prev_img[:pid]%>" title="<%=prev_img[:titleSet_display]%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=prev_img[:pid]%>/<%=prev_img[:index]%>"><img src="<%=  DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= prev_img[:pid]%>/120" alt><br /> Previous</a></p>
 	     </li>
-	       <li pid="<%=next_img.pid%>" title="<%=next_img.titleSet_display%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=next_img.pid%>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= next_img.pid%>/120" alt><br /> Next</a></p>
+	       <li pid="<%=next_img[:pid]%>" title="<%=next_img[:titleSet_display]%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=next_img[:pid]%>/<%=next_img[:index]%>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= next_img[:pid]%>/120" alt><br /> Next</a></p>
 	     </li>
 	   </ul>
 	</div>
