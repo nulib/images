@@ -6,11 +6,6 @@
 <div id="sidebar" class="span3"><%= sidebar_items.join().html_safe %></div>
 
 <div id="accordion" class="span9">
-    <% uploads_collection = current_user.get_uploads_collection %>
-	<% if uploads_collection.first.present? and uploads_collection.first["id"] == @collection.id %>
-	  <%= batch_edit_tools %>
-	  <%= batch_edit_continue %>
-	<% end %>
   <span class="edit-browse">
     <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %> <% if @collection.members %>| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %><% end %>
   </span>

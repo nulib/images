@@ -171,6 +171,11 @@ class Multiresimage < ActiveFedora::Base
     solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
     solr_doc
   end
+  
+  ## Checks if this image is a crop
+  def is_crop?
+    self.RELS_EXT.content.include? "isCropOf"
+  end
 
   private
 
