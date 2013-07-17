@@ -1,7 +1,7 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
-		CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"));
+		CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? %>);
 	});
 </script>
 
