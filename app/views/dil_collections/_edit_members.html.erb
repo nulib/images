@@ -1,4 +1,5 @@
 	<div id="gallery_container" class="gallery_container" pid="<%= params[:id] %>">
+		<% img_count = 0 %>
 		<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
 			<%
 				pid = '' 
@@ -11,7 +12,8 @@
 				title = mods.search('titleInfo/title').first.text() unless mods.search('titleInfo/title').empty?
 				if !mods.search('type').text.present? || mods.search('type').text=='image'
 					img = "#{DIL_CONFIG['dil_app_url']}multiresimages/get_image/#{pid}/150"
-					ref = '/dil_collections/' + @collection.pid + '/' + pid
+					ref = '/dil_collections/' + @collection.pid + '/' + pid + '/' + img_count.to_s
+					img_count += 1
 					type = 'image'
 				elsif mods.search('type').text == 'collection'
 					img = '/assets/folder.jpg'
