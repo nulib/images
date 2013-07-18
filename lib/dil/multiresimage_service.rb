@@ -352,7 +352,7 @@ module DIL
 
     end #end method
     
-    # This web service will return the pid of an object given an accession number.
+    # This web service will return the pids of the objects for an accession number (not including detail image objects).
     # The URL to call this method/web service is https://localhost:3000/multiresimages/get_pid_from_accession_number.xml
     # It's expecting the following params in the URL: accessionNbr
     def get_pids_from_accession_number
@@ -372,7 +372,7 @@ module DIL
 			  accession_nbr = params[:accessionNbr]
 				  
 			  # Query Solr to find Multiresimage object that has the accession nbr
-			  pids = ActiveFedora::SolrService.query("search_field_tesim:\"Voyager:#{accession_nbr}\" AND object_type_facet:Multiresimage")
+			  pids = ActiveFedora::SolrService.query("search_field_tesim:\"Voyager:#{accession_nbr}\" AND object_type_facet:Multiresimage AND -is_crop_of_ssim:[* TO *]")
 			  
 			  #if one image object found
 			  if (pids.present? and pids.size == 1)
@@ -418,7 +418,7 @@ module DIL
 
     end #end method
     
-    # This web service will return the nbr of objects found given an accession nbr and title
+    # This web service will return the nbr of objects (not including detail image objects) found given an accession nbr and title
     # The URL to call this method/web service is https://localhost:3000/multiresimages/get_number_of_objects.xml
     # It's expecting the following params in the URL: accessionNbr, title
     def get_number_of_objects
@@ -436,7 +436,7 @@ module DIL
 			if params[:accessionNbr].present? and params[:title].present?
 							  
 			  # Query Solr to find objects that have the accession nbr and title in the search_field_tesim field
-			  pids = ActiveFedora::SolrService.query("search_field_tesim:\"Voyager:#{params[:accessionNbr]}\" AND search_field_tesim:\"#{params[:title]}\"")
+			  pids = ActiveFedora::SolrService.query("search_field_tesim:\"Voyager:#{params[:accessionNbr]}\" AND search_field_tesim:\"#{params[:title]}\" AND -is_crop_of_ssim:[* TO *]")
 			  return_xml = "<numberObjects>#{pids.size}</numberObjects>"
 			
 			else
