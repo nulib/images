@@ -43,8 +43,10 @@ class DILCollection < ActiveFedora::Base
       members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.titleSet_display, :member_type=>'image')
       
       #add to the rels-ext ds
-      fedora_object.collections << self
-      self.multiresimages << fedora_object
+      fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+      add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
+      
+      #self.multiresimages << fedora_object
       #self.add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
       
      elsif (fedora_object.instance_of?(DILCollection))
@@ -66,19 +68,18 @@ class DILCollection < ActiveFedora::Base
           members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
       
           #add to the rels-ext ds
-          fedora_object.parent_collections << self
-    
-          #logger.debug("self:#{self}")
-          #logger.debug("fedora_object:#{fedora_object}")
-          self.subcollections << fedora_object
-          #fedora_object.parent = self
+          fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+          add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
         end
       end
       
     end
     
+    logger.debug("before image save #{Time.new}")
     fedora_object.save!
+    logger.debug("after image save #{Time.new}")
     self.save!
+    logger.debug("after collection save #{Time.new}")
 
   end
   
@@ -141,7 +142,7 @@ class DILCollection < ActiveFedora::Base
         img_width = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_width[0].to_i
         img_height = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_height[0].to_i
         size = img_width > img_height ? img_width > 950 ? 950 : img_width : img_height > 700 ? 700 : img_height
-        logger.debug("PID:" << pid)
+        logger.debug("PID: #{pid}")
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}#{size}</url><metadata></metadata></image>"
         #export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
         logger.debug("export_xml debug:" << export_xml)
