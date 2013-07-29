@@ -28,14 +28,16 @@ function dropMe(theObj) {
 		//var collectionID = $( this ).find("li").attr("pid");
 		var collectionID = $( this ).attr("pid");
   
-		//show the loading gif
-        $('.modal-collection').show();
+
         
 		$.ajax({
 		type: "POST",
 		url: "/dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
 		//data: "id=10",
-		async: false,
+		beforeSend: function() {
+			//show the loading gif
+      $('.modal-collection').show();
+		},
 		success: function(msg){
 		 
 		 //hide the loading gif
