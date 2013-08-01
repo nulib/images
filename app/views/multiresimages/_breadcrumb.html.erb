@@ -1,5 +1,5 @@
 <%if !@collection.nil? %>
 <div id="breadcrumb">
-	<%= link_to 'Home', '/' %> &gt; <%= link_to @collection.datastreams["descMetadata"].find_by_terms(:title).text(), dil_collection_path(@collection), :class=>'active browse' %>
+	<%= link_to 'Home', '/' %> &gt; <%= link_to @collection.datastreams["descMetadata"].find_by_terms(:title).text(), dil_collection_path(@collection), :class=>'active browse' %> &gt;
 </div>
 <% end %>
