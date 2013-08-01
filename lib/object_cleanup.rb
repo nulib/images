@@ -37,7 +37,11 @@ begin
       
       # find MARC XML file that needs to be run again by searching for the accession number in the directory
       # of MARC XML files
-      files = `grep -rl #{line_tokens[1]} #{xml_dir_path}`  
+      if !line_tokens[1].include? " "
+        files = `grep -rl \.cgi\/#{line_tokens[1]} #{xml_dir_path}`
+      else
+        raise "Could not extract accession nbr|#{line_tokens[1]}"
+      end
       
       # if grep returns nothing
       if files.blank?
@@ -50,7 +54,7 @@ begin
         raise "More than one XML file|#{line_tokens[1]}"
       elsif files_tokens.size == 1
         #move xml file to re-run directory
-        log_file.write(files_tokens.first)
+        log_file.write("#{files_tokens.first}\n")
         `cp #{files_tokens.first} #{rerun_dir_path}`
       end
       
@@ -64,25 +68,25 @@ begin
         #fedora_object.delete
       elsif fedora_object.is_a? Vrawork
         image = fedora_object.multiresimage.first
-        log_file.write("delete #{fedora_object.pid}|#{image.pid}")
+        log_file.write("delete #{fedora_object.pid}|#{image.pid}\n")
         #image.delete
         #fedora_object.delete
       end
       
     rescue StandardError => s
-      error_file.write "StandardError: #{s.message}"
+      error_file.write "StandardError: #{s.message}\n"
   
     rescue Exception => e
-      error_file.write "Exception: #{e.message}"
+      error_file.write "Exception: #{e.message}\n"
     
     end #end exception handling for loop
   end
 
 rescue StandardError => s
-  log_file.write("StandardError: #{s.message}")
+  log_file.write("StandardError: #{s.message}\n")
   
 rescue Exception => e
-  log_file.write("Exception: #{e.message}")
+  log_file.write("Exception: #{e.message}\n")
 
 ensure
   log_file.close
