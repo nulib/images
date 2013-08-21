@@ -365,7 +365,7 @@ $(document).ready(function(){
     var collectionPid = $("#collection_list option:selected").attr("id");
     //get the image pid from the url
     var imagePid = $("[name='id']")[0].value;
-	//var imagePid = document.location.href.substr(document.location.href.lastIndexOf('/')+1);
+
     
     //This is spin.js code to show a spinner
     var spinOpts = {
