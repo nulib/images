@@ -607,8 +607,10 @@ module DIL
       #fedora_object.send(ds_name)
       
       #set datastream content
-      fedora_object.datastreams[ds_name].content = xml
-    
+      #fedora_object.datastreams[ds_name].content = xml
+      
+      fedora_object.send(ds_name).content = xml
+      
       #save Fedora object
       #debugger
       fedora_object.save
