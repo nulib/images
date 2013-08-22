@@ -14,6 +14,10 @@ class Ability
   def custom_permissions
     can :manage, :all if @user.admin?
 
+    ### Sets up Uploads route with permission for admin and uploader
+    can :show, UploadFile if @user.uploader?
+    can :show, UploadFile if DIL_CONFIG['admin_staff'].include? @user.uid || @user.admin? || @user.uploader?
+
     can :create, DILCollection unless @user.new_record?
     can :update, DILCollection do |obj|
       test_edit(obj.pid)
