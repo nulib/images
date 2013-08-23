@@ -1,0 +1,67 @@
+  <!--   <div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h3>Please note:</h3>
+    <p>Uploads will not be saved until you hit the "Submit Your Upload" button in Step Four.</p>
+  </div> -->
+  <p class="muted">Steps marked with an asterisk (*) are required</p><br/>
+  <h3 class="required"><span class="muted">Step 1: </span>Add Your Files</h3><br/>
+  <%= render :partial=>'multiupload' %>
+  <br/>
+  <br/>
+  <h3><span class="muted">Step 3: </span>Describe the Batch of Uploaded Images</h3>
+  <br/>
+  <span class="btn fileinput-button" id="button_id"><i class="icon-plus"></i><span> Add description</span></span>
+  <br/>
+  <br/>
+  <%= form_tag(enqueue_uploads_path, :method => "post", :class => "form-horizontal reorderable") do |f|%>  
+    <%= render :partial=>'batch_form_fields' %>
+  <br/>
+  <br/>
+  <h3 class="required"><span class="muted">Step 4: </span>Agree to Terms and Conditions</h3>
+  <br/>
+  <%= render :partial=>'terms_and_conditions' %>
+  <br/>
+  <br/>
+  <br/>
+  <h3 class="required"><span class="muted">Step 5: </span>Save</h3>
+  <br/>
+  <%= submit_tag "Save", :class=>"btn btn-primary", :id=>"process_uploads", :disabled=>'true'%> 
+<%end%>
+
+<script>
+
+// bind the click to all headers
+ $(document).ready(function() {
+	
+	$('#hide_me').hide();
+
+	$("#button_id").click(function() {
+
+    // get the li that this header belongs to
+    // check to see if this li is not already being displayed
+    if (!$('#hide_me').is(':visible'))
+    {
+        // loop on all the li elements
+            // slide up the element and set it's marker to '+' 
+        $('#hide_me').slideDown(200);
+        $('#button_id').text('- Add Description');
+
+    } else {
+        $('#hide_me').slideUp(200);
+        $('#button_id').text('+ Add Description');  
+    }
+    })
+    
+    $("#depositors_agreement").click(function(){
+      
+      if ($(this).is(':checked')){
+        $("#process_uploads").attr("disabled", false);
+      }
+      
+      else {
+        $("#process_uploads").attr("disabled", true);
+      }
+      
+    })
+});
+</script>
