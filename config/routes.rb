@@ -55,6 +55,7 @@ DIL::Application.routes.draw do
   match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
   match "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
   match "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }, :via => :post
+  match "uploads/notify" => "uploads#notify", :via => :post
   
   resources :uploads, :only => [:index] do
     collection do
@@ -65,8 +66,9 @@ DIL::Application.routes.draw do
   match "uploads/update_status" => "uploads#update_status"
 
   resources :groups do
-    resources :users, :only=>[:create, :destroy]
+    resources :users, :only=>[:create, :edit, :destroy]
   end
+  match "groups/edit/:id" => "groups#edit", :via => :get
 
 #  resources :policies
 
