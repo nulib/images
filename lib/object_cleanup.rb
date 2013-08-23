@@ -1,5 +1,6 @@
 # BE CAREFUL!!!
-# This script deletes objects using an input file to load pids
+# This script deletes objects using an input file to load pids and accession numbers.
+# The MARC record that needs to be re-ingested is found and copied and the image and work objects are deleted.
 # THE DELETES ARE COMMENTED OUT 
 # Make sure to set the config variables.
 # To run this script from app root: rails runner -e lib/environment object_cleanup.rb
