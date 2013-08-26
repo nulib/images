@@ -2,7 +2,7 @@
 # This script deletes objects using an input file to load pids
 # THE DELETES ARE COMMENTED OUT
 # Make sure to set the config variables.
-# To run this script from app root: rails runner -e lib/environment object_cleanup.rb
+# To run this script from app root: rails runner -e environment /lib/delete_objects.rb
 
 require 'fileutils'
 
@@ -32,7 +32,7 @@ begin
         #work.delete
         #fedora_object.delete
       elsif fedora_object.is_a? Vrawork
-        image = fedora_object.multiresimage.first
+        image = fedora_object.multiresimages.first
         log_file.write("delete #{fedora_object.pid}|#{image.pid}\n")
         #image.delete
         #fedora_object.delete
