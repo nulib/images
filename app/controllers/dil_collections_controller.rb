@@ -61,7 +61,7 @@ class DilCollectionsController < ApplicationController
       session.delete(:batch_select_ids)
       
       # Make sure the selected image is in the list (user might not have checked it)
-      if pid_list.include? (params[:member_id])
+      if !pid_list.include? (params[:member_id])
         pid_list << params[:member_id]
       end
       
