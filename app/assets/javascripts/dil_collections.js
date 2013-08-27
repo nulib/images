@@ -18,6 +18,10 @@ function dropMe(theObj) {
 		//get id attribute for draggable <li> item (image)
 		var imageID = $(ui.draggable).attr("pid");
 		
+		//if it's an h2, it's a collection, will reload after it's added
+        
+        var doReload = $(ui.draggable).is('h2');
+    	
 		//get title attribute for draggable <li> item (image)
 		var titleID = $(ui.draggable).attr("title");
 		
@@ -54,7 +58,9 @@ function dropMe(theObj) {
 		 spinner.stop();
 		 
 		 //reload the page to refresh the collections
-		 location.reload();
+		 if (doReload) {
+		   location.reload();
+		 }
 	    },
 		
 		 error: function(msg){ 
@@ -97,12 +103,8 @@ function dropMe(theObj) {
 			    start_index=$(this).children().index(ui.item)
 			},
 			update: function(event, ui) {
-				//var fruitOrder = $(this).sortable('toArray').toString();
 				var collection_id= $(this).attr('pid');
-				// Note: ui.item.attr('id') is id of dragged item 
 				var url='/dil_collections/move/' + collection_id + '/' + start_index + '/' + $(this).children().index(ui.item);
-				//$.get('update-sort.cfm', {fruitOrder:fruitOrder});
-
 				$.ajax({
 				type: "POST",
 				url: url,
