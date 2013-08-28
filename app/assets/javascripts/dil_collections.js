@@ -23,10 +23,10 @@ function dropMe(theObj) {
         var doReload = $(ui.draggable).is('h2');
     	
 		//see if there are multiple images selected
-		var count = $.trim($("#batch_select_count").text());
+		var batch_select_count = $.trim($("#batch_select_count").text());
 		
 		//if it's an h2 (it's a collection) OR multiple images selected, will reload after it's added.        
-        var doReload = $(ui.draggable).is('h2');
+        var doReload = $(ui.draggable).is('h2') OR batch_select_count > 0;
         
 		//get title attribute for draggable <li> item (image)
 		var titleID = $(ui.draggable).attr("title");
