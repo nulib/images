@@ -86,22 +86,27 @@ class DILCollection < ActiveFedora::Base
   #remove the member (image or subcollection) from a collection
   def remove_member_by_pid (pid)
   
+   #will only delete out of RELS-EXT if member is only instance of that object in the collection.
+   #member can appear in collection more than once, but only one shows up in RELS-EXT because of Hydra or Fedora restriction.
+   number_of_times_in_collection = self.members.find_by_terms(:mods, :relatedItem, :identifier=>pid).size
+   
    #remove from mods_collection_members datastream
    members.remove_member_by_pid(pid)
    
    #remove from RELS-EXT for both the member and the collection
-   object_to_delete = ActiveFedora::Base.find(pid, :cast=>true)
-   
-   if object_to_delete.instance_of?(Multiresimage)
-     self.remove_relationship(:has_image, object_to_delete)
-     object_to_delete.remove_relationship(:is_member_of, self)
-   elsif object_to_delete.instance_of?(DILCollection)
-     self.remove_relationship(:has_subcollection, object_to_delete)
-     object_to_delete.remove_relationship(:is_member_of, self)
+   if number_of_times_in_collection == 1
+     object_to_delete = ActiveFedora::Base.find(pid, :cast=>true)
+     if object_to_delete.instance_of?(Multiresimage)
+       self.remove_relationship(:has_image, object_to_delete)
+       object_to_delete.remove_relationship(:is_member_of, self)
+     elsif object_to_delete.instance_of?(DILCollection)
+       self.remove_relationship(:has_subcollection, object_to_delete)
+       object_to_delete.remove_relationship(:is_member_of, self)
+     end
+     object_to_delete.save!
    end
    
    self.save!
-   object_to_delete.save!
    
   end
   
