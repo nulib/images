@@ -85,6 +85,7 @@ class DilCollectionsController < ApplicationController
     
     render :nothing => true
   end
+
   
   #remove an image or subcollection from the collection
   def remove
