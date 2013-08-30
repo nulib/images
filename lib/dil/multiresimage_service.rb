@@ -161,7 +161,7 @@ module DIL
         #make sure xml, pid, and datstream name and datastream label are not nil and not empty
         if xml.present? and params[:pid].present? and params[:ds_name].present? and params[:ds_label].present?
             #calls method in helper
-            returnXml = update_fedora_object(params[:pid], xml, params[:ds_name], params[:ds_label])
+            returnXml = update_fedora_object(params[:pid], xml, params[:ds_name], params[:ds_label], params[:mime_type])
          end #end xml_params if
      
        end #end request_ip if
@@ -590,7 +590,7 @@ module DIL
     # The output is output indicating a success.
     # If an exception occurs, the controller will catch it.
     
-    def update_fedora_object(pid, xml, ds_name, ds_label)
+    def update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
       
       #load Fedora object
       fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
@@ -610,6 +610,7 @@ module DIL
       #fedora_object.datastreams[ds_name].content = xml
       
       fedora_object.send(ds_name).content = xml
+      fedora_object.send(ds_name).mimeType = mime_type
       
       #save Fedora object
       #debugger
