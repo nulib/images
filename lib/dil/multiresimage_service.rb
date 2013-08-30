@@ -610,6 +610,7 @@ module DIL
       #fedora_object.datastreams[ds_name].content = xml
       
       fedora_object.send(ds_name).content = xml
+      fedora_object.send(ds_name).dsLabel = ds_label
       fedora_object.send(ds_name).mimeType = mime_type
       
       #save Fedora object
