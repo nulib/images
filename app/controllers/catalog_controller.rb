@@ -94,6 +94,8 @@ class CatalogController < ApplicationController
           user_access_filters << "#{type}_access_person_t:[* TO *]"        
         end
       end
+    else
+      redirect_to(root_path)
     end
     user_access_filters
   end
