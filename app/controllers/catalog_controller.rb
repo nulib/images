@@ -88,9 +88,11 @@ class CatalogController < ApplicationController
 
   def apply_superuser_permissions(permission_types)
     user_access_filters = []
-    if current_user.admin?
-      permission_types.each do |type|
-        user_access_filters << "#{type}_access_person_t:[* TO *]"        
+    if current_user.present?
+      if current_user.admin?
+        permission_types.each do |type|
+          user_access_filters << "#{type}_access_person_t:[* TO *]"        
+        end
       end
     end
     user_access_filters
