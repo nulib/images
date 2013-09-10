@@ -1,5 +1,7 @@
 #!/usr/bin/evn ruby
 
+# Be sure to change the read_folder param and add the owner of the collection's net_id to edit_users!
+
 # This is a Rails runner batch process to migrate collections from the MDID system to DIL.
 # The last line of the code is what is called from the command-line.
 # The collections in MDID are exported and structured in folders.  That process is manual.  Then this code traverses the
@@ -9,7 +11,7 @@
 # is maintaining the collections, subcollections, and their relationships. The "collection" lines are folders,
 # the "xml" is the MDID export xml with the information about which images are in the collections, and the "subcollection" lines
 # are subcollections within a collection.  Because we store information in a collection regarding it's subcollections and parent collections,
-# there needs to be a way for a subcollection to kno about it's parent collection's pid.  To do so, this code updates a collection's folder name
+# there needs to be a way for a subcollection to know about it's parent collection's pid.  To do so, this code updates a collection's folder name
 # with it's pid after the collection is created and if it has subcollections.  Thay way, a subcollection can look at it's parent folder and know
 # it's pid.  That's how this code supports as many levels of nesting as needed.
 #
@@ -119,8 +121,8 @@ def create_collection_no_images(folder_name)
   #create new collection, update it's metadata and save
   collection = DILCollection.new({:pid=>mint_pid("dil-local")})
   collection.apply_depositor_metadata('mcs680')
-  collection.edit_users=DIL_CONFIG['admin_staff']
-  collection.set_collection_type('dil_collection')
+  collection.edit_users=DIL_CONFIG['admin_staff'] + [""]
+  #collection.set_collection_type('dil_collection')
   collection.descMetadata.title = title
   collection.save!
   
@@ -162,8 +164,8 @@ def create_collection(filename)
   #ToDo: refactor into method
   collection = DILCollection.new({:pid=>mint_pid("dil-local")})
   collection.apply_depositor_metadata('mcs680')
-  collection.edit_users = DIL_CONFIG['admin_staff']
-  collection.set_collection_type('dil_collection')
+  collection.edit_users = DIL_CONFIG['admin_staff'] + [""]
+  #collection.set_collection_type('dil_collection')
   collection.descMetadata.title = title
   collection.save!
   
