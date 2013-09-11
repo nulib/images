@@ -1,7 +1,7 @@
 class LockedObject < ActiveRecord::Base
-  attr_accessible :pid, :type, :user_id, :created_at, :updated_at
+  attr_accessible :pid, :action, :user_id, :created_at, :updated_at
   
-  def self.obtain_lock(pid)
+  def self.obtain_lock(pid, action, user_id)
     #check for existing lock on collection
     if self.object_locked(pid)
       sleep 0.5
@@ -12,12 +12,16 @@ class LockedObject < ActiveRecord::Base
       end
       #unlock if nbr_lock_attemps is max
       #lock
-      collection_lock = self.new(:pid=>pid)
+      collection_lock = self.new(:pid=>pid, :action=>action, :user_id=>user_id)
       collection_lock.save!
     else
-      collection_lock = self.new(:pid=>pid)
+      collection_lock = self.new(:pid=>pid, :action=>action, :user_id=>user_id)
       collection_lock.save!
     end
+  end
+  
+  def self.release_lock(pid)
+    self.delete_all("pid = '#{pid}'")
   end
   
 private 
