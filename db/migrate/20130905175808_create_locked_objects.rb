@@ -2,7 +2,7 @@ class CreateLockedObjects < ActiveRecord::Migration
   def up
     create_table :locked_objects do |t|
      t.string :pid, :primary=>true
-     t.string :type
+     t.string :action
      t.string :user_id
      t.timestamps
     end
