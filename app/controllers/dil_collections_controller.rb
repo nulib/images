@@ -48,7 +48,7 @@ class DilCollectionsController < ApplicationController
     begin
       
       #check for existing lock on collection
-      LockedObject.obtain_lock(params[:id], "collection - add object", current_user.user_id)
+      LockedObject.obtain_lock(params[:id], "collection - add object", current_user.id)
       
       collection = DILCollection.find(params[:id])
       # Does user have edit access on the collection?
@@ -71,7 +71,7 @@ class DilCollectionsController < ApplicationController
         end
       
         pid_list.each do |pid|
-          LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.user_id)
+          LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.id)
           fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
           # Does user have read access on the item?
           authorize! :show, fedora_object
@@ -83,15 +83,17 @@ class DilCollectionsController < ApplicationController
     
       else
         fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
-        LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.user_id)
-        # Does user have read access on the item?
-        authorize! :show, fedora_object
-        collection.insert_member(fedora_object)
-        LockedObject.release_lock(fedora_object.pid)
+        begin
+          LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.id)
+          # Does user have read access on the item?
+          authorize! :show, fedora_object
+          collection.insert_member(fedora_object)
+        ensure
+          LockedObject.release_lock(fedora_object.pid)
+        end
       end
     ensure
       LockedObject.release_lock(params[:id])
-      LockedObject.release_lock(params[:pid])
     end
       render :nothing => true
   end
@@ -99,11 +101,11 @@ class DilCollectionsController < ApplicationController
   #remove an image or subcollection from the collection
   def remove
     begin
-      member_index = params[:member_index];
-      LockedObject.obtain_lock(params[:id], "collection - remove", current_user.user_id)
+      member_index = params[:member_index]
+      LockedObject.obtain_lock(params[:id], "collection - remove", current_user.id)
       collection = DILCollection.find(params[:id])
       authorize! :update, collection
-      LockedObject.obtain_lock(params[:pid], "collection - remove", current_user.user_id)
+      LockedObject.obtain_lock(params[:pid], "collection - remove", current_user.id)
       collection.remove_member_by_pid(params[:pid])
     ensure
       LockedObject.release_lock(params[:id])
@@ -159,14 +161,19 @@ class DilCollectionsController < ApplicationController
   
   #move a member item in a collection from original position to new position
   def move
-    collection = DILCollection.find(params[:id])
-    authorize! :update, collection
-	ds = collection.datastreams["members"]
+    begin
+      LockedObject.obtain_lock(params[:id], "collection - move", current_user.id)
+      collection = DILCollection.find(params[:id])
+      authorize! :update, collection
+	  ds = collection.datastreams["members"]
     
-    #call the move_member method within mods_collection_members
-    ds.move_member(params[:from_index], params[:to_index])
-    collection.save!
-	render :nothing => true
+      #call the move_member method within mods_collection_members
+      ds.move_member(params[:from_index], params[:to_index])
+      collection.save!
+	  render :nothing => true
+   ensure
+     LockedObject.release_lock(params[:id])
+   end
   end
   
   def show
@@ -189,7 +196,7 @@ class DilCollectionsController < ApplicationController
   
   def edit
     begin
-      LockedObject.obtain_lock(params[:id], "collection - edit", current_user.user_id)
+      LockedObject.obtain_lock(params[:id], "collection - edit", current_user.id)
       @collection = DILCollection.find(params[:id])
       authorize! :edit, @collection
       #NEEDED FOR BATCH EDIT
