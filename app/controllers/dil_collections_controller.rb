@@ -45,55 +45,70 @@ class DilCollectionsController < ApplicationController
   # This code now checks to see if there are multiple items in the list.  If so, it will make a call to
   # collection.insert_member for each one.
   def add
-    collection = DILCollection.find(params[:id])
-    # Does user have edit access on the collection?
-    authorize! :edit, collection
+    begin
+      
+      #check for existing lock on collection
+      LockedObject.obtain_lock(params[:id])
+      
+      collection = DILCollection.find(params[:id])
+      # Does user have edit access on the collection?
+      authorize! :edit, collection
+    
+      # Check to see if there is a batch_select_ids session variable that has values.
+      # If so, iterate through and add those items to the collection
+      if session[:batch_select_ids].present?
+      
+        #assign to variable in this scope so the session can be cleared right away
+        #for the page refresh 
+        pid_list = session[:batch_select_ids]
+      
+        #Clear the session variable
+        session.delete(:batch_select_ids)
+      
+        # Make sure the selected image is in the list (user might not have checked it)
+        if !pid_list.include? (params[:member_id])
+          pid_list << params[:member_id]
+        end
+      
+        pid_list.each do |pid|
+          LockedObject.obtain_lock(fedora_object.pid)
+          fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
+          # Does user have read access on the item?
+          authorize! :show, fedora_object
         
-    # Check to see if there is a batch_select_ids session variable that has values.
-    # If so, iterate through and add those items to the collection
-    if session[:batch_select_ids].present?
-      
-      #assign to variable in this scope so the session can be cleared right away
-      #for the page refresh 
-      pid_list = session[:batch_select_ids]
-      
-      #Clear the session variable
-      session.delete(:batch_select_ids)
-      
-      # Make sure the selected image is in the list (user might not have checked it)
-      if !pid_list.include? (params[:member_id])
-        pid_list << params[:member_id]
-      end
-      
-      pid_list.each do |pid|
-        fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
-        
+          # Add to collection
+          collection.insert_member(fedora_object)
+          LockedObject.delete_all("pid = '#{fedora_object.pid}'")
+        end
+    
+      else
+        fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
+        LockedObject.obtain_lock(fedora_object.pid)
         # Does user have read access on the item?
         authorize! :show, fedora_object
-        
-        # Add to collection
         collection.insert_member(fedora_object)
+        LockedObject.delete_all("pid = '#{fedora_object.pid}'")
       end
-    
-    else
-      fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
-    
-      # Does user have read access on the item?
-      authorize! :show, fedora_object
-      collection.insert_member(fedora_object)
+    ensure
+      LockedObject.delete_all("pid = '#{params[:id]}'")
+      LockedObject.delete_all("pid = '#{fedora_object.pid}'")
     end
-    
-    render :nothing => true
+      render :nothing => true
   end
-
   
   #remove an image or subcollection from the collection
   def remove
-    member_index = params[:member_index];
-    collection = DILCollection.find(params[:id])
-    authorize! :update, collection
-    collection.remove_member_by_pid(params[:pid])
-    
+    begin
+      member_index = params[:member_index];
+      LockedObject.obtain_lock(params[:id])
+      collection = DILCollection.find(params[:id])
+      authorize! :update, collection
+      LockedObject.obtain_lock(params[:pid])
+      collection.remove_member_by_pid(params[:pid])
+    ensure
+      LockedObject.delete_all("pid = '#{params[:id]}'")
+      LockedObject.delete_all("pid = '#{params[:pid]}'")
+    end
     redirect_to edit_dil_collection_path(collection)
   end
   
@@ -173,15 +188,20 @@ class DilCollectionsController < ApplicationController
   end
   
   def edit
-    @collection = DILCollection.find(params[:id])
-    authorize! :edit, @collection
-    #NEEDED FOR BATCH EDIT
-    #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view) 
-    #@solr_docs = []
-    #@collection.members.find_by_terms(:mods).each_with_index do |mods|
-      #pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
-      #@solr_docs << get_solr_response_for_doc_id(pid)
-    #end
+    begin
+      LockedObject.obtain_lock(params[:id])
+      @collection = DILCollection.find(params[:id])
+      authorize! :edit, @collection
+      #NEEDED FOR BATCH EDIT
+      #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view) 
+      #@solr_docs = []
+      #@collection.members.find_by_terms(:mods).each_with_index do |mods|
+        #pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
+        #@solr_docs << get_solr_response_for_doc_id(pid)
+      #end
+    ensure
+      LockedObject.delete_all("pid = '#{params[:id]}'")
+    end
     
   end
   
@@ -315,5 +335,5 @@ class DilCollectionsController < ApplicationController
     
     end
   end
-  
+    
 end
