@@ -4,27 +4,23 @@
 
 <div id="content" class="span9">
 
-    <% unless has_search_parameters? %>
+<% unless has_search_parameters? %>
 <%# if there are no input/search related params, display the "home" partial -%>
-<%= render 'home' %>
-    <% else %>
+  <%= render 'home' %>
+  </div>
+<% else %>
 
-      <h2 class="hide-text top-content-title"><%= t('blacklight.search.search_results_header') %></h2>
+  <h2 class="hide-text top-content-title"><%= t('blacklight.search.search_results_header') %></h2>
+  <% @page_title = t('blacklight.search.title', :application_name => application_name) %>
+  <%#= render :partial => 'did_you_mean' %>
+  <%= render :partial => 'constraints' %>
+  <%= render 'sort_and_per_page' %>
+  <%= render 'batch_select_counter' %> 
+  <h2 class="hide-text"><%= t('blacklight.search.search_results') %></h2>
+  <%= render_document_index %>
+  </div>
+  <div class="span9">
+    <%= render 'sort_and_per_page'%>
+  </div>
+<% end %>
 
-      <% @page_title = t('blacklight.search.title', :application_name => application_name) %>
-
-
-
-<%#= render :partial => 'did_you_mean' %>
-
-      <%= render :partial => 'constraints' %>
-
-<%= render 'sort_and_per_page' %>
-<%= render 'batch_select_counter' %> 
-
-      <h2 class="hide-text"><%= t('blacklight.search.search_results') %></h2>
-<%= render_document_index %>
-
-    <% end %>
-
-</div>
