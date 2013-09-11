@@ -48,7 +48,7 @@ class DilCollectionsController < ApplicationController
     begin
       
       #check for existing lock on collection
-      LockedObject.obtain_lock(params[:id])
+      LockedObject.obtain_lock(params[:id], "collection - add object", current_user.user_id)
       
       collection = DILCollection.find(params[:id])
       # Does user have edit access on the collection?
@@ -71,27 +71,27 @@ class DilCollectionsController < ApplicationController
         end
       
         pid_list.each do |pid|
-          LockedObject.obtain_lock(fedora_object.pid)
+          LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.user_id)
           fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
           # Does user have read access on the item?
           authorize! :show, fedora_object
         
           # Add to collection
           collection.insert_member(fedora_object)
-          LockedObject.delete_all("pid = '#{fedora_object.pid}'")
+          LockedObject.release_lock(fedora_object.pid)
         end
     
       else
         fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
-        LockedObject.obtain_lock(fedora_object.pid)
+        LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.user_id)
         # Does user have read access on the item?
         authorize! :show, fedora_object
         collection.insert_member(fedora_object)
-        LockedObject.delete_all("pid = '#{fedora_object.pid}'")
+        LockedObject.release_lock(fedora_object.pid)
       end
     ensure
-      LockedObject.delete_all("pid = '#{params[:id]}'")
-      LockedObject.delete_all("pid = '#{fedora_object.pid}'")
+      LockedObject.release_lock(params[:id])
+      LockedObject.release_lock(params[:pid])
     end
       render :nothing => true
   end
@@ -100,14 +100,14 @@ class DilCollectionsController < ApplicationController
   def remove
     begin
       member_index = params[:member_index];
-      LockedObject.obtain_lock(params[:id])
+      LockedObject.obtain_lock(params[:id], "collection - remove", current_user.user_id)
       collection = DILCollection.find(params[:id])
       authorize! :update, collection
-      LockedObject.obtain_lock(params[:pid])
+      LockedObject.obtain_lock(params[:pid], "collection - remove", current_user.user_id)
       collection.remove_member_by_pid(params[:pid])
     ensure
-      LockedObject.delete_all("pid = '#{params[:id]}'")
-      LockedObject.delete_all("pid = '#{params[:pid]}'")
+      LockedObject.release_lock(params[:id])
+      LockedObject.release_lock(params[:pid])
     end
     redirect_to edit_dil_collection_path(collection)
   end
@@ -189,7 +189,7 @@ class DilCollectionsController < ApplicationController
   
   def edit
     begin
-      LockedObject.obtain_lock(params[:id])
+      LockedObject.obtain_lock(params[:id], "collection - edit", current_user.user_id)
       @collection = DILCollection.find(params[:id])
       authorize! :edit, @collection
       #NEEDED FOR BATCH EDIT
@@ -200,7 +200,7 @@ class DilCollectionsController < ApplicationController
         #@solr_docs << get_solr_response_for_doc_id(pid)
       #end
     ensure
-      LockedObject.delete_all("pid = '#{params[:id]}'")
+      LockedObject.release_lock(params[:id])
     end
     
   end
