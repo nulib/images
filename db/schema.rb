@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(:version => 20130905175808) do
 
   create_table "locked_objects", :force => true do |t|
     t.string   "pid"
+    t.string   "action"
+    t.string   "user_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
