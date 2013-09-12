@@ -365,6 +365,10 @@ svg image {
 	         box-sizing: border-box;
 }
 
+#dialog li {
+	list-style: decimal;
+}
+
 /* Sticky footer */
 
 html, body {
