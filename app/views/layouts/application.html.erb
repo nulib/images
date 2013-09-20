@@ -18,12 +18,8 @@ the_logo = "repository-images.png"
     
     <div class="wrapper">
 
-  		<div id="hd">
-  			<div id="top-menu"><%= render :partial => '/user_util_links' %></div>
-  			<div id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
-  			<%= render :partial=>'shared/menu' %>
-  			<%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %>
-  		</div>
+	  <%= render :partial => 'shared/header_navbar' %>
+
   	    
       <div id="bd">
         <div id="main">
