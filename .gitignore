@@ -15,6 +15,9 @@
 /tmp
 /coverage
 
+# Ignore Rails Best Practices Output html file
+rails_best_practices_output.html
+
 config/hydra-ldap.yml
 config/fedora.yml
 *.swp

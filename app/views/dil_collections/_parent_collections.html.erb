@@ -3,6 +3,4 @@
   <% @collection.parent_collections.each do |parent_collection| %>
     <div><%= link_to "#{parent_collection.datastreams['descMetadata'].find_by_terms(:title).text()}", dil_collection_path(parent_collection) %></div>
   <% end %>
-<% else %>
-  <%= render :partial=>'shared/back_to_previous' %>
 <% end %>

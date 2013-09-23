@@ -43,8 +43,10 @@ class DILCollection < ActiveFedora::Base
       members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.titleSet_display, :member_type=>'image')
       
       #add to the rels-ext ds
-      fedora_object.collections << self
-      self.multiresimages << fedora_object
+      fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+      add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
+      
+      #self.multiresimages << fedora_object
       #self.add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
       
      elsif (fedora_object.instance_of?(DILCollection))
@@ -66,41 +68,45 @@ class DILCollection < ActiveFedora::Base
           members.insert_member(:member_id=>fedora_object.pid, :member_title=>fedora_object.title, :member_type=>'collection')
       
           #add to the rels-ext ds
-          fedora_object.parent_collections << self
-    
-          #logger.debug("self:#{self}")
-          #logger.debug("fedora_object:#{fedora_object}")
-          self.subcollections << fedora_object
-          #fedora_object.parent = self
+          fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
+          add_relationship(:has_subcollection, "info:fedora/#{fedora_object.pid}")
         end
       end
       
     end
     
+    logger.debug("before image save #{Time.new}")
     fedora_object.save!
+    logger.debug("after image save #{Time.new}")
     self.save!
+    logger.debug("after collection save #{Time.new}")
 
   end
   
   #remove the member (image or subcollection) from a collection
   def remove_member_by_pid (pid)
   
+   #will only delete out of RELS-EXT if member is only instance of that object in the collection.
+   #member can appear in collection more than once, but only one shows up in RELS-EXT because of Hydra or Fedora restriction.
+   number_of_times_in_collection = self.members.find_by_terms(:mods, :relatedItem, :identifier=>pid).size
+   
    #remove from mods_collection_members datastream
    members.remove_member_by_pid(pid)
    
    #remove from RELS-EXT for both the member and the collection
-   object_to_delete = ActiveFedora::Base.find(pid, :cast=>true)
-   
-   if object_to_delete.instance_of?(Multiresimage)
-     self.remove_relationship(:has_image, object_to_delete)
-     object_to_delete.remove_relationship(:is_member_of, self)
-   elsif object_to_delete.instance_of?(DILCollection)
-     self.remove_relationship(:has_subcollection, object_to_delete)
-     object_to_delete.remove_relationship(:is_member_of, self)
+   if number_of_times_in_collection == 1
+     object_to_delete = ActiveFedora::Base.find(pid, :cast=>true)
+     if object_to_delete.instance_of?(Multiresimage)
+       self.remove_relationship(:has_image, object_to_delete)
+       object_to_delete.remove_relationship(:is_member_of, self)
+     elsif object_to_delete.instance_of?(DILCollection)
+       self.remove_relationship(:has_subcollection, object_to_delete)
+       object_to_delete.remove_relationship(:is_member_of, self)
+     end
+     object_to_delete.save!
    end
    
    self.save!
-   object_to_delete.save!
    
   end
   
@@ -141,7 +147,7 @@ class DILCollection < ActiveFedora::Base
         img_width = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_width[0].to_i
         img_height = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_height[0].to_i
         size = img_width > img_height ? img_width > 950 ? 950 : img_width : img_height > 700 ? 700 : img_height
-        logger.debug("PID:" << pid)
+        logger.debug("PID: #{pid}")
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}#{size}</url><metadata></metadata></image>"
         #export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>" 
         logger.debug("export_xml debug:" << export_xml)
@@ -194,7 +200,6 @@ class DILCollection < ActiveFedora::Base
   def get_subcollections_json
     json_array = []
     
-    numberImages = nil
     numberSubcollections = nil
     
     #if collection has subcollections
@@ -203,13 +208,6 @@ class DILCollection < ActiveFedora::Base
       #for each subcollection
       self.subcollections.each do |subcollection|
         
-        #get the number of images in this subcollection
-        if subcollection.multiresimages.present?
-          numberImages = subcollection.multiresimages.size
-        else
-          numberImages = 0
-        end
-         
         #if the subcollection has subcollections
         if subcollection.subcollections.present?
           numberSubcollections = subcollection.subcollections.size
@@ -217,7 +215,7 @@ class DILCollection < ActiveFedora::Base
           numberSubcollections = 0
         end
         
-        json_array << {"title" => subcollection.title, "pid" => subcollection.pid, "numSubcollections" => numberSubcollections, "numImages" =>  numberImages}
+        json_array << {"title" => subcollection.title, "pid" => subcollection.pid, "numSubcollections" => numberSubcollections}
       end
     #no subcollections
     else
@@ -247,23 +245,31 @@ class DILCollection < ActiveFedora::Base
     solr_doc
   end
 
-  def get_prev_img(img = self.multiresimages.first)
-  	if img == self.multiresimages.first
-  			self.multiresimages.last
-  		elsif img == self.multiresimages.last
-  			self.multiresimages[self.multiresimages.size-2]
-  		else
-  			self.multiresimages[self.multiresimages.find_index(img) - 1]
-  		end
+  def get_prev_img(loc = 0)
+    loc = loc.to_i
+    img = self.members.find_by_terms(:mods, :type => :image)[loc]
+  	if img == self.members.find_by_terms(:mods, :type => :image).first
+  		{ :pid => self.members.find_by_terms(:mods, :type => :image).last.search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image).last.search('titleInfo/title').first), :index => self.members.find_by_terms(:mods, :type => :image).size - 1 }
+  	else
+  		{ :pid => self.members.find_by_terms(:mods, :type => :image)[loc - 1].search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image)[loc - 1].search('titleInfo/title').first), :index => loc - 1 }
+  	end
   end
 
-  def get_next_img(img = self.multiresimages.first)
-  	if img == self.multiresimages.first
-  			self.multiresimages[1]
-  		elsif img == self.multiresimages.last
-  			self.multiresimages.first
-  		else
-  			self.multiresimages[self.multiresimages.find_index(img) + 1]
-  		end
+  def get_next_img(loc = 0)
+    loc = loc.to_i
+    img = self.members.find_by_terms(:mods, :type => :image)[loc]
+  	if img == self.members.find_by_terms(:mods, :type => :image).last
+			{ :pid => self.members.find_by_terms(:mods, :type => :image).first.search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image).first.search('titleInfo/title').first), :index => 0 }
+		else
+			{ :pid => self.members.find_by_terms(:mods, :type => :image)[loc + 1].search('relatedItem/identifier').first.text(), :titleSet_display => get_value_from_mods(self.members.find_by_terms(:mods, :type => :image)[loc + 1].search('titleInfo/title').first), :index => loc + 1 }
+		end
+  end
+  
+  def get_value_from_mods(xml = nil)
+	  if xml.nil?
+	    ''
+    else
+      xml.text()
+    end
   end
 end
