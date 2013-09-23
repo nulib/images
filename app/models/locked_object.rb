@@ -6,7 +6,7 @@ class LockedObject < ActiveRecord::Base
     if self.object_locked(pid)
       sleep 0.5
       nbr_lock_attempts = 0
-      while object_locked and nbr_lock_attempts < 20 do
+      while self.object_locked(pid) and nbr_lock_attempts < 20 do
         nbr_lock_attempts = nbr_lock_attempts+1
         sleep 0.5
       end
