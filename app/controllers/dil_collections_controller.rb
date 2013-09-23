@@ -53,12 +53,19 @@ class DilCollectionsController < ApplicationController
     # If so, iterate through and add those items to the collection
     if session[:batch_select_ids].present?
       
+      #assign to variable in this scope so the session can be cleared right away
+      #for the page refresh 
+      pid_list = session[:batch_select_ids]
+      
+      #Clear the session variable
+      session.delete(:batch_select_ids)
+      
       # Make sure the selected image is in the list (user might not have checked it)
-      if !session[:batch_select_ids].include? (params[:member_id])
-        session[:batch_select_ids] << params[:member_id]
+      if !pid_list.include? (params[:member_id])
+        pid_list << params[:member_id]
       end
       
-      session[:batch_select_ids].each do |pid|
+      pid_list.each do |pid|
         fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
         
         # Does user have read access on the item?
@@ -66,9 +73,6 @@ class DilCollectionsController < ApplicationController
         
         # Add to collection
         collection.insert_member(fedora_object)
-        
-        #Clear the session variable
-        session.delete(:batch_select_ids)
       end
     
     else
@@ -81,6 +85,7 @@ class DilCollectionsController < ApplicationController
     
     render :nothing => true
   end
+
   
   #remove an image or subcollection from the collection
   def remove
@@ -98,7 +103,17 @@ class DilCollectionsController < ApplicationController
       collection = DILCollection.find(params[:id])
       authorize! :destroy, collection
     
-      #remove all images from collection
+    #remove all members from collection's mods and rels-ext, and update members rels-ext, too
+      #collection.members.find_by_terms(:mods, :relatedItem, :identifier).each do |member_pid|
+       # collection.remove_member_by_pid(member_pid)
+      #end
+     
+      ##remove collection from parent collections' mods and rels-ext and it's own rels-ext and mods
+      #collection.parent_collections.each do |parent_collection|
+        #parent_collection.remove_member_by_pid(collection.pid)
+     # end
+    
+    #remove all images from collection
       collection.multiresimages.each do |image|
         collection.remove_member_by_pid(image.pid)
       end
