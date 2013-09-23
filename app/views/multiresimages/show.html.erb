@@ -1,7 +1,4 @@
-<% sidebar_items << capture do %>
-  <%= render :partial=>'shared/back_to_previous' %>
-<% end %>
-
+<%=render :partial=>'breadcrumb' %>
 <% if can?(:edit, @multiresimage) %>
   <div id="browselinks">
     <span class="inactive browse">Browse</span> |

@@ -100,4 +100,8 @@ class User < ActiveRecord::Base
   def admin?
     (User.admin_groups & groups.map(&:code)).length > 0
   end
+  def uploader?
+    config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
+    config['uploaders'].include? self.uid
+  end
 end

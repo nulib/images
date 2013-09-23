@@ -8,8 +8,16 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //
-// Required by Blacklight
-//= require blacklight/blacklight
+// Required by Blacklight (replaced blacklight/blacklight with list below to fix facets bug)
+
+//= require blacklight/core
+//= require blacklight/bookmark_toggle
+//= require blacklight/facet_expand_contract
+//= require blacklight/lightbox_dialog
+//= require blacklight/search_context
+//= require blacklight/select_submit
+//= require blacklight/zebra_stripe
+//= require blacklight/css_dropdowns
 
 //= require_tree .
 

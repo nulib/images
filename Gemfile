@@ -43,6 +43,8 @@ gem 'uuid', '2.3.5'
 gem 'hydra-ldap', '0.0.3'
 gem 'hydra-batch-edit', '~>0.0.6'
 
+gem 'high_voltage'
+
 group :development, :test, :staging do
   gem 'jettywrapper', '1.4.1'
   gem 'rspec-rails', '>=2.9.0'

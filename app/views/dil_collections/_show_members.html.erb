@@ -8,7 +8,7 @@
 				<tr valign="center">
 				<td>
 				<% if !mods.search('type').text.present? || mods.search('type').text=='image'%>
-				  <a href="/dil_collections/<%=@collection.pid%>/<%=pid%>""><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= pid%>/150"/></a></td>
+				  <a href="/dil_collections/<%=@collection.pid%>/<%=pid%>""><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= pid%>/120"/></a></td>
 				<% elsif mods.search('type').text=='collection' %>
 				  <a href="/dil_collections/<%=pid%>"><img src="/assets/folder.jpg" width="102px" height="102px"/></a>
 				<% end %>
