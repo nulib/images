@@ -3,7 +3,7 @@ class DilCollectionsController < ApplicationController
   include Blacklight::Catalog
   include Blacklight::SolrHelper
   include DIL::PidMinter
-
+  
   def create
     authorize!(:create, DILCollection)
 	  #make sure collection's name isn't a reserved name for Uploads and Details collections
@@ -45,58 +45,21 @@ class DilCollectionsController < ApplicationController
   # This code now checks to see if there are multiple items in the list.  If so, it will make a call to
   # collection.insert_member for each one.
   def add
+    #check for existing lock on collection
     begin
-      
-      #check for existing lock on collection
       LockedObject.obtain_lock(params[:id], "collection - add object", current_user.id)
       
       collection = DILCollection.find(params[:id])
       # Does user have edit access on the collection?
       authorize! :edit, collection
-    
-      # Check to see if there is a batch_select_ids session variable that has values.
-      # If so, iterate through and add those items to the collection
-      if session[:batch_select_ids].present?
-      
-        #assign to variable in this scope so the session can be cleared right away
-        #for the page refresh 
-        pid_list = session[:batch_select_ids]
-      
-        #Clear the session variable
-        session.delete(:batch_select_ids)
-      
-        # Make sure the selected image is in the list (user might not have checked it)
-        if !pid_list.include? (params[:member_id])
-          pid_list << params[:member_id]
-        end
-      
-        pid_list.each do |pid|
-          LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.id)
-          fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
-          # Does user have read access on the item?
-          authorize! :show, fedora_object
-        
-          # Add to collection
-          collection.insert_member(fedora_object)
-          LockedObject.release_lock(fedora_object.pid)
-        end
-    
-      else
-        fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
-        begin
-          LockedObject.obtain_lock(fedora_object.pid, "collection - add object", current_user.id)
-          # Does user have read access on the item?
-          authorize! :show, fedora_object
-          collection.insert_member(fedora_object)
-        ensure
-          LockedObject.release_lock(fedora_object.pid)
-        end
-      end
+      #Delayed::Job.enqueue CollectionAsynch.new(params[:id], current_user.id, session, params[:member_id]).perform
+      collection.add_members(session[:batch_select_ids], current_user.id, params[:member_id])
     ensure
       LockedObject.release_lock(params[:id])
     end
-      render :nothing => true
+    render :nothing => true
   end
+
   
   #remove an image or subcollection from the collection
   def remove
