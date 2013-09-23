@@ -93,7 +93,7 @@ module DIL
 				  logger.debug("FIND IN AF")
 				  if (ActiveFedora::Base.exists?(pid))
 				    #object already exists, update the object
-				    returnXml = update_fedora_object(pid, xml, "VRA", "VRA")
+				    returnXml = update_fedora_object(pid, xml, "VRA", "VRA", "text/xml")
 				  else  
 				    #if object doesn't exist in Fedora, create the object, then update
 			        #create the object
