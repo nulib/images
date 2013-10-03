@@ -14,6 +14,8 @@ class DilCollectionsController < ApplicationController
 	    @dil_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
 		@dil_collection.apply_depositor_metadata(current_user.user_key)
 		@dil_collection.edit_users = edit_users_array
+		# This allows ALL Collections created by users to be available for anyone with the link
+		@dil_collection.read_groups = ["registered"]
 		#@dil_collection.set_collection_type('dil_collection')
 		@dil_collection.descMetadata.title = params[:dil_collection][:title]
 		@dil_collection.save!
@@ -157,7 +159,7 @@ class DilCollectionsController < ApplicationController
   def show
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
-    if can?(:edit, @collection)
+#    if can?(:edit, @collection)
        #NEEDED FOR BATCH EDIT
        #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view) 
        #@solr_docs = []
@@ -166,15 +168,16 @@ class DilCollectionsController < ApplicationController
          #@solr_docs << get_solr_response_for_doc_id(pid)
       #end
       
-      render :action => 'edit', :id => params[:id]
+#      render :action => 'edit', :id => params[:id]
     
-    end
+#    end
     
   end
-  
-  def edit
-    @collection = DILCollection.find(params[:id])
-    authorize! :edit, @collection
+
+# Edit is now unecessary since both show and edit can be handled by the same partial
+#  def edit
+#    @collection = DILCollection.find(params[:id])
+#    authorize! :edit, @collection
     #NEEDED FOR BATCH EDIT
     #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view) 
     #@solr_docs = []
@@ -183,7 +186,7 @@ class DilCollectionsController < ApplicationController
       #@solr_docs << get_solr_response_for_doc_id(pid)
     #end
     
-  end
+#  end
   
   def export
     @collection = DILCollection.find(params[:id])

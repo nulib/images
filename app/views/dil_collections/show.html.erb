@@ -3,10 +3,23 @@
   <%= render :partial=>'dil_collections/add' %>
 <% end %>
 
-<div id="accordion">
-    
-  <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
-  <%= render :partial => 'dil_collections/show_members', :locals => { :collection_id => @collection.id } %>
-  <br/>
-   <!--<h2 class="section-title"><a href="#">Description</a></h2>-->
+<div id="sidebar" class="span3"><%= sidebar_items.join().html_safe %></div>
+
+<div id="accordion" class="span9">
+<% if can?(:edit, @collection) %>
+  <span class="edit-browse">
+    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
+	<% if @collection.members %>
+		| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
+	<% end %>
+  </span>
+<% end %>
+
+  <% if @collection.members %>
+   <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
+     <%= render :partial => 'dil_collections/members' %>
+   <% end %>
 </div>
+
+<div class="modal-collection"></div>
+  <!--Description, permissions-->
