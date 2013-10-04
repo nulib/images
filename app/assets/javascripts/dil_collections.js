@@ -182,3 +182,25 @@ function dropMe(theObj) {
 			$('.modal-collection').show();
 	});
 });
+
+$(document).ready(function(){
+    //store nodepath value to clipboard (copy to top of page)
+    $('#shareLink').live('click', function(){
+        //console.log($('#pathtonode').html()+ " copied to window");
+        var path = $('#copypath').html();
+        path = path.replace(/ &amp;gt; /g,".");
+        //console.log(path);
+        addtoppath(path);
+		return false;
+    });
+    //initially hide copy window
+    $('#toppathwrap').hide();
+
+    function addtoppath(path) {
+        //console.log(path);
+        $('#copypath').val(path);
+        $('#toppathwrap').show();
+        $('#copypath').focus();
+        $('#copypath').select();
+    }   
+});
