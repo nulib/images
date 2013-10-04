@@ -1,4 +1,8 @@
+<% if can?(:edit, @collection) %>
 <div id="gallery_container" class="gallery_container" pid="<%= params[:id] %>">
+<% else %>
+<div id="container" class="container" pid="<%= params[:id] %>">
+<% end %>
 	<% img_count = 0 %>
 	<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
 		<%
