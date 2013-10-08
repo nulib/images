@@ -202,5 +202,10 @@ $(document).ready(function(){
         $('#toppathwrap').show();
         $('#copypath').focus();
         $('#copypath').select();
-    }   
+    }
+    $('.modal').on('show', function () {
+			$("body").animate({
+			    scrollTop:0
+			});
+		});   
 });
