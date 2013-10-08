@@ -406,3 +406,16 @@ html, body {
 	}
 }
 
+#toppathwrap {
+	position:relative;
+	background-color:#F2F1E8;
+	padding:5px;
+	display:none;
+	width: 650px;
+}
+#toppathwrap textarea {
+		width: 600px !important;
+	}
+#toppathwrap a {
+	float: right;
+}

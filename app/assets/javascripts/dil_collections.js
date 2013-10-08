@@ -18,10 +18,6 @@ function dropMe(theObj) {
 		//get id attribute for draggable <li> item (image)
 		var imageID = $(ui.draggable).attr("pid");
 		
-		//if it's an h2, it's a collection, will reload after it's added
-        
-        var doReload = $(ui.draggable).is('h2');
-    	
 		//see if there are multiple images selected
 		var batch_select_count = $.trim($("#batch_select_count").text());
 		
@@ -185,4 +181,26 @@ function dropMe(theObj) {
 		if(answer)
 			$('.modal-collection').show();
 	});
+});
+
+$(document).ready(function(){
+    //store nodepath value to clipboard (copy to top of page)
+    $('#shareLink').live('click', function(){
+        //console.log($('#pathtonode').html()+ " copied to window");
+        var path = $('#copypath').html();
+        path = path.replace(/ &amp;gt; /g,".");
+        //console.log(path);
+        addtoppath(path);
+		return false;
+    });
+    //initially hide copy window
+    $('#toppathwrap').hide();
+
+    function addtoppath(path) {
+        //console.log(path);
+        $('#copypath').val(path);
+        $('#toppathwrap').show();
+        $('#copypath').focus();
+        $('#copypath').select();
+    }   
 });
