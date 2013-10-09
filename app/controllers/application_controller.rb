@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
 layout "blacklight"
 
   rescue_from CanCan::AccessDenied do |exception|
+    # Store the url the user was trying to get to in the session. If they log in, they will get redirected to it.
+    session[:previous_url] = request.fullpath unless request.xhr?
     redirect_to root_url, :alert => exception.message
   end
 
