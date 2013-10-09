@@ -33,4 +33,20 @@ namespace :dil do
         #nop - index is out of synch with repository. Try solrizing
       end
   end
+  desc "DIL Collections read_groups_string set to registered"
+  task :read_access_on_all_collections => :environment do
+    begin
+      DILCollection.find(:all).each do |c|
+        unless c.read_groups.include? 'registered'
+          c.read_groups = c.read_groups + ['registered']
+          c.save!
+          puts "Updating #{c.title}: #{c.read_groups_string}"
+        end
+      end
+      puts "DONE!"
+    rescue :any
+      puts "An error was encountered attempting to make Collections set to registered. #{e.message}"
+      puts "Aborting this task."
+    end
+  end
 end
