@@ -37,7 +37,7 @@ namespace :dil do
   task :read_access_on_all_collections => :environment do
     begin
       DILCollection.find(:all).each do |c|
-        unless c.read_groups.include? 'registered'
+        unless c.read_groups.include?('registered') || c.title == 'My Details' || c.title == 'My Uploads'
           c.read_groups = c.read_groups + ['registered']
           c.save!
           puts "Updating #{c.title}: #{c.read_groups_string}"
