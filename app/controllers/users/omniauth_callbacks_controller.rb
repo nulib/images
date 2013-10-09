@@ -17,4 +17,15 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       end
    end
   end
+  
+  # After login, redirect to previous_url (where the user was trying to go before login but got denied)
+  # or root path. This overrides a devise gem method.
+  def after_sign_in_path_for(resource)
+     if session[:previous_url].present?
+      session[:previous_url]
+     else
+      super
+    end
+  end
+  
 end
