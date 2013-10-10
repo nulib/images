@@ -388,7 +388,18 @@ html, body {
   height: 180px;
 }
 
+@media all and (max-width: 767px) {
+  .container {
+    padding: 0 1em;
+  }
+}
+
 @media all and (max-width: 709px) {
+
+  .container {
+    padding: 0 1em;
+  }
+
 	.wrapper { 
 		margin: 0 auto -280px;
   }
