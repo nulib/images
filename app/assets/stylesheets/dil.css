@@ -419,3 +419,7 @@ html, body {
 #toppathwrap a {
 	float: right;
 }
+
+.ui-widget-content {
+  border: none;
+}
