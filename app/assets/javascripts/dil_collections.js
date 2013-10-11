@@ -34,7 +34,7 @@ function dropMe(theObj) {
 		//var collectionID = $( this ).find("li").attr("pid");
 		var collectionID = $( this ).attr("pid");
   
-        var target = document.getElementById(collectionID);
+        var target = document.getElementById(collectionID).parentNode;
         var spinner;
         
 		$.ajax({
@@ -42,16 +42,17 @@ function dropMe(theObj) {
 		url: "/dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
 		beforeSend: function() {
 		  //show the loading gif
-          //This is spin.js code to show a spinner
-          var spinOpts = {
-          lines: 8, // The number of lines to draw
-          length: 4, // The length of each line
-          width: 4, // The line thickness
-          radius: 4, // The radius of the inner circle
-          top: 'auto', // Top position relative to parent in px
-          left: 'auto' // Left position relative to parent in px
-          };
-          spinner = new Spinner(spinOpts).spin(target);
+      //This is spin.js code to show a spinner
+      var spinOpts = {
+      lines: 8, // The number of lines to draw
+      length: 4, // The length of each line
+      width: 4, // The line thickness
+      radius: 4, // The radius of the inner circle
+      className: 'collectionSpinner',
+      top: 'auto', // Top position relative to parent in px
+      left: 'auto' // Left position relative to parent in px
+      };
+      spinner = new Spinner(spinOpts).spin(target);
 		},
 		
 		success: function(msg){
