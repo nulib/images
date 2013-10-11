@@ -37,7 +37,7 @@ class DilCollectionsController < ApplicationController
     else
       flash[:alert] = "Failed to save your changes!"
     end
-    redirect_to edit_dil_collection_path(@collection)
+    redirect_to dil_collection_path(@collection)
   end
  
   # This method is for adding an image or collection to an existing collection
@@ -96,7 +96,7 @@ class DilCollectionsController < ApplicationController
     authorize! :update, collection
     collection.remove_member_by_pid(params[:pid])
     
-    redirect_to edit_dil_collection_path(collection)
+    redirect_to dil_collection_path(collection)
   end
   
   #delete the collection
@@ -209,7 +209,7 @@ class DilCollectionsController < ApplicationController
 
     flash[:notice] = "Image Group exported.  Please check your Northwestern University email account for a link to your presentation."
     
-    redirect_to edit_dil_collection_path(@collection)
+    redirect_to dil_collection_path(@collection)
   end
   
   
