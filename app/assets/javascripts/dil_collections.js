@@ -44,14 +44,13 @@ function dropMe(theObj) {
 		  //show the loading gif
       //This is spin.js code to show a spinner
       var spinOpts = {
-      lines: 8, // The number of lines to draw
-      length: 4, // The length of each line
-      width: 4, // The line thickness
-      radius: 4, // The radius of the inner circle
-      className: 'collectionSpinner',
-      top: 'auto', // Top position relative to parent in px
-      left: 'auto' // Left position relative to parent in px
-      };
+        lines: 8, // The number of lines to draw
+        length: 4, // The length of each line
+        width: 4, // The line thickness
+        radius: 4, // The radius of the inner circle
+        top: 'auto', // Top position relative to parent in px
+        left: 'auto' // Left position relative to parent in px
+        };
       spinner = new Spinner(spinOpts).spin(target);
 		},
 		
