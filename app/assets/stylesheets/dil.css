@@ -434,10 +434,3 @@ html, body {
 .ui-widget-content {
   border: none;
 }
-
-.collectionSpinner {
-  position: relative;
-}
-.collectionSpinner div {
-  right: 12%;
-}
