@@ -46,9 +46,14 @@ class MultiresimagesController < ApplicationController
   end
    
   def edit
-    @multiresimage = Multiresimage.find(params[:id])
-    authorize! :update, @multiresimage
-    @policies = AdminPolicy.readable_by_user(current_user)
+    begin
+      LockedObject.obtain_lock(params[:id], "image - edit metadata", current_user.id)
+      @multiresimage = Multiresimage.find(params[:id])
+      authorize! :update, @multiresimage
+      @policies = AdminPolicy.readable_by_user(current_user)
+    ensure
+      LockedObject.release_lock(params[:id])
+    end
   end
    
   def show
@@ -89,80 +94,83 @@ class MultiresimagesController < ApplicationController
   # Create new crop
   # Todo: Refactor a bunch of this into the model
   def create_crop
-    
-    
-    image_id = params[:pid]
-    
+        
     # Get source Fedora object
-    source_fedora_object = Multiresimage.find(image_id)
-    authorize! :show, source_fedora_object
+    begin
+      image_id = params[:pid]
+      LockedObject.obtain_lock(params[:pid], "image - generate detail", current_user.id) 
+      source_fedora_object = Multiresimage.find(image_id)
     
-    # Get the new crop boundaries
-    x=params[:x]
-    y=params[:y]
-    width=params[:width]
-    height=params[:height]
+      authorize! :show, source_fedora_object
     
-    new_image = Multiresimage.new(:pid=>mint_pid("dil-local"))
-    #puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
-	#@dil_collection.set_collection_type('Multiresimage')
+      # Get the new crop boundaries
+      x=params[:x]
+      y=params[:y]
+      width=params[:width]
+      height=params[:height]
+    
+      new_image = Multiresimage.new(:pid=>mint_pid("dil-local"))
+      #puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
+	  #@dil_collection.set_collection_type('Multiresimage')
 
-    # Get source SVG datastream
-    source_svg_ds = source_fedora_object.DELIV_OPS   
+      # Get source SVG datastream
+      source_svg_ds = source_fedora_object.DELIV_OPS   
     
-    # Get new SVG datastream
-    new_svg_ds = new_image.DELIV_OPS 
+      # Get new SVG datastream
+      new_svg_ds = new_image.DELIV_OPS 
 
-    # Get source <image> for copying
-    image_node = source_svg_ds.find_by_terms(:svg_image)
+      # Get source <image> for copying
+      image_node = source_svg_ds.find_by_terms(:svg_image)
     
-    # Add the <image> object
-    new_svg_ds.add_image(image_node)
+      # Add the <image> object
+      new_svg_ds.add_image(image_node)
 
-	# Update SVG
-    new_svg_ds.add_rect(x, y, width, height)
+	  # Update SVG
+      new_svg_ds.add_rect(x, y, width, height)
     
-    #Add properties datastream with depositor (user) info
-    new_image.apply_depositor_metadata(current_user.user_key)
+      #Add properties datastream with depositor (user) info
+      new_image.apply_depositor_metadata(current_user.user_key)
     
-    #new_svg_ds.dirty = true
-    new_image.save!
+      #new_svg_ds.dirty = true
+      new_image.save!
 
-    # Get source VRA datastream
-    source_vra_ds = source_fedora_object.datastreams["VRA"]
-    #source_vra_image=source_vra_ds.find_by_terms(:vra) 
-    #vra_ds = new_image.VRA
-    #vra_ds.add_image(source_vra_image)
+      # Get source VRA datastream
+      source_vra_ds = source_fedora_object.datastreams["VRA"]
+      #source_vra_image=source_vra_ds.find_by_terms(:vra) 
+      #vra_ds = new_image.VRA
+      #vra_ds.add_image(source_vra_image)
     
-    #copy VRA ds from source image object
-    new_image.VRA.content = source_vra_ds.content
+      #copy VRA ds from source image object
+      new_image.VRA.content = source_vra_ds.content
     
-    #replace pid in VRA with crop's pid 
-    new_image.replace_pid_in_vra(image_id, new_image.pid)
+      #replace pid in VRA with crop's pid 
+      new_image.replace_pid_in_vra(image_id, new_image.pid)
 	
-	# Add [DETAIL] to title in VRA
-	new_image.titleSet_display = new_image.titleSet_display << " [DETAIL]"
+	  # Add [DETAIL] to title in VRA
+	  new_image.titleSet_display = new_image.titleSet_display << " [DETAIL]"
 	
-  	# Add image and VRA behavior via their cmodels
-    new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
-    new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
+  	  # Add image and VRA behavior via their cmodels
+      new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
+      new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
     
-    #Add isCropOf relationship to crop
-    new_image.add_relationship(:is_crop_of, "info:fedora/#{source_fedora_object.pid}")
+      #Add isCropOf relationship to crop
+      new_image.add_relationship(:is_crop_of, "info:fedora/#{source_fedora_object.pid}")
     
-    #Add hasCrop relationship to image
-    source_fedora_object.add_relationship(:has_crop, "info:fedora/#{new_image.pid}")
-    source_fedora_object.save
+      #Add hasCrop relationship to image
+      source_fedora_object.add_relationship(:has_crop, "info:fedora/#{new_image.pid}")
+      source_fedora_object.save
     
-    #Edit rightsMetadata datastream
-    new_image.edit_users=[current_user.user_key]
+      #Edit rightsMetadata datastream
+      new_image.edit_users=[current_user.user_key]
     
-    new_image.save
+      new_image.save
     
-    #add the detail to the detail collection
-    personal_collection_search_result = current_user.get_details_collection
-    DILCollection.add_image_to_personal_collection(personal_collection_search_result, DIL_CONFIG['dil_details_collection'], new_image, current_user.user_key)
-    
+      #add the detail to the detail collection
+      personal_collection_search_result = current_user.get_details_collection
+      DILCollection.add_image_to_personal_collection(personal_collection_search_result, DIL_CONFIG['dil_details_collection'], new_image, current_user.user_key)
+    ensure
+      LockedObject.release_lock(params[:pid])
+    end
     respond_to do |wants|
       wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }
       wants.xml  { render :inline =>'<success pid="'+ new_image.pid + '"/>' }
