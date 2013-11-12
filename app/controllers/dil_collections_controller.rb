@@ -47,61 +47,80 @@ class DilCollectionsController < ApplicationController
   # This code now checks to see if there are multiple items in the list.  If so, it will make a call to
   # collection.insert_member for each one.
   def add
-    collection = DILCollection.find(params[:id])
-    # Does user have edit access on the collection?
-    authorize! :edit, collection
+     begin
+      LockedObject.obtain_lock(params[:id], "collection - add object", current_user.id)
+      collection = DILCollection.find(params[:id])
+      # Does user have edit access on the collection?
+      authorize! :edit, collection
+       # Check to see if there is a batch_select_ids session variable that has values.
+      # If so, iterate through and add those items to the collection
+      if session[:batch_select_ids].present?
+      
+        #assign to variable in this scope so the session can be cleared right away
+        #for the page refresh 
+        pid_list = session[:batch_select_ids]
+      
+        #Clear the session variable
+        session.delete(:batch_select_ids)
+      
+        # Make sure the selected image is in the list (user might not have checked it)
+        if !pid_list.include? (params[:member_id])
+          pid_list << params[:member_id]
+        end
+       
+        pid_list.each do |pid|
+          begin
+            LockedObject.obtain_lock(pid, "image - add to collection", current_user.id)
+            fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
         
-    # Check to see if there is a batch_select_ids session variable that has values.
-    # If so, iterate through and add those items to the collection
-    if session[:batch_select_ids].present?
-      
-      #assign to variable in this scope so the session can be cleared right away
-      #for the page refresh 
-      pid_list = session[:batch_select_ids]
-      
-      #Clear the session variable
-      session.delete(:batch_select_ids)
-      
-      # Make sure the selected image is in the list (user might not have checked it)
-      if !pid_list.include? (params[:member_id])
-        pid_list << params[:member_id]
-      end
-      
-      pid_list.each do |pid|
-        fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
+            # Does user have read access on the item?
+            authorize! :show, fedora_object
         
-        # Does user have read access on the item?
-        authorize! :show, fedora_object
-        
-        # Add to collection
-        collection.insert_member(fedora_object)
-      end
+            # Add to collection
+            collection.insert_member(fedora_object)
+          ensure
+            LockedObject.release_lock(pid)
+          end
+        end
     
-    else
-      fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
+      else
+        begin
+          LockedObject.obtain_lock(params[:member_id], "image - add to collection", current_user.id)
+          fedora_object = ActiveFedora::Base.find(params[:member_id], :cast=>true)
     
-      # Does user have read access on the item?
-      authorize! :show, fedora_object
-      collection.insert_member(fedora_object)
-    end
-    
-    render :nothing => true
+          # Does user have read access on the item?
+          authorize! :show, fedora_object
+          collection.insert_member(fedora_object)
+        ensure
+          LockedObject.release_lock(params[:member_id])
+        end  
+      end 
+  ensure
+    LockedObject.release_lock(params[:id])
   end
-
+  render :nothing => true
+end
   
   #remove an image or subcollection from the collection
   def remove
-    member_index = params[:member_index];
-    collection = DILCollection.find(params[:id])
-    authorize! :update, collection
-    collection.remove_member_by_pid(params[:pid])
-    
-    redirect_to dil_collection_path(collection)
+    begin
+      #member_index = params[:member_index];
+      LockedObject.obtain_lock(params[:id], "collection - remove object", current_user.id)
+      collection = DILCollection.find(params[:id])
+      authorize! :update, collection
+      LockedObject.obtain_lock(params[:pid], "image - remove from collection", current_user.id)
+      collection.remove_member_by_pid(params[:pid])
+     ensure
+       LockedObject.release_lock(params[:id])
+       LockedObject.release_lock(params[:pid])
+     end
+      redirect_to dil_collection_path(collection)
   end
   
   #delete the collection
   def destroy
     begin
+      LockedObject.obtain_lock(params[:id], "collection - deleting collection", current_user.id)
       collection = DILCollection.find(params[:id])
       authorize! :destroy, collection
     
@@ -115,19 +134,34 @@ class DilCollectionsController < ApplicationController
         #parent_collection.remove_member_by_pid(collection.pid)
      # end
     
-    #remove all images from collection
+      #remove all images from collection
       collection.multiresimages.each do |image|
-        collection.remove_member_by_pid(image.pid)
+        begin
+          LockedObject.obtain_lock(image.pid, "collection - remove image", current_user.id)
+          collection.remove_member_by_pid(image.pid)
+        ensure
+          LockedObject.release_lock(image.pid)
+        end
       end
     
       #remove all subcollections from collection
       collection.subcollections.each do |subcollection|
-        collection.remove_member_by_pid(subcollection.pid)
+        begin
+          LockedObject.obtain_lock(subcollection.pid, "collection - remove subcollection", current_user.id)
+          collection.remove_member_by_pid(subcollection.pid)
+        ensure
+          LockedObject.release_lock(subcollection.pid)
+        end
       end
       
       #remove collection from parent collections
       collection.parent_collections.each do |parent_collection|
-        parent_collection.remove_member_by_pid(collection.pid)
+        begin
+          LockedObject.obtain_lock(parent_collection.pid, "collection - remove parent collection", current_user.id)
+          parent_collection.remove_member_by_pid(collection.pid)
+        ensure
+          LockedObject.release_lock(parent_collection.pid)
+        end
       end
       
       #delete the DILCollection object
@@ -138,7 +172,8 @@ class DilCollectionsController < ApplicationController
       flash[:error] = "Error deleting Image Group"
       logger.debug("ERROR ERROR #{e.to_s}")
     
-    ensure 
+    ensure
+      LockedObject.release_lock(params[:id])
       redirect_to catalog_index_path
     end
   
@@ -146,13 +181,18 @@ class DilCollectionsController < ApplicationController
   
   #move a member item in a collection from original position to new position
   def move
-    collection = DILCollection.find(params[:id])
-    authorize! :update, collection
-	ds = collection.datastreams["members"]
+    begin
+      LockedObject.obtain_lock(params[:id], "collection - reorder images", current_user.id)    
+      collection = DILCollection.find(params[:id])
+      authorize! :update, collection
+	  ds = collection.datastreams["members"]
     
-    #call the move_member method within mods_collection_members
-    ds.move_member(params[:from_index], params[:to_index])
-    collection.save!
+      #call the move_member method within mods_collection_members
+      ds.move_member(params[:from_index], params[:to_index])
+      collection.save!
+    ensure
+      LockedObject.release_lock(params[:id])
+    end
 	render :nothing => true
   end
   
