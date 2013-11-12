@@ -120,6 +120,7 @@ end
   #delete the collection
   def destroy
     begin
+      LockedObject.obtain_lock(params[:id], "collection - deleting collection", current_user.id)
       collection = DILCollection.find(params[:id])
       authorize! :destroy, collection
     
@@ -133,19 +134,34 @@ end
         #parent_collection.remove_member_by_pid(collection.pid)
      # end
     
-    #remove all images from collection
+      #remove all images from collection
       collection.multiresimages.each do |image|
-        collection.remove_member_by_pid(image.pid)
+        begin
+          LockedObject.obtain_lock(image.pid, "collection - remove image", current_user.id)
+          collection.remove_member_by_pid(image.pid)
+        ensure
+          LockedObject.release_lock(image.pid)
+        end
       end
     
       #remove all subcollections from collection
       collection.subcollections.each do |subcollection|
-        collection.remove_member_by_pid(subcollection.pid)
+        begin
+          LockedObject.obtain_lock(subcollection.pid, "collection - remove subcollection", current_user.id)
+          collection.remove_member_by_pid(subcollection.pid)
+        ensure
+          LockedObject.release_lock(subcollection.pid)
+        end
       end
       
       #remove collection from parent collections
       collection.parent_collections.each do |parent_collection|
-        parent_collection.remove_member_by_pid(collection.pid)
+        begin
+          LockedObject.obtain_lock(parent_collection.pid, "collection - remove parent collection", current_user.id)
+          parent_collection.remove_member_by_pid(collection.pid)
+        ensure
+          LockedObject.release_lock(parent_collection.pid)
+        end
       end
       
       #delete the DILCollection object
@@ -156,7 +172,8 @@ end
       flash[:error] = "Error deleting Image Group"
       logger.debug("ERROR ERROR #{e.to_s}")
     
-    ensure 
+    ensure
+      LockedObject.release_lock(params[:id])
       redirect_to catalog_index_path
     end
   
@@ -164,13 +181,18 @@ end
   
   #move a member item in a collection from original position to new position
   def move
-    collection = DILCollection.find(params[:id])
-    authorize! :update, collection
-	ds = collection.datastreams["members"]
+    begin
+      LockedObject.obtain_lock(params[:id], "collection - reorder images", current_user.id)    
+      collection = DILCollection.find(params[:id])
+      authorize! :update, collection
+	  ds = collection.datastreams["members"]
     
-    #call the move_member method within mods_collection_members
-    ds.move_member(params[:from_index], params[:to_index])
-    collection.save!
+      #call the move_member method within mods_collection_members
+      ds.move_member(params[:from_index], params[:to_index])
+      collection.save!
+    ensure
+      LockedObject.release_lock(params[:id])
+    end
 	render :nothing => true
   end
   
