@@ -3,21 +3,15 @@ class LockedObject < ActiveRecord::Base
   
   def self.obtain_lock(pid, action, user_id)
     #check for existing lock on collection
-    if self.object_locked(pid)
+    while self.object_locked(pid) and nbr_lock_attempts < 20 do
+      logger.debug("TEST TEST TEST LOCKED")
+      nbr_lock_attempts = nbr_lock_attempts+1
       sleep 0.5
-      nbr_lock_attempts = 0
-      while self.object_locked(pid) and nbr_lock_attempts < 20 do
-        nbr_lock_attempts = nbr_lock_attempts+1
-        sleep 0.5
-      end
-      #unlock if nbr_lock_attemps is max
-      #lock
-      collection_lock = self.new(:pid=>pid, :action=>action, :user_id=>user_id)
-      collection_lock.save!
-    else
-      collection_lock = self.new(:pid=>pid, :action=>action, :user_id=>user_id)
-      collection_lock.save!
     end
+    #need tounlock if nbr_lock_attemps is max
+    #lock
+    collection_lock = self.new(:pid=>pid, :action=>action, :user_id=>user_id)
+    collection_lock.save!
   end
   
   def self.release_lock(pid)
