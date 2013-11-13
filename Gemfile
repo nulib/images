@@ -13,6 +13,7 @@ source 'http://rubygems.org'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
   gem 'bootstrap-sass'
+  gem 'rufus-scheduler', '3.0.2'
   
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
