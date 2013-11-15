@@ -359,4 +359,27 @@ end
     end
   end
   
+  # This will remove "registered" from read_groups
+  # A link exists on show.html.erb
+  def make_private
+    c = DILCollection.find(params[:id])
+    if c.read_groups.include? "registered"
+      temp = c.read_groups - ['registered']
+      c.read_groups = [temp]
+      c.save!
+    end
+    redirect_to dil_collection_path(c)
+  end
+  
+  # This will add "registered" to read_groups
+  # A link exists on show.html.erb
+  def make_public
+    c = DILCollection.find(params[:id])
+    if !c.read_groups.include? "registered"
+      temp = c.read_groups + ['registered']
+      c.read_groups = [temp]
+      c.save!
+    end
+    redirect_to dil_collection_path(c)
+  end
 end
