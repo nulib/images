@@ -11,11 +11,14 @@
     <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
 	<% if @collection.members %>
 		| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
+		| <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
+		<% if @collection.read_groups.include? "registered" %>
 		|
-		<a href="#" id="shareLink">Share Group</a>
+		<a href="#" id="shareLink">Share this Group</a>
 		<div id="toppathwrap">
 		    <textarea id="copypath" rows="2" cols="250" onclick="this.focus();this.select()" readonly="readonly"><%= DIL_CONFIG['dil_app_url'] + 'dil_collections/' + @collection.pid %></textarea><a href="#" onclick="$('#toppathwrap').hide(); return false;">X</a><br>Copy this link and share it!
 		</div>
+		<% end %>
 	<% end %>
   </span>
 <% end %>
