@@ -56,6 +56,8 @@ DIL::Application.routes.draw do
   match "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
   match "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }, :via => :post
   match "uploads/notify" => "uploads#notify", :via => :post
+  match "dil_collections/make_private/:id" => "dil_collections#make_private" , :via => :post
+  match "dil_collections/make_public/:id" => "dil_collections#make_public" , :via => :post
   
   resources :uploads, :only => [:index] do
     collection do
