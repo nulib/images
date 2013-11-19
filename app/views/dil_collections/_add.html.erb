@@ -11,35 +11,32 @@
     <!-- Each collection row is a JQuery UI droppable -->
     </div>
     <div id="imageCollection">
-		<div>
-		<ul class="accordion"> <!-- ui-widget-content -->
-		 <% current_user.top_level_collections.each do |collection| %>
-		  <li class="collection">
-        <h2 id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_tesim'].first%>" toggle="plus">
-          <% if collection["has_subcollection_ssim"].present? %>
-            <span>
-              <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus", :class=>"collection_plus_minus") %>
-            </span>
-            <% if collection["has_image_ssim"].present? %>
-              <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_tesim'].first%></a>
-            <% else %>
-              <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_tesim'].first%></a>
-            <% end %>
-          <% else %>
-            <% if collection["has_image_ssim"].present? %>
-              <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_tesim'].first%></a>
-            <% else %>
-              <a href="/dil_collections/<%=collection['id']%>"><%=collection['title_tesim'].first%></a>
-            <% end %>
-          <% end %>
-        </h2>
-		    <div class="outer"><div class="inner"></div>
-        </div>
-      </li>
-		<% end %>
-		  </ul>
-		</div>
+  		<div>
+    		<ul class="accordion"> <!-- ui-widget-content -->
+    		 <% current_user.top_level_collections.each do |collection| %>
+
+    		  <li class="collection">
+            <h2 id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_tesim'].first%>" toggle="plus">
+              <% if collection["has_subcollection_ssim"].present? %>
+
+                <span>
+                  <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus", :class=>"collection_plus_minus") %>
+                </span>
+              <% end %>
+
+              <%= link_to_collection( collection ) %>
+
+            </h2>
+    		    <div class="outer"><div class="inner"></div>
+            </div>
+          </li>
+
+
+
+    		<% end %>
+  		  </ul>
+  		</div>
     </div>
-    <div class="modal-collection"></div>
+  <div class="modal-collection"></div>
 <% end %>
 

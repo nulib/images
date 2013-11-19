@@ -58,3 +58,7 @@ group :development, :test, :staging do
 end
 
 gem 'unicorn', '4.3.1'
+
+group :development do
+  gem 'better_errors'
+end

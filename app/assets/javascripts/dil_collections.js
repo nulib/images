@@ -141,21 +141,30 @@ function dropMe(theObj) {
 			  var pid = '';
 			  var numSub = 0;
 			  var numImages = 0;
+			  var owner = '';
 
 			  //Each row
 			  $.each(data, function(i, map) {
 
-				title = map['title'];
-				pid = map['pid'];
-				numSub = map['numSubcollections'];
-				numImages = map['numImages'];
+					title = map['title'];
+					pid = map['pid'];
+					numSub = map['numSubcollections'];
+					numImages = map['numImages'];
+					owner = map[ 'owner' ];
 
 			    if (numSub > 0){
-			      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" class="collection_plus_minus" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
-                }
-                else{
-                  items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
-                }
+			    	if ( !owner ) {
+				      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" class="collection_plus_minus" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
+			    	} else {
+				      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" class="collection_plus_minus" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + " - " + owner + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
+			    	}
+          } else {
+          	if ( !owner ) {
+	            items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
+          	} else {
+	            items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + " - " + owner + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
+          	}
+          }
 
 			  });//End each row
 
