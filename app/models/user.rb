@@ -90,7 +90,7 @@ class User < ActiveRecord::Base
 
   def top_level_collections
     query="edit_access_person_ssim:#{uid} AND NOT title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND NOT title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_ssi:DILCollection AND is_top_level_collection_ssim:true" 
-    ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim has_subcollection_ssim has_image_ssim', :rows=>'1000', :sort=>'system_create_dtsi desc'})
+    ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim has_subcollection_ssim has_image_ssim owner_tesim', :rows=>'1000', :sort=>'system_create_dtsi desc'})
   end
 
   def self.admin_groups
@@ -98,8 +98,11 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    (User.admin_groups & groups.map(&:code)).length > 0
+    # (User.admin_groups & groups.map(&:code)).length > 0
+    config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
+    config[ 'admin_staff' ].include? self.uid
   end
+
   def uploader?
     config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
     config['uploaders'].include? self.uid

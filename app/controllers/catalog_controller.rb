@@ -91,7 +91,7 @@ class CatalogController < ApplicationController
     if current_user.present?
       if current_user.admin?
         permission_types.each do |type|
-          user_access_filters << "#{type}_access_person_t:[* TO *]"        
+          user_access_filters << "#{type}_access_person_tesim:[* TO *]"        
         end
       end
     else
