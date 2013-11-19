@@ -3,7 +3,10 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
   #include Hydra::Datastream::CommonModsIndexMethods
 
   set_terminology do |t|
-    t.root(:path=>"modsCollection", :xmlns=>"http://www.loc.gov/mods/v3", :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-2.xsd") 
+    t.root(:path=>"modsCollection", :xmlns=>"http://www.loc.gov/mods/v3", :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-2.xsd")
+
+    t.owner( :path => "owner", :index_as => [ :searchable ] )
+
 		t.mods {
 			t.title_info(:path=>"titleInfo", :index_as=>[:searchable]) {
 			  t.main_title(:path=>"title", :label=>"title", :index_as=>[:searchable])
@@ -17,11 +20,8 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
 			t.type(:index_as=>[:searchable])
 			
 			t.title(:path=>"titleInfo/title", :index_as=>[:searchable])
-			
-			
 		}
-		
-		
+
   end
 
     # Generates an empty Mods Collections (used when you call ModsCollectionMembers.new without passing in existing xml)
@@ -104,7 +104,9 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
     
       def to_solr(solr_doc=Hash.new)
         solr_doc = super(solr_doc)
-        ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
+        owner_hash = Hash[ "owner_tesim" => self.owner ]
+        solr_doc = solr_doc.merge( owner_hash )
+        # ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
         #::Solrizer::Extractor.insert_solr_field_value(solr_doc, "title_t", self.find_by_terms("mods/titleInfo/title")) unless self.find_by_terms("mods/titleInfo/title").size == 0
         solr_doc
       end
