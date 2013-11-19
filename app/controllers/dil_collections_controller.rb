@@ -18,6 +18,7 @@ class DilCollectionsController < ApplicationController
 		@dil_collection.read_groups = ["registered"]
 		#@dil_collection.set_collection_type('dil_collection')
 		@dil_collection.descMetadata.title = params[:dil_collection][:title]
+    @dil_collection.owner = current_user.uid
 		@dil_collection.save!
 	  end
 	  redirect_to :back
@@ -261,8 +262,12 @@ end
       authorize! :show, collection
     
       #get the json
-      return_json = collection.get_subcollections_json
-    
+      if current_user.admin?
+        return_json = collection.get_subcollections_json( true )
+      else
+        return_json = collection.get_subcollections_json( false )
+      end
+
     rescue Exception => e
       #error
       return_json = "{\"status\":exception}"
