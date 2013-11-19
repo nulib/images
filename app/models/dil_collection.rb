@@ -33,6 +33,8 @@ class DILCollection < ActiveFedora::Base
 
   delegate :title, :to=>'descMetadata', :unique=>true
 
+  delegate :owner, :to => 'members', :unique => true
+
   validates :title, :presence => true
 
   #A collection can have another collection as a member, or an image
@@ -197,7 +199,7 @@ class DILCollection < ActiveFedora::Base
   
   end
   
-  def get_subcollections_json
+  def get_subcollections_json( admin=false )
     json_array = []
     
     numberSubcollections = nil
@@ -214,8 +216,17 @@ class DILCollection < ActiveFedora::Base
         else
           numberSubcollections = 0
         end
-        
-        json_array << {"title" => subcollection.title, "pid" => subcollection.pid, "numSubcollections" => numberSubcollections}
+
+        return_hash = { "title" => subcollection.title,
+                        "pid" => subcollection.pid, 
+                        "numSubcollections" => numberSubcollections }
+
+        if admin
+          return_hash[ "owner" ] = subcollection.owner
+        end
+
+        json_array << return_hash
+
       end
     #no subcollections
     else
