@@ -262,11 +262,18 @@ end
       authorize! :show, collection
     
       #get the json
-      if current_user.admin?
-        return_json = collection.get_subcollections_json( true )
-      else
-        return_json = collection.get_subcollections_json( false )
+      return_json = JSON.parse( collection.get_subcollections_json )
+      logger.debug( "return_json: #{return_json}" )
+      return_json.each do |subcoll|
+        coll = DILCollection.find( subcoll[ "pid" ] )
+        logger.debug( "collection_owner: #{coll.owner}")
+        if current_user.admin?
+          subcoll[ "owner" ] = coll.owner
+        end
+        logger.debug( "collection: #{collection}")
       end
+      return_json.to_json
+      logger.debug( "return_json: #{ return_json }" )
 
     rescue Exception => e
       #error
