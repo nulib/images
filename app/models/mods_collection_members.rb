@@ -5,6 +5,7 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
   set_terminology do |t|
     t.root(:path=>"modsCollection", :xmlns=>"http://www.loc.gov/mods/v3", :schema=>"http://www.loc.gov/standards/mods/v3/mods-3-2.xsd")
 
+    # The "owner" is the netID of the user who created the collection
     t.owner( :path => "owner", :index_as => [ :searchable ] )
 
 		t.mods {
@@ -104,6 +105,8 @@ class ModsCollectionMembers < ActiveFedora::OmDatastream
     
       def to_solr(solr_doc=Hash.new)
         solr_doc = super(solr_doc)
+        # super is not automatically indexing the new element
+        # so we do it explicitly
         owner_hash = Hash[ "owner_tesim" => self.owner ]
         solr_doc = solr_doc.merge( owner_hash )
         # ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Collection")
