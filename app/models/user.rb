@@ -99,7 +99,10 @@ class User < ActiveRecord::Base
 
   def admin?
     # (User.admin_groups & groups.map(&:code)).length > 0
+
+    # Load the 'config/dil-config.yml' file
     config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
+    # If the current user's uid occurs in the 'admin_staff' list, they're admin
     config[ 'admin_staff' ].include? self.uid
   end
 

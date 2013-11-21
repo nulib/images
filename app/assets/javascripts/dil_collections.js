@@ -141,10 +141,13 @@ function dropMe(theObj) {
 			  var pid = '';
 			  var numSub = 0;
 			  var numImages = 0;
+			  // "owner" returned as netID *if* current user is an admin
+			  // Otherwise "owner" will be null
 			  var owner = '';
 
 			  //Each row
 			  $.each(data, function(i, map) {
+
 
 					title = map['title'];
 					pid = map['pid'];
@@ -153,15 +156,21 @@ function dropMe(theObj) {
 					owner = map[ 'owner' ];
 
 			    if (numSub > 0){
+			    	// If owner is falsey (null, '', etc.)
 			    	if ( !owner ) {
+			    		// Just print the subcollection link
 				      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" class="collection_plus_minus" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
 			    	} else {
+			    		// Otherwise print the subcollection link and append the owner's netID
 				      items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '" toggle="plus"><span><img src="/assets/listexpander/collapsed.gif" class="collection_plus_minus" alt = "Plus or Minus"></span><a href="/dil_collections/' + pid + '">' + title + " - " + owner + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
 			    	}
           } else {
+			    	// If owner is falsey
           	if ( !owner ) {
+			    		// Just print the subcollection link
 	            items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
           	} else {
+			    		// Otherwise print the subcollection link and append the owner's netID
 	            items.push('<li class="collection"><h2 pid="' + pid + '" title="' + title + '" id="' + pid + '"><span> </span><a href="/dil_collections/' + pid + '">' + title + " - " + owner + '</a></h2><div class="outer"><div class="inner"></div></div></li>');
           	}
           }
