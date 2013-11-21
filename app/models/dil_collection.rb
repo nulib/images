@@ -199,7 +199,7 @@ class DILCollection < ActiveFedora::Base
   
   end
   
-  def get_subcollections_json( admin=false )
+  def get_subcollections_json
     json_array = []
     
     numberSubcollections = nil
@@ -221,12 +221,7 @@ class DILCollection < ActiveFedora::Base
                         "pid" => subcollection.pid, 
                         "numSubcollections" => numberSubcollections }
 
-        if admin
-          return_hash[ "owner" ] = subcollection.owner
-        end
-
         json_array << return_hash
-
       end
     #no subcollections
     else

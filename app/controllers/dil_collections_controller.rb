@@ -255,18 +255,28 @@ end
   
   
   
-  #This will return all the subcollections of the collection
+  # This will return a JSON string for all the subcollections of the collection
   def get_subcollections
     begin 
       collection = DILCollection.find(params[:id])
       authorize! :show, collection
     
-      #get the json
-      if current_user.admin?
-        return_json = collection.get_subcollections_json( true )
-      else
-        return_json = collection.get_subcollections_json( false )
+      # Get the subcollection JSON as a string and convert to a hash
+      return_json = JSON.parse( collection.get_subcollections_json )
+      # For each subcollection ...
+      return_json.each do |subcoll|
+        # Create a DILCollection object
+        coll = DILCollection.find( subcoll[ "pid" ] )
+        # Check to see if the current_user is an admin
+        if current_user.admin?
+          # If so, add the owner to the JSON
+          # If the owner is empty, the JSON will contain "null"
+          subcoll[ "owner" ] = coll.owner
+        end
       end
+      logger.debug( "return_json: #{ return_json }" )
+      # Return the JSON as a string
+      return_json.to_json
 
     rescue Exception => e
       #error
