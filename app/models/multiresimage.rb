@@ -3,7 +3,7 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
   
-  belongs_to :admin_policy, :class_name=> "AdminPolicy", :property=>:is_governed_by
+  belongs_to :institutional_collection, :class_name=> "InstitutionalCollection", :property=> :is_governed_by
   
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
   has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
