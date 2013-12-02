@@ -1,14 +1,14 @@
 #require 'json'
 #require 'dil/pid_minter'
 
-class InstitutionalCollection < ActiveFedora::Base
+class InstitutionalCollection < Hydra::AdminPolicy
   
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   #include Hydra::ModelMixins::InheritableRightsMetadata
   #include DIL::PidMinter
   
-  has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_image
+  has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_collection_member
   
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "defaultRights", :type => Hydra::Datastream::InheritableRightsMetadata 
@@ -29,12 +29,13 @@ class InstitutionalCollection < ActiveFedora::Base
     solr_doc = super(solr_doc)
     
     #parent_collection_hash = Hash["is_top_level_collection_ssim" => value]
-    
+    collection_hash = Hash["test_ssim"=>"testing"]
+    solr_doc = solr_doc.merge(collection_hash)
     #solr_doc = solr_doc.merge(parent_collection_hash)
     #solr_doc = solr_doc.merge({"object_type_facet" => 'Collection'})
     #solr_doc = solr_doc.merge({"title_ssim" => self.title})
     #solr_doc = solr_doc.merge({"title_tesim" => self.title})
-    #solr_doc
+    solr_doc
   end
 
  
