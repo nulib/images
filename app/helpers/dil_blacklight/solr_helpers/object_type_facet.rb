@@ -6,7 +6,7 @@ module DIL_Blacklight::SolrHelpers::ObjectTypeFacet
         # Only apply this if the search is happening from inside the Hydra app.
         # External searches need Works and Images (Hydra app just needs Images).
     if (self.class.name != "ExternalSearchController")
-      solr_parameters[:fq] << 'object_type_facet:(Multiresimage) OR active_fedora_model_ssi:(InstitutionalCollection)'
+      solr_parameters[:fq] << 'object_type_facet:(Multiresimage)'
     end
   end
 
