@@ -52,7 +52,9 @@ class CatalogController < ApplicationController
     config.add_facet_field 'stylePeriod_facet', :label => 'Style/Period', :limit=>5
     config.add_facet_field 'subject_term_facet', :label => 'Subject', :limit=>5 
     config.add_facet_field 'technique_facet', :label => 'Technique' 
-    config.add_facet_field 'worktype_facet', :label => 'Work Type', :limit=>5  
+    config.add_facet_field 'worktype_facet', :label => 'Work Type', :limit=>5
+    config.add_facet_field 'institutional_collection_unit_facet', :label => 'Unit', :limit=>5
+    config.add_facet_field 'institutional_collection_title_facet', :label => 'Institutional Collection', :limit=>5 
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
