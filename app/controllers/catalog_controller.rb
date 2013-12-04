@@ -85,19 +85,6 @@ class CatalogController < ApplicationController
     config.spell_max = 5
   end
 
-  def apply_superuser_permissions(permission_types)
-    user_access_filters = []
-    if current_user.present?
-      if current_user.admin?
-        permission_types.each do |type|
-         # user_access_filters << "#{type}_access_person_ssim:[* TO *]"        
-        end
-      end
-    else
-      redirect_to(root_path)
-    end
-    user_access_filters
-  end
 
 
 end 

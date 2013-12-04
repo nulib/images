@@ -50,7 +50,7 @@ class MultiresimagesController < ApplicationController
       LockedObject.obtain_lock(params[:id], "image - edit metadata", current_user.id)
       @multiresimage = Multiresimage.find(params[:id])
       authorize! :update, @multiresimage
-      @policies = AdminPolicy.readable_by_user(current_user)
+      #@policies = AdminPolicy.readable_by_user(current_user)
     ensure
       LockedObject.release_lock(params[:id])
     end
