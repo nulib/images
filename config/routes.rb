@@ -10,7 +10,7 @@ DIL::Application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   devise_scope :user do
-    root :to => "devise/sessions#new"
+    root :to => "catalog#index"
   end
   
   #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
