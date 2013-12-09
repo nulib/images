@@ -33,7 +33,7 @@ module Blacklight::Catalog
     def index
       
       # If the user isn't logged in and is doing a facet query on a "private" institutional collection, redirect to login.
-      if !user_signed_in? and params.has_key?("f") and params[:f].has_key?("institutional_collection_title_facet") and (params[:f][:institutional_collection_title_facet] & DIL_CONFIG["private_institutional_collection"]).empty?
+      if !user_signed_in? and params.has_key?("f") and params[:f].has_key?("institutional_collection_title_facet") and !(params[:f][:institutional_collection_title_facet] & DIL_CONFIG["private_institutional_collection_names"]).empty?
         redirect_to :new_user_session
       end
       
