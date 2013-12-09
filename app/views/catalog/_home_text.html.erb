@@ -1,15 +1,10 @@
+
 <div class="home_text">
-<h2>Welcome to the Northwestern University Digital Image Library</h2>
-  <div>
-      <a href="/catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=Public"><img src="/multiresimages/get_image/inu:dil-6ef3b0ac-6083-4027-89a3-139322c1c2a4/230">Public Collection</img></a>
-  </div>
-  <br/>
+  <h2>Welcome to the Northwestern University Digital Image Library</h2>
+  <% DIL_CONFIG["institutional_collection"].each do |coll| %>
     <div>
-      <% if user_signed_in?%>
-        <a href="/catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=Private"><img src="/multiresimages/get_image/inu:dil-6ef3b0ac-6083-4027-89a3-139322c1c2a4/230">Private Collection</img></a>
-      <% else %>
-        <%= link_to image_tag("/multiresimages/get_image/inu:dil-5212f45f-87dc-419e-9b12-1e84b91e7bd5/230"), :new_user_session %>
-        <%= link_to "Private Collection", :new_user_session %>
-      <% end %>
+        <a href="#{coll[ 'solr_url' ]}"><img src="#{ coll[ 'image_url' ] }">#{ coll[  'name' ]}</img></a>
     </div>
-  </div>
+    <br/>
+  <% end %>
+</div>
