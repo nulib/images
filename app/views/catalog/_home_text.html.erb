@@ -1,9 +1,8 @@
-
 <div class="home_text">
   <h2>Welcome to the Northwestern University Digital Image Library</h2>
-  <% DIL_CONFIG["institutional_collection"].each do |coll| %>
+  <% DIL_CONFIG["institutional_collection"].each do |inst_collection| %>
     <div>
-        <a href="#{coll[ 'solr_url' ]}"><img src="#{ coll[ 'image_url' ] }">#{ coll[  'name' ]}</img></a>
+     <img src="<%=inst_collection[1]["image_url"]%>"><a href="<%=inst_collection[1]["solr_url"]%>"><%=inst_collection[1]["title"]%></a></img>
     </div>
     <br/>
   <% end %>
