@@ -8,6 +8,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 		t.titleSet_display(:path=>"display", :label=>"display", :index_as=>[:searchable]) 
 		t.title(:path=>"title", :label=>"title", :index_as=>[:searchable, :displayable]) 
 		t.title_pref(:path=>"title", :attributes=>{:pref=>"true"}, :index_as=>[:searchable]) 
+		t.title_altSet_display(:path=>"title", :attributes=>{:pref=>"false"}, :index_as=>[:searchable, :displayable]) 
 	}
 		
 	# agentSet OM definitions
@@ -237,6 +238,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 	
 	t.agentSet_display(:proxy=>[:image, :agentSet, :agentSet_display])
 	t.titleSet_display(:proxy=>[:image, :titleSet, :titleSet_display])
+	t.title_altSet_display(:proxy=>[:image, :titleSet, :title_altSet_display])
 	t.descriptionSet_display(:proxy=>[:image, :descriptionSet, :descriptionSet_display])
 	t.inscriptionSet_display(:proxy=>[:image, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display(:proxy=>[:image, :dateSet, :dateSet_display])
@@ -254,6 +256,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 	
 	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
 	t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
+	t.title_altSet_display_work(:proxy=>[:work, :titleSet, :title_altSet_display])
 	t.descriptionSet_display_work(:proxy=>[:work, :descriptionSet, :descriptionSet_display])
 	t.inscriptionSet_display_work(:proxy=>[:work, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display_work(:proxy=>[:work, :dateSet, :dateSet_display])
@@ -346,9 +349,10 @@ class VRADatastream < ActiveFedora::OmDatastream
 				xml.technique
 		   }
 		   
-           xml['vra'].titleSet {
+       xml['vra'].titleSet {
 				xml.display_
 				xml.title(:pref=>"true")
+				xml.title(:pref=>"false")
 		   }
 		   
 		   xml['vra'].worktypeSet {
@@ -369,6 +373,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 		   xml.titleSet {
 				xml.display
 				xml.title(:pref=>"true")
+				xml.title(:pref=>"false")
 		}
 		   xml.agentSet {
 				xml.display
@@ -576,6 +581,8 @@ class VRADatastream < ActiveFedora::OmDatastream
         end
 
         solr_doc['title_display'] = titleSet_display
+        #solr_doc['title_alternate'] = title_altSet_display
+
       end
 
       # Is this a Work?
@@ -626,21 +633,26 @@ class VRADatastream < ActiveFedora::OmDatastream
   # == Returns:
   # An array of Solr::Field objects
   def extract_titleSet
- 	titleSet_array = {}
+	 	titleSet_array = {}
 
-	# Add the display field for titleSet
+		# Add the display field for titleSet
     self.find_by_terms('//vra:titleSet/vra:display').each do |title_display|
       insert_solr_field_value(titleSet_array, "title_display_tesim", title_display.text)
     end
 
-	# Add a field for each title
+		# Add a field for each title
     self.find_by_terms('//vra:titleSet/vra:title').each do |title| 
-		insert_solr_field_value(titleSet_array, "title_tesim", title.text) 
+			insert_solr_field_value(titleSet_array, "title_tesim", title.text) 
     end
 
-	# Add a field for preferred title
+		# Add a field for preferred title
     self.find_by_terms('//vra:titleSet/vra:title[@pref="true"]').each do |title_pref| 
-		insert_solr_field_value(titleSet_array, "title_pref_tesim", title_pref.text) 
+			insert_solr_field_value(titleSet_array, "title_pref_tesim", title_pref.text) 
+    end
+
+  	# Add a field for alternate title
+    self.find_by_terms('//vra:titleSet/vra:title[@pref="false"]').each do |title_alt| 
+			insert_solr_field_value(titleSet_array, "title_alt_tesim", title_alt.text) 
     end
 
     return titleSet_array
