@@ -46,7 +46,7 @@ class Multiresimage < ActiveFedora::Base
     m.field 'file_name', :string
   end
   
-  delegate_to :VRA, [:titleSet_display, :agentSet_display, :dateSet_display, 
+  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display, 
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display, 
       :techniqueSet_display, :locationSet_display, :materialSet_display, 
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display, 
