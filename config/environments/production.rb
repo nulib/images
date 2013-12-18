@@ -52,6 +52,9 @@ DIL::Application.configure do
   
   # Log level for production
   config.log_level = :error
+
+  # Google analytics id
+  GA.tracker = "UA-xxxxxx-x"
   
   # For emailing exceptions that occur in the app
   config.middleware.use ExceptionNotifier,
