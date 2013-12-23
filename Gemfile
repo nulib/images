@@ -45,8 +45,6 @@ gem 'hydra-ldap', '0.0.3'
 gem 'hydra-batch-edit', '~>0.0.6'
 
 gem 'high_voltage'
-gem 'google-analytics-rails'
-
 
 group :development, :test, :staging do
   gem 'jettywrapper', '1.4.1'
@@ -64,4 +62,8 @@ gem 'unicorn', '4.3.1'
 
 group :development do
   gem 'better_errors'
+end
+
+group :production do
+  gem 'google-analytics-rails'
 end
