@@ -515,7 +515,7 @@ module DIL
     # The output is output indicating a success.
     # If an exception occurs, the controller will catch it.
 
-    def create_vra_image_fedora_object(pid, rel_pid, document)
+    def create_vra_image_fedora_object(pid, rel_pid, document, collection=nil)
       logger.debug("create_image_method")
       # create new Fedora object with minted pid
       fedora_object = Multiresimage.new({:pid=>pid})
@@ -536,6 +536,11 @@ module DIL
       
       #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
       fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
+      
+      # if this is part of an institutional collection, add that relationship
+      if collection.present?
+        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + DIL_CONFIG["institutional_collection"][collection]["pid"])
+      end
       
       #add rels-ext CModel relationship
       #fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
