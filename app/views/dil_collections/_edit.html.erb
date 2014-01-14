@@ -41,11 +41,9 @@
 		});
 		$('.gallery_container').sortable({
 			update: function(event, ui) {
-				var fruitOrder = $(this).sortable('toArray').toString();
 				var collection_id= $(this).attr('id');
 				// Note: ui.item.attr('id') is id of dragged item 
 				var url='/collections/move/' + collection_id + '/' + start_index + '/' + $(this).children().index(ui.item);
-				$.get('update-sort.cfm', {fruitOrder:fruitOrder});
 
 				$.ajax({
 				type: "POST",
