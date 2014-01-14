@@ -27,3 +27,5 @@ config/fedora.yml
 Gemfile.lock
 
 vendor/servlet/
+
+.ruby-version
