@@ -77,10 +77,10 @@ module DIL
 				
 				  if vra_type == "image"
 					#create Fedora object for VRA Image, calls method in helper
-					returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
+					returnXml = create_vra_image_fedora_object(pid, rel_pid, document, params[:collection])
 				  elsif vra_type == "work"
 					#create Fedora object for VRA Work, calls method in helper
-					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)	           
+					returnXml = create_vra_work_fedora_object(pid, rel_pid, document, params[:collection])	           
 				  end
 				
 				end     
@@ -98,9 +98,9 @@ module DIL
 				    #if object doesn't exist in Fedora, create the object, then update
 			        #create the object
 				    if vra_type == "image"
-					  returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
+					  returnXml = create_vra_image_fedora_object(pid, rel_pid, document, params[:collection])
 				    elsif vra_type == "work"
-					  returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
+					  returnXml = create_vra_work_fedora_object(pid, rel_pid, document, params[:collection])
 				    end
 				  end
 			    #else
