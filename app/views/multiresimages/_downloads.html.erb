@@ -6,6 +6,7 @@
         <a target="_blank" class="btn" href="<%=DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">Download</a></li>
       </div>
       <hr>
+      <!-- Hide the "Add to Image Group" button if the user is signed out -->
       <% if user_signed_in? %>
         <div id="addToImageGroup">
           <button class="btn" id="addToImageGroupBtn">Add to Image Group</button>
