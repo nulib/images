@@ -67,6 +67,21 @@ class VRADatastream < ActiveFedora::OmDatastream
 		}
 	}
 
+	# editionSet OM definition
+	t.editionSet_ref(:path=>"editionSet", :label=>"Edition", :index_as=>[:searchable]) {
+		t.editionSet_display(:path=>"display", :label=>"display edition", :index_as=>[:searchable])
+		t.edition(:path=>"edition", :label=>"edition", :index_as=>[:searchable]) 
+	}
+
+	# rightsSet OM definition
+	t.rightsSet_ref(:path=>"rightsSet", :label=>"Rights", :index_as=>[:searchable]) {
+		t.rightsSet_display(:path=>"display", :index_as=>[:searchable])
+		t.rights {
+			t.right_content(:path=>'text()', :index_as=>[:searchable])
+			t.rights_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
+		}
+	}
+
 	# materialSet OM definition
 	t.materialSet_ref(:path=>"materialSet", :label=>"Materials", :index_as=>[:searchable]) {
 		t.materialSet_display(:path=>"display", :index_as=>[:searchable])
@@ -214,7 +229,9 @@ class VRADatastream < ActiveFedora::OmDatastream
 		t.locationSet(:ref=>[:locationSet_ref])		
 		t.sourceSet(:ref=>[:sourceSet_ref])		
 		t.subjectSet(:ref=>[:subjectSet_ref])		
-		t.relationSet(:ref=>[:relationSet_ref])		
+		t.relationSet(:ref=>[:relationSet_ref])
+		t.editionSet(:ref=>[:editionSet_ref])
+		t.rightsSet(:ref=>[:rightsSet_ref])		
 	}
 
 	# VRA Work OM definition
@@ -233,7 +250,9 @@ class VRADatastream < ActiveFedora::OmDatastream
 		t.locationSet(:ref=>[:locationSet_ref])		
 		t.sourceSet(:ref=>[:sourceSet_ref])		
 		t.subjectSet(:ref=>[:subjectSet_ref])		
-		t.relationSet(:ref=>[:relationSet_ref])		
+		t.relationSet(:ref=>[:relationSet_ref])
+		t.editionSet(:ref=>[:editionSet_ref])
+		t.rightsSet(:ref=>[:rightsSet_ref])		
 	}
 	
 	t.agentSet_display(:proxy=>[:image, :agentSet, :agentSet_display])
@@ -252,7 +271,8 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.culturalContextSet_display(:proxy=>[:image, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display(:proxy=>[:image, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display(:proxy=>[:image, :sourceSet, :sourceSet_display])
-	
+	t.editionSet_display(:proxy=>[:image, :editionSet, :editionSet_display])
+	t.rightsSet_display(:proxy=>[:image, :rightsSet, :rightsSet_display])
 	
 	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
 	t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
@@ -270,6 +290,8 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display_work(:proxy=>[:work, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display_work(:proxy=>[:work, :sourceSet, :sourceSet_display])
+	t.editionSet_display_work(:proxy=>[:image, :editionSet, :editionSet_display])
+	t.rightsSet_display_work(:proxy=>[:image, :rightsSet, :rightsSet_display])
 
   #t.title(:proxy=>[:work, :titleSet, :titleSet_display]) 
 	
@@ -322,6 +344,11 @@ class VRADatastream < ActiveFedora::OmDatastream
 				xml.display_
 				xml.description
 		   }
+
+		   xml['vra'].editionSet {
+		   	xml.display_
+		   	xml.edition
+		   }
 		   
 		    xml['vra'].inscriptionSet {
 				xml.display_
@@ -334,6 +361,11 @@ class VRADatastream < ActiveFedora::OmDatastream
 				xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
 		   }
 		   
+		   xml['vra'].rightsSet {
+		   	xml.display_
+		   	xml.rights
+		   }
+
 		   xml['vra'].stylePeriodSet {
 				xml.display_
 				xml.stylePeriod
@@ -484,6 +516,16 @@ class VRADatastream < ActiveFedora::OmDatastream
 		hashSet = extract_locationSet
 		search_field << extract_values_for_search_field(hashSet)
 		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval|  oldval | newval }
+
+		#editionSet
+		hashSet = extract_editionSet
+		search_field << extract_values_for_search_filed(hashSet)
+		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval| oldval | newval }
+
+		#rightsSet
+		hashSet = extract_rightsSet
+		search_field << extract_values_for_search_filed(hashSet)
+		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval| oldval | newval }
 		
 		#sourceSet
 		hashSet = extract_sourceSet
@@ -924,6 +966,50 @@ class VRADatastream < ActiveFedora::OmDatastream
 	}
     end
     return subjectSet_array
+  end
+
+    #########################
+  # EDITION SET
+  #
+  # Extracts the editionSet fields and creates Solr::Field objects
+  #
+  # == Returns:
+  # An array of Solr::Field objects
+  def extract_editionSet
+    editionSet_array = {}
+    self.find_by_terms('//vra:editionSet/vra:display').each do |edition_display| 
+      insert_solr_field_value(editionSet_array, "edition_display_tesim", edition_display.text) 
+    end
+
+		# Add a field for each source
+    self.find_by_terms('//vra:editionSet/vra:edition').each do |source| 
+	 	source.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
+		insert_solr_field_value(sourceSet_array, "edition_name_tesim", name.text) 
+	 }
+    end
+    return editionSet_array
+  end
+
+  #########################
+  # RIGHTS SET
+  #
+  # Extracts the editionSet fields and creates Solr::Field objects
+  #
+  # == Returns:
+  # An array of Solr::Field objects
+  def extract_rightsSet
+    rightsSet_array = {}
+    self.find_by_terms('//vra:rightsSet/vra:display').each do |rights_display| 
+      insert_solr_field_value(rightsSet_array, "rights_display_tesim", rights_display.text) 
+    end
+
+		# Add a field for each source
+    self.find_by_terms('//vra:rightsSet/vra:edition').each do |source| 
+	 	source.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
+		insert_solr_field_value(sourceSet_array, "rights_name_tesim", name.text) 
+	 }
+    end
+    return rightsSet_array
   end
 
   #########################
