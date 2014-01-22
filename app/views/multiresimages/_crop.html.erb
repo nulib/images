@@ -1,6 +1,7 @@
 <script type="text/javascript">
 	$(document).ready(function()
 	{
+		// The last parameter hides the crop tool if the image is already a crop, or if the user is logged out
 		CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %>);
 	});
 </script>
