@@ -77,7 +77,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.rightsSet_ref(:path=>"rightsSet", :label=>"Rights", :index_as=>[:searchable]) {
 		t.rightsSet_display(:path=>"display", :index_as=>[:searchable])
 		t.rights {
-			t.right_content(:path=>'text()', :index_as=>[:searchable])
+			t.rights_content(:path=>'text()', :index_as=>[:searchable])
 			t.rights_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		}
 	}
@@ -981,10 +981,10 @@ class VRADatastream < ActiveFedora::OmDatastream
       insert_solr_field_value(editionSet_array, "edition_display_tesim", edition_display.text) 
     end
 
-		# Add a field for each source
-    self.find_by_terms('//vra:editionSet/vra:edition').each do |source| 
-	 	source.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
-		insert_solr_field_value(sourceSet_array, "edition_name_tesim", name.text) 
+		# Add a field for each edition
+    self.find_by_terms('//vra:editionSet/vra:edition').each do |edition| 
+	 	edition.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
+		insert_solr_field_value(editionSet_array, "edition_name_tesim", name.text) 
 	 }
     end
     return editionSet_array
@@ -1003,10 +1003,10 @@ class VRADatastream < ActiveFedora::OmDatastream
       insert_solr_field_value(rightsSet_array, "rights_display_tesim", rights_display.text) 
     end
 
-		# Add a field for each source
-    self.find_by_terms('//vra:rightsSet/vra:edition').each do |source| 
-	 	source.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
-		insert_solr_field_value(sourceSet_array, "rights_name_tesim", name.text) 
+		# Add a field for each rights
+    self.find_by_terms('//vra:rightsSet/vra:edition').each do |rights| 
+	 	rights.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
+		insert_solr_field_value(rightsSet_array, "rights_name_tesim", name.text) 
 	 }
     end
     return rightsSet_array
