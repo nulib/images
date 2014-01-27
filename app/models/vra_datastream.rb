@@ -519,12 +519,12 @@ class VRADatastream < ActiveFedora::OmDatastream
 
 		#editionSet
 		hashSet = extract_editionSet
-		search_field << extract_values_for_search_filed(hashSet)
+		search_field << extract_values_for_search_field(hashSet)
 		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval| oldval | newval }
 
 		#rightsSet
 		hashSet = extract_rightsSet
-		search_field << extract_values_for_search_filed(hashSet)
+		search_field << extract_values_for_search_field(hashSet)
 		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval| oldval | newval }
 		
 		#sourceSet
