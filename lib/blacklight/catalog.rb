@@ -13,7 +13,7 @@ module Blacklight::Catalog
     helper_method :search_action_url
     before_filter :search_session, :history_session
     before_filter :delete_or_assign_search_session_params, :only => :index
-    after_filter :set_additional_search_session_values, :only=>:index
+    after_filter  :set_additional_search_session_values, :only=>:index
 
     # Whenever an action raises SolrHelper::InvalidSolrID, this block gets executed.
     # Hint: the SolrHelper #get_solr_response_for_doc_id method raises this error,
@@ -31,6 +31,11 @@ module Blacklight::Catalog
 
     # get search results from the solr index
     def index
+      
+      # If the user isn't logged in and is doing a facet query on a "private" institutional collection, redirect to login.
+      if !user_signed_in? and params.has_key?("f") and params[:f].has_key?("institutional_collection_title_facet") and !(params[:f][:institutional_collection_title_facet] & DIL_CONFIG["private_institutional_collection_names"]).empty?
+        redirect_to :new_user_session
+      end
       
       extra_head_content << view_context.auto_discovery_link_tag(:rss, url_for(params.merge(:format => 'rss')), :title => t('blacklight.search.rss_feed') )
       extra_head_content << view_context.auto_discovery_link_tag(:atom, url_for(params.merge(:format => 'atom')), :title => t('blacklight.search.atom_feed') )

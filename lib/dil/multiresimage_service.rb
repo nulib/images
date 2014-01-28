@@ -77,7 +77,7 @@ module DIL
 				
 				  if vra_type == "image"
 					#create Fedora object for VRA Image, calls method in helper
-					returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
+					returnXml = create_vra_image_fedora_object(pid, rel_pid, document, params[:collection])
 				  elsif vra_type == "work"
 					#create Fedora object for VRA Work, calls method in helper
 					returnXml = create_vra_work_fedora_object(pid, rel_pid, document)	           
@@ -98,7 +98,7 @@ module DIL
 				    #if object doesn't exist in Fedora, create the object, then update
 			        #create the object
 				    if vra_type == "image"
-					  returnXml = create_vra_image_fedora_object(pid, rel_pid, document)
+					  returnXml = create_vra_image_fedora_object(pid, rel_pid, document, params[:collection])
 				    elsif vra_type == "work"
 					  returnXml = create_vra_work_fedora_object(pid, rel_pid, document)
 				    end
@@ -515,7 +515,7 @@ module DIL
     # The output is output indicating a success.
     # If an exception occurs, the controller will catch it.
 
-    def create_vra_image_fedora_object(pid, rel_pid, document)
+    def create_vra_image_fedora_object(pid, rel_pid, document, collection=nil)
       logger.debug("create_image_method")
       # create new Fedora object with minted pid
       fedora_object = Multiresimage.new({:pid=>pid})
@@ -536,6 +536,11 @@ module DIL
       
       #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
       fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
+      
+      # if this is part of an institutional collection, add that relationship
+      if collection.present?
+        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + DIL_CONFIG["institutional_collection"][collection]["pid"])
+      end
       
       #add rels-ext CModel relationship
       #fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")

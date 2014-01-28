@@ -28,7 +28,7 @@ class LockedObject < ActiveRecord::Base
 private 
   def self.object_locked(pid)
     object_locked = false
-    self.uncached
+    self.uncached do
       if self.exists?(:pid=>pid)
         object_locked = true
       end

@@ -6,13 +6,26 @@
 					  <%# Display sets for work and image %>
 					  <% vraSetArray.each.with_index do |setName, index| %>
 					    <%# Get the preferred work's set value from the VRA datastream.  Using to_sym to covert Strings into Symbols %> 
-					    <% pref_work_display_value = vra_work.VRA.find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
+					    
+					    <%# Added a check for alternate title because it utilizes the same set as title_display %>
+					    <% if(setName == "title_alt") %>
+								<% pref_work_display_value = vra_work.VRA.find_by_terms(:work, ("titleSet").to_sym, (setName + "Set_display").to_sym).text %>
+
+								<% image_display_value = @multiresimage.VRA.find_by_terms(:image, ("titleSet").to_sym, (setName + "Set_display").to_sym).text %>
+
+							<% else %>
+								<% pref_work_display_value = vra_work.VRA.find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %>
+
+								<% image_display_value = @multiresimage.VRA.find_by_terms(:image, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %>
+
+					    <% end %>
+					    
 					    <%# image_display_value = @multiresimage.send((setName + "Set_display").to_sym) %>
 						  <%# unless pref_work_display_value.empty? %>
 							 <tr class="<%= cycle("even", "odd") %>">
 								 <td class="field"><%=vraSetNameArray[index].capitalize%>:</td>
 								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
-								   <% image_display_value = @multiresimage.VRA.find_by_terms(:image, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %> 
+								  
 					               <%= image_display_value %>
 									<%#= [pref_work_display_value, image_display_value].flatten.join(' ; ') %> 
 								 </td>
@@ -21,7 +34,7 @@
 					  <%end%>
 	
 					  <%# Include its identifier (pid) %>
-					  <tr class="even">
+					  <tr class="odd">
 						 <td class="field">Identifier:</td>
 						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%#=vra_work.pid%><%= @multiresimage.pid %></td>
 					  </tr>

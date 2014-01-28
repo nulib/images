@@ -1,15 +1,15 @@
 source 'http://rubygems.org'
 
-  gem 'rails', '3.2.12'
+  gem 'rails', '3.2.13'
   gem 'rack', '1.4.5'
   gem 'json', '1.7.7'
   gem 'blacklight', '4.2'
   gem 'kaminari', '~> 0.13'
   gem 'exception_notification', '3.0.1'
   gem 'ruby-prof'
-  gem 'om', '2.1.2'
+  #gem 'om', '2.1.2'
   #gem 'hydra-access-controls', '0.0.5'
-  gem 'hydra-head', '6.1.1'
+  gem 'hydra-head', '6.4.1'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
   gem 'bootstrap-sass'
@@ -62,4 +62,8 @@ gem 'unicorn', '4.3.1'
 
 group :development do
   gem 'better_errors'
+end
+
+group :production do
+  gem 'google-analytics-rails'
 end
