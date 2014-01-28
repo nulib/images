@@ -8,6 +8,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 		t.titleSet_display(:path=>"display", :label=>"display", :index_as=>[:searchable]) 
 		t.title(:path=>"title", :label=>"title", :index_as=>[:searchable, :displayable]) 
 		t.title_pref(:path=>"title", :attributes=>{:pref=>"true"}, :index_as=>[:searchable]) 
+		t.title_altSet_display(:path=>"title", :attributes=>{:pref=>"false"}, :index_as=>[:searchable, :displayable]) 
 	}
 		
 	# agentSet OM definitions
@@ -63,6 +64,21 @@ class VRADatastream < ActiveFedora::OmDatastream
 			t.stylePeriod_content(:path=>'text()', :index_as=>[:searchable])
 			t.stylePeriod_vocab(:path=>{:attribute =>"vocab"}, :index_as=>[:searchable])
 			t.stylePeriod_refid(:path=>{:attribute =>"refid"}, :index_as=>[:searchable])
+		}
+	}
+
+	# editionSet OM definition
+	t.editionSet_ref(:path=>"editionSet", :label=>"Edition", :index_as=>[:searchable]) {
+		t.editionSet_display(:path=>"display", :label=>"display edition", :index_as=>[:searchable])
+		t.edition(:path=>"edition", :label=>"edition", :index_as=>[:searchable]) 
+	}
+
+	# rightsSet OM definition
+	t.rightsSet_ref(:path=>"rightsSet", :label=>"Rights", :index_as=>[:searchable]) {
+		t.rightsSet_display(:path=>"display", :index_as=>[:searchable])
+		t.rights {
+			t.rights_content(:path=>'text()', :index_as=>[:searchable])
+			t.rights_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
 		}
 	}
 
@@ -213,7 +229,9 @@ class VRADatastream < ActiveFedora::OmDatastream
 		t.locationSet(:ref=>[:locationSet_ref])		
 		t.sourceSet(:ref=>[:sourceSet_ref])		
 		t.subjectSet(:ref=>[:subjectSet_ref])		
-		t.relationSet(:ref=>[:relationSet_ref])		
+		t.relationSet(:ref=>[:relationSet_ref])
+		t.editionSet(:ref=>[:editionSet_ref])
+		t.rightsSet(:ref=>[:rightsSet_ref])		
 	}
 
 	# VRA Work OM definition
@@ -232,11 +250,14 @@ class VRADatastream < ActiveFedora::OmDatastream
 		t.locationSet(:ref=>[:locationSet_ref])		
 		t.sourceSet(:ref=>[:sourceSet_ref])		
 		t.subjectSet(:ref=>[:subjectSet_ref])		
-		t.relationSet(:ref=>[:relationSet_ref])		
+		t.relationSet(:ref=>[:relationSet_ref])
+		t.editionSet(:ref=>[:editionSet_ref])
+		t.rightsSet(:ref=>[:rightsSet_ref])		
 	}
 	
 	t.agentSet_display(:proxy=>[:image, :agentSet, :agentSet_display])
 	t.titleSet_display(:proxy=>[:image, :titleSet, :titleSet_display])
+	t.title_altSet_display(:proxy=>[:image, :titleSet, :title_altSet_display])
 	t.descriptionSet_display(:proxy=>[:image, :descriptionSet, :descriptionSet_display])
 	t.inscriptionSet_display(:proxy=>[:image, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display(:proxy=>[:image, :dateSet, :dateSet_display])
@@ -250,10 +271,12 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.culturalContextSet_display(:proxy=>[:image, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display(:proxy=>[:image, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display(:proxy=>[:image, :sourceSet, :sourceSet_display])
-	
+	t.editionSet_display(:proxy=>[:image, :editionSet, :editionSet_display])
+	t.rightsSet_display(:proxy=>[:image, :rightsSet, :rightsSet_display])
 	
 	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
 	t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
+	t.title_altSet_display_work(:proxy=>[:work, :titleSet, :title_altSet_display])
 	t.descriptionSet_display_work(:proxy=>[:work, :descriptionSet, :descriptionSet_display])
 	t.inscriptionSet_display_work(:proxy=>[:work, :inscriptionSet, :inscriptionSet_display])
 	t.dateSet_display_work(:proxy=>[:work, :dateSet, :dateSet_display])
@@ -267,6 +290,8 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display_work(:proxy=>[:work, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display_work(:proxy=>[:work, :sourceSet, :sourceSet_display])
+	t.editionSet_display_work(:proxy=>[:image, :editionSet, :editionSet_display])
+	t.rightsSet_display_work(:proxy=>[:image, :rightsSet, :rightsSet_display])
 
   #t.title(:proxy=>[:work, :titleSet, :titleSet_display]) 
 	
@@ -319,6 +344,11 @@ class VRADatastream < ActiveFedora::OmDatastream
 				xml.display_
 				xml.description
 		   }
+
+		   xml['vra'].editionSet {
+		   	xml.display_
+		   	xml.edition
+		   }
 		   
 		    xml['vra'].inscriptionSet {
 				xml.display_
@@ -331,6 +361,11 @@ class VRADatastream < ActiveFedora::OmDatastream
 				xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
 		   }
 		   
+		   xml['vra'].rightsSet {
+		   	xml.display_
+		   	xml.rights
+		   }
+
 		   xml['vra'].stylePeriodSet {
 				xml.display_
 				xml.stylePeriod
@@ -346,9 +381,10 @@ class VRADatastream < ActiveFedora::OmDatastream
 				xml.technique
 		   }
 		   
-           xml['vra'].titleSet {
+       xml['vra'].titleSet {
 				xml.display_
 				xml.title(:pref=>"true")
+				xml.title(:pref=>"false")
 		   }
 		   
 		   xml['vra'].worktypeSet {
@@ -369,6 +405,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 		   xml.titleSet {
 				xml.display
 				xml.title(:pref=>"true")
+				xml.title(:pref=>"false")
 		}
 		   xml.agentSet {
 				xml.display
@@ -479,6 +516,16 @@ class VRADatastream < ActiveFedora::OmDatastream
 		hashSet = extract_locationSet
 		search_field << extract_values_for_search_field(hashSet)
 		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval|  oldval | newval }
+
+		#editionSet
+		hashSet = extract_editionSet
+		search_field << extract_values_for_search_field(hashSet)
+		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval| oldval | newval }
+
+		#rightsSet
+		hashSet = extract_rightsSet
+		search_field << extract_values_for_search_field(hashSet)
+		solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval| oldval | newval }
 		
 		#sourceSet
 		hashSet = extract_sourceSet
@@ -576,6 +623,8 @@ class VRADatastream < ActiveFedora::OmDatastream
         end
 
         solr_doc['title_display'] = titleSet_display
+        #solr_doc['title_alternate'] = title_altSet_display
+
       end
 
       # Is this a Work?
@@ -626,21 +675,26 @@ class VRADatastream < ActiveFedora::OmDatastream
   # == Returns:
   # An array of Solr::Field objects
   def extract_titleSet
- 	titleSet_array = {}
+	 	titleSet_array = {}
 
-	# Add the display field for titleSet
+		# Add the display field for titleSet
     self.find_by_terms('//vra:titleSet/vra:display').each do |title_display|
       insert_solr_field_value(titleSet_array, "title_display_tesim", title_display.text)
     end
 
-	# Add a field for each title
+		# Add a field for each title
     self.find_by_terms('//vra:titleSet/vra:title').each do |title| 
-		insert_solr_field_value(titleSet_array, "title_tesim", title.text) 
+			insert_solr_field_value(titleSet_array, "title_tesim", title.text) 
     end
 
-	# Add a field for preferred title
+		# Add a field for preferred title
     self.find_by_terms('//vra:titleSet/vra:title[@pref="true"]').each do |title_pref| 
-		insert_solr_field_value(titleSet_array, "title_pref_tesim", title_pref.text) 
+			insert_solr_field_value(titleSet_array, "title_pref_tesim", title_pref.text) 
+    end
+
+  	# Add a field for alternate title
+    self.find_by_terms('//vra:titleSet/vra:title[@pref="false"]').each do |title_alt| 
+			insert_solr_field_value(titleSet_array, "title_alt_tesim", title_alt.text) 
     end
 
     return titleSet_array
@@ -912,6 +966,50 @@ class VRADatastream < ActiveFedora::OmDatastream
 	}
     end
     return subjectSet_array
+  end
+
+    #########################
+  # EDITION SET
+  #
+  # Extracts the editionSet fields and creates Solr::Field objects
+  #
+  # == Returns:
+  # An array of Solr::Field objects
+  def extract_editionSet
+    editionSet_array = {}
+    self.find_by_terms('//vra:editionSet/vra:display').each do |edition_display| 
+      insert_solr_field_value(editionSet_array, "edition_display_tesim", edition_display.text) 
+    end
+
+		# Add a field for each edition
+    self.find_by_terms('//vra:editionSet/vra:edition').each do |edition| 
+	 	edition.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
+		insert_solr_field_value(editionSet_array, "edition_name_tesim", name.text) 
+	 }
+    end
+    return editionSet_array
+  end
+
+  #########################
+  # RIGHTS SET
+  #
+  # Extracts the editionSet fields and creates Solr::Field objects
+  #
+  # == Returns:
+  # An array of Solr::Field objects
+  def extract_rightsSet
+    rightsSet_array = {}
+    self.find_by_terms('//vra:rightsSet/vra:display').each do |rights_display| 
+      insert_solr_field_value(rightsSet_array, "rights_display_tesim", rights_display.text) 
+    end
+
+		# Add a field for each rights
+    self.find_by_terms('//vra:rightsSet/vra:edition').each do |rights| 
+	 	rights.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name| 
+		insert_solr_field_value(rightsSet_array, "rights_name_tesim", name.text) 
+	 }
+    end
+    return rightsSet_array
   end
 
   #########################

@@ -1,9 +1,14 @@
+# This model represents the images in the application. Images can be a part of user groups and institutional collections.
+# It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
+# The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
+# the institutional collection's permissions.
+
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
   
-  belongs_to :institutional_collection, :class_name=> "InstitutionalCollection", :property=> :is_governed_by
+  belongs_to :institutional_collection, :property=> :is_governed_by
   
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
   has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
@@ -41,11 +46,11 @@ class Multiresimage < ActiveFedora::Base
     m.field 'file_name', :string
   end
   
-  delegate_to :VRA, [:titleSet_display, :agentSet_display, :dateSet_display, 
+  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display, 
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display, 
       :techniqueSet_display, :locationSet_display, :materialSet_display, 
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display, 
-      :worktypeSet_display, :sourceSet_display, :techniqueSet_display], :unique=>true
+      :worktypeSet_display, :sourceSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
 
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
@@ -169,7 +174,21 @@ class Multiresimage < ActiveFedora::Base
   def to_solr(solr_doc = Hash.new, opts={}) 
     solr_doc = super(solr_doc, opts)
     solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
-    solr_doc
+   
+   # If the image "is_governed_by" an InstitutionalCollection object, get that object's unit name and title.
+   # It needs to be indexed (with a facet) with the image. The title and unit name are stored in the 
+   # descMetadata datastream.
+   
+   if self.institutional_collection.present?
+     institutional_collection = InstitutionalCollection.find(self.institutional_collection.pid)
+     unit_name, collection_title = institutional_collection.title.split("|")
+     solr_doc["institutional_collection_unit_ssim"] = unit_name
+     solr_doc["institutional_collection_unit_facet"] = unit_name
+     solr_doc["institutional_collection_title_facet"] = collection_title
+     solr_doc["institutional_collection_title_ssim"] = collection_title
+   end
+   
+   solr_doc
   end
   
   ## Checks if this image is a crop

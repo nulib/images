@@ -5,13 +5,12 @@ class CatalogController < ApplicationController
   # Extend Blacklight::Catalog with Hydra behaviors (primarily editing).
   include Hydra::Controller::ControllerBehavior
   include DIL_Blacklight::SolrHelpers::ObjectTypeFacet
+  include Hydra::PolicyAwareAccessControlsEnforcement
 
-  # These before_filters apply the hydra access controls
-  #before_filter :enforce_access_controls
-  #before_filter :enforce_viewing_context_for_show_requests, :only=>:show
   # This applies appropriate access controls to all solr queries
   self.solr_search_params_logic += [:add_access_controls_to_solr_params]
   self.solr_search_params_logic << :multiresimage_object_type_facet
+  
   configure_blacklight do |config|
     config.default_solr_params = { 
       :qt => 'search',
@@ -53,7 +52,9 @@ class CatalogController < ApplicationController
     config.add_facet_field 'stylePeriod_facet', :label => 'Style/Period', :limit=>5
     config.add_facet_field 'subject_term_facet', :label => 'Subject', :limit=>5 
     config.add_facet_field 'technique_facet', :label => 'Technique' 
-    config.add_facet_field 'worktype_facet', :label => 'Work Type', :limit=>5  
+    config.add_facet_field 'worktype_facet', :label => 'Work Type', :limit=>5
+    config.add_facet_field 'institutional_collection_unit_facet', :label => 'Unit', :limit=>5
+    config.add_facet_field 'institutional_collection_title_facet', :label => 'Institutional Collection', :limit=>5 
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
@@ -86,19 +87,6 @@ class CatalogController < ApplicationController
     config.spell_max = 5
   end
 
-  def apply_superuser_permissions(permission_types)
-    user_access_filters = []
-    if current_user.present?
-      if current_user.admin?
-        permission_types.each do |type|
-          user_access_filters << "#{type}_access_person_tesim:[* TO *]"        
-        end
-      end
-    else
-      redirect_to(root_path)
-    end
-    user_access_filters
-  end
 
 
 end 
