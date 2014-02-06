@@ -1,4 +1,4 @@
-<% if !@collection.nil? && @collection.multiresimages.size > 1 %>
+<% if !@collection.nil? && @collection.multiresimages.size > 1 && !@index.nil? %>
 	<% prev_img = @collection.get_prev_img(@index) %>
 	<% next_img = @collection.get_next_img(@index) %>
 	<div id="photostream" class="photostream">
