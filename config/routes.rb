@@ -26,6 +26,7 @@ DIL::Application.routes.draw do
       get 'create_crop'
       get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
       get 'get_number_of_objects', :defaults => { :format => 'xml' }
+      get 'archival_image_proxy'
     end
     member do
       post 'permissions'
