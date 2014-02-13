@@ -257,8 +257,11 @@ class MultiresimagesController < ApplicationController
 
   def archival_image_proxy
     multiresimage = Multiresimage.find(params[:id])
-    filename = "download.tif"
-    send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename)
+    if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]
+      filename = "download.tif"
+      send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+    end
+    render :nothing => true
   end
   
 end
