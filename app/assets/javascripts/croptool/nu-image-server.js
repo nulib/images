@@ -1,6 +1,6 @@
 /*global $, CoordinateManager, Image */
 
-// Fedora: http://repository.library.northwestern.edu:80/fedora/get/inu:inu-mntb-0005279659-pg-45315359-4fd3-4bf4-af3e-9b7a9a1a81ff/fedora-system:3/viewMethodIndex
+// Fedora: ***REMOVED***
 
 var ImageServer = {};
 
