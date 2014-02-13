@@ -26,7 +26,6 @@ DIL::Application.routes.draw do
       get 'create_crop'
       get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
       get 'get_number_of_objects', :defaults => { :format => 'xml' }
-      get 'archival_image_proxy'
     end
     member do
       post 'permissions'
@@ -47,6 +46,7 @@ DIL::Application.routes.draw do
   match "multiresimages/svg/:id" => "multiresimages#get_svg"
   match "multiresimages/aware_details" => "multiresimages#aware_details"
   match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
+  match "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy", :via => :get
   match "external_search/search_hydra" => "external_search#index"
   match "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
   match "dil_collections/remove/:id/:pid" => "dil_collections#remove"#, :via => :post
