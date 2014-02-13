@@ -254,5 +254,11 @@ class MultiresimagesController < ApplicationController
       send_data(default_image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
     end
   end
+
+  def archival_image_proxy
+    multiresimage = Multiresimage.find(params[:id])
+    filename = "download.tif"
+    send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename)
+  end
   
 end
