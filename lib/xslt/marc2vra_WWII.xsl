@@ -159,12 +159,18 @@
 						<xsl:call-template name="displaySeparator"/>
 					</xsl:for-each>
 				</vra:display>
-        		<vra:date type="creation">
-        			<vra:earliestDate>0000</vra:earliestDate>
-        			<vra:latestDate>0000</vra:latestDate>
-        			</vra:date>
-				<xsl:apply-templates select="marc:datafield[@tag='046']"/>
-				<xsl:apply-templates select="marc:datafield[@tag='648']"/>
+				<xsl:choose>
+					<xsl:when test="marc:datafield[@tag='046'] or marc:datafield[@tag='648']">
+						<xsl:apply-templates select="marc:datafield[@tag='046']"/>
+						<xsl:apply-templates select="marc:datafield[@tag='648']"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<vra:date type="creation">
+							<vra:earliestDate>0000</vra:earliestDate>
+							<vra:latestDate>0000</vra:latestDate>
+						</vra:date>
+					</xsl:otherwise>
+				</xsl:choose>
 			</vra:dateSet>
 		</xsl:if>
 
