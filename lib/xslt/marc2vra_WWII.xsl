@@ -148,14 +148,8 @@
 								<xsl:analyze-string select="." regex="\d\d\d">
 									<xsl:matching-substring>
 										<xsl:value-of select="."/>0s</xsl:matching-substring>
-									<xsl:non-matching-substring>
-<!--										<xsl:value-of select="."/>-->
-									</xsl:non-matching-substring>
 								</xsl:analyze-string>
 							</xsl:matching-substring>
-							<xsl:non-matching-substring>
-								<!-- <xsl:value-of select="."/> -->
-							</xsl:non-matching-substring>
 						</xsl:analyze-string>
 						<xsl:analyze-string select="." regex="\d{{4}}">
 							<xsl:matching-substring>
@@ -163,17 +157,12 @@
 							</xsl:matching-substring>
 						</xsl:analyze-string>
 						<xsl:call-template name="displaySeparator"/>
-						<xsl:call-template name="cleanDate">
-							<xsl:with-param name="val">
-								<!-- <xsl:value-of select="."/> -->
-							</xsl:with-param>
-						</xsl:call-template>
 					</xsl:for-each>
 				</vra:display>
-                                <vra:date type="creation">
-                                  <vra:earliestDate>0000</vra:earliestDate>
-                                  <vra:latestDate>0000</vra:latestDate>
-                                </vra:date>
+        		<vra:date type="creation">
+        			<vra:earliestDate>0000</vra:earliestDate>
+        			<vra:latestDate>0000</vra:latestDate>
+        			</vra:date>
 				<xsl:apply-templates select="marc:datafield[@tag='046']"/>
 				<xsl:apply-templates select="marc:datafield[@tag='648']"/>
 			</vra:dateSet>
