@@ -143,10 +143,29 @@
 				<vra:display>
 					<xsl:for-each
 						select="marc:datafield[@tag='260']/marc:subfield[@code='c']  | marc:datafield[@tag='650']/marc:subfield[@code='y']  | marc:datafield[@tag='651']/marc:subfield[@code='y']">
+						<xsl:analyze-string select="." regex="\d\d\d-\?">
+							<xsl:matching-substring>
+								<xsl:analyze-string select="." regex="\d\d\d">
+									<xsl:matching-substring>
+										<xsl:value-of select="."/>0s</xsl:matching-substring>
+									<xsl:non-matching-substring>
+<!--										<xsl:value-of select="."/>-->
+									</xsl:non-matching-substring>
+								</xsl:analyze-string>
+							</xsl:matching-substring>
+							<xsl:non-matching-substring>
+								<!-- <xsl:value-of select="."/> -->
+							</xsl:non-matching-substring>
+						</xsl:analyze-string>
+						<xsl:analyze-string select="." regex="\d{{4}}">
+							<xsl:matching-substring>
+								<xsl:value-of select="."/>
+							</xsl:matching-substring>
+						</xsl:analyze-string>
 						<xsl:call-template name="displaySeparator"/>
 						<xsl:call-template name="cleanDate">
 							<xsl:with-param name="val">
-								<xsl:value-of select="."/>
+								<!-- <xsl:value-of select="."/> -->
 							</xsl:with-param>
 						</xsl:call-template>
 					</xsl:for-each>
