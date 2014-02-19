@@ -30,14 +30,10 @@
 
 	<xsl:template match="marc:record" mode="work">
 		<vra:work>
-			<!--xsl:attribute name="xml:id">inu:inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"/>_w</xsl:attribute-->
 			<xsl:attribute name="id">inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"
 				/>_w</xsl:attribute>
-			<!--xsl:attribute name="vra:refid">inu:inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"/></xsl:attribute-->
 
 			<!-- Updated by Bill -->
-			<!-- <xsl:attribute name="refid">inu:inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"/></xsl:attribute> -->
-
 			<xsl:choose>
 				<xsl:when test="$pid!=''">
 					<xsl:attribute name="refid">
@@ -56,10 +52,8 @@
 
 	<xsl:template match="marc:record" mode="image">
 		<vra:image>
-			<!--xsl:attribute name="xml:id">inu:inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"/>_w</xsl:attribute-->
 			<xsl:attribute name="id">inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"
 				/>_w</xsl:attribute>
-			<!--xsl:attribute name="vra:refid">inu:inu-dil-<xsl:value-of select="marc:controlfield[@tag='001']"/></xsl:attribute-->
 			<xsl:attribute name="refid">inu:inu-dil-<xsl:value-of
 					select="marc:controlfield[@tag='001']"/></xsl:attribute>
 			<xsl:call-template name="marc2vra"/>
@@ -85,7 +79,6 @@
 			| marc:datafield[@tag='110'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g'] 
 			| marc:datafield[@tag='700'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']
 			| marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']">
-						<!--xsl:if test="position()!=1">;</xsl:if-->
 						<xsl:if test="position()!=1"> ; </xsl:if>
 						<xsl:apply-templates select="." mode="display"/>
 					</xsl:for-each>
@@ -175,7 +168,6 @@
 		
 		<!-- ______________ Location ______________ -->
 		<!-- Always have location because we always have a pid and probably have a bibid -->
-		<!--	<xsl:if test="marc:datafield[@tag='752']/marc:subfield[not(@code='g')] | marc:datafield[@tag='535']/marc:subfield[@code='a' or @code='b' ] "> -->
 		<xsl:call-template name="comment">
 			<xsl:with-param name="comment">Location</xsl:with-param>
 		</xsl:call-template>
@@ -346,7 +338,6 @@
 				<vra:display>
 					<xsl:for-each
 						select="marc:datafield[@tag='773']/marc:subfield[@code='a' or @code='g']">
-						<!--xsl:call-template name="displaySeparator"/-->
 						<xsl:value-of select="."/>
 						<xsl:text> </xsl:text>
 					</xsl:for-each>
@@ -435,7 +426,6 @@
 						<xsl:call-template name="displaySeparator"/>
 
 						<!-- Changed by Bill Parod 1/22/2012 -->
-						<!-- <xsl:apply-templates select="." /> -->
 						<xsl:apply-templates select="." mode="display"/>
 					</xsl:for-each>
 				</vra:display>
@@ -651,21 +641,7 @@
 		If there is only one date and it is preceded by text "d. " (i.e., d. 1956) then it goes in latestDate.
 		-->
 	<xsl:template match="marc:subfield[@code='d']" mode="agent">
-		<!-- <vra:dates type="life">
-	<xsl:choose>
-	<xsl:when test="contains(.,'-')">
-		<xsl:variable name="uno"><xsl:value-of select="substring-before(.,'-')"/></xsl:variable>
-		<xsl:variable name="dos"><xsl:value-of select="substring-after(.,'-')"/></xsl:variable>
-		<xsl:if test="$uno!=''"><vra:earliestDate><xsl:value-of select="$uno"/></vra:earliestDate></xsl:if>
-		<xsl:variable name="theDate"><xsl:call-template name="stripTrailingPeriod"><xsl:with-param name="val"><xsl:value-of select="$dos"/></xsl:with-param></xsl:call-template></xsl:variable>
-		<xsl:if test="$theDate!=''"><vra:latestDate><xsl:value-of select="$theDate"/></vra:latestDate></xsl:if>
-	</xsl:when>
-	<xsl:when test="starts-with(.,'b')"><vra:earliestDate><xsl:value-of select="."/></vra:earliestDate></xsl:when>
-	<xsl:when test="starts-with(.,'d')"><vra:latestDate><xsl:value-of select="."/></vra:latestDate></xsl:when>
-	<xsl:otherwise><vra:earliestDate><xsl:value-of select="."/></vra:earliestDate></xsl:otherwise>
-	</xsl:choose>
-</vra:dates>
--->
+`
 	</xsl:template>
 
 
@@ -1054,9 +1030,6 @@
     <xsl:template match="marc:datafield[@tag='653']/marc:subfield[@code='a']">
         <vra:subject>
             <vra:term type="descriptiveTopic">
-                <!-- commented out subfields, not sure if they're necessary -->
-                <!-- <xsl:apply-templates select="marc:subfield[@code='0']"/> -->
-                <!-- <xsl:apply-templates select="../marc:subfield[@code='2']"/> -->
                 <xsl:call-template name="stripTrailingPeriod">
                     <xsl:with-param name="val">
                         <xsl:value-of select="."/>
@@ -1111,7 +1084,6 @@
 
 
 	<xsl:template name="stripTrailingPeriod">
-		<!--	<xsl:param name="val"/><xsl:analyze-string select="$val" regex="(.+)\.\s*$" flags="i"> -->
 		<xsl:param name="val"/>
 		<xsl:analyze-string select="$val" regex="(.*)\.\s*$" flags="i">
 			<xsl:matching-substring>
@@ -1158,19 +1130,6 @@
 			</xsl:non-matching-substring>
 		</xsl:analyze-string>
 	</xsl:template>
-
-	<xsl:template name="cleanDate">
-		<xsl:param name="val"/>
-		<xsl:analyze-string select="$val" regex="^\[?(\S+?)\]?\s?:?\.?$" flags="i">
-			<xsl:matching-substring>
-				<xsl:value-of select="regex-group(1)"/>
-			</xsl:matching-substring>
-			<xsl:non-matching-substring>
-				<xsl:value-of select="$val"/>
-			</xsl:non-matching-substring>
-		</xsl:analyze-string>
-	</xsl:template>
-
 
 	<xsl:template match="*|text()"/>
 
