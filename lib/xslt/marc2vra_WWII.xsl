@@ -188,7 +188,14 @@
 			</vra:display>
 		    <xsl:for-each select="marc:datafield[@tag='260']/marc:subfield[@code='a']">
 		        <vra:location type="creation">
-		            <xsl:apply-templates select="marc:datafield[@tag='260']/marc:subfield[@code='a']"/>
+		        	<vra:name type="geographic">
+		        		<xsl:call-template name="displaySeparator"/>
+		        		<xsl:call-template name="stripBrackets">
+		        			<xsl:with-param name="val">
+		        				<xsl:apply-templates select="." mode="creation"/>
+		        			</xsl:with-param>
+		        		</xsl:call-template>
+		        	</vra:name>
 		        </vra:location>
 		    </xsl:for-each>
 			<xsl:for-each select="marc:datafield[@tag='752'][marc:subfield/@code!='g']">
@@ -555,7 +562,7 @@
 	<!-- agent -->
 	<xsl:template match="marc:datafield[@tag='100'or @tag='700']">
 		<vra:agent>
-			<vra:name type="personal" vocab="ulan">
+			<vra:name type="personal" vocab="lcnaf">
 				<xsl:apply-templates select="marc:subfield[@code='0']"/>
 				<xsl:call-template name="stripTrailingPeriod">
 					<xsl:with-param name="val">
@@ -604,7 +611,7 @@
 
 	<xsl:template match="marc:datafield[@tag='110' or @tag='710']">
 		<vra:agent>
-			<vra:name type="corporate" vocab="ulan">
+			<vra:name type="corporate" vocab="lcnaf">
 				<xsl:apply-templates select="marc:subfield[@code='0']"/>
 				<xsl:call-template name="stripTrailingPeriod">
 					<xsl:with-param name="val">
@@ -641,7 +648,6 @@
 		If there is only one date and it is preceded by text "d. " (i.e., d. 1956) then it goes in latestDate.
 		-->
 	<xsl:template match="marc:subfield[@code='d']" mode="agent">
-`
 	</xsl:template>
 
 
@@ -856,7 +862,7 @@
     <!-- Publication, Distribution, etc -->
     <xsl:template match="marc:datafield[@tag='260']/marc:subfield[@code='a']">
         <vra:name type="geographic">
-            <xsl:value-of select="marc:subfield[@code='a']"/>
+        	<xsl:value-of select="marc:datafield[@tag='260']/marc:subfield[@code='a']"/>
         </vra:name>
     </xsl:template>
 
