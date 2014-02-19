@@ -3,7 +3,7 @@
 	xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-	<xsl:param name="bibid"/>
+	<xsl:param name="bibid" select="//marc:controlfield[@tag='001']"/>
 	<xsl:param name="pid"/>
 	<xsl:param name="work_pid"/>
 	<xsl:param name="item_pid"/>
@@ -102,62 +102,32 @@
 			</vra:agentSet>
 		</xsl:if>
 
-
-
-		<!-- ______________ Dates ______________ -->
-		<!-- Now getting dates from 046/648; Bill Parod 1/31/2012; Commenting out 260/650/652 usage -->
-		<!--
-	<xsl:if test="marc:datafield[@tag='260']/marc:subfield[@code='c'] | marc:datafield[@tag='650']/marc:subfield[@code='y'] | marc:datafield[@tag='651']/marc:subfield[@code='y']">
-		<xsl:call-template name="comment"><xsl:with-param name="comment">Dates</xsl:with-param></xsl:call-template>
-		<vra:dateSet>
-			<vra:display>
-			<xsl:for-each select="marc:datafield[@tag='260']/marc:subfield[@code='c']  | marc:datafield[@tag='650']/marc:subfield[@code='y']  | marc:datafield[@tag='651']/marc:subfield[@code='y']">
-				<xsl:call-template name="displaySeparator"/>
-				<xsl:call-template name="stripTrailingPeriod"><xsl:with-param name="val"><xsl:value-of select="."/></xsl:with-param></xsl:call-template>
-			</xsl:for-each>
-			</vra:display>
-                        <vra:date type="creation">
-                          <vra:earliestDate>0000</vra:earliestDate>
-                          <vra:latestDate>0000</vra:latestDate>
-                        </vra:date>
-			<xsl:apply-templates select="marc:datafield[@tag='260']/marc:subfield[@code='c']"/>
-			<xsl:apply-templates select="marc:datafield[@tag='650']/marc:subfield[@code='y']"/>
-			<xsl:apply-templates select="marc:datafield[@tag='651']/marc:subfield[@code='y']"/>
-		</vra:dateSet>
-	</xsl:if>
-
--->
-
 		<!-- added by Mike - 3/12/2012-->
 		<xsl:call-template name="addEmptyCulturalContextSet"/>
 		<!-- Mike -->
 
 
 		<xsl:if
-			test="marc:datafield[@tag='046']/marc:subfield[@code='s'] | marc:datafield[@tag='046']/marc:subfield[@code='t'] | marc:datafield[@tag='648']/marc:subfield[@code='s'] | marc:datafield[@tag='648']/marc:subfield[@code='t']
-		| marc:datafield[@tag='260']/marc:subfield[@code='c'] | marc:datafield[@tag='650']/marc:subfield[@code='y'] | marc:datafield[@tag='651']/marc:subfield[@code='y']">
+			test="marc:datafield[@tag='046']/marc:subfield[@code='s'] | marc:datafield[@tag='046']/marc:subfield[@code='t'] | marc:datafield[@tag='260']/marc:subfield[@code='c']">
 			<xsl:call-template name="comment">
 				<xsl:with-param name="comment">Dates</xsl:with-param>
 			</xsl:call-template>
 			<vra:dateSet>
 				<vra:display>
-					<xsl:for-each
-						select="marc:datafield[@tag='260']/marc:subfield[@code='c']  | marc:datafield[@tag='650']/marc:subfield[@code='y']  | marc:datafield[@tag='651']/marc:subfield[@code='y']">
-						<xsl:analyze-string select="." regex="\d\d\d-\?">
-							<xsl:matching-substring>
-								<xsl:analyze-string select="." regex="\d\d\d">
-									<xsl:matching-substring>
-										<xsl:value-of select="."/>0s</xsl:matching-substring>
-								</xsl:analyze-string>
-							</xsl:matching-substring>
-						</xsl:analyze-string>
-						<xsl:analyze-string select="." regex="\d{{4}}">
-							<xsl:matching-substring>
-								<xsl:value-of select="."/>
-							</xsl:matching-substring>
-						</xsl:analyze-string>
-						<xsl:call-template name="displaySeparator"/>
-					</xsl:for-each>
+					<xsl:analyze-string select="marc:datafield[@tag='260']/marc:subfield[@code='c']" regex="\d\d\d-\?">
+						<xsl:matching-substring>
+							<xsl:analyze-string select="." regex="\d\d\d">
+								<xsl:matching-substring>
+									<xsl:value-of select="."/>0s</xsl:matching-substring>
+							</xsl:analyze-string>
+						</xsl:matching-substring>
+					</xsl:analyze-string>
+					<xsl:analyze-string select="marc:datafield[@tag='260']/marc:subfield[@code='c']" regex="\d{{4}}">
+						<xsl:matching-substring>
+							<xsl:value-of select="."/>
+						</xsl:matching-substring>
+					</xsl:analyze-string>
+					<xsl:call-template name="displaySeparator"/>
 				</vra:display>
 				<xsl:choose>
 					<xsl:when test="marc:datafield[@tag='046'] or marc:datafield[@tag='648']">
@@ -776,31 +746,12 @@
 		<vra:earliestDate>
 			<xsl:value-of select="."/>
 		</vra:earliestDate>
-		<!--
-	<xsl:choose>
-		<xsl:when test="contains(.,'/')">
-			<vra:earliestDate><xsl:value-of select="substring-before(.,'/')"/></vra:earliestDate>
-		</xsl:when>
-		<xsl:otherwise>
-			<vra:earliestDate><xsl:value-of select="."/></vra:earliestDate>
-		</xsl:otherwise>
-	</xsl:choose>
--->
 	</xsl:template>
 
 	<xsl:template match="marc:subfield[@code='t']" mode="latestDate">
 		<vra:latestDate>
 			<xsl:value-of select="."/>
 		</vra:latestDate>
-		<!--	<xsl:choose>
-		<xsl:when test="contains(.,'/')">
-			<vra:latestDate><xsl:value-of select="substring-after(.,'/')"/></vra:latestDate>
-		</xsl:when>
-		<xsl:otherwise>
-			<vra:latestDate><xsl:value-of select="."/></vra:latestDate>
-		</xsl:otherwise>
-	</xsl:choose>
--->
 	</xsl:template>
 
 	<!-- description -->
