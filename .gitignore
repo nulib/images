@@ -29,3 +29,4 @@ Gemfile.lock
 vendor/servlet/
 
 .ruby-version
+.rvmrc
