@@ -1,0 +1,173 @@
+defaults: &defaults
+  dil_aware_detail_url: ***REMOVED***
+  dil_aware_tile_url: ***REMOVED***
+  dil_fedora_disseminator: /inu:sdef-image/getWithLongSide?length=
+  dil_fedora_disseminator_thumbnail: /inu:sdef-image/getWithLongSide?length=100
+  dil_fedora_disseminator_collection: /inu:sdef-image/getWithLongSide?length=120
+  dil_fedora_disseminator_ppt: /inu:sdef-image/getWithLongSide?length=
+  dil_uploads_collection: My Uploads
+  dil_details_collection: My Image Details
+  record_lock_sleep_value: 0.5
+  max_nbr_lock_attempts: 90
+  private_institutional_collection_names:
+  - "Digital Image Library"
+  - LOL Cats
+
+  admin_staff:
+  - mcs680
+  - ega505
+  - dzellner
+  - ngf811
+  - jdb246
+  - cfc478
+  - steve
+  - toc171
+  - pac913
+  - bmq449
+  - hms253
+
+  uploaders:
+  - aab509
+  - acg187
+  - amr527
+  - arh001
+  - bfort
+  - bmq449
+  - bpj152
+  - brb384
+  - cab052
+  - cac457
+  - cbl198
+  - cdg010
+  - cfc478
+  - chr447
+  - cjsmith
+  - cka872
+  - ckb393
+  - csw386
+  - cvo804
+  - dac576
+  - dgarrisn
+  - dnp421
+  - dtvz
+  - eab207
+  - eab411
+  - ecb467
+  - efo864
+  - eic992
+  - eme052
+  - fran
+  - frg946
+  - ftr150
+  - hcbin
+  - hgh865
+  - hjf271
+  - hli077
+  - hms253
+  - hnr240
+  - ihc252
+  - jbg686
+  - jdb246
+  - jdl704
+  - jdu329
+  - jeb946
+  - jep765
+  - jmm945
+  - jpm216
+  - jre934
+  - jrl912
+  - jrr907
+  - kat710
+  - kln223
+  - kmt106
+  - kse830
+  - lcg694
+  - lhein
+  - lhein
+  - lmw999
+  - lro809
+  - mab285
+  - matt
+  - mcdough
+  - mcu220
+  - mds145
+  - mmueller
+  - mru828
+  - mwt876
+  - mymble
+  - nam503
+  - ngf811
+  - njh482
+  - pca559
+  - "r-linrothe"
+  - rhs841
+  - rko534
+  - rnl304
+  - sef000
+  - sfe387
+  - sfj455
+  - shc766
+  - skm170
+  - slg989
+  - syc344
+  - tlh217
+  - wnw773
+  - xya998
+
+development:  
+   <<: *defaults
+   dil_fedora_base_ip: 127.0.0.1
+   dil_fedora_port: 8983
+   dil_fedora_url: http://localhost:8983/fedora/get/
+   dil_app_url: https://localhost:3000/
+   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
+   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload-test.cgi
+   institutional_collection:
+     hot dogs:
+       pid: inu:dil-local-7de1cda8-2d3b-4242-bc27-426c4b420a39
+       title: Hot Dogs
+       image_url: /assets/tail_of_the_pup.jpg #/multiresimages/get_image/inu:dil-68f22ef6-f1ab-44dc-b51d-1dd14cb52af5/230
+       solr_url: /catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=Hot+Dogs
+     lol cats:
+       pid: inu:dil-ccbe42d9-2611-487c-a1f6-fc2a6f283250
+       title: LOL Cats*
+       image_url: /assets/cats_and_watermelons.jpg
+       solr_url: /catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=LOL+Cats
+
+test:  
+   <<: *defaults
+   dil_fedora_base_ip: 127.0.0.1
+   dil_fedora_port: 8983
+   dil_fedora_url: http://localhost:8983/fedora-test/get/
+   dil_app_url: https://localhost:3000/
+   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
+   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload-test.cgi
+
+staging:  
+   <<: *defaults
+   dil_fedora_base_ip: 127.0.0.1
+   dil_fedora_port: 8983
+   dil_fedora_url: http://cecil.library.northwestern.edu:8983/fedora/get/
+   dil_app_url: http://cecil.library.northwestern.edu:3000/
+   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
+   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload-test.cgi
+   institutional_collection:
+     "Digital Image Library":
+       pid: inu:dil-local-23655b1f-7029-4fb4-aa10-8ababe0ca63b
+       title: Digital Image Library*
+       image_url: /assets/digital-image-library-thumbnail.jpg
+       solr_url: /catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=Digital+Image+Library
+     "World War II Poster Collection at Northwestern University Library":
+       pid: inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b
+       title: "World War II Poster Collection at Northwestern University Library"
+       image_url: /assets/wwii-posters-thumbnail.jpg
+       solr_url: /catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=World+War+II+Poster+Collection+at+Northwestern+University+Library
+
+production: 
+   <<: *defaults
+   dil_fedora_base_ip: repository.library.northwestern.edu
+   dil_fedora_port: 80
+   dil_fedora_url: http://repository.library.northwestern.edu/fedora/get/
+   dil_app_url: https://images.library.northwestern.edu/
+   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms.cgi
+   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload.cgi
