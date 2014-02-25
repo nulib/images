@@ -1,6 +1,6 @@
 defaults: &defaults
-  dil_aware_detail_url: ***REMOVED***
-  dil_aware_tile_url: ***REMOVED***
+  dil_aware_detail_url: http://awareserver/ImageServer/imageInfo.jsp?filename=/dimages/public/images/
+  dil_aware_tile_url: http://awareserver/ImageServer/tileServer?filename=/dimages/public/images/
   dil_fedora_disseminator: /inu:sdef-image/getWithLongSide?length=
   dil_fedora_disseminator_thumbnail: /inu:sdef-image/getWithLongSide?length=100
   dil_fedora_disseminator_collection: /inu:sdef-image/getWithLongSide?length=120
@@ -14,105 +14,12 @@ defaults: &defaults
   - LOL Cats
 
   admin_staff:
-  - mcs680
-  - ega505
-  - dzellner
-  - ngf811
-  - jdb246
-  - cfc478
-  - steve
-  - toc171
-  - pac913
-  - bmq449
-  - hms253
+  - user1
+  - user2
 
   uploaders:
-  - aab509
-  - acg187
-  - amr527
-  - arh001
-  - bfort
-  - bmq449
-  - bpj152
-  - brb384
-  - cab052
-  - cac457
-  - cbl198
-  - cdg010
-  - cfc478
-  - chr447
-  - cjsmith
-  - cka872
-  - ckb393
-  - csw386
-  - cvo804
-  - dac576
-  - dgarrisn
-  - dnp421
-  - dtvz
-  - eab207
-  - eab411
-  - ecb467
-  - efo864
-  - eic992
-  - eme052
-  - fran
-  - frg946
-  - ftr150
-  - hcbin
-  - hgh865
-  - hjf271
-  - hli077
-  - hms253
-  - hnr240
-  - ihc252
-  - jbg686
-  - jdb246
-  - jdl704
-  - jdu329
-  - jeb946
-  - jep765
-  - jmm945
-  - jpm216
-  - jre934
-  - jrl912
-  - jrr907
-  - kat710
-  - kln223
-  - kmt106
-  - kse830
-  - lcg694
-  - lhein
-  - lhein
-  - lmw999
-  - lro809
-  - mab285
-  - matt
-  - mcdough
-  - mcu220
-  - mds145
-  - mmueller
-  - mru828
-  - mwt876
-  - mymble
-  - nam503
-  - ngf811
-  - njh482
-  - pca559
-  - "r-linrothe"
-  - rhs841
-  - rko534
-  - rnl304
-  - sef000
-  - sfe387
-  - sfj455
-  - shc766
-  - skm170
-  - slg989
-  - syc344
-  - tlh217
-  - wnw773
-  - xya998
+  - user3
+  - user4
 
 development:  
    <<: *defaults
@@ -120,8 +27,8 @@ development:
    dil_fedora_port: 8983
    dil_fedora_url: http://localhost:8983/fedora/get/
    dil_app_url: https://localhost:3000/
-   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
-   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload-test.cgi
+   dil_ppt_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
+   dil_upload_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-upload-test.cgi
    institutional_collection:
      hot dogs:
        pid: inu:dil-local-7de1cda8-2d3b-4242-bc27-426c4b420a39
@@ -140,17 +47,17 @@ test:
    dil_fedora_port: 8983
    dil_fedora_url: http://localhost:8983/fedora-test/get/
    dil_app_url: https://localhost:3000/
-   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
-   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload-test.cgi
+   dil_ppt_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
+   dil_upload_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-upload-test.cgi
 
 staging:  
    <<: *defaults
    dil_fedora_base_ip: 127.0.0.1
    dil_fedora_port: 8983
-   dil_fedora_url: http://cecil.library.northwestern.edu:8983/fedora/get/
-   dil_app_url: http://cecil.library.northwestern.edu:3000/
-   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
-   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload-test.cgi
+   dil_fedora_url: http://fedoraserver:8983/fedora/get/
+   dil_app_url: http://appserver/
+   dil_ppt_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
+   dil_upload_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-upload-test.cgi
    institutional_collection:
      "Digital Image Library":
        pid: inu:dil-local-23655b1f-7029-4fb4-aa10-8ababe0ca63b
@@ -167,7 +74,7 @@ production:
    <<: *defaults
    dil_fedora_base_ip: repository.library.northwestern.edu
    dil_fedora_port: 80
-   dil_fedora_url: http://repository.library.northwestern.edu/fedora/get/
-   dil_app_url: https://images.library.northwestern.edu/
-   dil_ppt_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-export-ppt-jms.cgi
-   dil_upload_cgi_url: http://gandalf.library.northwestern.edu/cgi-bin/hydra/hydra-upload.cgi
+   dil_fedora_url: http://fedoraserver/fedora/get/
+   dil_app_url: https://appserver/
+   dil_ppt_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-export-ppt-jms.cgi
+   dil_upload_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-upload.cgi
