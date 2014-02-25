@@ -71,6 +71,7 @@ class MultiresimagesController < ApplicationController
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
     @page_title = @multiresimage.titleSet_display
+    gon.url = DIL_CONFIG['dil_js_url']
   end
    
   def update
