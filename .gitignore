@@ -30,3 +30,6 @@ vendor/servlet/
 
 .ruby-version
 .rvmrc
+
+config/database.yml
+config/dil-config.yml

@@ -27,6 +27,7 @@ class MultiresimagesController < ApplicationController
 	  source_fedora_object = Multiresimage.find(params[:id])
 	  authorize! :show, source_fedora_object
 	  @svg = source_fedora_object.DELIV_OPS.content()
+    gon.url = DIL_CONFIG['dil_js_url']
     respond_to do |wants|
        wants.xml  { render :xml => @svg }
     end
