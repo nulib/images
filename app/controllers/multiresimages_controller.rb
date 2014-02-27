@@ -259,27 +259,12 @@ class MultiresimagesController < ApplicationController
 
   def archival_image_proxy
     multiresimage = Multiresimage.find(params[:id])
-    
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]
       filename = "download.tif"
-       
-      if can?(:read, multiresimage)
-
-        Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-          resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}")
-
-          if(resp.body.include? "error")
-            image = default_image
-          else
-            image = resp.body
-            filename = "#{params[:id]}.tif"
-          end
-          send_data(image, :disposition=>'inline', :type=>'image/tiff', :filename=>filename)
-        }
-      end
-      #send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+      send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+    else
+      render :nothing => true
     end
-    render :nothing => true
   end
   
 end
