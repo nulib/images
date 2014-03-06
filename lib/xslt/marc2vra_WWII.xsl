@@ -68,19 +68,21 @@
 			test="marc:datafield[@tag='100'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']
 			or marc:datafield[@tag='110'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g'] 
 			or marc:datafield[@tag='700'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']
-			or marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']">
+			or marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']
+			or marc:datafield[@tag='260']/marc:subfield[@code='b']">
 			<xsl:call-template name="comment">
 				<xsl:with-param name="comment">Agents</xsl:with-param>
 			</xsl:call-template>
 			<vra:agentSet>
 				<vra:display>
 					<xsl:for-each
-						select="marc:datafield[@tag='100'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']
-			| marc:datafield[@tag='110'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g'] 
-			| marc:datafield[@tag='700'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']
-			| marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']">
-						<xsl:if test="position()!=1"> ; </xsl:if>
-						<xsl:apply-templates select="." mode="display"/>
+						select="marc:datafield[@tag='260']/marc:subfield[@code='b']
+						| marc:datafield[@tag='100'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q'] 
+						| marc:datafield[@tag='110'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']
+						| marc:datafield[@tag='700'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']
+						| marc:datafield[@tag='710'][marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g'] ">
+						<xsl:call-template name="displaySeparator"/>
+						<xsl:apply-templates select="." mode="display"/>													
 					</xsl:for-each>
 				</vra:display>
 				<xsl:apply-templates
@@ -90,10 +92,24 @@
 				<xsl:apply-templates
 					select="marc:datafield[@tag='700'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']"/>
 				<xsl:apply-templates
-					select="marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']"
-				/>
+					select="marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']"/>
+				<xsl:if test="marc:datafield[@tag='260']/marc:subfield[@code='b']">
+					<vra:agent>
+						<vra:name type="corporate" vocab="lcnaf">
+							<xsl:if test="marc:datafield[@tag='710'][marc:subfield/@code='0']">
+								<xsl:attribute name="refid">
+									<xsl:value-of select="marc:datafield[@tag='710'][marc:subfield/@code='0']"/>
+									
+								</xsl:attribute>							
+							</xsl:if>
+							<xsl:value-of select="marc:datafield[@tag='260']/marc:subfield[@code='b']" />
+						</vra:name>
+					</vra:agent>
+				</xsl:if>		
 			</vra:agentSet>
 		</xsl:if>
+
+
 
 		<!-- added by Mike - 3/12/2012-->
 		<xsl:call-template name="addEmptyCulturalContextSet"/>
@@ -138,29 +154,29 @@
 		</xsl:if>
 
 		<!-- ______________ Description ______________ -->
-    <!-- 505 and 506 added by Brendan, Added 520; 546 notes returned True (Radhi) -->
-<xsl:if test="marc:datafield[@tag='500']/marc:subfield[@code='a'] or marc:datafield[@tag='505']/marc:subfield[@code='a'] or marc:datafield[@tag='520']/marc:subfield[@code='a'] or marc:datafield[@tag='546']/marc:subfield[@code='a']">
-<xsl:call-template name="comment">
-<xsl:with-param name="comment">Description</xsl:with-param>
-</xsl:call-template>
-<vra:descriptionSet>
-<vra:display>
-<xsl:for-each select="marc:datafield[@tag='500']/marc:subfield[@code='a'] | marc:datafield[@tag='505']/marc:subfield[@code='a'] | marc:datafield[@tag='520']/marc:subfield[@code='a'] | marc:datafield[@tag='546']/marc:subfield[@code='a']">
-<xsl:call-template name="displaySeparator"/>
-<xsl:value-of select="."/>
-</xsl:for-each>
-</vra:display>
-<vra:notes>
-<xsl:for-each select="marc:datafield[@tag='500']/marc:subfield[@code='a'] | marc:datafield[@tag='505']/marc:subfield[@code='a'] | marc:datafield[@tag='520']/marc:subfield[@code='a'] | marc:datafield[@tag='546']/marc:subfield[@code='a']">
-<xsl:call-template name="displaySeparator"/>
-<xsl:value-of select="."/>
-</xsl:for-each> 
-</vra:notes>
-<xsl:apply-templates select="marc:datafield[@tag='500']/marc:subfield[@code='a']"/>
-<xsl:apply-templates select="marc:datafield[@tag='505']/marc:subfield[@code='a']"/>
-<xsl:apply-templates select="marc:datafield[@tag='520']/marc:subfield[@code='a']"/>
-</vra:descriptionSet>
-</xsl:if>
+		<!-- 505 and 506 added by Brendan, Added 520; 546 notes returned True (Radhi) -->
+		<xsl:if test="marc:datafield[@tag='500']/marc:subfield[@code='a'] or marc:datafield[@tag='505']/marc:subfield[@code='a'] or marc:datafield[@tag='520']/marc:subfield[@code='a'] or marc:datafield[@tag='546']/marc:subfield[@code='a']">
+			<xsl:call-template name="comment">
+				<xsl:with-param name="comment">Description</xsl:with-param>
+			</xsl:call-template>
+			<vra:descriptionSet>
+				<vra:display>
+					<xsl:for-each select="marc:datafield[@tag='500']/marc:subfield[@code='a'] | marc:datafield[@tag='505']/marc:subfield[@code='a'] | marc:datafield[@tag='520']/marc:subfield[@code='a'] | marc:datafield[@tag='546']/marc:subfield[@code='a']">
+						<xsl:call-template name="displaySeparator"/>
+						<xsl:value-of select="."/>
+					</xsl:for-each>
+				</vra:display>
+				<vra:notes>
+					<xsl:for-each select="marc:datafield[@tag='500']/marc:subfield[@code='a'] | marc:datafield[@tag='505']/marc:subfield[@code='a'] | marc:datafield[@tag='520']/marc:subfield[@code='a'] | marc:datafield[@tag='546']/marc:subfield[@code='a']">
+						<xsl:call-template name="displaySeparator"/>
+						<xsl:value-of select="."/>
+					</xsl:for-each> 
+				</vra:notes>
+				<xsl:apply-templates select="marc:datafield[@tag='500']/marc:subfield[@code='a']"/>
+				<xsl:apply-templates select="marc:datafield[@tag='505']/marc:subfield[@code='a']"/>
+				<xsl:apply-templates select="marc:datafield[@tag='520']/marc:subfield[@code='a']"/>
+			</vra:descriptionSet>
+		</xsl:if>
         
         <!-- added by Mike - 3/12/2012-->
 		<xsl:call-template name="addEmptyInscriptionSet"/>
@@ -174,15 +190,16 @@
 		<vra:locationSet>
 			<vra:display>
 				<xsl:for-each
-				    select="marc:datafield[@tag='260']/marc:subfield[@code='a'] | marc:datafield[@tag='752'][marc:subfield/@code!='g'] | marc:datafield[@tag='535'][marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c']">
+				    select="marc:datafield[@tag='260']/marc:subfield[@code='a'] | marc:datafield[@tag='752'][marc:subfield/@code!='g'] | marc:datafield[@tag='535'][marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c'] ">
 					<xsl:call-template name="displaySeparator"/>
 					<xsl:call-template name="stripBrackets">
 						<xsl:with-param name="val">
 							<xsl:apply-templates select="." mode="display"/>
 						</xsl:with-param>
-					</xsl:call-template>
+					</xsl:call-template>							
 				</xsl:for-each>
-
+				<xsl:if test="marc:datafield[@tag='086'][marc:subfield/@code='a']"> ; U.S. Superintendent of Documents Classification number: <xsl:apply-templates select="marc:datafield[@tag='086'][marc:subfield/@code='a']" mode="display"/>
+				</xsl:if>
 				<xsl:if test="$pid!=''"> ; DIL:<xsl:value-of select="$pid"/></xsl:if>
 				<xsl:if test="$bibid!=''"> ; Voyager:<xsl:value-of select="$bibid"/></xsl:if>
 			</vra:display>
@@ -276,7 +293,10 @@
 		<!-- Work and Image records are created from the same Marc record -->
 		<xsl:variable name="rel_title">
 			<xsl:for-each
-				select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p']">
+				select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p']
+				| marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
+				| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
+				| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
 				<xsl:call-template name="displaySeparator"/>
 				<xsl:apply-templates select="." mode="display"/>
 			</xsl:for-each>
@@ -299,6 +319,7 @@
 					</vra:relation>
 				</vra:relationSet>
 			</xsl:when>
+			
 			<xsl:when test="$work_or_image='work' and $item_pid!=''">
 				<xsl:call-template name="comment">
 					<xsl:with-param name="comment">Relation</xsl:with-param>
@@ -317,7 +338,6 @@
 			</xsl:when>
 			<xsl:otherwise/>
 		</xsl:choose>
-
 
 		<!-- ______________ Rights ______________ -->
 		<!-- added by group 1/14/14-->
@@ -429,7 +449,7 @@
 			<vra:titleSet>
 				<vra:display>
 					<xsl:for-each
-						select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p']">
+						select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p'] | marc:datafield[@tag='246'][marc:subfield/@code='a' or marc:subfield/@code='i']">
 						<xsl:call-template name="displaySeparator"/>
 
 						<!-- Changed by Bill Parod 1/22/2012 -->
@@ -560,7 +580,7 @@
 	</xsl:template>
 
 	<!-- agent -->
-	<xsl:template match="marc:datafield[@tag='100'or @tag='700']">
+	<xsl:template match="marc:datafield[@tag='100' or @tag='700']">
 		<vra:agent>
 			<vra:name type="personal" vocab="lcnaf">
 				<xsl:apply-templates select="marc:subfield[@code='0']"/>
@@ -634,6 +654,24 @@
 			<!-- Mike -->
 		</vra:agent>
 	</xsl:template>
+	
+	<!-- Agent 260$b -->
+	<xsl:template match="marc:datafield[@tag='260'][marc:subfield/@code='b']">
+		<vra:agent>
+			<vra:name type="corporate" vocab="lcnaf">
+				<xsl:if test="marc:datafield[@tag='710'][marc:subfield/@code='0']">
+					<xsl:attribute name="refid">
+						<xsl:value-of select="marc:datafield[@tag='710'][marc:subfield/@code='0']"/>
+					</xsl:attribute>
+				</xsl:if>
+				<xsl:call-template name="stripTrailingPeriod">
+					<xsl:with-param name="val">
+						<xsl:value-of select="marc:datafield[@tag='260'][marc:subfield/@code='b']"/>
+					</xsl:with-param>
+				</xsl:call-template>		
+			</vra:name>
+		</vra:agent>
+	</xsl:template>
 
 	<xsl:template match="marc:subfield[@code='0']">
 		<xsl:attribute name="refid">
@@ -697,11 +735,11 @@
 		</xsl:call-template>
 	</xsl:template>
 
-	<xsl:template match="marc:datafield[@tag='246'][marc:subfield/@code='a']">
+	<xsl:template match="marc:datafield[@tag='246'][marc:subfield/@code='i' or marc:subfield/@code='a']">
 		<vra:title pref="false">
 			<xsl:call-template name="stripTrailingPeriod">
 				<xsl:with-param name="val">
-					<xsl:value-of select="marc:subfield[@code='a']"/>
+					<xsl:value-of select="marc:subfield[@code='i' or @code='a']"/>
 				</xsl:with-param>
 			</xsl:call-template>
 		</vra:title>
