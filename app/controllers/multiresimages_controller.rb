@@ -27,6 +27,7 @@ class MultiresimagesController < ApplicationController
 	  source_fedora_object = Multiresimage.find(params[:id])
 	  authorize! :show, source_fedora_object
 	  @svg = source_fedora_object.DELIV_OPS.content()
+    gon.url = DIL_CONFIG['dil_js_url']
     respond_to do |wants|
        wants.xml  { render :xml => @svg }
     end
@@ -71,6 +72,7 @@ class MultiresimagesController < ApplicationController
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
     @page_title = @multiresimage.titleSet_display
+    gon.url = DIL_CONFIG['dil_js_url']
   end
    
   def update
@@ -260,8 +262,9 @@ class MultiresimagesController < ApplicationController
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]
       filename = "download.tif"
       send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+    else
+      render :nothing => true
     end
-    render :nothing => true
   end
   
 end
