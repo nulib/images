@@ -293,13 +293,19 @@
 		<!-- Work and Image records are created from the same Marc record -->
 		<xsl:variable name="rel_title">
 			<xsl:for-each
-				select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p']
-				| marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
-				| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
-				| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
+				select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p']">
 				<xsl:call-template name="displaySeparator"/>
 				<xsl:apply-templates select="." mode="display"/>
 			</xsl:for-each>
+		</xsl:variable>
+
+		<xsl:variable name="rel_title_wwii">
+				<xsl:for-each select="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
+				| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
+				| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
+					<xsl:call-template name="displaySeparator"/>
+					<xsl:apply-templates select="." mode="display"/>
+				</xsl:for-each>
 		</xsl:variable>
 
 		<xsl:choose>
@@ -310,6 +316,7 @@
 				<vra:relationSet>
 					<vra:display>
 						<xsl:value-of select="$rel_title"/>
+						<xsl:value-of select="$rel_title_wwii"/>
 					</vra:display>
 					<vra:relation pref="true" type="imageOf">
 						<xsl:attribute name="relids">
@@ -317,6 +324,13 @@
 						</xsl:attribute>
 						<xsl:value-of select="$rel_title"/>
 					</vra:relation>
+					<xsl:if test="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
+						| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
+						| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
+						<vra:relation pref="false">
+							<xsl:value-of select="$rel_title_wwii"/>
+						</vra:relation>
+					</xsl:if>
 				</vra:relationSet>
 			</xsl:when>
 			
@@ -327,6 +341,7 @@
 				<vra:relationSet>
 					<vra:display>
 						<xsl:value-of select="$rel_title"/>
+						<xsl:value-of select="$rel_title_wwii"/>
 					</vra:display>
 					<vra:relation pref="true" type="imageIs">
 						<xsl:attribute name="relids">
@@ -334,6 +349,13 @@
 						</xsl:attribute>
 						<xsl:value-of select="$rel_title"/>
 					</vra:relation>
+					<xsl:if test="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
+						| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
+						| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
+						<vra:relation pref="false">
+							<xsl:value-of select="$rel_title_wwii"/>
+						</vra:relation>
+					</xsl:if>
 				</vra:relationSet>
 			</xsl:when>
 			<xsl:otherwise/>
