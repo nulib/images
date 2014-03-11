@@ -83,12 +83,14 @@
 						<xsl:call-template name="displaySeparator"/>
 						<xsl:apply-templates select="." mode="display"/>													
 					</xsl:for-each>
-					<xsl:if test="marc:datafield[@tag='260']/marc:subfield[@code='b']"> ; <xsl:analyze-string select="marc:datafield[@tag='260']/marc:subfield[@code='b']" regex="(,| :|\],)$">
-							<xsl:non-matching-substring>
-								<xsl:value-of select="."/>
-							</xsl:non-matching-substring>
-						</xsl:analyze-string>
-					</xsl:if>
+					<xsl:if test="marc:datafield[@tag='260']/marc:subfield[@code='b']">
+						<xsl:for-each select="marc:datafield[@tag='260']/marc:subfield[@code='b']"> ; <xsl:analyze-string select="." regex="(,| :|\],)$">
+								<xsl:non-matching-substring>
+									<xsl:value-of select="."/>
+								</xsl:non-matching-substring>
+							</xsl:analyze-string>
+						</xsl:for-each>				
+					</xsl:if>	
 				</vra:display>
 				<xsl:apply-templates
 					select="marc:datafield[@tag='100'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']"/>
@@ -98,6 +100,7 @@
 					select="marc:datafield[@tag='700'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='c' or marc:subfield/@code='d' or marc:subfield/@code='g' or marc:subfield/@code='j' or marc:subfield/@code='q']"/>
 				<xsl:apply-templates
 					select="marc:datafield[@tag='710'][marc:subfield/@code='0' or marc:subfield/@code='a' or marc:subfield/@code='b' or marc:subfield/@code='g']"/>
+				
 				<xsl:if test="marc:datafield[@tag='260']/marc:subfield[@code='b']">
 					<vra:agent>
 						<vra:name type="corporate" vocab="lcnaf">
@@ -106,18 +109,22 @@
 									<xsl:value-of select="marc:datafield[@tag='710'][marc:subfield/@code='0']"/>
 								</xsl:attribute>							
 							</xsl:if>
-							<xsl:analyze-string select="marc:datafield[@tag='260']/marc:subfield[@code='b']" regex="(,| :|\],)$">
-								<xsl:non-matching-substring>
-									<xsl:value-of select="."/>
-								</xsl:non-matching-substring>
-							</xsl:analyze-string>
+							<xsl:if test="marc:datafield[@tag='260']/marc:subfield[@code='b']">
+								<xsl:for-each select="marc:datafield[@tag='260']/marc:subfield[@code='b']">
+									<xsl:call-template name="displaySeparator"/>
+									<xsl:analyze-string select="." regex="(,| :|\],)$">
+										<xsl:non-matching-substring>
+											<xsl:value-of select="."/>
+										</xsl:non-matching-substring>
+									</xsl:analyze-string>
+								</xsl:for-each>
+							</xsl:if>
 						</vra:name>
 					</vra:agent>
-				</xsl:if>		
+				</xsl:if>
 			</vra:agentSet>
 		</xsl:if>
-
-
+		
 
 		<!-- added by Mike - 3/12/2012-->
 		<xsl:call-template name="addEmptyCulturalContextSet"/>
