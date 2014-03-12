@@ -271,7 +271,6 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.culturalContextSet_display(:proxy=>[:image, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display(:proxy=>[:image, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display(:proxy=>[:image, :sourceSet, :sourceSet_display])
-	t.relationSet_display(:proxy=>[:image, :relationSet, :relationSet_display])
 	t.editionSet_display(:proxy=>[:image, :editionSet, :editionSet_display])
 	t.rightsSet_display(:proxy=>[:image, :rightsSet, :rightsSet_display])
 	
@@ -291,7 +290,6 @@ class VRADatastream < ActiveFedora::OmDatastream
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display_work(:proxy=>[:work, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display_work(:proxy=>[:work, :sourceSet, :sourceSet_display])
-	t.relationSet_display_work(:proxy=>[:image, :relationSet, :relationSet_display])
 	t.editionSet_display_work(:proxy=>[:image, :editionSet, :editionSet_display])
 	t.rightsSet_display_work(:proxy=>[:image, :rightsSet, :rightsSet_display])
 
