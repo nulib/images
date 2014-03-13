@@ -1,20 +1,4 @@
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim"
-	xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-	<xsl:param name="bibid" select="//marc:controlfield[@tag='001']"/>
-	<xsl:param name="pid"/>
-	<xsl:param name="work_pid"/>
-	<xsl:param name="item_pid"/>
-	<xsl:param name="work_or_image"/>
-
-	<xsl:output method="xml" omit-xml-declaration="no" indent="yes" encoding="utf-8"
-		media-type="text/xml"/>
-
-	<xsl:template match="/">
-		<vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"
-			xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
+/
 			<xsl:choose>
 				<xsl:when test="$work_or_image='image'">
 					<xsl:apply-templates select="//marc:record" mode="image"/>
@@ -316,11 +300,16 @@
 		<xsl:variable name="rel_title_wwii">
 				<xsl:for-each select="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
 				| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
-					<xsl:apply-templates select="." mode="display"/>
+					<xsl:call-template name="displaySeparator"/>
+					<xsl:call-template name="stripTrailingSemicolon">
+						<xsl:with-param name="val">
+							<xsl:value-of select="."/>
+						</xsl:with-param>
+					</xsl:call-template>
 				</xsl:for-each>
 			<!-- <xsl:call-template name="displaySeparator"/> -->
 		</xsl:variable>
-
+		
 		<xsl:choose>
 			<xsl:when test="$work_or_image='image' and $work_pid!=''">
 				<xsl:call-template name="comment">
@@ -480,6 +469,7 @@
 				<vra:display>
 					<xsl:for-each
 						select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p'] | marc:datafield[@tag='246'][marc:subfield/@code='a' or marc:subfield/@code='i']">
+						<xsl:call-template name="stripTrailingForwardSlash"/>
 						<xsl:call-template name="displaySeparator"/>
 
 						<!-- Changed by Bill Parod 1/22/2012 -->
@@ -1169,7 +1159,7 @@
 	
 	<xsl:template name="stripTrailingForwardSlash">
 		<xsl:param name="val"/>
-		<xsl:analyze-string select="$val" regex="(.*)\s/$" flags="i">
+		<xsl:analyze-string select="$val" regex="(.*)\s/\s*$" flags="i">
 			<xsl:matching-substring>
 				<xsl:value-of select="regex-group(1)"/>
 			</xsl:matching-substring>
@@ -1182,6 +1172,18 @@
 	<xsl:template name="stripTrailingColon">
 		<xsl:param name="val"/>
 		<xsl:analyze-string select="$val" regex="(.*)\s:\s*$" flags="i">
+			<xsl:matching-substring>
+				<xsl:value-of select="regex-group(1)"/>
+			</xsl:matching-substring>
+			<xsl:non-matching-substring>
+				<xsl:value-of select="$val"/>
+			</xsl:non-matching-substring>
+		</xsl:analyze-string>
+	</xsl:template>
+	
+	<xsl:template name="stripTrailingSemicolon">
+		<xsl:param name="val"/>
+		<xsl:analyze-string select="$val" regex="(.*)\s;\s*$" flags="i">
 			<xsl:matching-substring>
 				<xsl:value-of select="regex-group(1)"/>
 			</xsl:matching-substring>
