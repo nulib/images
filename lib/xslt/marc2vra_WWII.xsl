@@ -1,4 +1,20 @@
-/
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim"
+	xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<xsl:param name="bibid" select="//marc:controlfield[@tag='001']"/>
+	<xsl:param name="pid"/>
+	<xsl:param name="work_pid"/>
+	<xsl:param name="item_pid"/>
+	<xsl:param name="work_or_image"/>
+
+	<xsl:output method="xml" omit-xml-declaration="no" indent="yes" encoding="utf-8"
+		media-type="text/xml"/>
+
+	<xsl:template match="/">
+		<vra:vra xmlns:vra="http://www.vraweb.org/vracore4.htm"
+			xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
 			<xsl:choose>
 				<xsl:when test="$work_or_image='image'">
 					<xsl:apply-templates select="//marc:record" mode="image"/>
