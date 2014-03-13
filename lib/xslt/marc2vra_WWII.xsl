@@ -341,7 +341,6 @@
 						</xsl:attribute>
 					</vra:relation>
 					<xsl:if test="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
-						| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
 						| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
 						<vra:relation pref="false">
 							<xsl:value-of select="$rel_title_wwii"/>
