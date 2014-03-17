@@ -316,11 +316,16 @@
 		<xsl:variable name="rel_title_wwii">
 				<xsl:for-each select="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
 				| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
-					<xsl:apply-templates select="." mode="display"/>
+					<xsl:call-template name="displaySeparator"/>
+					<xsl:call-template name="stripTrailingSemicolon">
+						<xsl:with-param name="val">
+							<xsl:value-of select="."/>
+						</xsl:with-param>
+					</xsl:call-template>
 				</xsl:for-each>
 			<!-- <xsl:call-template name="displaySeparator"/> -->
 		</xsl:variable>
-
+		
 		<xsl:choose>
 			<xsl:when test="$work_or_image='image' and $work_pid!=''">
 				<xsl:call-template name="comment">
@@ -336,7 +341,6 @@
 						</xsl:attribute>
 					</vra:relation>
 					<xsl:if test="marc:datafield[@tag='440']/marc:subfield[@code='a' or @code='v']
-						| marc:datafield[@tag='490']/marc:subfield[@code='a' or @code='v']
 						| marc:datafield[@tag='830']/marc:subfield[@code='a' or @code='v']">
 						<vra:relation pref="false">
 							<xsl:value-of select="$rel_title_wwii"/>
@@ -480,6 +484,7 @@
 				<vra:display>
 					<xsl:for-each
 						select="marc:datafield[@tag='245'][marc:subfield/@code='a' or marc:subfield/@code='p'] | marc:datafield[@tag='246'][marc:subfield/@code='a' or marc:subfield/@code='i']">
+						<xsl:call-template name="stripTrailingForwardSlash"/>
 						<xsl:call-template name="displaySeparator"/>
 
 						<!-- Changed by Bill Parod 1/22/2012 -->
@@ -1169,7 +1174,7 @@
 	
 	<xsl:template name="stripTrailingForwardSlash">
 		<xsl:param name="val"/>
-		<xsl:analyze-string select="$val" regex="(.*)\s/$" flags="i">
+		<xsl:analyze-string select="$val" regex="(.*)\s/\s*$" flags="i">
 			<xsl:matching-substring>
 				<xsl:value-of select="regex-group(1)"/>
 			</xsl:matching-substring>
@@ -1182,6 +1187,18 @@
 	<xsl:template name="stripTrailingColon">
 		<xsl:param name="val"/>
 		<xsl:analyze-string select="$val" regex="(.*)\s:\s*$" flags="i">
+			<xsl:matching-substring>
+				<xsl:value-of select="regex-group(1)"/>
+			</xsl:matching-substring>
+			<xsl:non-matching-substring>
+				<xsl:value-of select="$val"/>
+			</xsl:non-matching-substring>
+		</xsl:analyze-string>
+	</xsl:template>
+	
+	<xsl:template name="stripTrailingSemicolon">
+		<xsl:param name="val"/>
+		<xsl:analyze-string select="$val" regex="(.*)\s;\s*$" flags="i">
 			<xsl:matching-substring>
 				<xsl:value-of select="regex-group(1)"/>
 			</xsl:matching-substring>
