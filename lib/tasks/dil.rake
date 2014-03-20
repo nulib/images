@@ -1,4 +1,5 @@
 
+
 namespace :dil do
 
   desc "DIL Continuous Integration build"
@@ -16,6 +17,8 @@ namespace :dil do
     raise "test failures: #{error}" if error
 
   end
+
+
   desc "DIL Repository Cleaner"
   task :clean_repo => :environment do
     ENV["RAILS_ENV"] ||= 'test'
@@ -33,6 +36,8 @@ namespace :dil do
         #nop - index is out of synch with repository. Try solrizing
       end
   end
+
+
   desc "DIL Collections read_groups_string set to registered"
   task :read_access_on_all_collections => :environment do
     begin
@@ -50,8 +55,24 @@ namespace :dil do
     end
   end
 
+
   desc "Creates test data"
-  task :create_test_data do
-    ENV["RAILS_ENV"] || "dev"
+  task :create_test_data => :environment do
+    require 'rest_client'
+
+    ENV["RAILS_ENV"] ||= "development"
+    pids = ["inu:dil-4d013cb3-19ad-46f3-8106-f38ff78541bb"]
+
+    pids.each do |pid|
+      puts "About to connect to fedora!"
+      puts "http://cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/datastreams/VRA/content"
+      puts response = RestClient.get("http://cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/datastreams/VRA/content")
+    end
+
+
+    # figure out how to query cecil's api so it returns this image
+
   end
 end
+
+# come up with an array of pids? hit the production api to grab
