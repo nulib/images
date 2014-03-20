@@ -4,7 +4,7 @@ namespace :dil do
   desc "DIL Continuous Integration build"
   task :ci do
     Rake::Task['db:migrate'].invoke
-    
+
     require 'jettywrapper'
     jetty_params = Jettywrapper.load_config.merge({:jetty_home => File.expand_path(File.dirname(__FILE__) + '/../../jetty')})
     Rake::Task['jetty:config'].invoke
@@ -14,7 +14,7 @@ namespace :dil do
       Rake::Task['spec'].invoke
     end
     raise "test failures: #{error}" if error
-    
+
   end
   desc "DIL Repository Cleaner"
   task :clean_repo => :environment do
@@ -48,5 +48,10 @@ namespace :dil do
       puts "An error was encountered attempting to make Collections set to registered. #{e.message}"
       puts "Aborting this task."
     end
+  end
+
+  desc "Creates test data"
+  task :create_test_data do
+    ENV["RAILS_ENV"] || "dev"
   end
 end
