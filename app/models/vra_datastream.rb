@@ -278,7 +278,8 @@ set_terminology do |t|
 	t.sourceSet_display(:proxy=>[:image, :sourceSet, :sourceSet_display])
 	t.editionSet_display(:proxy=>[:image, :editionSet, :editionSet_display])
 	t.rightsSet_display(:proxy=>[:image, :rightsSet, :rightsSet_display])
-
+	t.relationSet_display(:proxy=>[:image, :relationSet, :relationSet_display])
+	
 	t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
 	t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
 	t.title_altSet_display_work(:proxy=>[:work, :titleSet, :title_altSet_display])
@@ -295,8 +296,9 @@ set_terminology do |t|
 	t.culturalContextSet_display_work(:proxy=>[:work, :culturalContextSet, :culturalContextSet_display])
 	t.techniqueSet_display_work(:proxy=>[:work, :techniqueSet, :techniqueSet_display])
 	t.sourceSet_display_work(:proxy=>[:work, :sourceSet, :sourceSet_display])
-	t.editionSet_display_work(:proxy=>[:image, :editionSet, :editionSet_display])
-	t.rightsSet_display_work(:proxy=>[:image, :rightsSet, :rightsSet_display])
+	t.editionSet_display_work(:proxy=>[:work, :editionSet, :editionSet_display])
+	t.rightsSet_display_work(:proxy=>[:work, :rightsSet, :rightsSet_display])
+	t.relationSet_display_work(:proxy=>[:work, :relationSet, :relationSet_display])
 
   #t.title(:proxy=>[:work, :titleSet, :titleSet_display])
 
@@ -313,120 +315,119 @@ set_terminology do |t|
 
 
 	# Generates new VRA datastream
-  def self.xml_template
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.vra("xmlns"=>"http://www.vraweb.org/vracore4.htm", "xmlns:vra"=>"http://www.vraweb.org/vracore4.htm",
-		  "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance",
-      "xsi:schemaLocation"=>"http://www.loc.gov/standards/vracore/vra.xsd") {
-        xml.parent.namespace = xml.parent.namespace_definitions.find{|ns|ns.prefix=="vra"}
+    def self.xml_template
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.vra("xmlns"=>"http://www.vraweb.org/vracore4.htm", "xmlns:vra"=>"http://www.vraweb.org/vracore4.htm",
+		   "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance",
+           "xsi:schemaLocation"=>"http://www.loc.gov/standards/vracore/vra.xsd") {
+           xml.parent.namespace = xml.parent.namespace_definitions.find{|ns|ns.prefix=="vra"}
+           
+           xml['vra'].image(:refid=>""){
+           
+           xml['vra'].agentSet {
+				xml.display_
+				xml.agent {
+				 xml.name
+				 xml.attribution
+			    }
+		   }
+		   
+		   xml['vra'].culturalContextSet {
+				xml.display_
+		   }
+		   
+		   xml['vra'].dateSet {
+				xml.display_ {
+				  xml.date{
+		            xml.dateContent
+                    xml.dateType(:type=>"")
+                    xml.earliestDate
+                    xml.latestDate
+                  }
+				}
+		   }
+		   
+		    xml['vra'].descriptionSet {
+				xml.display_
+				xml.description
+		   }
 
-        xml['vra'].image(:refid=>"") {
-          xml['vra'].agentSet {
-			      xml.display_
-			      xml.agent {
-		          xml.name
-		          xml.attribution
-	          }
-	        }
-
-	        xml['vra'].culturalContextSet {
-			      xml.display_
-	        }
-
-	        xml['vra'].dateSet {
-			      xml.display_ {
-			        xml.date {
-	              xml.dateContent
-                xml.dateType(:type=>"")
-                xml.earliestDate
-                xml.latestDate
-              }
-			      }
-	        }
-
-	        xml['vra'].descriptionSet {
-			      xml.display_
-			      xml.description
-	        }
-
-	        xml['vra'].editionSet {
-		  	    xml.display_
-		  	    xml.edition
-	        }
-
-	        xml['vra'].inscriptionSet {
-			      xml.display_
-			      xml.inscription
-	        }
-
-
-    		  xml['vra'].relationSet {
+		   xml['vra'].editionSet {
+		   	xml.display_
+		   	xml.edition
+		   }
+		   
+		    xml['vra'].inscriptionSet {
+				xml.display_
+				xml.inscription
+		   }
+		   
+		   
+		xml['vra'].relationSet {
       			xml.display_
       			xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
     		  }
+ 
+		   xml['vra'].rightsSet {
+		   	xml.display_
+		   	xml.rights
+		   }
 
-    		  xml['vra'].rightsSet {
-    		  	xml.display_
-    		  	xml.rights
-    		  }
+		   xml['vra'].stylePeriodSet {
+				xml.display_
+				xml.stylePeriod
+		   }
+		   
+		   xml['vra'].subjectSet {
+				xml.display_
+				xml.subject
+		   }
+		   
+		   xml['vra'].techniqueSet {
+				xml.display_
+				xml.technique
+		   }
+		   
+       xml['vra'].titleSet {
+				xml.display_
+				xml.title(:pref=>"true")
+				xml.title(:pref=>"false")
+		   }
+		   
+		   xml['vra'].worktypeSet {
+				xml.display_
+				xml.worktype
+		   }
+		
+		 }
+		}
+      end
+      return builder.doc
+    end    
 
-    		  xml['vra'].stylePeriodSet {
-      			xml.display_
-      			xml.stylePeriod
-    		  }
-
-      	  xml['vra'].subjectSet {
-      		  xml.display_
-      		  xml.subject
-      	  }
-
-    		  xml['vra'].techniqueSet {
-    			  xml.display_
-    			  xml.technique
-    		  }
-
-          xml['vra'].titleSet {
-    				xml.display_
-    				xml.title(:pref=>"true")
-    				xml.title(:pref=>"false")
-    		  }
-
-    		  xml['vra'].worktypeSet {
-    				xml.display_
-    				xml.worktype
-    		  }
-	      }
-		  }
-    end
-    return builder.doc
-  end
-
-
-	  # Generates VRA Image
-  def self.image_template item
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.image(:xmlns=>"http://www.vraweb.org/vracore4.htm") {
-		    xml.titleSet {
-				  xml.display
-				  xml.title(:pref=>"true")
-				  xml.title(:pref=>"false")
-		    }
-
-        xml.agentSet {
-				  xml.display
-		    }
-
-        xml.relationSet {
-				  xml.display
-				  xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
-		    }
-      }
-    end
-    return builder.doc
-  end
-
-  # Inserts a new vra_image
-  def insert_image(parms)
+	# Generates VRA Image
+    def self.image_template item
+      builder = Nokogiri::XML::Builder.new do |xml|
+        xml.image(:xmlns=>"http://www.vraweb.org/vracore4.htm") {
+		   xml.titleSet {
+				xml.display
+				xml.title(:pref=>"true")
+				xml.title(:pref=>"false")
+		}
+		   xml.agentSet {
+				xml.display
+		}
+		   xml.relationSet {
+				xml.display
+				xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
+		   }
+        }
+      end
+      return builder.doc
+    end    
+    
+      # Inserts a new vra_image
+    def insert_image(parms)
 	  node = Hydra::VRAImage.image_template({:title => parms[:title]}).root()
 	  nodeset = self.find_by_terms(:vra)
 
