@@ -25,6 +25,7 @@ class Vrawork  < ActiveFedora::Base
   delegate :descriptionSet_display_work, :to=>:VRA, :unique=>true
   delegate :subjectSet_display_work, :to=>:VRA, :unique=>true
   delegate :culturalContextSet_display_work, :to=>:VRA, :unique=>true
+  delegate :relationSet_display_work, :to=>:VRA, :unique=>true
   #delegate :ref_id, :to=>:VRA, :unique=>true
 
   # The xml_template uses the vra:image tags when creating the vra work

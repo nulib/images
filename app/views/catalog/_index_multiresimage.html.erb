@@ -2,7 +2,7 @@
   <div id="images">
     <ul>
      <% if !document[:id].nil? %>
-       <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><a href="/multiresimages/<%=document[:id]%>"><img src="<%= DIL_CONFIG['dil_app_url']%>multiresimages/get_image/<%= document[:id]%>/120"/></a>
+       <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>"><a href="/multiresimages/<%=document[:id]%>"><img src="/multiresimages/get_image/<%= document[:id]%>/120"/></a>
       <% end %>
      </li>
    </ul>
