@@ -90,6 +90,19 @@ namespace :dil do
         puts "About to try and create this xml locally"
 
         RestClient.post("https://localhost:3000/multiresimages/create_update_fedora_object", response)
+
+        # maybe try creating the datastream first?
+        # pid, ds_name, ds_label
+        #RestClient.post("https://localhost:3000/multiresimages/add_datastream", :pid => pid, :ds_name => "DELIV_IMG", :ds_label => "test" )
+
+        # pid, ds_name, ds_label, ds_location, mime_type
+        RestClient.post("https://localhost:3000/multiresimages/add_external_datastream", :pid => pid, :ds_name => "DELIV_IMG", :ds_label => "test", :ds_location => "https://localhost:3000/assets/c09.jpg", :mime_type => "image/jpeg" )
+
+
+        # delete the record
+        RestClient.post("https://localhost:3000/multiresimages/delete_fedora_object", :pid => pid )
+
+
       rescue Exception => e
         puts "Error!!!!! #{e}"
       end
