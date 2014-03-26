@@ -59,14 +59,41 @@ namespace :dil do
   desc "Creates test data"
   task :create_test_data => :environment do
     require 'rest_client'
+    require 'nokogiri'
 
     ENV["RAILS_ENV"] ||= "development"
-    pids = ["inu:dil-4d013cb3-19ad-46f3-8106-f38ff78541bb"]
+
+    # first pid is work, second is image
+    pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01"]
 
     pids.each do |pid|
       puts "About to connect to fedora!"
-      puts "http://cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/datastreams/VRA/content"
-      puts response = RestClient.get("http://cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/datastreams/VRA/content")
+
+      # exception handling
+      begin
+        response = RestClient.get("http://cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/datastreams/VRA/content")
+
+        # check the response. if it's an image, get it's associated work and try to create that first
+        # then create image.
+        document = Nokogiri::XML(response)
+
+        related = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@type")
+        puts related.to_s
+        if related.to_s == "imageOf" # this means that this is the work and can just be created
+          puts "Creating the work for the image..."
+          work_pid = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@relids").to_s  # look up the work and create that first   # if it's an image, we need to grab it's rel pid and look that up before we can create the image
+          puts "Work pid for the image: #{work_pid}"
+          work_vra = RestClient.get("http://cecil.library.northwestern.edu:8983/fedora/objects/#{work_pid}/datastreams/VRA/content")
+          RestClient.post("https://localhost:3000/multiresimages/create_update_fedora_object", work_vra)
+        end
+
+        puts "About to try and create this xml locally"
+
+        RestClient.post("https://localhost:3000/multiresimages/create_update_fedora_object", response)
+      rescue Exception => e
+        puts "Error!!!!! #{e}"
+      end
+      # maybe put the test images in the project repo? and then change the VRA (or the arcv_img datastream?) location to point to the local repo?
     end
 
 
