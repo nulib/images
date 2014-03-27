@@ -645,10 +645,16 @@ module DIL
         #needs updated syntax
         #new_ds = ActiveFedora::Datastream.new(:dsID=>ds_name, :dsLabel=>ds_label, :controlGroup=>"E", :dsLocation=>ds_location, :mimeType=>mime_type)
         #fedora_object.add_datastream(new_ds)
-        fedora_object.datastreams[ds_name].dsLabel=ds_label
-        fedora_object.datastreams[ds_name].dsLocation=ds_location
-        fedora_object.datastreams[ds_name].mimeType=mime_type
-        fedora_object.datastreams[ds_name].controlGroup='E'
+
+        fedora_object.send(ds_name).dsLabel = ds_label
+        fedora_object.send(ds_name).dsLocation = ds_location
+        fedora_object.send(ds_name).mimeType = mime_type
+        fedora_object.send(ds_name).controlGroup='E'
+
+        #fedora_object.datastreams[ds_name].dsLabel=ds_label
+        #fedora_object.datastreams[ds_name].dsLocation=ds_location
+        #fedora_object.datastreams[ds_name].mimeType=mime_type
+        #fedora_object.datastreams[ds_name].controlGroup='E'
       #end
 
       #save Fedora object
