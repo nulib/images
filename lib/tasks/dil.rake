@@ -64,7 +64,11 @@ namespace :dil do
     ENV["RAILS_ENV"] ||= "development"
 
 
-    pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01"]
+    pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
+            "inu:dil-fbdabadb-8b07-4dfd-b7b6-3459eb03d96b",
+            "inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
+            "inu:dil-531d05be-f1c4-4c59-8f51-e1a06c44b44b",
+            "inu:dil-4320ca2c-0f3a-42ce-9079-013f377374ca"]
 
     pids.each do |pid|
 
