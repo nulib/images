@@ -63,7 +63,6 @@ namespace :dil do
 
     ENV["RAILS_ENV"] ||= "development"
 
-
     pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
             "inu:dil-fbdabadb-8b07-4dfd-b7b6-3459eb03d96b",
             "inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
@@ -103,7 +102,7 @@ namespace :dil do
 
         mime_type = obj_doc.xpath("/foxml:digitalObject/foxml:datastream[@ID='DELIV-IMG']/foxml:datastreamVersion/@MIMETYPE").to_s
         puts "Mime type: #{mime_type}"
-        label = mime_type = obj_doc.xpath("/foxml:digitalObject/foxml:datastream[@ID='DELIV-IMG']/foxml:datastreamVersion/@LABEL").to_s
+        label = obj_doc.xpath("/foxml:digitalObject/foxml:datastream[@ID='DELIV-IMG']/foxml:datastreamVersion/@LABEL").to_s
         puts "Label: #{label}"
         location = obj_doc.xpath("/foxml:digitalObject/foxml:datastream[@ID='DELIV-IMG']/foxml:datastreamVersion/foxml:contentLocation/@REF").to_s
         puts "Location: #{location}"
