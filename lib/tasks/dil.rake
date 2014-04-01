@@ -62,19 +62,30 @@ namespace :dil do
     require 'nokogiri'
 
     ENV["RAILS_ENV"] ||= "development"
+    ENV["environment"] ||= "staging"
+
+    LOCAL_FEDORA = YAML.load_file(Rails.root.join('config', 'fedora.yml'))[Rails.env]
+    REMOTE_FEDORA = YAML.load_file(Rails.root.join('config', 'fedora.yml'))[ENV["environment"]]
+
+    REMOTE_DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[ENV["environment"]]
 
     pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
             "inu:dil-fbdabadb-8b07-4dfd-b7b6-3459eb03d96b",
             "inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
             "inu:dil-531d05be-f1c4-4c59-8f51-e1a06c44b44b",
             "inu:dil-4320ca2c-0f3a-42ce-9079-013f377374ca"]
+            
+    fedora_url = REMOTE_DIL_CONFIG["dil_fedora_url"].gsub(/\/get/,"")
 
     pids.each do |pid|
 
       begin
         # Grab the VRA for this pid from staging.
-        response = RestClient.get("http://cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/datastreams/VRA/content")
+        response = RestClient.get("#{fedora_url}objects/#{pid}/datastreams/VRA/content")
         document = Nokogiri::XML(response)
+
+        rels_ext_response = RestClient.get("#{fedora_url}objects/#{pid}/datastreams/RELS-EXT/content")
+        rels_ext = Nokogiri::XML(rels_ext_response)
 
         # This checks to see if the fedora object is a 'work' or an 'image'. If it's an image, we will query the associated work
         # and make sure the work is created locally before the image is created. Otherwise the local fedora will flip out
@@ -85,19 +96,20 @@ namespace :dil do
           puts "Creating the work for the image..."
           work_pid = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@relids").to_s
           puts "Work pid for the image: #{work_pid}"
-          work_vra = RestClient.get("http://cecil.library.northwestern.edu:8983/fedora/objects/#{work_pid}/datastreams/VRA/content")
-          RestClient.post("https://localhost:3000/multiresimages/create_update_fedora_object", work_vra)
+          work_vra = RestClient.get("#{fedora_url}objects/#{work_pid}/datastreams/VRA/content")
+          RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", work_vra)
           puts "Work has been created locally!"
         end
 
         # Now create the actual local record for the image VRA
         puts "Creating local fedora object using remote VRA..."
-        RestClient.post("https://localhost:3000/multiresimages/create_update_fedora_object", response)
+        RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", response)
         puts "Local object created successfully!"
 
         # Grab the remote objectXML and parse through it for information about the deliv-img datastream and use that to create a local external datastream in fedora
         puts "Querying remote DELIV-IMG data..."
-        obj_xml = RestClient.get("http://#{DIL_CONFIG["dil_fedora_username"]}:#{DIL_CONFIG["dil_fedora_password"]}@cecil.library.northwestern.edu:8983/fedora/objects/#{pid}/objectXML")
+        # inserting the Fedora user:password between the protocol and the server ex. http://fedoraAdmin:fedoraAdmin@server.tld/objects/pid/objectXML
+        obj_xml = RestClient.get("#{fedora_url.gsub(/\/\//, "//#{REMOTE_FEDORA["user"]}:#{REMOTE_FEDORA["password"]}@")}objects/#{pid}/objectXML")
         obj_doc = Nokogiri::XML(obj_xml)
 
         mime_type = obj_doc.xpath("/foxml:digitalObject/foxml:datastream[@ID='DELIV-IMG']/foxml:datastreamVersion/@MIMETYPE").to_s
@@ -108,11 +120,11 @@ namespace :dil do
         puts "Location: #{location}"
 
 
-        RestClient.post("https://localhost:3000/multiresimages/add_external_datastream", :pid => pid, :ds_name => "DELIV-IMG", :ds_label => label, :ds_location => location, :mime_type => mime_type )
+        RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/add_external_datastream", :pid => pid, :ds_name => "DELIV-IMG", :ds_label => label, :ds_location => location, :mime_type => mime_type )
 
 
         # delete the record. this is just here in case you want to delete a local fedora record while you're testing
-        #RestClient.get("https://localhost:3000/multiresimages/delete_fedora_object?pid=#{pid}" )
+        #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{pid}" )
 
 
       rescue Exception => e
