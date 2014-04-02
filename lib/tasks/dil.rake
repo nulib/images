@@ -64,7 +64,6 @@ namespace :dil do
     ENV["RAILS_ENV"] ||= "development"
     ENV["environment"] ||= "staging"
 
-    LOCAL_FEDORA = YAML.load_file(Rails.root.join('config', 'fedora.yml'))[Rails.env]
     REMOTE_FEDORA = YAML.load_file(Rails.root.join('config', 'fedora.yml'))[ENV["environment"]]
 
     REMOTE_DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[ENV["environment"]]
@@ -74,7 +73,9 @@ namespace :dil do
             "inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
             "inu:dil-531d05be-f1c4-4c59-8f51-e1a06c44b44b",
             "inu:dil-4320ca2c-0f3a-42ce-9079-013f377374ca"]
-            
+
+    work_pids = []
+
     fedora_url = REMOTE_DIL_CONFIG["dil_fedora_url"].gsub(/\/get/,"")
 
     pids.each do |pid|
@@ -84,27 +85,28 @@ namespace :dil do
         response = RestClient.get("#{fedora_url}objects/#{pid}/datastreams/VRA/content")
         document = Nokogiri::XML(response)
 
-        rels_ext_response = RestClient.get("#{fedora_url}objects/#{pid}/datastreams/RELS-EXT/content")
-        rels_ext = Nokogiri::XML(rels_ext_response)
+        # Create the work first, fedora won't throw a ActiveFedora::ObjectNotFoundError:Unable to find 'inu:dil-dabce2f5-3a95-4072-9916-be9e21fd56cc' in fedora. See logger for details.
+        # which seems to be nicer
+        work_pid = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@relids").to_s
+        work_vra = RestClient.get("#{fedora_url}objects/#{work_pid}/datastreams/VRA/content")
+        RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", work_vra)
+        puts "Work has been created locally!"
 
-        # This checks to see if the fedora object is a 'work' or an 'image'. If it's an image, we will query the associated work
-        # and make sure the work is created locally before the image is created. Otherwise the local fedora will flip out
-        related = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@type")
-
-        # If this conditional is true, it means that we need to look up the work and create that first
-        if related.to_s == "imageOf"
-          puts "Creating the work for the image..."
-          work_pid = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@relids").to_s
-          puts "Work pid for the image: #{work_pid}"
-          work_vra = RestClient.get("#{fedora_url}objects/#{work_pid}/datastreams/VRA/content")
-          RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", work_vra)
-          puts "Work has been created locally!"
-        end
-
-        # Now create the actual local record for the image VRA
-        puts "Creating local fedora object using remote VRA..."
+        # Create the image
+        puts "Creating local fedora image object using remote VRA..."
         RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", response)
-        puts "Local object created successfully!"
+        puts "Local image object created successfully!"
+
+        # For some reason the DIL api doesn't create a relation between the work and image, so we're doing that manually here
+        img = Multiresimage.find(pid)
+        work = Vrawork.find(work_pid)
+
+        img.add_relationship(:is_image_of, "info:fedora/#{work_pid}")
+        img.save
+
+        work.add_relationship(:has_image, "info:fedora/#{pid}")
+        work.save
+
 
         # Grab the remote objectXML and parse through it for information about the deliv-img datastream and use that to create a local external datastream in fedora
         puts "Querying remote DELIV-IMG data..."
@@ -122,13 +124,21 @@ namespace :dil do
 
         RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/add_external_datastream", :pid => pid, :ds_name => "DELIV-IMG", :ds_label => label, :ds_location => location, :mime_type => mime_type )
 
+        # check to see if response.code == 200 !
+        #puts "Querying remote RELS-EXT data..."
+        #rels_ext = Nokogiri::XML(RestClient.get("#{fedora_url}objects/#{pid}/datastreams/RELS-EXT/content")).to_s.gsub(/\n/, "")
+
+        #puts rels_ext
+        #RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/add_datastream", :pid => pid, :ds_name => "RELS-EXT", :ds_label => "Fedora Object-to-Object Relationship Metadata", :xml => rels_ext)
+        #puts "RELS-EXT added successfully!"
 
         # delete the record. this is just here in case you want to delete a local fedora record while you're testing
         #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{pid}" )
+        #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{work_pid}" )
 
 
       rescue Exception => e
-        puts "Error!!!!! #{e}"
+        puts "Error!!!!! #{e.message}"
       end
     end
 
