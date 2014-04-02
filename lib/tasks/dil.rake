@@ -89,12 +89,12 @@ namespace :dil do
         # which seems to be nicer
         work_pid = document.xpath("/vra:vra/vra:image/vra:relationSet/vra:relation/@relids").to_s
         work_vra = RestClient.get("#{fedora_url}objects/#{work_pid}/datastreams/VRA/content")
-        RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", work_vra)
+        puts RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", work_vra)
         puts "Work has been created locally!"
 
         # Create the image
         puts "Creating local fedora image object using remote VRA..."
-        RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", response)
+        puts RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/create_update_fedora_object", response)
         puts "Local image object created successfully!"
 
         # For some reason the DIL api doesn't create a relation between the work and image, so we're doing that manually here
@@ -121,20 +121,16 @@ namespace :dil do
         location = obj_doc.xpath("/foxml:digitalObject/foxml:datastream[@ID='DELIV-IMG']/foxml:datastreamVersion/foxml:contentLocation/@REF").to_s
         puts "Location: #{location}"
 
+        puts RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/add_external_datastream", :pid => pid, :ds_name => "DELIV-IMG", :ds_label => label, :ds_location => location, :mime_type => mime_type )
 
-        RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/add_external_datastream", :pid => pid, :ds_name => "DELIV-IMG", :ds_label => label, :ds_location => location, :mime_type => mime_type )
 
-        # check to see if response.code == 200 !
-        #puts "Querying remote RELS-EXT data..."
-        #rels_ext = Nokogiri::XML(RestClient.get("#{fedora_url}objects/#{pid}/datastreams/RELS-EXT/content")).to_s.gsub(/\n/, "")
-
-        #puts rels_ext
-        #RestClient.post("#{DIL_CONFIG["dil_app_url"]}multiresimages/add_datastream", :pid => pid, :ds_name => "RELS-EXT", :ds_label => "Fedora Object-to-Object Relationship Metadata", :xml => rels_ext)
-        #puts "RELS-EXT added successfully!"
+        # I know this save seems random, but saving the image again forces solr to reindex and makes the images show up in DIL
+        img.save
 
         # delete the record. this is just here in case you want to delete a local fedora record while you're testing
         #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{pid}" )
         #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{work_pid}" )
+
 
 
       rescue Exception => e
