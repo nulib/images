@@ -56,6 +56,12 @@ namespace :dil do
   end
 
 
+  pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
+          "inu:dil-fbdabadb-8b07-4dfd-b7b6-3459eb03d96b",
+          "inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
+          "inu:dil-531d05be-f1c4-4c59-8f51-e1a06c44b44b",
+          "inu:dil-4320ca2c-0f3a-42ce-9079-013f377374ca"]
+
   desc "Creates test data"
   task :create_test_data => :environment do
     require 'rest_client'
@@ -68,11 +74,6 @@ namespace :dil do
 
     REMOTE_DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[ENV["environment"]]
 
-    pids = ["inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
-            "inu:dil-fbdabadb-8b07-4dfd-b7b6-3459eb03d96b",
-            "inu:dil-b908eafe-c8c1-43bd-8b4b-b0456d495e01",
-            "inu:dil-531d05be-f1c4-4c59-8f51-e1a06c44b44b",
-            "inu:dil-4320ca2c-0f3a-42ce-9079-013f377374ca"]
 
     work_pids = []
 
@@ -127,16 +128,30 @@ namespace :dil do
         # I know this save seems random, but saving the image again forces solr to reindex and makes the images show up in DIL
         img.save
 
-        # delete the record. this is just here in case you want to delete a local fedora record while you're testing
-        #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{pid}" )
-        #RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{work_pid}" )
-
-
-
+        
       rescue Exception => e
         puts "Error!!!!! #{e.message}"
       end
     end
+  end
 
+
+
+  desc "Removes local test data that was created by dil:create_test_data"
+  task :delete_test_data => :environment do
+    require 'rest_client'
+
+    pids.each do |pid|
+      begin
+        # Pull up the image and find it's related work
+        img = Multiresimage.find(pid)
+        work_pid = img.related_ids.first
+
+        RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{pid}" )
+        RestClient.get("#{DIL_CONFIG["dil_app_url"]}multiresimages/delete_fedora_object?pid=#{work_pid}" )
+      rescue Exception => e
+        puts "Exception on pid: #{pid} with error message: #{e.message}"
+      end
+    end
   end
 end
