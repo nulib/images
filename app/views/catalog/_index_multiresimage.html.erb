@@ -13,10 +13,12 @@
   <!-- Display the checkbox for batch-select -->
   <!-- If checked in the session, show as checked -->
   <% #Added :autocomplete => "off" to fix firefix specific checkbox issue on searches %>
-  <% if session[:batch_select_ids].present? and session[:batch_select_ids].include? ("#{document[:id]}")  %>
-    <%= check_box_tag "batch_select_#{document[:id]}", "1", "checked", :autocomplete => "off" %>
-  <% else %>
-    <%= check_box_tag "batch_select_#{document[:id]}", "0", false, :autocomplete => "off" %>
+  <% if user_signed_in? %>
+    <% if session[:batch_select_ids].present? and session[:batch_select_ids].include? ("#{document[:id]}")  %>
+      <%= check_box_tag "batch_select_#{document[:id]}", "1", "checked", :autocomplete => "off" %>
+    <% else %>
+      <%= check_box_tag "batch_select_#{document[:id]}", "0", false, :autocomplete => "off" %>
+    <% end %>
   <% end %>
 
   <%#= batch_edit_select(document) %>
