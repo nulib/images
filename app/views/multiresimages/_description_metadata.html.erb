@@ -11,7 +11,7 @@
 					    <% if(setName == "title_alt") %>
 								<% pref_work_display_value = vra_work.VRA.find_by_terms(:work, ("titleSet").to_sym, (setName + "Set_display").to_sym).text %>
 
-								<% image_display_value = @multiresimage.VRA.find_by_terms(:image, ("titleSet").to_sym, (setName + "Set_display").to_sym).text %>
+								<% image_display_value = @multiresimage.VRA.find_by_terms(:image, ("titleSet").to_sym, (setName + "Set_display").to_sym).to_a.join( ' ; ' ) %>
 
 							<% else %>
 								<% pref_work_display_value = vra_work.VRA.find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %>
