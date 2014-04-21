@@ -5,7 +5,7 @@
     <h3>Image Groups</h3>
     <%= form_for DILCollection.new do |f| %>
       <%= f.label "Create new image group:"%>
-      <%= f.text_field :title, :placeholder => "New group name..." %>
+      <%= f.text_field :title, :placeholder => "New group name...", :id => 'new_dil_collection_title' %>
     <% end %>
     <br/>
     <!-- Each collection row is a JQuery UI droppable -->
