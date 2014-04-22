@@ -394,6 +394,12 @@ $(document).ready(function(){
   });//end ajax
      
   }));
+
+  // Edit image group name toggle show form
+  $('.edit_dil_collection').hide();
+  $('#rename_image_group_link').on('click', function(){
+    $('.edit_dil_collection').slideToggle();
+  });
   
   
 });
