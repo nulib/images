@@ -32,11 +32,15 @@ class DilCollectionsController < ApplicationController
       eligible = current_user.owned_groups.map(&:code)
       @collection.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
     end
-    @collection.update_attributes(params[:dil_collection])
-    if @collection.save
-      flash[:notice] = "Saved changes to #{@collection.title}"
+    if params[:dil_collection][:title].downcase == DIL_CONFIG['dil_uploads_collection'].downcase || params[:dil_collection][:title].downcase == DIL_CONFIG['dil_details_collection'].downcase
+      flash[:alert] = "Cannot use that collection name. That name is reserved."
     else
-      flash[:alert] = "Failed to save your changes!"
+      @collection.update_attributes(params[:dil_collection])
+      if @collection.save
+        flash[:notice] = "Saved changes to #{@collection.title}"
+      else
+        flash[:alert] = "Failed to save your changes!"
+      end
     end
     redirect_to dil_collection_path(@collection)
   end

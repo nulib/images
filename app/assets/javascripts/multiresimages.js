@@ -290,7 +290,7 @@ $(function() {
 
 //JQuery tooltip for batch_select checkboxes
 $(function() {
-  $("input[id='dil_collection_title']").attr('title', 'Create a new collection by entering the name.  You can then drag-and-drop images to it.').tooltip();
+  $("input[id='new_dil_collection_title']").attr('title', 'Create a new collection by entering the name.  You can then drag-and-drop images to it.').tooltip();
 });
 
 //When a user clicks the checkbox for batch selecting images
@@ -394,6 +394,12 @@ $(document).ready(function(){
   });//end ajax
      
   }));
+
+  // Edit image group name toggle show form
+  $('.edit_dil_collection').hide();
+  $('#rename_image_group_link').on('click', function(){
+    $('.edit_dil_collection').slideToggle();
+  });
   
   
 });

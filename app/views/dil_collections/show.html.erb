@@ -24,10 +24,14 @@
 <% end %>
 
   <% if @collection.members %>
-   <h2 class="section-title"><%=@collection.datastreams["descMetadata"].find_by_terms(:title).text()%></h2>
-   <p>Number of images in collection: <%= @collection.members.find_by_terms(:mods).count %></p>
-     <%= render :partial => 'dil_collections/members' %>
-   <% end %>
+    <h2><%=@collection.title %> <button id="rename_image_group_link" class="btn"><i class="icon-pencil"></i></button></h2>
+    <%= form_for @collection do |f| %>
+      <%= f.text_field :title, :placeholder => "New group name...", :id => 'dil_collection_title' %>
+      <%= f.submit "Update", :class => "btn" %>
+    <% end %>
+    <p>Number of images in collection: <%= @collection.members.find_by_terms(:mods).count %></p>
+    <%= render :partial => 'dil_collections/members' %>
+    <% end %>
 </div>
 
 <div class="modal-collection"></div>

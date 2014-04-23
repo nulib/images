@@ -446,3 +446,15 @@ html, body {
     li.span1:nth-child(12n + 13) { margin-left : 0px; }
   }
 }
+
+#accordion div, button, p, form {
+  padding: 0.5em 0;
+}
+
+#dil_collection_title {
+  margin-bottom: 0;
+}
+
+.edit_dil_collection {
+  display: none;  
+}
