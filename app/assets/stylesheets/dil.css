@@ -447,8 +447,8 @@ html, body {
   }
 }
 
-#accordion div, button, p, form {
-  padding: 0.5em 0;
+#accordion button, p, form {
+  padding: 0.5em;
 }
 
 #dil_collection_title {
