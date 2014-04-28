@@ -11,5 +11,7 @@
 
   <p>Use the search box, or browse using the terms on the left side or clicking on the representative thumbnails to discover images.</p>
 
-  <p>Some images are only available to Northwestern faculty, students and staff. Login with your Northwestern NetID and password to search and browse through both publicly available and NU only content. Collections marked with an asterisk (*) are only available when you <%= link_to 'sign in', new_user_session_path %> with your Northwestern NetID and password.</p>
+  <% unless current_user %>
+    <p>Some images are only available to Northwestern faculty, students and staff. Login with your Northwestern NetID and password to search and browse through both publicly available and NU only content. Collections marked with an asterisk (*) are only available when you <%= link_to 'sign in', new_user_session_path %> with your Northwestern NetID and password.</p>
+  <% end %>
 </div>
