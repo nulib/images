@@ -170,9 +170,22 @@ class MultiresimagesController < ApplicationController
       #add the detail to the detail collection
       personal_collection_search_result = current_user.get_details_collection
       DILCollection.add_image_to_personal_collection(personal_collection_search_result, DIL_CONFIG['dil_details_collection'], new_image, current_user.user_key)
+
+      # get the dil_collection pid from the referer
+      if request.referer =~ /dil_collections/
+        url_array = request.referer.split( '/' )
+        dil_collections_index = url_array.find_index( 'dil_collections' )
+
+        # get the dil_collection
+        dil_collection = DILCollection.find( url_array[ dil_collections_index + 1 ] )
+        # insert the detail if the current user is the collection owner
+        dil_collection.insert_member( new_image ) if dil_collection.owner == current_user.uid
+      end
+
     ensure
       LockedObject.release_lock(params[:pid])
     end
+
     respond_to do |wants|
       wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }
       wants.xml  { render :inline =>'<success pid="'+ new_image.pid + '"/>' }
