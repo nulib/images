@@ -532,7 +532,14 @@ module DIL
 
       # if this is part of an institutional collection, add that relationship
       if collection.present?
-        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + DIL_CONFIG["institutional_collection"][collection]["pid"])
+        # Set up default institutional collection pid as being "Digital Image Library"
+        institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+
+        if DIL_CONFIG["institutional_collection"][collection]
+          institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
+        end
+
+        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + DIL_CONFIG["institutional_collection"][institutional_collection_pid]["pid"])
       end
 
       #add rels-ext CModel relationship
