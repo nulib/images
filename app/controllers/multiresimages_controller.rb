@@ -180,15 +180,18 @@ class MultiresimagesController < ApplicationController
         dil_collection = DILCollection.find( url_array[ dil_collections_index + 1 ] )
         # insert the detail if the current user is the collection owner
         dil_collection.insert_member( new_image ) if dil_collection.owner == current_user.uid
+        dil_collection_url = "/dil_collections/#{ dil_collection.pid }/#{ new_image.pid }"
       end
 
     ensure
       LockedObject.release_lock(params[:pid])
     end
 
+    destination_url = dil_collection_url || "/multiresimages/" + new_image.pid
+
     respond_to do |wants|
       wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }
-      wants.xml  { render :inline =>'<success pid="'+ new_image.pid + '"/>' }
+      wants.xml  { render :inline =>'<success pid="'+ destination_url + '"/>' }
     end
   end
   
@@ -201,7 +204,7 @@ class MultiresimagesController < ApplicationController
   #   @multiresimage.save
   #   redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/permissions_updated_flash', :locals => { :asset => @multiresimage }).html_safe
   # end
- 
+
   def updatecrop
     image_id = params[:id]
     
