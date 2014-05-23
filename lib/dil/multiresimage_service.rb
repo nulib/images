@@ -539,7 +539,7 @@ module DIL
           institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
         end
 
-        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + DIL_CONFIG["institutional_collection"][institutional_collection_pid]["pid"])
+        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
       end
 
       #add rels-ext CModel relationship
