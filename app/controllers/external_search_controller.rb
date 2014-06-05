@@ -27,7 +27,7 @@ class ExternalSearchController < CatalogController
         returnXml = "<response><returnCode>403</returnCode></response>"
         
         # only requests from these IP addresses are allowed
-	    if !request.remote_ip.nil? and !request.remote_ip.empty? and (request.remote_ip == "129.105.203.30" or request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.19.60" or request.remote_ip == "129.105.19.59")
+	    if !request.remote_ip.nil? and !request.remote_ip.empty? and (request.remote_ip == "129.105.203.30" or request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.19.60" or request.remote_ip == "129.105.19.59" or request.remote_ip == "129.105.238.233")
 	    
 	      if !params[:q].nil? and !params[:q].empty?
 		    #archivist1 sign in
