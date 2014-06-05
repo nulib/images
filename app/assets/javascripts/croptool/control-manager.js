@@ -514,7 +514,7 @@ ControlManager.initialize = function ()
 
 		var createFunction = function(event)
 		{
-			if (confirm("Create a new crop using current viewport?"))
+			if (confirm("Create a new image detail using the current viewport?\n\nAll image details will be placed in 'My Image Details'.\nIf the image was opened from an Image Group the detail will also be placed there."))
 				PersistenceManager.requestNewCrop();
 		};
 	
