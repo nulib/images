@@ -16,7 +16,7 @@ module DIL
         returnXml = "<response><returnCode>403</returnCode></response>"
         #if request is coming from these IP's, all other ip's will return with the 403 error xml)
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
   		  #update returnXml (this is the error xml, will be updated if success)
   			returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
 
@@ -148,7 +148,7 @@ module DIL
         #default return xml
         returnXml = "<response><returnCode>403</returnCode></response>"
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
 		      #update returnXml (this is the error xml, will be updated if success)
           returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
           #read in the xml from the POST request
@@ -188,7 +188,7 @@ module DIL
         #default return xml
         returnXml = "<response><returnCode>403</returnCode></response>"
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
 			    #update returnXml (this is the error xml, will be updated if success)
 			    returnXml = "<response><returnCode>Error: The object was not saved.</returnCode><pid/></response>"
 
@@ -230,7 +230,7 @@ module DIL
         #default return xml
         returnXml = "<response><returnCode>403</returnCode></response>"
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
 
           #update returnXml (this is the error xml, will be updated if success)
           returnXml = "<response><returnCode>Error: The object was not deleted.</returnCode><pid/></response>"
@@ -273,7 +273,7 @@ module DIL
 
         returnXml = "<response><returnCode>403</returnCode></response>"
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
 
     			#update returnXml (this is the error xml, will be updated if success)
     			returnXml = "<response><returnCode>Error: The object was not cloned.</returnCode><pid/></response>"
@@ -348,7 +348,7 @@ module DIL
 
         return_xml = "<response><returnCode>403</returnCode></response>"
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
 
     			#update returnXml (this is the error xml, will be updated if success)
     			return_xml = "<response><returnCode>Error: Could not find object. Accession Number: #{params[:accessionNbr]}</returnCode><pid/></response>"
@@ -415,7 +415,7 @@ module DIL
 
         return_xml = "<response><returnCode>403</returnCode></response>"
 
-        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1")
+        if request.remote_ip.present? and (request.remote_ip == "129.105.203.122" or request.remote_ip == "129.105.203.236" or request.remote_ip == "129.105.203.30" or request.remote_ip == "127.0.0.1" or request.remote_ip == "129.105.238.233")
 
     			#update returnXml (this is the error xml, will be updated if success)
     			return_xml = "<response><returnCode>Error: Could not find object. Accession Number: #{params[:accessionNbr]}</returnCode><pid/></response>"
