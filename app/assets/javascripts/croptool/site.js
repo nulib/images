@@ -60,5 +60,5 @@ Site.catalogPathForPid = function(pid)
 
 Site.multiresimagePathForPid = function(pid)
 {
-	return "/multiresimages/" + pid;
+	return pid;
 };
