@@ -157,7 +157,7 @@
    <!-- FIXME: generally, facet fields are not stored -->
    <dynamicField name="*_facet" type="string" indexed="true" stored="true" multiValued="true" />
    <dynamicField name="*_display" type="string" indexed="false" stored="true" multiValued="true" />
-   <dynamicField name="*_dil" type="string" indexed="true" stored="true" multiValued="true" />
+   <dynamicField name="*_dil" type="string" indexed="true" stored="true" multiValued="false" />
 
 
   </fields>
