@@ -80,8 +80,8 @@ class CatalogController < ApplicationController
     config.add_sort_field 'score desc, title_dil asc', :label => 'relevance'
     config.add_sort_field 'date_dil asc, title_dil asc', :label => 'date asc'
     config.add_sort_field 'date_dil desc, title_dil asc', :label => 'date desc'
-    config.add_sort_field 'author_dil asc, title_dil asc', :label => 'author asc'
-    config.add_sort_field 'author_dil desc, title_dil asc', :label => 'author desc'
+    config.add_sort_field 'agent_dil asc, title_dil asc', :label => 'author asc'
+    config.add_sort_field 'agent_dil desc, title_dil asc', :label => 'author desc'
 
     config.add_sort_field 'title_dil asc, date_dil asc', :label => 'title asc'
     config.add_sort_field 'title_dil desc, date_dil asc', :label => 'title desc'
