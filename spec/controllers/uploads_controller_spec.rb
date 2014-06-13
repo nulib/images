@@ -73,8 +73,8 @@ describe UploadsController do
       @img2.save
       UploadFile.create(:pid=>'pid:one', :user=>@user)
       UploadFile.create(:pid=>'pid:two', :user=>@user)
-      ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'm-stroming@northwestern.edu').and_return(req1)
-      ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'm-stroming@northwestern.edu').and_return(req2)
+      ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:one', :email => 'edgar-garcia@northwestern.edu').and_return(req1)
+      ImageProcessingRequest.should_receive(:create!).with(:status => 'NEW', :pid=>'pid:two', :email => 'edgar-garcia@northwestern.edu').and_return(req2)
       sign_in @user
       post :enqueue, :titleSet_display=>"The title"
     end
