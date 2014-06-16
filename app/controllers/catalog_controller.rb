@@ -77,14 +77,14 @@ class CatalogController < ApplicationController
     # label in pulldown is followed by the name of the SOLR field to sort by and
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case).
-    config.add_sort_field 'score desc, title_dil asc', :label => 'relevance'
-    config.add_sort_field 'date_dil asc, title_dil asc', :label => 'date asc'
-    config.add_sort_field 'date_dil desc, title_dil asc', :label => 'date desc'
-    config.add_sort_field 'agent_dil asc, title_dil asc', :label => 'author asc'
-    config.add_sort_field 'agent_dil desc, title_dil asc', :label => 'author desc'
+    config.add_sort_field 'score desc, title_dil asc', :label => 'Relevance'
+    config.add_sort_field 'date_dil asc, title_dil asc', :label => 'Date Asc'
+    config.add_sort_field 'date_dil desc, title_dil asc', :label => 'Date Desc'
+    config.add_sort_field 'agent_dil asc, title_dil asc', :label => 'Creator A-Z'
+    config.add_sort_field 'agent_dil desc, title_dil asc', :label => 'Creator Z-A'
 
-    config.add_sort_field 'title_dil asc, date_dil asc', :label => 'title asc'
-    config.add_sort_field 'title_dil desc, date_dil asc', :label => 'title desc'
+    config.add_sort_field 'title_dil asc, date_dil asc', :label => 'Title A-Z'
+    config.add_sort_field 'title_dil desc, date_dil asc', :label => 'Title Z-A'
     #config.add_sort_field 'title_sort asc', :label => 'title'
 
     # If there are more than this many search results, no spelling ("did you 
