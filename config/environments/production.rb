@@ -60,6 +60,6 @@ DIL::Application.configure do
   config.middleware.use ExceptionNotifier,
     :email_prefix => "[DIL-Exception Production] ",
     :sender_address => %{"notifier" <edgar-garcia@northwestern.edu>},
-    :exception_recipients => %w{edgar-garcia@northwestern.edu}
+    :exception_recipients => %w{edgar-garcia@northwestern.edu, christopher.syversen@northwestern.edu, brendan-quinn@northwestern.edu, p-clough@northwestern.edu}
 
 end
