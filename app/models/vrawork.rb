@@ -2,13 +2,15 @@ class Vrawork  < ActiveFedora::Base
   include Hydra::ModelMethods
   #include ActiveFedora::Relationships
   include Hydra::ModelMixins::RightsMetadata
-  
+
+  after_create :update_vra_work_tag
+
   #has_relationship "parts", :is_part_of, :inbound => true
   has_and_belongs_to_many :multiresimages, :class => "Multiresimage", :property=> :has_image
-  
+
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
-  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
-  
+  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
+
   # Uses the VRA profile for tracking the descriptive metadata
    has_metadata :name => "VRA", :type => VRADatastream
 
@@ -35,7 +37,7 @@ class Vrawork  < ActiveFedora::Base
     vra_xml = vra_xml.gsub!("</vra:image>","</vra:work>")
     self.datastreams["VRA"].content = vra_xml
   end
-  
+
   def update_ref_id(ref_id)
     #Refactor to use proxy/delegates
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work[@refid]')
@@ -44,7 +46,7 @@ class Vrawork  < ActiveFedora::Base
     #Need to let Hydra know ds has been updated
     #self.datastreams["VRA"].dirty = true
   end
-  
+
   def update_relation_set(image_pid)
     #Refactor to use proxy/delegates
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:relationSet/vra:relation')
@@ -55,11 +57,11 @@ class Vrawork  < ActiveFedora::Base
     #Need to let Hydra know ds has been updated
     #self.datastreams["VRA"].dirty = true
   end
-  
+
    #def update_agent_set(agent_set_display)
     #self.agentSet_display_work = agent_set_display
-   
-    #node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:agentSet/vra:display')  
+
+    #node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:work/vra:agentSet/vra:display')
     #logger.debug("NODESET TEST: " + node_set.to_xml)
     #self.datastreams["VRA"].agentSet_display = node_set[0].content
     #Not sure why this doesn't work
