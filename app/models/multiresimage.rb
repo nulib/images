@@ -7,49 +7,49 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
-  
+
   belongs_to :institutional_collection, :property=> :is_governed_by
-  
+
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
   has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
-  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
+  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
 
   has_file_datastream :name=>'raw', :type=>ActiveFedora::Datastream, :label=>'Raw image'
-  
+
   # Uses the VRA profile for tracking the descriptive metadata
   has_metadata :name => "VRA", :type => VRADatastream, :label=> 'VRA metadata'
 
   # Uses the SVG schema to encode jp2 image path, size, crop, and rotation
   has_metadata :name => "DELIV-OPS", :type => SVGDatastream, :label=>'SVG Datastream'
-  
+
   has_metadata :name => "ARCHV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Archive image technical metadata'
 
   has_metadata :name => "ARCHV-EXIF", :type => ActiveFedora::Datastream, :label=>'Archive image EXIF metadata'
-  
+
   has_metadata :name => "DELIV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Image technical metadata'
-  
+
   # External datastream
   has_metadata :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
-  
+
   # External datastream
   has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
 
   # External datastream
   has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
-  
+
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => ActiveFedora::QualifiedDublinCoreDatastream do |m|
     m.field 'collection', :string
     m.field 'depositor', :string
     m.field 'file_name', :string
   end
-  
-  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display, 
-      :descriptionSet_display, :subjectSet_display, :culturalContextSet_display, 
-      :techniqueSet_display, :locationSet_display, :materialSet_display, 
-      :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display, 
+
+  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+      :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
+      :techniqueSet_display, :locationSet_display, :materialSet_display,
+      :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
       :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
 
   delegate :file_name, :to=>:properties, :unique=>true
@@ -58,6 +58,68 @@ class Multiresimage < ActiveFedora::Base
   delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
   before_save :update_associated_work
+
+
+  # Moving some of the fat controller methods to the model
+  # should titleSet_display be a parameter? it contains current_user which doesn't have any relevance to the model
+  def create_submitted_mri(files, titleSet_display)
+    # TODO: scan the submitted image with ClamAV
+
+
+    # chris notes: the below code has just been copied straight over from the uploads controller
+
+    logger.debug("FILES:#{files}")
+    image = create_vra_image(files)
+    work = create_vra_work
+
+
+    work.save!
+    image.save!
+
+    #add image to Uploads collection
+    personal_collection = current_user.get_uploads_collection
+    DILCollection.add_image_to_personal_collection(personal_collection, DIL_CONFIG['dil_uploads_collection'], @image, current_user.user_key)
+
+    UploadFile.create(:user=>current_user, :pid=>@image.pid)
+
+  end
+
+
+  def create_vra_work(titleSet_display)
+    work = Vrawork.new(pid: mint_pid)
+    work.apply_depositor_metadata(current_user.user_key)
+    work.edit_users = edit_users_array
+    work.datastreams["properties"].delete
+    work.titleSet_display_work = titleSet_display
+    work.save!
+  end
+
+
+  def create_vra_image(files, titleSet_display)
+    image = Multiresimage.new(pid: mint_pid)
+    image.attach_file(files)
+    image.apply_depositor_metadata(current_user.user_key)
+    image.edit_users = DIL_CONFIG['admin_staff']
+    image.titleSet_display = titleSet_display
+    image.save!
+  end
+
+
+  def link_image_work_vra(image, work)
+    work.add_relationship(:has_image, "info:fedora/" + image.pid)
+    image.add_relationship(:is_image_of, "info:fedora/" + work.pid)
+
+    #update the refid field in the vra xml
+    image.update_ref_id(image.pid)
+    work.update_ref_id(work.pid)
+
+    #update the relation set in the vra xml for the image and work
+    image.update_relation_set(work.pid)
+    work.update_relation_set(image.pid)
+
+    work.save!
+    image.save!
+  end
 
 
   def update_associated_work
@@ -73,7 +135,7 @@ class Multiresimage < ActiveFedora::Base
       vra_work.save!
     end
   end
-   
+
   def preferred_related_work
     return @preferred_related_work if @preferred_related_work
     return nil unless preferred_related_work_pid
@@ -133,12 +195,12 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
-  
+
   #replace the VRA locationSet_display value
   def replace_locationset_display_pid(old_pid, new_pid)
     self.VRA.locationSet_display = [self.VRA.locationSet_display[0].gsub(old_pid, new_pid)]
   end
-  
+
   #replace the VRA locationSet location value
   def replace_locationset_location_pid(new_pid)
     node_set = self.datastreams["VRA"].find_by_terms("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")
@@ -146,7 +208,7 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
-  
+
   #replace every instance of old pid with new pid in VRA
   def replace_pid_in_vra(old_pid, new_pid)
     begin
@@ -157,7 +219,7 @@ class Multiresimage < ActiveFedora::Base
       logger.error("Exception in replace_pid_in_vra:#{e.message}")
     end
   end
-  
+
   def update_relation_set(work_pid)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')
     node_set[0].set_attribute("pref", "true")
@@ -167,19 +229,19 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
-  
+
   def get_work_pid
     self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end
 
-  def to_solr(solr_doc = Hash.new, opts={}) 
+  def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
     solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
-   
+
    # If the image "is_governed_by" an InstitutionalCollection object, get that object's unit name and title.
-   # It needs to be indexed (with a facet) with the image. The title and unit name are stored in the 
+   # It needs to be indexed (with a facet) with the image. The title and unit name are stored in the
    # descMetadata datastream.
-   
+
    if self.institutional_collection.present?
      institutional_collection = InstitutionalCollection.find(self.institutional_collection.pid)
      unit_name, collection_title = institutional_collection.title.split("|")
@@ -188,10 +250,10 @@ class Multiresimage < ActiveFedora::Base
      solr_doc["institutional_collection_title_facet"] = collection_title
      solr_doc["institutional_collection_title_ssim"] = collection_title
    end
-   
+
    solr_doc
   end
-  
+
   ## Checks if this image is a crop
   def is_crop?
     self.RELS_EXT.content.include? "isCropOf"
@@ -209,5 +271,5 @@ class Multiresimage < ActiveFedora::Base
     end while File.exist?(tmpname)
     tmpname
   end
-  
+
 end
