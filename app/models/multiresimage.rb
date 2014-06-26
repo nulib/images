@@ -62,25 +62,25 @@ class Multiresimage < ActiveFedora::Base
 
   # Moving some of the fat controller methods to the model
   # should titleSet_display be a parameter? it contains current_user which doesn't have any relevance to the model
-  def create_submitted_mri(files, titleSet_display)
+  # also I *think* the collection should be a parameter to this call, but we should talk about it
+  def create_submitted_mri(files, titleSet_display, collection=nil)
     # TODO: scan the submitted image with ClamAV
 
-
-    # chris notes: the below code has just been copied straight over from the uploads controller
-
     logger.debug("FILES:#{files}")
+
     image = create_vra_image(files)
     work = create_vra_work
 
+    link_image_work_vra(image, work)
 
-    work.save!
-    image.save!
+    # The code below would add the new record to the personal collection, but we don't want to assume that in the
+    # model.
+    # TODO: figure out how to add the work/images to a collection.
 
-    #add image to Uploads collection
-    personal_collection = current_user.get_uploads_collection
-    DILCollection.add_image_to_personal_collection(personal_collection, DIL_CONFIG['dil_uploads_collection'], @image, current_user.user_key)
-
-    UploadFile.create(:user=>current_user, :pid=>@image.pid)
+    # add image to Uploads collection
+    # personal_collection = current_user.get_uploads_collection
+    # DILCollection.add_image_to_personal_collection(personal_collection, DIL_CONFIG['dil_uploads_collection'], @image, current_user.user_key)
+    # UploadFile.create(:user=>current_user, :pid=>@image.pid)
 
   end
 
