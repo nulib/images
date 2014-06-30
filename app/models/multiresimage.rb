@@ -7,6 +7,7 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
+  include DIL::PidMinter
 
   belongs_to :institutional_collection, :property=> :is_governed_by
 
@@ -85,25 +86,91 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  def create_vra_work(titleSet_display)
-    work = Vrawork.new(pid: mint_pid)
-    work.apply_depositor_metadata(current_user.user_key)
-    work.edit_users = edit_users_array
+  def create_vra_work(titleSet_display, vra, current_user=nil)
+    work = Vrawork.new(pid: mint_pid("dil"))
+
+    work.edit_users = DIL_CONFIG['admin_staff']
+    if current_user
+      work.edit_users << current_user
+      work.apply_depositor_metadata(current_user.user_key)
+    end
+
     work.datastreams["properties"].delete
+    work.datastreams["VRA"].content = vra.to_s
     work.titleSet_display_work = titleSet_display
+    self.vraworks << work
+    #work.save!
+    #work.update_relation_set(self.pid)
     work.save!
+    work #you'd better
   end
 
 
-  def create_vra_image(files, titleSet_display)
-    image = Multiresimage.new(pid: mint_pid)
-    image.attach_file(files)
-    image.apply_depositor_metadata(current_user.user_key)
-    image.edit_users = DIL_CONFIG['admin_staff']
-    image.titleSet_display = titleSet_display
-    image.save!
-  end
+  # def create_vra_image(files, titleSet_display)
+  #   #image = Multiresimage.new(pid: mint_pid)
+  #   self.attach_file(files)
+  #   self.apply_depositor_metadata(current_user.user_key)
+  #   self.edit_users = DIL_CONFIG['admin_staff']
+  #   self.titleSet_display = titleSet_display
+  #   self.save!
+  # end
 
+
+  def initialize(vra, location)
+    vra_type = ""
+    rel_pid = ""
+    super()
+
+    #this should probably be self.pid
+    pid = mint_pid("dil")
+
+    vra = Nokogiri::XML(vra)
+
+    if pid.present?
+      vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
+      if vra_type == "image"
+
+        logger.debug("create_image_method")
+
+        #set the refid attribute to the new pid
+        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", pid)
+
+        #set VRA datastream to the xml document
+        self.datastreams["VRA"].content = vra.to_s
+
+        #todo: make groups be a param to the API
+        self.read_groups = ["registered"]
+
+        #create the vrawork that is related to this vraimage/multiresimage
+        work = self.create_vra_work(titleSet_display, vra)
+
+        #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
+        self.add_relationship(:is_image_of, "info:fedora/" + work.pid)
+
+        #TODO: parse the vra record for the collection record
+        collection = nil
+
+        # if this is part of an institutional collection, add that relationship
+        unless collection.present?
+          # Set up default institutional collection pid as being "Digital Image Library"
+          institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+
+          if collection && DIL_CONFIG["institutional_collection"][collection]
+            institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
+          end
+
+          self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
+        end
+
+        #save Fedora object
+        self.save
+        logger.debug("created image")
+
+      else
+        raise "not an image type"
+      end
+    end
+  end
 
   def link_image_work_vra(image, work)
     work.add_relationship(:has_image, "info:fedora/" + image.pid)
