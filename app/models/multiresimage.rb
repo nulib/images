@@ -47,6 +47,8 @@ class Multiresimage < ActiveFedora::Base
     m.field 'file_name', :string
   end
 
+  attr_accessor :pid
+
   delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
@@ -99,8 +101,7 @@ class Multiresimage < ActiveFedora::Base
     work.datastreams["VRA"].content = vra.to_s
     work.titleSet_display_work = titleSet_display
     self.vraworks << work
-    #work.save!
-    #work.update_relation_set(self.pid)
+    work.add_relationship(:has_image, "info:fedora/" + @pid)
     work.save!
     work #you'd better
   end
@@ -121,19 +122,18 @@ class Multiresimage < ActiveFedora::Base
     rel_pid = ""
     super()
 
-    #this should probably be self.pid
-    pid = mint_pid("dil")
+    @pid = mint_pid("dil")
 
     vra = Nokogiri::XML(vra)
 
-    if pid.present?
+    if @pid.present?
       vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
       if vra_type == "image"
 
         logger.debug("create_image_method")
 
         #set the refid attribute to the new pid
-        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", pid)
+        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", @pid)
 
         #set VRA datastream to the xml document
         self.datastreams["VRA"].content = vra.to_s
@@ -162,8 +162,6 @@ class Multiresimage < ActiveFedora::Base
           self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
         end
 
-        #save Fedora object
-        self.save
         logger.debug("created image")
 
       else
@@ -172,21 +170,21 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  def link_image_work_vra(image, work)
-    work.add_relationship(:has_image, "info:fedora/" + image.pid)
-    image.add_relationship(:is_image_of, "info:fedora/" + work.pid)
-
-    #update the refid field in the vra xml
-    image.update_ref_id(image.pid)
-    work.update_ref_id(work.pid)
-
-    #update the relation set in the vra xml for the image and work
-    image.update_relation_set(work.pid)
-    work.update_relation_set(image.pid)
-
-    work.save!
-    image.save!
-  end
+  # def link_image_work_vra(image, work)
+  #   work.add_relationship(:has_image, "info:fedora/" + image.pid)
+  #   image.add_relationship(:is_image_of, "info:fedora/" + work.pid)
+  #
+  #   #update the refid field in the vra xml
+  #   image.update_ref_id(image.pid)
+  #   work.update_ref_id(work.pid)
+  #
+  #   #update the relation set in the vra xml for the image and work
+  #   image.update_relation_set(work.pid)
+  #   work.update_relation_set(image.pid)
+  #
+  #   work.save!
+  #   image.save!
+  # end
 
 
   def update_associated_work
