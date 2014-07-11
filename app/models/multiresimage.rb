@@ -47,7 +47,6 @@ class Multiresimage < ActiveFedora::Base
     m.field 'file_name', :string
   end
 
-  attr_accessor :pid
 
   delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
@@ -60,32 +59,35 @@ class Multiresimage < ActiveFedora::Base
   delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
   delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
-  #before_save :update_associated_work
+  attr_accessor :vra_xml
 
+
+  #before_save :update_associated_work
+  before_create :vra_save
 
   # Moving some of the fat controller methods to the model
   # should titleSet_display be a parameter? it contains current_user which doesn't have any relevance to the model
   # also I *think* the collection should be a parameter to this call, but we should talk about it
-  def create_submitted_mri(files, titleSet_display, collection=nil)
-    # TODO: scan the submitted image with ClamAV
-
-    logger.debug("FILES:#{files}")
-
-    image = create_vra_image(files)
-    work = create_vra_work
-
-    link_image_work_vra(image, work)
-
-    # The code below would add the new record to the personal collection, but we don't want to assume that in the
-    # model.
-    # TODO: figure out how to add the work/images to a collection.
-
-    # add image to Uploads collection
-    # personal_collection = current_user.get_uploads_collection
-    # DILCollection.add_image_to_personal_collection(personal_collection, DIL_CONFIG['dil_uploads_collection'], @image, current_user.user_key)
-    # UploadFile.create(:user=>current_user, :pid=>@image.pid)
-
-  end
+  # def create_submitted_mri(files, titleSet_display, collection=nil)
+  #   # TODO: scan the submitted image with ClamAV
+  #
+  #   logger.debug("FILES:#{files}")
+  #
+  #   image = create_vra_image(files)
+  #   work = create_vra_work
+  #
+  #   link_image_work_vra(image, work)
+  #
+  #   # The code below would add the new record to the personal collection, but we don't want to assume that in the
+  #   # model.
+  #   # TODO: figure out how to add the work/images to a collection.
+  #
+  #   # add image to Uploads collection
+  #   # personal_collection = current_user.get_uploads_collection
+  #   # DILCollection.add_image_to_personal_collection(personal_collection, DIL_CONFIG['dil_uploads_collection'], @image, current_user.user_key)
+  #   # UploadFile.create(:user=>current_user, :pid=>@image.pid)
+  #
+  # end
 
 
   def create_vra_work(titleSet_display, vra, current_user=nil)
@@ -107,102 +109,81 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  # def create_vra_image(files, titleSet_display)
-  #   #image = Multiresimage.new(pid: mint_pid)
-  #   self.attach_file(files)
-  #   self.apply_depositor_metadata(current_user.user_key)
-  #   self.edit_users = DIL_CONFIG['admin_staff']
-  #   self.titleSet_display = titleSet_display
-  #   self.save!
-  # end
-
   # This method should be passed the VRAImage xml and the location of the image file
-  # def initialize(options = {})
-  #   vra_type = ""
-  #   rel_pid = ""
-  #   super()
-  #
-  #   vra = options[:vra]
-  #   location = options[:location]
-  #
-  #   self.pid = mint_pid("dil")
-  #
-  #   vra = Nokogiri::XML(vra)
-  #
-  #   if pid.present?
-  #     vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
-  #     if vra_type == "image"
-  #
-  #       # here is what the uploads controller does and it seems to work
-  #       # @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
-  #       # logger.debug("FILES:#{params[:files]}")
-  #       # @image.attach_file(params[:files])
-  #       # @image.apply_depositor_metadata(current_user.user_key)
-  #       # @image.edit_users = edit_users_array
-  #       # @image.titleSet_display = titleSet_display
-  #       # @image.save!
-  #
-  #
-  #
-  #       logger.debug("create_image_method")
-  #       logger.debug("newly created pid: #{@pid}")
-  #
-  #       #set the refid attribute to the new pid
-  #       vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", @pid)
-  #
-  #       #set VRA datastream to the xml document
-  #       self.datastreams["VRA"].content = vra.to_s
-  #
-  #       #todo: make groups be a param to the API (maybe)
-  #       #self.read_groups = ["registered"]
-  #
-  #       #create the vrawork that is related to this vraimage/multiresimage
-  #       #work = self.create_vra_work(titleSet_display, vra)
-  #
-  #       #update_associated_work
-  #
-  #       #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-  #       #self.add_relationship(:is_image_of, "info:fedora/" + work.pid)
-  #
-  #       #TODO: parse the vra record for the collection record
-  #       #collection = nil
-  #
-  #       # if this is part of an institutional collection, add that relationship
-  #       # unless collection.present?
-  #       #   # Set up default institutional collection pid as being "Digital Image Library"
-  #       #   institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
-  #       #
-  #       #   if collection && DIL_CONFIG["institutional_collection"][collection]
-  #       #     institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
-  #       #   end
-  #       #
-  #       #   self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
-  #       # end
-  #
-  #       logger.debug("created image")
-  #
-  #
-  #     else
-  #       raise "not an image type"
-  #     end
-  #   end
-  # end
+  def vra_save
+    #vra_type = ""
+    #rel_pid = ""
 
-  # def link_image_work_vra(image, work)
-  #   work.add_relationship(:has_image, "info:fedora/" + image.pid)
-  #   image.add_relationship(:is_image_of, "info:fedora/" + work.pid)
-  #
-  #   #update the refid field in the vra xml
-  #   image.update_ref_id(image.pid)
-  #   work.update_ref_id(work.pid)
-  #
-  #   #update the relation set in the vra xml for the image and work
-  #   image.update_relation_set(work.pid)
-  #   work.update_relation_set(image.pid)
-  #
-  #   work.save!
-  #   image.save!
-  # end
+    #vra = options[:vra]
+    #location = options[:location]
+
+    pid = mint_pid("dil")
+    logger.debug("pid: #{pid}")
+    puts "pid: #{pid}"
+
+    #vra = Nokogiri::XML(vra_xml)
+    #logger.debug("vra: #{vra}")
+    #puts "vra: #{vra}"
+
+    #if pid.present?
+    #  vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
+    #  if vra_type == "image"
+
+        # here is what the uploads controller does and it seems to work
+        # @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
+        # logger.debug("FILES:#{params[:files]}")
+        # @image.attach_file(params[:files])
+        # @image.apply_depositor_metadata(current_user.user_key)
+        # @image.edit_users = edit_users_array
+        # @image.titleSet_display = titleSet_display
+        # @image.save!
+
+
+
+    #    logger.debug("create_image_method")
+    #    logger.debug("newly created pid: #{pid}")
+
+        #set the refid attribute to the new pid
+        #vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", @pid)
+
+        #set VRA datastream to the xml document
+        #self.datastreams["VRA"].content = vra.to_s
+
+        #todo: make groups be a param to the API (maybe)
+        #self.read_groups = ["registered"]
+
+        #create the vrawork that is related to this vraimage/multiresimage
+        #work = self.create_vra_work(titleSet_display, vra)
+
+        #update_associated_work
+
+        #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
+        #self.add_relationship(:is_image_of, "info:fedora/" + work.pid)
+
+        #TODO: parse the vra record for the collection record
+        #collection = nil
+
+        # if this is part of an institutional collection, add that relationship
+        # unless collection.present?
+        #   # Set up default institutional collection pid as being "Digital Image Library"
+        #   institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+        #
+        #   if collection && DIL_CONFIG["institutional_collection"][collection]
+        #     institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
+        #   end
+        #
+        #   self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
+        # end
+
+    #    logger.debug("created image")
+    #    puts "end of call!!"
+
+    #  else
+    #    raise "not an image type"
+    #  end
+    #end
+  end
+
 
 
   def update_associated_work
