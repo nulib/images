@@ -4,10 +4,31 @@ module DIL
     # include Blacklight::SolrHelper
     include DIL::PidMinter
 
+
     # This method/web service is called from other applications (Orbeon VRA Editor, migration scripts).
     # The URL to call this method/web service is http://localhost:3000/multiresimages/create_update_fedora_object.xml
     # It's expecting a pid param in the URL (it will check the VRA xml in the xml), as well as VRA xml in the POST request.
     # This method will create or update a Fedora object using the VRA xml that's included in the POST request
+
+
+    def cool_api_call
+      require 'json'
+      # puts "you did it, great job!!! thank u based god"
+      # "you did it, great job!!! thank u based god"
+      respond_to do |format|
+        format.json { JSON.generate("you did it, great job!! thank u based god") }
+      end
+      # render nothing: true
+    end
+
+
+    def cool_test_upload
+      puts "cool_test_upload was just called, so cool"
+      i = Multiresimage.new(vra: params[:vra], location: params[:location])
+      i.save
+      render nothing: true
+    end
+
 
     def create_update_fedora_object
       begin #for exception handling

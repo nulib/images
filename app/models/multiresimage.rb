@@ -60,7 +60,7 @@ class Multiresimage < ActiveFedora::Base
   delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
   delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
-  before_save :update_associated_work
+  #before_save :update_associated_work
 
 
   # Moving some of the fat controller methods to the model
@@ -116,59 +116,77 @@ class Multiresimage < ActiveFedora::Base
   #   self.save!
   # end
 
-
-  def initialize(vra, location)
-    vra_type = ""
-    rel_pid = ""
-    super()
-
-    @pid = mint_pid("dil")
-
-    vra = Nokogiri::XML(vra)
-
-    if @pid.present?
-      vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
-      if vra_type == "image"
-
-        logger.debug("create_image_method")
-
-        #set the refid attribute to the new pid
-        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", @pid)
-
-        #set VRA datastream to the xml document
-        self.datastreams["VRA"].content = vra.to_s
-
-        #todo: make groups be a param to the API
-        self.read_groups = ["registered"]
-
-        #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(titleSet_display, vra)
-
-        #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        self.add_relationship(:is_image_of, "info:fedora/" + work.pid)
-
-        #TODO: parse the vra record for the collection record
-        collection = nil
-
-        # if this is part of an institutional collection, add that relationship
-        unless collection.present?
-          # Set up default institutional collection pid as being "Digital Image Library"
-          institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
-
-          if collection && DIL_CONFIG["institutional_collection"][collection]
-            institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
-          end
-
-          self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
-        end
-
-        logger.debug("created image")
-
-      else
-        raise "not an image type"
-      end
-    end
-  end
+  # This method should be passed the VRAImage xml and the location of the image file
+  # def initialize(options = {})
+  #   vra_type = ""
+  #   rel_pid = ""
+  #   super()
+  #
+  #   vra = options[:vra]
+  #   location = options[:location]
+  #
+  #   self.pid = mint_pid("dil")
+  #
+  #   vra = Nokogiri::XML(vra)
+  #
+  #   if pid.present?
+  #     vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
+  #     if vra_type == "image"
+  #
+  #       # here is what the uploads controller does and it seems to work
+  #       # @image = Multiresimage.new(:pid=>mint_pid("dil-local"))
+  #       # logger.debug("FILES:#{params[:files]}")
+  #       # @image.attach_file(params[:files])
+  #       # @image.apply_depositor_metadata(current_user.user_key)
+  #       # @image.edit_users = edit_users_array
+  #       # @image.titleSet_display = titleSet_display
+  #       # @image.save!
+  #
+  #
+  #
+  #       logger.debug("create_image_method")
+  #       logger.debug("newly created pid: #{@pid}")
+  #
+  #       #set the refid attribute to the new pid
+  #       vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", @pid)
+  #
+  #       #set VRA datastream to the xml document
+  #       self.datastreams["VRA"].content = vra.to_s
+  #
+  #       #todo: make groups be a param to the API (maybe)
+  #       #self.read_groups = ["registered"]
+  #
+  #       #create the vrawork that is related to this vraimage/multiresimage
+  #       #work = self.create_vra_work(titleSet_display, vra)
+  #
+  #       #update_associated_work
+  #
+  #       #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
+  #       #self.add_relationship(:is_image_of, "info:fedora/" + work.pid)
+  #
+  #       #TODO: parse the vra record for the collection record
+  #       #collection = nil
+  #
+  #       # if this is part of an institutional collection, add that relationship
+  #       # unless collection.present?
+  #       #   # Set up default institutional collection pid as being "Digital Image Library"
+  #       #   institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+  #       #
+  #       #   if collection && DIL_CONFIG["institutional_collection"][collection]
+  #       #     institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
+  #       #   end
+  #       #
+  #       #   self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
+  #       # end
+  #
+  #       logger.debug("created image")
+  #
+  #
+  #     else
+  #       raise "not an image type"
+  #     end
+  #   end
+  # end
 
   # def link_image_work_vra(image, work)
   #   work.add_relationship(:has_image, "info:fedora/" + image.pid)
