@@ -81,6 +81,7 @@ class Multiresimage < ActiveFedora::Base
 
     work.save!
 
+    #These have to be called after a save otherwise they'll try to reference a bunch of null objects
     work.update_relation_set(self.pid)
     work.update_ref_id(work.pid)
     work.save!
