@@ -7,6 +7,7 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
   include Hydra::ModelMixins::RightsMetadata
   include Rails.application.routes.url_helpers
+  include DIL::PidMinter
 
   belongs_to :institutional_collection, :property=> :is_governed_by
 
@@ -60,11 +61,8 @@ class Multiresimage < ActiveFedora::Base
 
   attr_accessor :vra_xml
 
-
-  #before_save :update_associated_work
+  before_save :update_associated_work
   before_create :vra_save
-
-
 
 
   def create_vra_work(titleSet_display, vra, current_user=nil)
@@ -84,79 +82,59 @@ class Multiresimage < ActiveFedora::Base
     work.save!
 
     work.update_relation_set(self.pid)
+    work.update_ref_id(work.pid)
     work.save!
 
     work #you'd better
   end
 
 
-  # This method should be passed the VRAImage xml and the location of the image file
+  #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
-
-    logger.debug("pid: #{self.pid}")
-    puts "pid: #{self.pid}"
 
     vra = Nokogiri::XML(vra_xml)
 
-    #if pid.present?
     vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
     if vra_type == "image"
 
+      #set the refid attribute to the new pid
+      vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", self.pid)
 
+      #set VRA datastream to the xml document
+      self.datastreams["VRA"].content = vra.to_s
 
+      #todo: make groups be a param to the API (maybe)
+      self.read_groups = ["registered"]
 
+      #create the vrawork that is related to this vraimage/multiresimage
+      work = self.create_vra_work(titleSet_display, vra)
+      self.vraworks << work
 
-    #    logger.debug("create_image_method")
-    #    logger.debug("newly created pid: #{pid}")
+      #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
+      self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
 
-        #set the refid attribute to the new pid
-        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", self.pid)
+      #update vra xml to point to the new, associated work
+      update_relation_set(work.pid)
 
-        #set VRA datastream to the xml document
-        self.datastreams["VRA"].content = vra.to_s
+      #TODO: parse the vra record for the collection record
+      collection = nil
 
-        #todo: make groups be a param to the API (maybe)
-        #self.read_groups = ["registered"]
+      #if this is part of an institutional collection, add that relationship
+      unless collection.present?
+        # Set up default institutional collection pid as being "Digital Image Library"
+        institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
 
-        #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(titleSet_display, vra)
-        self.vraworks << work
-        puts "work's pid: #{work.pid}"
-        logger.debug("work's pid: #{work.pid}")
-
-        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
-        update_relation_set(work.pid)
-
-        #update_associated_work
-
-        #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-
-
-
-        #TODO: parse the vra record for the collection record
-        #collection = nil
-
-        # if this is part of an institutional collection, add that relationship
-        # unless collection.present?
-        #   # Set up default institutional collection pid as being "Digital Image Library"
-        #   institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
-        #
-        #   if collection && DIL_CONFIG["institutional_collection"][collection]
-        #     institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
-        #   end
-        #
-        #   self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
+        if collection && DIL_CONFIG["institutional_collection"][collection]
+          institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
         end
 
-       logger.debug("end of call!!")
-       puts "end of call!!"
+        self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
+      end
 
-    #  else
-    #    raise "not an image type"
-    #  end
-    #end
+    else
+      raise "not an image type"
+    end
   end
-
 
 
   def update_associated_work
@@ -173,11 +151,13 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
   def preferred_related_work
     return @preferred_related_work if @preferred_related_work
     return nil unless preferred_related_work_pid
 		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
   end
+
 
   def other_related_works
     return @other_related_works if @other_related_works
@@ -188,6 +168,7 @@ class Multiresimage < ActiveFedora::Base
     end
     @other_related_works
   end
+
 
   def longside_max
       ds = self.DELIV_OPS
@@ -201,6 +182,7 @@ class Multiresimage < ActiveFedora::Base
       svg_height > svg_width ? svg_height : svg_width
   end
 
+
   def attach_file(files)
     if files.present?
       raw.content = files.first.read
@@ -209,10 +191,12 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
   # return a hash of values for jQuery upload
   def to_jq_upload
     {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
   end
+
 
   # Moving file from temp location to config location.  Messing server will pull from here.
   def write_out_raw
@@ -225,6 +209,7 @@ class Multiresimage < ActiveFedora::Base
     new_filepath
   end
 
+
   #update the VRA ref id value
   def update_ref_id(ref_id)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
@@ -233,10 +218,12 @@ class Multiresimage < ActiveFedora::Base
     #self.datastreams["VRA"].dirty = true
   end
 
+
   #replace the VRA locationSet_display value
   def replace_locationset_display_pid(old_pid, new_pid)
     self.VRA.locationSet_display = [self.VRA.locationSet_display[0].gsub(old_pid, new_pid)]
   end
+
 
   #replace the VRA locationSet location value
   def replace_locationset_location_pid(new_pid)
@@ -245,6 +232,7 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
+
 
   #replace every instance of old pid with new pid in VRA
   def replace_pid_in_vra(old_pid, new_pid)
@@ -257,6 +245,7 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
   def update_relation_set(work_pid)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')
     node_set[0].set_attribute("pref", "true")
@@ -267,9 +256,11 @@ class Multiresimage < ActiveFedora::Base
     #self.datastreams["VRA"].dirty = true
   end
 
+
   def get_work_pid
     self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end
+
 
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
@@ -291,10 +282,13 @@ class Multiresimage < ActiveFedora::Base
    solr_doc
   end
 
+
   ## Checks if this image is a crop
   def is_crop?
     self.RELS_EXT.content.include? "isCropOf"
   end
+
+
 
   private
 
