@@ -13,20 +13,21 @@ module DIL
 
     def cool_api_call
       require 'json'
-      # puts "you did it, great job!!! thank u based god"
-      # "you did it, great job!!! thank u based god"
       respond_to do |format|
-        format.json { JSON.generate("you did it, great job!! thank u based god") }
+        format.json { JSON.generate("Success!") }
       end
       # render nothing: true
     end
 
 
-    def cool_test_upload
+    def menu_publish
       puts "cool_test_upload was just called, so cool"
-      i = Multiresimage.new(vra: params[:vra], location: params[:location])
+      i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: request.body.read)
       i.save
-      render nothing: true
+      returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+      respond_to do |format|
+        format.xml {render :layout => false, :xml => returnXml}
+      end
     end
 
 
