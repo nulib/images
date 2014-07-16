@@ -11,20 +11,17 @@ module DIL
     # This method will create or update a Fedora object using the VRA xml that's included in the POST request
 
 
-    def cool_api_call
-      require 'json'
-      respond_to do |format|
-        format.json { JSON.generate("Success!") }
-      end
-      # render nothing: true
-    end
-
 
     def menu_publish
-      puts "cool_test_upload was just called, so cool"
-      i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: request.body.read)
-      i.save
-      returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+      logger.debug "menu_publish api was just called"
+
+      begin
+        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: request.body.read)
+        i.save
+        returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+      rescue StandardError => msg
+        returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+      end
       respond_to do |format|
         format.xml {render :layout => false, :xml => returnXml}
       end

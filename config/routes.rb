@@ -15,8 +15,7 @@ DIL::Application.routes.draw do
 
   #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
 
-match "multiresimages/cool_api_call" => "multiresimages#cool_api_call", :via => :get
-match "multiresimages/cool_test_upload" => "multiresimages#cool_test_upload", :via => :post
+match "multiresimages/menu_publish" => "multiresimages#menu_publish", :via => :post
 
 
   resources :multiresimages do
