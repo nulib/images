@@ -60,6 +60,7 @@ class Multiresimage < ActiveFedora::Base
   delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
   attr_accessor :vra_xml
+  attr_accessor :from_menu
 
   before_save :update_associated_work
   before_create :vra_save
@@ -92,48 +93,51 @@ class Multiresimage < ActiveFedora::Base
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
+    #This check will probably go away when we get rid of the synchronizer.
+    #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
+    if from_menu
+      vra = Nokogiri::XML(vra_xml)
 
-    vra = Nokogiri::XML(vra_xml)
+      vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
+      if vra_type == "image"
 
-    vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
-    if vra_type == "image"
+        #set the refid attribute to the new pid
+        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", self.pid)
 
-      #set the refid attribute to the new pid
-      vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", self.pid)
+        #set VRA datastream to the xml document
+        self.datastreams["VRA"].content = vra.to_s
 
-      #set VRA datastream to the xml document
-      self.datastreams["VRA"].content = vra.to_s
+        #todo: make groups be a param to the API (maybe)
+        self.read_groups = ["registered"]
 
-      #todo: make groups be a param to the API (maybe)
-      self.read_groups = ["registered"]
+        #create the vrawork that is related to this vraimage/multiresimage
+        work = self.create_vra_work(titleSet_display, vra)
+        self.vraworks << work
 
-      #create the vrawork that is related to this vraimage/multiresimage
-      work = self.create_vra_work(titleSet_display, vra)
-      self.vraworks << work
+        #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
+        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
 
-      #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-      self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        #update vra xml to point to the new, associated work
+        update_relation_set(work.pid)
 
-      #update vra xml to point to the new, associated work
-      update_relation_set(work.pid)
+        #TODO: parse the vra record for the collection record
+        collection = nil
 
-      #TODO: parse the vra record for the collection record
-      collection = nil
+        #if this is part of an institutional collection, add that relationship
+        unless collection.present?
+          # Set up default institutional collection pid as being "Digital Image Library"
+          institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
 
-      #if this is part of an institutional collection, add that relationship
-      unless collection.present?
-        # Set up default institutional collection pid as being "Digital Image Library"
-        institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+          if collection && DIL_CONFIG["institutional_collection"][collection]
+            institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
+          end
 
-        if collection && DIL_CONFIG["institutional_collection"][collection]
-          institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
+          self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
         end
 
-        self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
+      else
+        raise "not an image type"
       end
-
-    else
-      raise "not an image type"
     end
   end
 

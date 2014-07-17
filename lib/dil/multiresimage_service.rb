@@ -16,7 +16,7 @@ module DIL
       logger.debug "menu_publish api was just called"
 
       begin
-        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: request.body.read)
+        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: request.body.read, from_menu: true)
         i.save
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
