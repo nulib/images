@@ -15,8 +15,13 @@ module DIL
     def menu_publish
       logger.debug "menu_publish api was just called"
 
+      # Set the image location to empty string if no location was passed in the request
+      img_location = params[:location] == nil ? "" : params[:location]
+
+      logger.debug "image location: #{img_location}"
+
       begin
-        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: request.body.read, from_menu: true)
+        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
         i.save
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
