@@ -189,8 +189,8 @@ describe MultiresimagesController do
 
   describe "create an image from menu post request" do
     it "should create a new image object from a post request" do
-      request.env['content_type'] = 'application/xml'
-      request.env['RAW_POST_DATA'] = '<?xml version="1.0" encoding="utf-8"?>
+      #request.env['content_type'] = 'application/xml'
+      xml = '<?xml version="1.0" encoding="utf-8"?>
 <vra:vra xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim"
@@ -334,7 +334,7 @@ describe MultiresimagesController do
       </vra:worktypeSet>
    </vra:image>
 </vra:vra>'
-      post(:menu_publish, format: 'xml' )
+      post( :menu_publish, xml: xml, format: "xml" )
       response.body.should include('Publish successful')
     end
   end
