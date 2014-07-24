@@ -142,6 +142,19 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
+  def create_techmd_datastream( img_location )
+    require 'rest_client'
+    require 'jhove_service'
+
+    # This parameter is where the output file will go
+    j = JhoveService.new( File.dirname( img_location ) )
+    xml_loc = j.run_jhove( img_location )
+
+    RestClient.post( "https://localhost:3000/multiresimages/add_datastream.xml?pid=#{pid}&ds_name=ARCHV-TECHMD&ds_label=MIX%20Technical%20Metadata&mime_type=text%2Fxml", File.open(xml_loc).read )
+
+  end
+
+
   def update_associated_work
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
     if vraworks.first.present?

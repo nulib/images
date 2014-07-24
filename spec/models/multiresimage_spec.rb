@@ -14,9 +14,18 @@ describe Multiresimage do
       @policy.delete
     end
     subject { Multiresimage.new(:admin_policy=>@policy) }
-    its(:admin_policy) { should == @policy } 
+    its(:admin_policy) { should == @policy }
 
   end
+
+
+  describe "jhove/techmd datastream" do
+    it "returns a path to the created jhove xml file" do
+      m = Multiresimage.create(pid: "my:pid")
+      expect( m.create_techmd_datastream("#{Rails.root}/app/assets/images/rails.png") ).to eq("#{Rails.root}/app/assets/images/jhove_output.xml")
+    end
+  end
+
 
   describe "should belong to multiple collections" do
     before do
@@ -25,9 +34,9 @@ describe Multiresimage do
       @collection3 = FactoryGirl.create(:collection)
     end
     subject { Multiresimage.new(:collections=>[@collection1, @collection2]) }
-    its(:collections) { should == [@collection1, @collection2] } 
+    its(:collections) { should == [@collection1, @collection2] }
   end
-  
+
   describe "created with a file" do
     before do
       @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')
@@ -44,7 +53,7 @@ describe Multiresimage do
     end
 
     it "should store the mimeType of the 'raw' datastream" do
-      @subject.raw.mimeType.should == 'image/jpeg' 
+      @subject.raw.mimeType.should == 'image/jpeg'
     end
 
     it "should have to_jq_upload" do
@@ -57,7 +66,7 @@ describe Multiresimage do
         @subject.stub(:pid =>'my:pid')
       end
       subject {@subject.write_out_raw}
-      it { should match /\/tmp\/The_Tilled_Field.jpg#{$$}\.0/ } 
+      it { should match /\/tmp\/The_Tilled_Field.jpg#{$$}\.0/ }
       after do
         `rm #{subject}`
       end
@@ -79,9 +88,9 @@ describe Multiresimage do
     end
     subject { @img.to_solr }
     it "should have title_display" do
-      subject['title_display'].should == "Evanston Public Library. Exterior: facade" 
+      subject['title_display'].should == "Evanston Public Library. Exterior: facade"
     end
-  end 
+  end
 
   context "with rightsMetadata" do
     subject do
@@ -115,7 +124,7 @@ describe Multiresimage do
     it "should update the work" do
       @img.update_attributes(:titleSet_display => "Woah cowboy")
       @img.vraworks.first.titleSet_display_work.should == "Woah cowboy"
-      
+
     end
   end
 

@@ -23,6 +23,8 @@ source 'http://rubygems.org'
   gem 'clamav', '0.4.1'
   gem 'rdf', '1.0'
   gem 'gon'
+  gem 'mini_exiftool'
+  gem 'jhove-service'
 
 # Gems used only for assets and not required
 # in production environments by default.

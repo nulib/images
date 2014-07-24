@@ -23,6 +23,9 @@ module DIL
       begin
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
         i.save
+
+        i.create_techmd_datastream(img_location)
+
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
@@ -31,6 +34,8 @@ module DIL
         format.xml {render :layout => false, :xml => returnXml}
       end
     end
+
+
 
 
     def create_update_fedora_object
