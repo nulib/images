@@ -1,0 +1,3065 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>XMP Tags</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h2 class=top>XMP Tags</h2>
+<p>
+XMP stands for &quot;Extensible Metadata Platform&quot;, an XML/RDF-based metadata
+format which is being pushed by Adobe.  Information in this format can be
+embedded in many different image file types including JPG, JP2, TIFF, GIF,
+PS, PDF, PSD, DNG, PNG, SVG and MIFF, as well as audio file formats
+supporting ID3v2 information.</p>
+
+<p>The XMP <b>Tag ID</b>&#39;s aren&#39;t listed because in most cases they are identical
+to the <b>Tag Name</b>.</p>
+
+<p>All XMP information is stored as character strings.  The <b>Writable</b> column
+specifies the information format:  <code>integer</code> is a string of digits
+(possibly beginning with a &#39;+&#39; or &#39;-&#39;), <code>real</code> is a floating point number,
+<code>rational</code> is two <code>integer</code> strings separated by a &#39;/&#39; character, <code>date</code>
+is a date/time string in the format &quot;YYYY:MM:DD HH:MM:SS[.SS][+/-HH:MM]&quot;,
+<code>boolean</code> is either &quot;True&quot; or &quot;False&quot;, and <code>lang-alt</code> is a list of string
+alternatives in different languages.</p>
+
+<p>Individual languages for <code>lang-alt</code> tags are accessed by suffixing the tag
+name with a &#39;-&#39;, followed by an RFC 3066 language code (ie. &quot;XMP:Title-fr&quot;,
+or &quot;Rights-en-US&quot;).  A <code>lang-alt</code> tag with no language code accesses the
+&quot;x-default&quot; language, but causes other languages to be deleted when writing.
+The &quot;x-default&quot; language code may be specified when writing a new value to
+write only the default language, but note that all languages are still
+deleted if &quot;x-default&quot; tag is deleted.  When reading, &quot;x-default&quot; is not
+specified.</p>
+
+<p>The XMP tags are organized according to schema <b>Namespace</b> in the following
+tables.  Note that a few of the longer namespace prefixes given below have
+been shortened for convenience (since the family 1 group names are derived
+from these by adding a leading &quot;XMP-&quot;).  In cases where a tag name exists in
+more than one namespace, less common namespaces are avoided when writing.
+However, any namespace may be written by specifying a family 1 group name
+for the tag, ie) XMP-exif:Contrast or XMP-crs:Contrast.</p>
+
+<p>ExifTool will extract XMP information even if it is not listed in these
+tables.  For example, the <code>pdfx</code> namespace doesn&#39;t have a predefined set of
+tag names because it is used to store application-defined PDF information,
+but this information is extracted by ExifTool anyway.
+</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Namespace</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>aux</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#aux'>XMP aux Tags</a></td></tr>
+<tr class=b>
+<td>cc</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#cc'>XMP cc Tags</a></td></tr>
+<tr>
+<td>crs</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#crs'>XMP crs Tags</a></td></tr>
+<tr class=b>
+<td>dc</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#dc'>XMP dc Tags</a></td></tr>
+<tr>
+<td>dex</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#dex'>XMP dex Tags</a></td></tr>
+<tr class=b>
+<td>DICOM</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#DICOM'>XMP DICOM Tags</a></td></tr>
+<tr>
+<td>exif</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#exif'>XMP exif Tags</a></td></tr>
+<tr class=b>
+<td>iptcCore</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#iptcCore'>XMP iptcCore Tags</a></td></tr>
+<tr>
+<td>lr</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#Lightroom'>XMP Lightroom Tags</a></td></tr>
+<tr class=b>
+<td>mediapro</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#MediaPro'>XMP MediaPro Tags</a></td></tr>
+<tr>
+<td>microsoft</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#Microsoft'>XMP Microsoft Tags</a></td></tr>
+<tr class=b>
+<td>pdf</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#pdf'>XMP pdf Tags</a></td></tr>
+<tr>
+<td>photomech</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PhotoMechanic.html#XMP'>PhotoMechanic XMP Tags</a></td></tr>
+<tr class=b>
+<td>photoshop</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#photoshop'>XMP photoshop Tags</a></td></tr>
+<tr>
+<td>PixelLive</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#PixelLive'>XMP PixelLive Tags</a></td></tr>
+<tr class=b>
+<td>plus</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#plus'>XMP plus Tags</a></td></tr>
+<tr>
+<td>tiff</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#tiff'>XMP tiff Tags</a></td></tr>
+<tr class=b>
+<td>xmp</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmp'>XMP xmp Tags</a></td></tr>
+<tr>
+<td>xmpBJ</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmpBJ'>XMP xmpBJ Tags</a></td></tr>
+<tr class=b>
+<td>xmpDM</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmpDM'>XMP xmpDM Tags</a></td></tr>
+<tr>
+<td>xmpMM</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmpMM'>XMP xmpMM Tags</a></td></tr>
+<tr class=b>
+<td>xmpPLUS</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmpPLUS'>XMP xmpPLUS Tags</a></td></tr>
+<tr>
+<td>xmpRights</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmpRights'>XMP xmpRights Tags</a></td></tr>
+<tr class=b>
+<td>xmpTPg</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html#xmpTPg'>XMP xmpTPg Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='aux'>XMP aux Tags</a></h2>
+<p>Photoshop Auxiliary schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Firmware</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FlashCompensation</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageNumber</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Lens</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LensID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LensInfo</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OwnerName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SerialNumber</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='cc'>XMP cc Tags</a></h2>
+<p>Creative Commons schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>License</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='crs'>XMP crs Tags</a></h2>
+<p>Photoshop Camera Raw Schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>AlreadyApplied</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>AutoBrightness</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AutoContrast</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>AutoExposure</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AutoShadows</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BlueHue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>BlueSaturation</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Brightness</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CameraProfile</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CameraProfileDigest</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ChromaticAberrationB</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ChromaticAberrationR</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Clarity</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorNoiseReduction</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Contrast</td>
+<td class=c>integer/</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ConvertToGrayscale</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CropAngle</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CropBottom</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CropHeight</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CropLeft</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CropRight</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CropTop</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CropUnits</td>
+<td class=c>integer</td>
+<td><span class=s>0 = pixels
+  <br>1 = inches
+  <br>2 = cm</span></td></tr>
+<tr class=b>
+<td>CropWidth</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Defringe</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Exposure</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FillLight</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GrayMixerAqua</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GrayMixerBlue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GrayMixerGreen</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GrayMixerMagenta</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GrayMixerOrange</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GrayMixerPurple</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GrayMixerRed</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GrayMixerYellow</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GreenHue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GreenSaturation</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HasCrop</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HasSettings</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HighlightRecovery</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HueAdjustmentAqua</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HueAdjustmentBlue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HueAdjustmentGreen</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HueAdjustmentMagenta</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HueAdjustmentOrange</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HueAdjustmentPurple</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HueAdjustmentRed</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HueAdjustmentYellow</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>IncrementalTemperature</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>IncrementalTint</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LuminanceAdjustmentAqua</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LuminanceAdjustmentBlue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LuminanceAdjustmentGreen</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LuminanceAdjustmentMagenta</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LuminanceAdjustmentOrange</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LuminanceAdjustmentPurple</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LuminanceAdjustmentRed</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LuminanceAdjustmentYellow</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LuminanceSmoothing</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ParametricDarks</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ParametricHighlights</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ParametricHighlightSplit</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ParametricLights</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ParametricMidtoneSplit</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ParametricShadows</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ParametricShadowSplit</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RawFileName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RedEyeInfo</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RedHue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RedSaturation</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RetouchInfo</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Saturation</td>
+<td class=c>integer/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SaturationAdjustmentAqua</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SaturationAdjustmentBlue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SaturationAdjustmentGreen</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SaturationAdjustmentMagenta</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SaturationAdjustmentOrange</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SaturationAdjustmentPurple</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SaturationAdjustmentRed</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SaturationAdjustmentYellow</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Shadows</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ShadowTint</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SharpenDetail</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SharpenEdgeMasking</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SharpenRadius</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Sharpness</td>
+<td class=c>integer/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SplitToningBalance</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SplitToningHighlightHue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SplitToningHighlightSaturation</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SplitToningShadowHue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SplitToningShadowSaturation</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Temperature</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Tint</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ToneCurve</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ToneCurveName</td>
+<td class=c>string</td>
+<td><span class=s>&#39;Custom&#39; = Custom
+  <br>&#39;Linear&#39; = Linear
+  <br>&#39;Medium Contrast&#39; = Medium Contrast
+  <br>&#39;Strong Contrast&#39; = Strong Contrast</span></td></tr>
+<tr class=b>
+<td>Version</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Vibrance</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VignetteAmount</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VignetteMidpoint</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>WhiteBalance</td>
+<td class=c>string/</td>
+<td><span class=s>&#39;As Shot&#39; = As Shot
+  <br>&#39;Auto&#39; = Auto
+  <br>&#39;Cloudy&#39; = Cloudy
+  <br>&#39;Custom&#39; = Custom
+  <br>&#39;Daylight&#39; = Daylight
+  <br>&#39;Flash&#39; = Flash
+  <br>&#39;Fluorescent&#39; = Fluorescent
+  <br>&#39;Shade&#39; = Shade
+  <br>&#39;Tungsten&#39; = Tungsten</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='dc'>XMP dc Tags</a></h2>
+<p>Dublin Core schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Contributor</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Coverage</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Creator</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Date</td>
+<td class=c>date+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Description</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Format</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Identifier</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Language</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Publisher</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Relation</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Rights</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Source</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Subject</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Title</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Type</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='dex'>XMP dex Tags</a></h2>
+<p>Description Explorer schema tags.  These tags are not very common.  The
+Source and Rating tags are avoided when writing due to name conflicts with
+other XMP tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>CRC32</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FFID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicenseType</td>
+<td class=c>string</td>
+<td><span class=s>&#39;adware&#39; = Adware
+  <br>&#39;commercial&#39; = Commercial
+  <br>&#39;demo&#39; = Demo
+  <br>&#39;freeware&#39; = Freeware
+  <br>&#39;open source&#39; = Open Source
+  <br>&#39;public domain&#39; = Public Domain
+  <br>&#39;shareware&#39; = Shareware
+  <br>&#39;unknown&#39; = Unknown</span></td></tr>
+<tr class=b>
+<td>OS</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Rating</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Revision</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ShortDescription</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Source</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='DICOM'>XMP DICOM Tags</a></h2>
+<p>DICOM schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>EquipmentInstitution</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>EquipmentManufacturer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PatientsBirthDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PatientID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PatientsName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PatientsSex</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SeriesDateTime</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SeriesDescription</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SeriesModality</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SeriesNumber</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>StudyDateTime</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>StudyDescription</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>StudyID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>StudyPhysician</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='exif'>XMP exif Tags</a></h2>
+<p>EXIF schema for EXIF tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>ApertureValue</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BrightnessValue</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CFAPatternColumns</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CFAPatternRows</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CFAPatternValues</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorSpace</td>
+<td class=c>integer</td>
+<td><span class=s>1 = sRGB
+  <br>2 = Adobe RGB
+  <br>65535 = Uncalibrated
+  <br>4294967295 = Uncalibrated</span></td></tr>
+<tr>
+<td>ComponentsConfiguration</td>
+<td class=c>integer+</td>
+<td><span class=s>0 = .
+  <br>1 = Y
+  <br>2 = Cb
+  <br>3 = Cr
+  <br>4 = R
+  <br>5 = G
+  <br>6 = B</span></td></tr>
+<tr class=b>
+<td>CompressedBitsPerPixel</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Contrast</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Normal
+  <br>1 = Low
+  <br>2 = High</span></td></tr>
+<tr class=b>
+<td>CustomRendered</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Normal
+  <br>1 = Custom</span></td></tr>
+<tr>
+<td>DateTimeDigitized</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DateTimeOriginal</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DeviceSettingDescriptionColumns</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DeviceSettingDescriptionRows</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DeviceSettingDescriptionSettings</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DigitalZoomRatio</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ExifVersion</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ExposureCompensation</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ExposureIndex</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ExposureMode</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Auto
+  <br>1 = Manual
+  <br>2 = Auto bracket</span></td></tr>
+<tr>
+<td>ExposureProgram</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Manual
+  <br>2 = Program AE
+  <br>3 = Aperture-priority AE
+  <br>4 = Shutter speed priority AE
+  <br>5 = Creative (Slow speed)
+  <br>6 = Action (High speed)
+  <br>7 = Portrait
+  <br>8 = Landscape</span></td></tr>
+<tr class=b>
+<td>ExposureTime</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FileSource</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Film Scanner
+  <br>2 = Reflection Print Scanner
+  <br>3 = Digital Camera</span></td></tr>
+<tr class=b>
+<td>FlashEnergy</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FlashFired</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FlashFunction</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FlashMode</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Unknown
+  <br>1 = On
+  <br>2 = Off
+  <br>3 = Auto</span></td></tr>
+<tr class=b>
+<td>FlashpixVersion</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FlashRedEyeMode</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FlashReturn</td>
+<td class=c>integer</td>
+<td><span class=s>0 = No return detection
+  <br>2 = Return not detected
+  <br>3 = Return detected</span></td></tr>
+<tr>
+<td>FNumber</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FocalLength</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FocalLengthIn35mmFormat</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FocalPlaneResolutionUnit</td>
+<td class=c>integer</td>
+<td><span class=s>1 = None
+  <br>2 = inches
+  <br>3 = cm
+  <br>4 = mm
+  <br>5 = um</span></td></tr>
+<tr>
+<td>FocalPlaneXResolution</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FocalPlaneYResolution</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GainControl</td>
+<td class=c>integer</td>
+<td><span class=s>0 = None
+  <br>1 = Low gain up
+  <br>2 = High gain up
+  <br>3 = Low gain down
+  <br>4 = High gain down</span></td></tr>
+<tr class=b>
+<td>GPSAltitude</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSAltitudeRef</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Above Sea Level
+  <br>1 = Below Sea Level</span></td></tr>
+<tr class=b>
+<td>GPSAreaInformation</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSDestBearing</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSDestBearingRef</td>
+<td class=c>string</td>
+<td><span class=s>&#39;M&#39; = Magnetic North
+  <br>&#39;T&#39; = True North</span></td></tr>
+<tr>
+<td>GPSDestDistance</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSDestDistanceRef</td>
+<td class=c>string</td>
+<td><span class=s>&#39;K&#39; = Kilometers
+  <br>&#39;M&#39; = Miles
+  <br>&#39;N&#39; = Nautical Miles</span></td></tr>
+<tr>
+<td>GPSDestLatitude</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSDestLongitude</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSDifferential</td>
+<td class=c>integer</td>
+<td><span class=s>0 = No Correction
+  <br>1 = Differential Corrected</span></td></tr>
+<tr class=b>
+<td>GPSDOP</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSImgDirection</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSImgDirectionRef</td>
+<td class=c>string</td>
+<td><span class=s>&#39;M&#39; = Magnetic North
+  <br>&#39;T&#39; = True North</span></td></tr>
+<tr>
+<td>GPSLatitude</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSLongitude</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSMapDatum</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSMeasureMode</td>
+<td class=c>integer</td>
+<td><span class=s>2 = 2-Dimensional
+  <br>3 = 3-Dimensional</span></td></tr>
+<tr>
+<td>GPSProcessingMethod</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSSatellites</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSSpeed</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSSpeedRef</td>
+<td class=c>string</td>
+<td><span class=s>&#39;K&#39; = km/h
+  <br>&#39;M&#39; = mph
+  <br>&#39;N&#39; = knots</span></td></tr>
+<tr>
+<td>GPSStatus</td>
+<td class=c>string</td>
+<td><span class=s>&#39;A&#39; = Measurement Active
+  <br>&#39;V&#39; = Measurement Void</span></td></tr>
+<tr class=b>
+<td>GPSDateTime</td>
+<td class=c>date</td>
+<td><span class=s><span class=n>(a date/time tag called GPSTimeStamp by the XMP specification.  This tag is
+renamed here to prevent direct copy from EXIF:GPSTimeStamp which is a
+time-only tag.  Instead, the value of this tag should be taken from
+Composite:GPSDateTime when copying from EXIF)</span></span></td></tr>
+<tr>
+<td>GPSTrack</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSTrackRef</td>
+<td class=c>string</td>
+<td><span class=s>&#39;M&#39; = Magnetic North
+  <br>&#39;T&#39; = True North</span></td></tr>
+<tr>
+<td>GPSVersionID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageUniqueID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ISO</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LightSource</td>
+<td class=c>string</td>
+<td><span class=s>0 = Unknown
+  <br>1 = Daylight
+  <br>2 = Fluorescent
+  <br>3 = Tungsten
+  <br>4 = Flash
+  <br>9 = Fine Weather
+  <br>10 = Cloudy
+  <br>11 = Shade
+  <br>12 = Daylight Fluorescent
+  <br>13 = Day White Fluorescent
+  <br>14 = Cool White Fluorescent
+  <br>15 = White Fluorescent
+  <br>17 = Standard Light A
+  <br>18 = Standard Light B
+  <br>19 = Standard Light C
+  <br>20 = D55
+  <br>21 = D65
+  <br>22 = D75
+  <br>23 = D50
+  <br>24 = ISO Studio Tungsten
+  <br>255 = Other</span></td></tr>
+<tr>
+<td>MakerNote</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MaxApertureValue</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MeteringMode</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Average
+  <br>2 = Center-weighted average
+  <br>3 = Spot
+  <br>4 = Multi-spot
+  <br>5 = Multi-segment
+  <br>6 = Partial
+  <br>255 = Other</span></td></tr>
+<tr class=b>
+<td>NativeDigest</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OECFColumns</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>OECFNames</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OECFRows</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>OECFValues</td>
+<td class=c>rational+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ExifImageWidth</td>
+<td class=c>integer</td>
+<td><span class=s><span class=n>(called PixelXDimension by the XMP spec)</span></span></td></tr>
+<tr class=b>
+<td>ExifImageHeight</td>
+<td class=c>integer</td>
+<td><span class=s><span class=n>(called PixelYDimension by the XMP spec)</span></span></td></tr>
+<tr>
+<td>RelatedSoundFile</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Saturation</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Normal
+  <br>1 = Low
+  <br>2 = High</span></td></tr>
+<tr>
+<td>SceneCaptureType</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Standard
+  <br>1 = Landscape
+  <br>2 = Portrait
+  <br>3 = Night</span></td></tr>
+<tr class=b>
+<td>SceneType</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Directly photographed</span></td></tr>
+<tr>
+<td>SensingMethod</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Not defined
+  <br>2 = One-chip color area
+  <br>3 = Two-chip color area
+  <br>4 = Three-chip color area
+  <br>5 = Color sequential area
+  <br>7 = Trilinear
+  <br>8 = Color sequential linear</span></td></tr>
+<tr class=b>
+<td>Sharpness</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Normal
+  <br>1 = Soft
+  <br>2 = Hard</span></td></tr>
+<tr>
+<td>ShutterSpeedValue</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SpatialFrequencyResponseColumns</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SpatialFrequencyResponseNames</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SpatialFrequencyResponseRows</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SpatialFrequencyResponseValues</td>
+<td class=c>rational+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SpectralSensitivity</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SubjectArea</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SubjectDistance</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SubjectDistanceRange</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Unknown
+  <br>1 = Macro
+  <br>2 = Close
+  <br>3 = Distant</span></td></tr>
+<tr class=b>
+<td>SubjectLocation</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>UserComment</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>WhiteBalance</td>
+<td class=c>integer</td>
+<td><span class=s>0 = Auto
+  <br>1 = Manual</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='iptcCore'>XMP iptcCore Tags</a></h2>
+<p>IPTC Core schema tags.  The actual IPTC Core namespace schema prefix is
+&quot;Iptc4xmpCore&quot;, which is the prefix recorded in the file, but ExifTool
+shortens this for the &quot;XMP-iptcCore&quot; family 1 group name.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>CountryCode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CreatorContactInfoCiAdrCity</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CreatorContactInfoCiAdrCtry</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CreatorContactInfoCiAdrExtadr</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CreatorContactInfoCiAdrPcode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CreatorContactInfoCiAdrRegion</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CreatorContactInfoCiEmailWork</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CreatorContactInfoCiTelWork</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CreatorContactInfoCiUrlWork</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>IntellectualGenre</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Location</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Scene</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SubjectCode</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Lightroom'>XMP Lightroom Tags</a></h2>
+<p>Adobe Lightroom &quot;lr&quot; schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>HierarchicalSubject</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PrivateRTKInfo</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='MediaPro'>XMP MediaPro Tags</a></h2>
+<p>IView MediaPro schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>CatalogSets</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Event</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Location</td>
+<td class=c>string/</td>
+<td><span class=s><span class=n>(avoided due to conflict with XMP-iptcCore:Location)</span></span></td></tr>
+<tr class=b>
+<td>People</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Status</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>UserFields</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Microsoft'>XMP Microsoft Tags</a></h2>
+<p>Microsoft Photo schema tags.  This is likely not a complete list, but
+represents tags which have been observed in sample images.  The actual
+namespace prefix is &quot;MicrosoftPhoto&quot;, but ExifTool shortens this to
+&quot;XMP-microsoft&quot; in the family 1 group name.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>CameraSerialNumber</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DateAcquired</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FlashManufacturer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FlashModel</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LastKeywordIPTC</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LastKeywordXMP</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LensManufacturer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LensModel</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RatingPercent</td>
+<td class=c>string</td>
+<td><span class=s><span class=n>(normal Rating values of 1,2,3,4 and 5 stars correspond to RatingPercent
+values of 1,25,50,75 and 99 respectively)</span></span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='pdf'>XMP pdf Tags</a></h2>
+<p>Adobe PDF schema tags.  The official XMP specification defines only
+Keywords, PDFVersion and Producer.  The other tags are included because they
+have been observed in PDF files, but Creator, Subject and Title are avoided
+when writing due to name conflicts with XMP-dc tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Author</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CreationDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Creator</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Keywords</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ModDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PDFVersion</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Producer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Subject</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Title</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Trapped</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='photoshop'>XMP photoshop Tags</a></h2>
+<p>Adobe Photoshop schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>AuthorsPosition</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CaptionWriter</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Category</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>City</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorMode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Country</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Credit</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DateCreated</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Headline</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>History</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ICCProfileName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Instructions</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LegacyIPTCDigest</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SidecarForExtension</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Source</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>State</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SupplementalCategories</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TransmissionReference</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Urgency</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='PixelLive'>XMP PixelLive Tags</a></h2>
+<p>PixelLive schema tags.  These tags are not writable becase they are very
+uncommon and I haven&#39;t been able to locate a reference which gives the
+namespace URI.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Author</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Comments</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Copyright</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Date</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Genre</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Title</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='plus'>XMP plus Tags</a></h2>
+<p>PLUS License Data Format 1.2.0 schema tags.  Note that all
+controlled-vocabulary tags in this table (ie. tags with a fixed set of
+values) have raw values which begin with &quot;http://ns.useplus.org/ldf/vocab/&quot;,
+but to reduce clutter this prefix has been removed from the values shown
+below.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>AdultContentWarning</td>
+<td class=c>string</td>
+<td><span class=s>&#39;CW-AWR&#39; = Adult Content Warning Required
+  <br>&#39;CW-NRQ&#39; = Not Required
+  <br>&#39;CW-UNK&#39; = Unknown</span></td></tr>
+<tr class=b>
+<td>CopyrightOwnerID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CopyrightOwnerName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CopyrightOwnerImageID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CopyrightRegistrationNumber</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CopyrightStatus</td>
+<td class=c>string</td>
+<td><span class=s>&#39;CS-PRO&#39; = Protected
+  <br>&#39;CS-PUB&#39; = Public Domain
+  <br>&#39;CS-UNK&#39; = Unknown</span></td></tr>
+<tr>
+<td>CreditLineRequired</td>
+<td class=c>string</td>
+<td><span class=s>&#39;CR-CAI&#39; = Credit Adjacent To Image
+  <br>&#39;CR-CCA&#39; = Credit in Credits Area
+  <br>&#39;CR-COI&#39; = Credit on Image
+  <br>&#39;CR-NRQ&#39; = Not Required</span></td></tr>
+<tr class=b>
+<td>Custom1</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Custom10</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Custom2</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Custom3</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Custom4</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Custom5</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Custom6</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Custom7</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Custom8</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Custom9</td>
+<td class=c>lang-alt+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>EndUserID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>EndUserName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FileNameAsDelivered</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FirstPublicationDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageAlterationConstraints</td>
+<td class=c>string+</td>
+<td><span class=s>&#39;AL-CLR&#39; = No Colorization
+  <br>&#39;AL-CRP&#39; = No Cropping
+  <br>&#39;AL-DCL&#39; = No De-Colorization
+  <br>&#39;AL-FLP&#39; = No Flipping
+  <br>&#39;AL-MRG&#39; = No Merging
+  <br>&#39;AL-RET&#39; = No Retouching</span></td></tr>
+<tr>
+<td>ImageCreatorID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageCreatorName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageCreatorImageID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageDuplicationConstraints</td>
+<td class=c>string</td>
+<td><span class=s>&#39;DP-LIC&#39; = Duplication Only as Necessary Under License
+  <br>&#39;DP-NDC&#39; = No Duplication Constraints
+  <br>&#39;DP-NOD&#39; = No Duplication</span></td></tr>
+<tr>
+<td>ImageFileConstraints</td>
+<td class=c>string+</td>
+<td><span class=s>&#39;IF-MFN&#39; = Maintain File Name
+  <br>&#39;IF-MFT&#39; = Maintain File Type
+  <br>&#39;IF-MID&#39; = Maintain ID in File Name
+  <br>&#39;IF-MMD&#39; = Maintain Metadata</span></td></tr>
+<tr class=b>
+<td>ImageFileFormatAsDelivered</td>
+<td class=c>string</td>
+<td><span class=s>&#39;FF-BMP&#39; = Windows Bitmap (BMP)
+  <br>&#39;FF-DNG&#39; = Digital Negative (DNG)
+  <br>&#39;FF-EPS&#39; = Encapsulated PostScript (EPS)
+  <br>&#39;FF-GIF&#39; = Graphics Interchange Format (GIF)
+  <br>&#39;FF-JPG&#39; = JPEG Interchange Formats (JPG, JIF, JFIF)
+  <br>&#39;FF-OTR&#39; = Other
+  <br>&#39;FF-PIC&#39; = Macintosh Picture (PICT)
+  <br>&#39;FF-PNG&#39; = Portable Network Graphics (PNG)
+  <br>&#39;FF-PSD&#39; = Photoshop Document (PSD)
+  <br>&#39;FF-RAW&#39; = Proprietary RAW Image Format
+  <br>&#39;FF-TIF&#39; = Tagged Image File Format (TIFF)
+  <br>&#39;FF-WMP&#39; = Windows Media Photo (HD Photo)</span></td></tr>
+<tr>
+<td>ImageFileSizeAsDelivered</td>
+<td class=c>string</td>
+<td><span class=s>&#39;SZ-G50&#39; = Greater than 50 MB
+  <br>&#39;SZ-U01&#39; = Up to 1 MB
+  <br>&#39;SZ-U10&#39; = Up to 10 MB
+  <br>&#39;SZ-U30&#39; = Up to 30 MB
+  <br>&#39;SZ-U50&#39; = Up to 50 MB</span></td></tr>
+<tr class=b>
+<td>ImageSupplierImageID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageSupplierID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageSupplierName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageType</td>
+<td class=c>string</td>
+<td><span class=s>&#39;TY-ILL&#39; = Illustrated Image
+  <br>&#39;TY-MCI&#39; = Multimedia or Composited Image
+  <br>&#39;TY-OTR&#39; = Other
+  <br>&#39;TY-PHO&#39; = Photographic Image
+  <br>&#39;TY-VID&#39; = Video</span></td></tr>
+<tr class=b>
+<td>LicenseeImageID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicenseeImageNotes</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicenseeID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicenseeName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicenseEndDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicenseeProjectReference</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicenseeTransactionID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicenseID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicenseStartDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicenseTransactionDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorImageID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorCity</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorCountry</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorEmail</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorExtendedAddress</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorPostalCode</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorRegion</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorStreetAddress</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorTelephone1</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorTelephone2</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorTelephoneType1</td>
+<td class=c>string+</td>
+<td><span class=s>&#39;cell&#39; = Cell
+  <br>&#39;fax&#39; = FAX
+  <br>&#39;home&#39; = Home
+  <br>&#39;pager&#39; = Pager
+  <br>&#39;work&#39; = Work</span></td></tr>
+<tr>
+<td>LicensorTelephoneType2</td>
+<td class=c>string+</td>
+<td><span class=s>&#39;cell&#39; = Cell
+  <br>&#39;fax&#39; = FAX
+  <br>&#39;home&#39; = Home
+  <br>&#39;pager&#39; = Pager
+  <br>&#39;work&#39; = Work</span></td></tr>
+<tr class=b>
+<td>LicensorURL</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LicensorNotes</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LicensorTransactionID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MediaConstraints</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MediaSummaryCode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MinorModelAgeDisclosure</td>
+<td class=c>string</td>
+<td><span class=s>&#39;AG-A15&#39; = Age 15
+  <br>&#39;AG-A16&#39; = Age 16
+  <br>&#39;AG-A17&#39; = Age 17
+  <br>&#39;AG-A18&#39; = Age 18
+  <br>&#39;AG-A19&#39; = Age 19
+  <br>&#39;AG-A20&#39; = Age 20
+  <br>&#39;AG-A21&#39; = Age 21
+  <br>&#39;AG-A22&#39; = Age 22
+  <br>&#39;AG-A23&#39; = Age 23
+  <br>&#39;AG-A24&#39; = Age 24
+  <br>&#39;AG-A25&#39; = Age 25 or Over
+  <br>&#39;AG-U14&#39; = Age 14 or Under
+  <br>&#39;AG-UNK&#39; = Age Unknown</span></td></tr>
+<tr class=b>
+<td>ModelReleaseID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ModelReleaseStatus</td>
+<td class=c>string</td>
+<td><span class=s>&#39;MR-LMR&#39; = Limited or Incomplete Model Releases
+  <br>&#39;MR-NAP&#39; = Not Applicable
+  <br>&#39;MR-NON&#39; = None
+  <br>&#39;MR-UMR&#39; = Unlimited Model Releases</span></td></tr>
+<tr class=b>
+<td>OtherConditions</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OtherConstraints</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>OtherImageInfo</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OtherLicenseDocuments</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>OtherLicenseInfo</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OtherLicenseRequirements</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ProductOrServiceConstraints</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PropertyReleaseID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PropertyReleaseStatus</td>
+<td class=c>string</td>
+<td><span class=s>&#39;PR-LPR&#39; = Limited or Incomplete Property Releases
+  <br>&#39;PR-NAP&#39; = Not Applicable
+  <br>&#39;PR-NON&#39; = None
+  <br>&#39;PR-UPR&#39; = Unlimited Property Releases</span></td></tr>
+<tr>
+<td>RegionConstraints</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Reuse</td>
+<td class=c>string</td>
+<td><span class=s>&#39;RE-NAP&#39; = Not Applicable
+  <br>&#39;RE-REU&#39; = Repeat Use</span></td></tr>
+<tr>
+<td>TermsAndConditionsText</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TermsAndConditionsURL</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PLUSVersion</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='tiff'>XMP tiff Tags</a></h2>
+<p>EXIF schema for TIFF tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Artist</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BitsPerSample</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Compression</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Uncompressed
+  <br>2 = CCITT 1D
+  <br>3 = T4/Group 3 Fax
+  <br>4 = T6/Group 4 Fax
+  <br>5 = LZW
+  <br>6 = JPEG (old-style)
+  <br>7 = JPEG
+  <br>8 = Adobe Deflate
+  <br>9 = JBIG B&amp;W
+  <br>10 = JBIG Color
+  <br>99 = JPEG
+  <br>262 = Kodak 262
+  <br>32766 = Next
+  <br>32767 = Sony ARW Compressed
+  <br>32769 = Epson ERF Compressed
+  <br>32771 = CCIRLEW
+  <br>32773 = PackBits
+  <br>32809 = Thunderscan
+  <br>32867 = Kodak KDC Compressed
+  <br>32895 = IT8CTPAD
+  <br>32896 = IT8LW
+  <br>32897 = IT8MP
+  <br>32898 = IT8BL
+  <br>32908 = PixarFilm
+  <br>32909 = PixarLog
+  <br>32946 = Deflate
+  <br>32947 = DCS
+  <br>34661 = JBIG
+  <br>34676 = SGILog
+  <br>34677 = SGILog24
+  <br>34712 = JPEG 2000
+  <br>34713 = Nikon NEF Compressed
+  <br>65000 = Kodak DCR Compressed
+  <br>65535 = Pentax PEF Compressed</span></td></tr>
+<tr class=b>
+<td>Copyright</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DateTime</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageDescription</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageHeight</td>
+<td class=c>integer</td>
+<td><span class=s><span class=n>(called ImageLength in the XMP specification)</span></span></td></tr>
+<tr class=b>
+<td>ImageWidth</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Make</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Model</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>NativeDigest</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Orientation</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Horizontal (normal)
+  <br>2 = Mirror horizontal
+  <br>3 = Rotate 180
+  <br>4 = Mirror vertical
+  <br>5 = Mirror horizontal and rotate 270 CW
+  <br>6 = Rotate 90 CW
+  <br>7 = Mirror horizontal and rotate 90 CW
+  <br>8 = Rotate 270 CW</span></td></tr>
+<tr>
+<td>PhotometricInterpretation</td>
+<td class=c>integer</td>
+<td><span class=s>0 = WhiteIsZero
+  <br>1 = BlackIsZero
+  <br>2 = RGB
+  <br>3 = RGB Palette
+  <br>4 = Transparency Mask
+  <br>5 = CMYK
+  <br>6 = YCbCr
+  <br>8 = CIELab
+  <br>9 = ICCLab
+  <br>10 = ITULab
+  <br>32803 = Color Filter Array
+  <br>32844 = Pixar LogL
+  <br>32845 = Pixar LogLuv
+  <br>34892 = Linear Raw</span></td></tr>
+<tr class=b>
+<td>PlanarConfiguration</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Chunky
+  <br>2 = Planar</span></td></tr>
+<tr>
+<td>PrimaryChromaticities</td>
+<td class=c>rational+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ReferenceBlackWhite</td>
+<td class=c>rational+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ResolutionUnit</td>
+<td class=c>integer</td>
+<td><span class=s>1 = None
+  <br>2 = inches
+  <br>3 = cm</span></td></tr>
+<tr class=b>
+<td>SamplesPerPixel</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Software</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TransferFunction</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>WhitePoint</td>
+<td class=c>rational+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>XResolution</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>YCbCrCoefficients</td>
+<td class=c>rational+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>YCbCrPositioning</td>
+<td class=c>integer</td>
+<td><span class=s>1 = Centered
+  <br>2 = Co-sited</span></td></tr>
+<tr>
+<td>YCbCrSubSampling</td>
+<td class=c>string</td>
+<td><span class=s>&#39;1 1&#39; = YCbCr4:4:4 (1 1)
+  <br>&#39;1 2&#39; = YCbCr4:4:0 (1 2)
+  <br>&#39;1 4&#39; = YCbCr4:4:1 (1 4)
+  <br>&#39;2 1&#39; = YCbCr4:2:2 (2 1)
+  <br>&#39;2 2&#39; = YCbCr4:2:0 (2 2)
+  <br>&#39;2 4&#39; = YCbCr4:2:1 (2 4)
+  <br>&#39;4 1&#39; = YCbCr4:1:1 (4 1)
+  <br>&#39;4 2&#39; = YCbCr4:1:0 (4 2)</span></td></tr>
+<tr class=b>
+<td>YResolution</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmp'>XMP xmp Tags</a></h2>
+<p>XMP Basic schema tags.  If the older &quot;xap&quot;, &quot;xapBJ&quot;, &quot;xapMM&quot; or &quot;xapRights&quot;
+namespace prefixes are found, they are translated to the newer &quot;xmp&quot;,
+&quot;xmpBJ&quot;, &quot;xmpMM&quot; and &quot;xmpRights&quot; prefixes for use in family 1 group names.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Advisory</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BaseURL</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CreateDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CreatorTool</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Identifier</td>
+<td class=c>string/+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Label</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MetadataDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ModifyDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Nickname</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Rating</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ThumbnailsFormat</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ThumbnailsHeight</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ThumbnailsImage</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ThumbnailsWidth</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmpBJ'>XMP xmpBJ Tags</a></h2>
+<p>XMP Basic Job Ticket schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>JobRefId</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>JobRefName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>JobRefUrl</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmpDM'>XMP xmpDM Tags</a></h2>
+<p>XMP Dynamic Media schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>AbsPeakAudioFilePath</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Album</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AltTapeName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>AltTimecodeTimeFormat</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AltTimecodeTimeValue</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Artist</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AudioChannelType</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>AudioCompressor</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AudioModDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>AudioSampleRate</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>AudioSampleType</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BeatSpliceParamsRiseInDecibel</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>BeatSpliceParamsRiseInTimeDuration</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BeatSpliceParamsUseFileBeatsMarker</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Composer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ContributedMediaDuration</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ContributedMediaManaged</td>
+<td class=c>boolean+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ContributedMediaPath</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ContributedMediaStartTime</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ContributedMediaTrack</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ContributedMediaWebStatement</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Copyright</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Duration</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Engineer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FileDataRate</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Genre</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Instrument</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>IntroTime</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Key</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LogComment</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Loop</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MarkersComment</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MarkersDuration</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MarkersLocation</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MarkersName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MarkersStartTime</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MarkersTarget</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MarkersType</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MetadataModDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>NumberOfBeats</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>OutCue</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ProjectRefPath</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ProjectRefType</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PullDown</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RelativePeakAudioFilePath</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RelativeTimestamp</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ReleaseDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ResampleParamsQuality</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ScaleType</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Scene</td>
+<td class=c>string/</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ShotDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ShotLocation</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ShotName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SpeakerPlacement</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>StartTimecodeTimeFormat</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>StartTimecodeTimeValue</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>StretchMode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TapeName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Tempo</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TimeScaleParamsFrameOverlappingPercentage</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>TimeScaleParamsFrameSize</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TimeScaleParamsQuality</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>TimeSignature</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>TrackNumber</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaMode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorA</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaPremultipleColorB</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorBlack</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaPremultipleColorBlue</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorCyan</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaPremultipleColorGreen</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorL</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaPremultipleColorMagenta</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorMode</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaPremultipleColorRed</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorSwatchName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaPremultipleColorType</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoAlphaPremultipleColorYellow</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoAlphaUnityIsTransparent</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoColorSpace</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoCompressor</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoFieldOrder</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoFrameRate</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoFrameSizeH</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoFrameSizeUnit</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoFrameSizeW</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoModDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VideoPixelAspectRatio</td>
+<td class=c>rational</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VideoPixelDepth</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmpMM'>XMP xmpMM Tags</a></h2>
+<p>XMP Media Management schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>DerivedFromDocumentID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DerivedFromInstanceID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DerivedFromManager</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DerivedFromManagerVariant</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DerivedFromManageTo</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DerivedFromManageUI</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DerivedFromRenditionClass</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DerivedFromRenditionParams</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DerivedFromVersionID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DocumentID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HistoryAction</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HistoryInstanceID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HistoryParameters</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HistorySoftwareAgent</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>HistoryWhen</td>
+<td class=c>date+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>InstanceID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>LastURL</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManagedFromDocumentID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ManagedFromInstanceID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManagedFromManager</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ManagedFromManagerVariant</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManagedFromManageTo</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ManagedFromManageUI</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManagedFromRenditionClass</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ManagedFromRenditionParams</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManagedFromVersionID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Manager</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManagerVariant</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ManageTo</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ManageUI</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PreservedFileName</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RenditionClass</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RenditionOfDocumentID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RenditionOfInstanceID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RenditionOfManager</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RenditionOfManagerVariant</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RenditionOfManageTo</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RenditionOfManageUI</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RenditionOfRenditionClass</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RenditionOfRenditionParams</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RenditionOfVersionID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RenditionParams</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>SaveID</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VersionID</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VersionsComments</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VersionsEventAction</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VersionsEventInstanceID</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VersionsEventParameters</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VersionsEventSoftwareAgent</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VersionsEventWhen</td>
+<td class=c>date+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VersionsModifier</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>VersionsModifyDate</td>
+<td class=c>date+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>VersionsVersion</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmpPLUS'>XMP xmpPLUS Tags</a></h2>
+<p>XMP Picture Licensing Universal System (PLUS) schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>CreditLineReq</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ReuseAllowed</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmpRights'>XMP xmpRights Tags</a></h2>
+<p>XMP Rights Management schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Certificate</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Marked</td>
+<td class=c>boolean</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Owner</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>UsageTerms</td>
+<td class=c>lang-alt</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>WebStatement</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='xmpTPg'>XMP xmpTPg Tags</a></h2>
+<p>XMP Paged-Text schema tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>ColorantsA</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorantsB</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorantsBlack</td>
+<td class=c>real+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorantsBlue</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorantsCyan</td>
+<td class=c>real+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorantsGreen</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorantsL</td>
+<td class=c>real+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorantsMagenta</td>
+<td class=c>real+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorantsMode</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorantsRed</td>
+<td class=c>integer+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorantsSwatchName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ColorantsType</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ColorantsYellow</td>
+<td class=c>real+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FontsChildFontFiles</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FontsComposite</td>
+<td class=c>boolean+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FontsFontFace</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FontsFontFamily</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FontsFontFileName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FontsFontName</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FontsFontType</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>FontsVersionString</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MaxPageSizeH</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MaxPageSizeUnit</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>MaxPageSizeW</td>
+<td class=c>real</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>NPages</td>
+<td class=c>integer</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PlateNames</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='SVG'>XMP SVG Tags</a></h2>
+<p>SVG (Scalable Vector Graphics) image tags.  By default, only the top-level
+SVG and Metadata tags are extracted from these images, but all graphics tags
+may be extracted by setting the Unknown option to 2 (-U on the command
+line).  The SVG tags are not part of XMP as such, but are included with the
+XMP module for convenience.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>ImageHeight</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ID</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>MetadataID</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SVGVersion</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageWidth</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<hr>
+(This document generated automatically by Image::ExifTool::BuildTagLookup)
+<br><i>Last revised Jul 11, 2008</i>
+<p class=lf><a href='index.html'>&lt;-- ExifTool Tag Names</a></p>
+</body>
+</html>
