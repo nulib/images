@@ -26,6 +26,8 @@ module DIL
 
         i.create_techmd_datastream(img_location)
 
+        i.save
+
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
