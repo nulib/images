@@ -151,9 +151,9 @@ class Multiresimage < ActiveFedora::Base
     jhove_xml = File.open(xml_loc).read
 
     if
-      update_fedora_object(pid, jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
+      populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
     else
-      raise "Failed to create Jhove datastream" 
+      raise "Failed to create Jhove datastream"
     end
   end
 
@@ -161,11 +161,23 @@ class Multiresimage < ActiveFedora::Base
     # require mini_exif_tool
     # run perl script on raw exif data
     # output file
+
+    exif = MiniExifTool.new img_location
+
     if
-      update_fedora_object(pid, exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
+      populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
     else
-      raise "Failed to create EXIF datastream" 
+      raise "Failed to create EXIF datastream"
     end
+  end
+
+
+  def populate_datastream(xml, ds_name, ds_label, mime_type)
+
+    self.datastreams[ds_name].content = xml
+    self.datastreams[ds_name].dsLabel = ds_label
+    self.datastreams[ds_name].mimeType = mime_type
+
   end
 
 

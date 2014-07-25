@@ -634,36 +634,13 @@ module DIL
 
     def update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
 
-      #load Fedora object
       fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
-
-      #set datastream to xml from the request
-
-      #if datastream doesn't already exist, add_datastream
-      #if (fedora_object.datastreams[ds_name].nil?)
-        #new_ds = ActiveFedora::Datastream.new(fedora_object, ds_name)
-        #fedora_object.add_datastream(new_ds)
-      #end
-
-      #create datastream
-      #fedora_object.send(ds_name)
-
-      #set datastream content
-      #fedora_object.datastreams[ds_name].content = xml
 
       fedora_object.send(ds_name).content = xml
       fedora_object.send(ds_name).dsLabel = ds_label
       fedora_object.send(ds_name).mimeType = mime_type
 
-      #save Fedora object
-      #debugger
       fedora_object.save
-
-      #update the solr index
-      #debugger
-      #if (ds_name=="VRA")
-       # fedora_object.update_index()
-      #end
 
       returnXml = "<response><returnCode>Update successful</returnCode><pid>" + pid + "</pid></response>"
 
