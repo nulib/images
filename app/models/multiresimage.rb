@@ -143,15 +143,29 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_techmd_datastream( img_location )
-    require 'rest_client'
     require 'jhove_service'
 
     # This parameter is where the output file will go
     j = JhoveService.new( File.dirname( img_location ) )
     xml_loc = j.run_jhove( img_location )
+    jhove_xml = File.open(xml_loc).read
 
-    RestClient.post( "https://localhost:3000/multiresimages/add_datastream.xml?pid=#{pid}&ds_name=ARCHV-TECHMD&ds_label=MIX%20Technical%20Metadata&mime_type=text%2Fxml", File.open(xml_loc).read )
+    if
+      update_fedora_object(pid, jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
+    else
+      raise "Failed to create Jhove datastream" 
+    end
+  end
 
+  def create_exif_datastream( img_location )
+    # require mini_exif_tool
+    # run perl script on raw exif data
+    # output file
+    if
+      update_fedora_object(pid, exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
+    else
+      raise "Failed to create EXIF datastream" 
+    end
   end
 
 
