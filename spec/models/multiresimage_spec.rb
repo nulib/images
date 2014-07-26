@@ -26,6 +26,15 @@ describe Multiresimage do
     end
   end
 
+  describe "#create_archv_exif_datastream" do
+    it "adds the archv-exif datastream" do
+      m = Multiresimage.create
+      sample_image_path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+      exif_xml = `#{ Rails.root }/lib/exif.pl #{ sample_image_path }`
+      m.create_archv_exif_datastream( sample_image_path )
+      expect( m.datastreams[ "ARCHV-EXIF" ].content ).to eq( exif_xml )
+    end
+  end
 
   describe "should belong to multiple collections" do
     before do

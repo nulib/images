@@ -25,6 +25,7 @@ module DIL
         i.save
 
         i.create_techmd_datastream(img_location)
+        i.create_archv_exif_datastream( img_location )
 
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg

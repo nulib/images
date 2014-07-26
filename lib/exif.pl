@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+use Cwd;
 
 if ($#ARGV != 0) {
  print "usage: exif.pl image_path\n";
@@ -7,7 +8,8 @@ if ($#ARGV != 0) {
 }
 
 my $image_path = $ARGV[0];
-my $EXIF_TOOL = './exiftool/exiftool -a -g1 -u ';
+my $pwd = cwd();
+my $EXIF_TOOL = "$pwd/lib/Image-ExifTool-9.68/exiftool -a -g1 -u --FileAccessDate ";
 
 my $raw_metadata = `$EXIF_TOOL $image_path`;
 $raw_metadata =~ s/\&/&amp;/g;
