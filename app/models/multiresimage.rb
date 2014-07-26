@@ -150,23 +150,18 @@ class Multiresimage < ActiveFedora::Base
     xml_loc = j.run_jhove( img_location )
     jhove_xml = File.open(xml_loc).read
 
-    if
-      populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
-    else
+    unless populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
       raise "Failed to create Jhove datastream"
     end
   end
 
-  def create_exif_datastream( img_location )
-    # require mini_exif_tool
+  def create_archv_exif_datastream( img_location )
     # run perl script on raw exif data
     # output file
 
-    exif = MiniExifTool.new img_location
+    exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
 
-    if
-      populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
-    else
+    unless populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
       raise "Failed to create EXIF datastream"
     end
   end
