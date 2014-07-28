@@ -15,22 +15,23 @@ module DIL
     def menu_publish
       logger.debug "menu_publish api was just called"
 
-      # Set the image location to empty string if no location was passed in the request
-      img_location = params[:location] == nil ? "" : params[:location]
 
-      logger.debug "image location: #{img_location}"
+      if params[:location] && params[:xml]
 
-      begin
-        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
-        i.save
+        begin
+          i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
+          i.save
 
-        i.create_techmd_datastream(img_location)
+          i.create_techmd_datastream(img_location)
 
-        i.save
+          i.save
 
-        returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
-      rescue StandardError => msg
-        returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+          returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+        rescue StandardError => msg
+          returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+        end
+      else
+        returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image location and VRA xml.</description></response>"
       end
       respond_to do |format|
         format.xml {render :layout => false, :xml => returnXml}
