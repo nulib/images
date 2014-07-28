@@ -20,9 +20,10 @@ describe Multiresimage do
 
 
   describe "jhove/techmd datastream" do
-    it "returns a path to the created jhove xml file" do
+    it "populates the ARCHV-TECHMD datastream" do
       m = Multiresimage.create(pid: "my:pid")
-      expect( m.create_techmd_datastream("#{Rails.root}/app/assets/images/rails.png") ).to eq("#{Rails.root}/app/assets/images/jhove_output.xml")
+      m.create_techmd_datastream("#{Rails.root}/app/assets/images/rails.png")
+      expect( m.datastreams["ARCHV-TECHMD"].content ).to eq(File.open("#{Rails.root}/app/assets/images/jhove_output.xml").read )
     end
   end
 
