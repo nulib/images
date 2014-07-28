@@ -33,3 +33,6 @@ vendor/servlet/
 
 config/database.yml
 config/dil-config.yml
+
+tags
+
