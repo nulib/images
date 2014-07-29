@@ -32,5 +32,7 @@ vendor/servlet/
 .rvmrc
 
 config/database.yml
+config/dil-config.yml
+
 tags
 
