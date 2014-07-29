@@ -155,12 +155,11 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  def create_exif_datastream( img_location )
-    # require mini_exif_tool
+  def create_archv_exif_datastream( img_location )
     # run perl script on raw exif data
     # output file
 
-    exif = MiniExifTool.new img_location
+    exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
 
     unless populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
       raise "Failed to create EXIF datastream"

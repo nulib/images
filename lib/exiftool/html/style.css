@@ -1,0 +1,24 @@
+body      { font-family: helvetica; font-size: .9em;
+            color: black; background: white }
+a:link    { color: blue }
+a:visited { color: #508 }
+a:active  { color: red }
+.blk      { color: black }
+.red      { color: #c00 }
+.com      { color: #a00 }
+.aside    { color: #864 }
+.lg       { font-size: larger }
+.sm       { font-size: smaller }
+.up       { margin: 0 0 .5em 0 }
+p         { margin: 1em 1em }
+p.lf      { margin: 1em 0 }
+.code     { color: #800; }
+code      { color: #800; font-family: monaco, monospace; font-size: 1em }
+pre       { font-family: monaco, monospace; font-size: 1em }
+table.box { padding: .2em; background: #ddd }
+table.norm     { border-collapse: collapse;
+                 border: 1px solid gray; }
+table.norm th  { border: 1px solid gray; background: #ddd }
+table.norm td  { border: 1px solid gray; padding: 2px 4px }
+table.clear td { border: 0; padding: 0 2px }
+table.tight td { padding: 1px 4px }
