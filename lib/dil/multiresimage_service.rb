@@ -16,22 +16,24 @@ module DIL
       logger.debug "menu_publish api was just called"
 
 
-      if params[:location] && params[:xml]
+      if params[:path] && params[:xml]
 
         begin
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
 
-          i.create_techmd_datastream(img_location)
+          i.create_techmd_datastream(params[:path])
 
           i.save
 
           returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
         rescue StandardError => msg
           returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+          # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
+          logger.debug returnXml
         end
       else
-        returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image location and VRA xml.</description></response>"
+        returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image path and VRA xml.</description></response>"
       end
       respond_to do |format|
         format.xml {render :layout => false, :xml => returnXml}
