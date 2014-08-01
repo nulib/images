@@ -141,6 +141,40 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+  def create_jp2( img_location )
+
+    jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
+    jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
+
+    `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
+    `export LD_LIBRARY_PATH`
+    `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_location}`
+    if $?.to_i == 0 && File.file?(jp2_img_location)
+      jp2_img_location
+    else
+      raise "Failed to create jp2 image"
+    end
+
+  end
+
+  def create_deliv_ops_datastream( img_location )
+    require 'net/scp'
+    
+    jp2 = create_jp2( img_location )
+
+    # Move jp2 file to ansel
+    Net::SCP.upload!( "ansel.library.northwestern.edu",
+                      DIL_CONFIG['ssh-user'],
+                      jp2,
+                      "inu-dil/hydra/test/",
+                      ssh: { password: DIL_CONFIG['ssh-pw'] } )
+
+    self.datastreams[ds_name].dsLabel = 'DELIV-OPS'
+    self.datastreams[ds_name].dsLocation = ansel_location
+    self.datastreams[ds_name].mimeType = 'IMG/JP2'
+    self.datastreams[ds_name].controlGroup = 'E'
+
+  end
 
   def create_techmd_datastream( img_location )
     require 'jhove_service'
