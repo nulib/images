@@ -115,7 +115,7 @@ class Multiresimage < ActiveFedora::Base
         self.vraworks << work
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
 
         #update vra xml to point to the new, associated work
         update_relation_set(work.pid)
@@ -159,7 +159,7 @@ class Multiresimage < ActiveFedora::Base
 
   def create_deliv_ops_datastream( img_location )
     require 'net/scp'
-    
+
     jp2 = create_jp2( img_location )
 
     # Move jp2 file to ansel
