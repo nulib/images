@@ -6,18 +6,19 @@ describe Multiresimage do
     its(:file_name) { should  == 'readme.txt' }
   end
 
-  describe "should have an admin policy" do
-    before do
-      @policy = AdminPolicy.create
-    end
-    after do
-      @policy.delete
-    end
-    subject { Multiresimage.new(:admin_policy=>@policy) }
-    its(:admin_policy) { should == @policy }
+  pending("It doesn't look like we're using policies") do
+    describe "should have an admin policy" do
+      before do
+        @policy = AdminPolicy.create
+      end
+      after do
+        @policy.delete
+      end
+      subject { Multiresimage.new(:admin_policy=>@policy) }
+      its(:admin_policy) { should == @policy }
 
+    end
   end
-
 
   describe "jhove/techmd datastream" do
     it "populates the ARCHV-TECHMD datastream" do
@@ -84,13 +85,19 @@ describe Multiresimage do
     end
   end
 
-  context "with a vra datastream" do
-    subject { Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26') }
-    it "should have related_ids" do
-      subject.related_ids.should == ["inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b"]
-    end
+  context "with an associated work" do
+    xml = File.open("#{Rails.root}/spec/fixtures/vra_image_minimal.xml")
 
+    # this will create a vrawork and associate them with each other
+    img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: "my:pid")
+    img.save
+
+    it "should have related_ids" do
+      img.related_ids.first.should eq img.vraworks.first.pid
+    end
   end
+
+
   context "to_solr" do
     before do
       @img = Multiresimage.new
