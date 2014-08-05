@@ -184,9 +184,9 @@ class Multiresimage < ActiveFedora::Base
 # # #
 
     jp2 = create_jp2( img_location )
-    @width = width
-    @height = height
-    ansel_location = "/inu-dil/hydra/test/"
+    width, height = get_image_width_and_height
+
+    ansel_location = DIL_CONFIG['ansel_location']  #"/inu-dil/hydra/test/"
 
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
