@@ -206,7 +206,7 @@ class Multiresimage < ActiveFedora::Base
 
 
   def get_image_width_and_height
-    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ] )
+    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ])
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     return { width: width, height: height }
