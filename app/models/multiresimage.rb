@@ -184,7 +184,9 @@ class Multiresimage < ActiveFedora::Base
 # # #
 
     jp2 = create_jp2( img_location )
-    width, height = get_image_width_and_height
+    width_and_height = get_image_width_and_height
+    width = width_and_height[ :width ]
+    height = width_and_height[ :height ]
 
     ansel_location = DIL_CONFIG['ansel_location']  #"/inu-dil/hydra/test/"
 
