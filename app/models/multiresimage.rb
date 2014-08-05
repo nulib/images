@@ -198,11 +198,12 @@ class Multiresimage < ActiveFedora::Base
                       ssh: { password: DIL_CONFIG['ssh_pw'] } )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
-
   end
 
 
+
   def jp2_deliv_ops_xml( width, height, rel_path, pid )
+    rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
       <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ pid }.jp2"/>
