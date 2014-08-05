@@ -145,17 +145,35 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_jp2( img_location )
-    jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
-    jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
-    return jp2_img_location if File.exist?( jp2_img_location )
+    if Rails.env == "staging"
+      jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
+      jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
+      return jp2_img_location if File.exist?( jp2_img_location )
 
-    `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
-    `export LD_LIBRARY_PATH`
-    `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_location}`
-    if $?.to_i == 0 && File.file?(jp2_img_location)
-      jp2_img_location
+      `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
+      `export LD_LIBRARY_PATH`
+      `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_location}`
+      if $?.to_i == 0 && File.file?(jp2_img_location)
+        jp2_img_location
+      else
+        raise "Failed to create jp2 image"
+      end
     else
-      raise "Failed to create jp2 image"
+      jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
+      jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
+      return jp2_img_location if File.exist?( jp2_img_location )
+
+      `convert #{img_location} -define jp2:rate=30 '#{jp2_img_location}[1024x1024]'`
+
+      # The shell command above doesn't return any indicator about success or failure, so we need to see if the jp2 file has actually been created before continuing
+      if File.file?(jp2_img_location)
+        # copy the jp2 file to wherever we need it to reside for fedora
+        # that location should be the ds_location that gets passed to populate_external_datastream
+        jp2_img_location
+      else
+        raise "Failed to create jp2 image"
+      end
+
     end
   end
 
@@ -214,14 +232,13 @@ class Multiresimage < ActiveFedora::Base
 
 
   def get_image_width_and_height
-    unless jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ])
-      raise 'Problem with DELIV-TECHMD datastream'
+    unless jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
+      raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
     end
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     return { width: width, height: height }
   end
-
 
 
   def create_jhove_xml( img_location )

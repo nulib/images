@@ -24,6 +24,8 @@ module DIL
 
           i.create_techmd_datastream( params[:path] )
           i.create_archv_exif_datastream( params[:path] )
+          i.create_deliv_techmd_datastream( params[:path] )
+          i.create_deliv_ops_datastream( params[:path] )
 
           i.save
 
