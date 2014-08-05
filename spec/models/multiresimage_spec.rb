@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Multiresimage do
+
   describe "a new instance with a file name" do
     subject { Multiresimage.new(:file_name=>'readme.txt') }
     its(:file_name) { should  == 'readme.txt' }
@@ -27,6 +28,15 @@ describe Multiresimage do
     end
   end
 
+  describe "#create_deliv-ops_datastream" do
+    it "populates the DELIV-OPS datastream" do
+      img = Multiresimage.create
+      img.create_deliv_ops_datastream( "#{ Rails.root }/spec/fixtures/images/internet.tiff" )
+      deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">  <svg:image x=\"0\" y=\"0\" height=\"600\" width=\"664\" xlink:href=\"inu-dil/hydra/test/#{ img.pid }.jp2\"/></svg:svg>"
+      expect( img.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml )
+    end
+  end
+
   describe "#create_archv_exif_datastream" do
     it "adds the archv-exif datastream" do
       m = Multiresimage.create
@@ -34,6 +44,16 @@ describe Multiresimage do
       exif_xml = `#{ Rails.root }/lib/exif.pl #{ sample_image_path }`
       m.create_archv_exif_datastream( sample_image_path )
       expect( m.datastreams[ "ARCHV-EXIF" ].content ).to eq( exif_xml )
+    end
+  end
+
+  describe "#create_deliv_techmd_datastream" do
+    it "adds the DELIV-TECHMD datastream" do
+      m = Multiresimage.create
+      sample_image_path = "#{Rails.root}/spec/fixtures/images/internet.jp2"
+      jhove_xml = `#{ Rails.root }/lib/exif.pl #{ sample_image_path }`
+      m.create_deliv_techmd_datastream( sample_image_path )
+      expect( m.datastreams[ "DELIV-TECHMD" ].content ).to eq( exif_xml )
     end
   end
 

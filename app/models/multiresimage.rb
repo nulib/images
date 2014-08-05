@@ -59,8 +59,10 @@ class Multiresimage < ActiveFedora::Base
   delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
   delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
-  attr_accessor :vra_xml
-  attr_accessor :from_menu
+  attr_accessor :vra_xml,
+                :from_menu,
+                :width,
+                :height
 
   before_save :update_associated_work
   before_create :vra_save
@@ -142,9 +144,9 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_jp2( img_location )
-
     jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
     jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
+    return jp2_img_location if File.exist?( jp2_img_location )
 
     `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
     `export LD_LIBRARY_PATH`
@@ -154,35 +156,75 @@ class Multiresimage < ActiveFedora::Base
     else
       raise "Failed to create jp2 image"
     end
-
   end
 
   def create_deliv_ops_datastream( img_location )
-    require 'net/scp'
+#    require 'net/ssh'
+#    require 'net/scp'
+
+# FROM ingest_processing_new.sh
+# imageWidth=$(cat $image_xml |  sed -n "s:.*<imageWidth>\(.*\)</imageWidth.*$:\1:p" | head -n 1)
+# imageHeight=$(cat $image_xml |  sed -n "s:.*<imageHeight>\(.*\)</imageHeight.*$:\1:p" | head -n 1)
+# imageServerRelativePath=$(cat $image_xml |  sed -n "s:.*<imageServerRelativePath>\(.*\)</imageServerRelativePath.*$:\1:p" | head -n 1)
+#
+# echo '<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' > $svg_xml
+# echo '  <svg:image x="0" y="0" height="'$imageHeight'" width="'$imageWidth'" xlink:href="'$IMAGESERVER_RELATIVE_PATH$imageServerRelativePath'"></svg:image>' >> $svg_xml
+# echo '</svg:svg>' >> $svg_xml
+#
+# add_xml_datastream "$pid" "DELIV-OPS" "$svg_xml" "http://$FEDORA_SERVER/fedora/objects/$pid/datastreams/DELIV-OPS?controlGroup=M&dsLabel=SVG+Datastream"
+# if [ $? != 0 ] ; then exit; fi
+# # #
+
+# EXAMPLE DELIV-OPS content
+# <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+#   <svg:image x="0" y="0" height="2048" width="3072" xlink:href="inu-dil/hydra/test/RealVMC/afri_posters/inu:dil-8522d0b2-317e-4c4d-ba59-c717b4ddf379.jp2"/>
+# </svg:svg>
+# # #
 
     jp2 = create_jp2( img_location )
+    @width = width
+    @height = height
+    ansel_location = "/inu-dil/hydra/test/"
 
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
-                      DIL_CONFIG['ssh-user'],
+                      DIL_CONFIG['ssh_user'],
                       jp2,
-                      "inu-dil/hydra/test/",
-                      ssh: { password: DIL_CONFIG['ssh-pw'] } )
+                      ansel_location,
+                      ssh: { password: DIL_CONFIG['ssh_pw'] } )
 
-    self.datastreams[ds_name].dsLabel = 'DELIV-OPS'
-    self.datastreams[ds_name].dsLocation = ansel_location
-    self.datastreams[ds_name].mimeType = 'IMG/JP2'
-    self.datastreams[ds_name].controlGroup = 'E'
+    self.datastreams[ 'DELIV-OPS' ].dsLabel = 'SVG Datastream'
+    self.datastreams[ 'DELIV-OPS' ].dsLocation = ansel_location
+    self.datastreams[ 'DELIV-OPS' ].mimeType = 'text/xml'
+    self.datastreams[ 'DELIV-OPS' ].controlGroup = 'M'
+  end
+
+  def get_image_width_and_height
+    jhove_xml = self.datastreams[ 'DELIV-TECHMD' ]
 
   end
 
-  def create_techmd_datastream( img_location )
+  def create_jhove_xml( img_location )
     require 'jhove_service'
 
     # This parameter is where the output file will go
-    j = JhoveService.new( File.dirname( img_location ) )
-    xml_loc = j.run_jhove( img_location )
+    j = JhoveService.new( File.dirname( jp2_imaage ))
+    xml_loc = j.run_jhove( jp2_image )
     jhove_xml = File.open(xml_loc).read
+  end
+
+  def create_deliv_techmd_datastream( img_location )
+    jp2_img_location = create_jp2( img_location )
+
+    jhove_xml = create_jhove_xml( jp2_img_location )
+
+    unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
+      raise "Failed to create Jhove datastream"
+    end
+  end
+
+  def create_techmd_datastream( img_location )
+    jhove_xml = create_jhove_xml( img_location )
 
     unless populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
       raise "Failed to create Jhove datastream"
@@ -202,11 +244,9 @@ class Multiresimage < ActiveFedora::Base
 
 
   def populate_datastream(xml, ds_name, ds_label, mime_type)
-
     self.datastreams[ds_name].content = xml
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
-
   end
 
 
