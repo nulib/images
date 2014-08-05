@@ -184,7 +184,9 @@ class Multiresimage < ActiveFedora::Base
 # # #
 
     jp2 = create_jp2( img_location )
-    width, height = get_image_width_and_height
+    width_and_height = get_image_width_and_height
+    width = width_and_height[ :width ]
+    height = width_and_height[ :height ]
 
     ansel_location = DIL_CONFIG['ansel_location']
 
@@ -204,7 +206,7 @@ class Multiresimage < ActiveFedora::Base
 
 
   def get_image_width_and_height
-    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ] )
+    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ])
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     return { width: width, height: height }
