@@ -187,8 +187,8 @@ class Multiresimage < ActiveFedora::Base
     width_and_height = get_image_width_and_height
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
-
     ansel_location = DIL_CONFIG['ansel_location']
+    deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
 
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
@@ -197,14 +197,26 @@ class Multiresimage < ActiveFedora::Base
                       ansel_location,
                       ssh: { password: DIL_CONFIG['ssh_pw'] } )
 
-    populate_datastream( svg_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
+    populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
+  end
 
+
+
+  def jp2_deliv_ops_xml( width, height, rel_path, pid )
+    rel_path = rel_path.chop if rel_path.end_with?( '/' )
+    xml = <<-EOF
+      <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ pid }.jp2"/>
+      </svg:svg>
+    EOF
   end
 
 
 
   def get_image_width_and_height
-    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ])
+    unless jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ])
+      raise 'Problem with DELIV-TECHMD datastream'
+    end
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     return { width: width, height: height }
