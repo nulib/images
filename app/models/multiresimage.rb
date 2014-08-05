@@ -162,7 +162,7 @@ class Multiresimage < ActiveFedora::Base
 
   def create_deliv_ops_datastream( img_location )
 #    require 'net/ssh'
-#    require 'net/scp'
+    require 'net/scp'
 
 # FROM ingest_processing_new.sh
 # imageWidth=$(cat $image_xml |  sed -n "s:.*<imageWidth>\(.*\)</imageWidth.*$:\1:p" | head -n 1)
