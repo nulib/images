@@ -197,8 +197,6 @@ class Multiresimage < ActiveFedora::Base
                       ansel_location,
                       ssh: { password: DIL_CONFIG['ssh_pw'] } )
 
-    xml, ds_name, ds_label, mime_type
-
     populate_datastream( svg_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
 
   end
