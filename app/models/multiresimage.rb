@@ -143,6 +143,7 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
   def create_jp2( img_location )
     jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
     jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
@@ -157,6 +158,7 @@ class Multiresimage < ActiveFedora::Base
       raise "Failed to create jp2 image"
     end
   end
+
 
   def create_deliv_ops_datastream( img_location )
 #    require 'net/ssh'
@@ -199,19 +201,25 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams[ 'DELIV-OPS' ].controlGroup = 'M'
   end
 
+
+
   def get_image_width_and_height
     jhove_xml = self.datastreams[ 'DELIV-TECHMD' ]
 
   end
 
+
+
   def create_jhove_xml( img_location )
     require 'jhove_service'
 
     # This parameter is where the output file will go
-    j = JhoveService.new( File.dirname( jp2_imaage ))
-    xml_loc = j.run_jhove( jp2_image )
+    j = JhoveService.new( File.dirname( img_location ))
+    xml_loc = j.run_jhove( img_location )
     jhove_xml = File.open(xml_loc).read
   end
+
+
 
   def create_deliv_techmd_datastream( img_location )
     jp2_img_location = create_jp2( img_location )
@@ -223,6 +231,8 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
+
   def create_techmd_datastream( img_location )
     jhove_xml = create_jhove_xml( img_location )
 
@@ -230,6 +240,8 @@ class Multiresimage < ActiveFedora::Base
       raise "Failed to create Jhove datastream"
     end
   end
+
+
 
   def create_archv_exif_datastream( img_location )
     # run perl script on raw exif data
@@ -247,6 +259,16 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams[ds_name].content = xml
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
+  end
+
+
+  def populate_external_datastream( ds_name, ds_label, mime_type, ds_location )
+
+    self.datastreams[ds_name].dsLabel = ds_label
+    self.datastreams[ds_name].dsLocation = ds_location
+    self.datastreams[ds_name].mimeType = mime_type
+    self.datastreams[ds_name].controlGroup = 'E'
+
   end
 
 
