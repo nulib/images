@@ -186,7 +186,7 @@ class Multiresimage < ActiveFedora::Base
     jp2 = create_jp2( img_location )
     width, height = get_image_width_and_height
 
-    ansel_location = DIL_CONFIG['ansel_location']  #"/inu-dil/hydra/test/"
+    ansel_location = DIL_CONFIG['ansel_location']
 
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
@@ -195,10 +195,10 @@ class Multiresimage < ActiveFedora::Base
                       ansel_location,
                       ssh: { password: DIL_CONFIG['ssh_pw'] } )
 
-    self.datastreams[ 'DELIV-OPS' ].dsLabel = 'SVG Datastream'
-    self.datastreams[ 'DELIV-OPS' ].dsLocation = ansel_location
-    self.datastreams[ 'DELIV-OPS' ].mimeType = 'text/xml'
-    self.datastreams[ 'DELIV-OPS' ].controlGroup = 'M'
+    xml, ds_name, ds_label, mime_type
+
+    populate_datastream( svg_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
+
   end
 
 
