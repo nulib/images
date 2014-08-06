@@ -114,7 +114,7 @@ class Multiresimage < ActiveFedora::Base
         work = self.create_vra_work(titleSet_display, vra)
         self.vraworks << work
 
-        self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
+        #self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
