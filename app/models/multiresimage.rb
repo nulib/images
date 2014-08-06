@@ -232,9 +232,11 @@ class Multiresimage < ActiveFedora::Base
 
 
   def get_image_width_and_height
-    unless jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
+    unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
       raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
     end
+    debugger
+    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     return { width: width, height: height }
@@ -264,7 +266,7 @@ class Multiresimage < ActiveFedora::Base
 
 
 
-  def create_techmd_datastream( img_location )
+  def create_archv_techmd_datastream( img_location )
     jhove_xml = create_jhove_xml( img_location )
 
     unless populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
