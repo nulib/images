@@ -60,9 +60,7 @@ class Multiresimage < ActiveFedora::Base
   delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
 
   attr_accessor :vra_xml,
-                :from_menu,
-                :width,
-                :height
+                :from_menu
 
   before_save :update_associated_work
   before_create :vra_save
@@ -115,6 +113,8 @@ class Multiresimage < ActiveFedora::Base
         #create the vrawork that is related to this vraimage/multiresimage
         work = self.create_vra_work(titleSet_display, vra)
         self.vraworks << work
+
+        #self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")

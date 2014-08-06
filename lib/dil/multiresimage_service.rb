@@ -22,7 +22,7 @@ module DIL
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
 
-          i.create_techmd_datastream( params[:path] )
+          i.create_archv_techmd_datastream( params[:path] )
           i.create_archv_exif_datastream( params[:path] )
           i.create_deliv_techmd_datastream( params[:path] )
           i.create_deliv_ops_datastream( params[:path] )
