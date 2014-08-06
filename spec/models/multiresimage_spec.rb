@@ -25,37 +25,39 @@ describe Multiresimage do
 
     before( :each ) do
       @m = Multiresimage.create
+      @sample_tiff = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+      @sample_jp2  = "#{ Rails.root }/spec/fixtures/images/internet.jp2"
     end
 
     describe "#create_archv_techmd_datastream" do
       it "populates the ARCHV-TECHMD datastream" do
-        @m.create_archv_techmd_datastream( "#{Rails.root}/spec/fixtures/images/internet.tiff" )
+        @m.create_archv_techmd_datastream( @sample_tiff )
         jhove_xml = File.open( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ).read
-        expect( @m.datastreams["ARCHV-TECHMD"].content ).to eq( jhove_xml )
+        expect( @m.datastreams["ARCHV-TECHMD"].content ).to match_xml_except( jhove_xml, 'date' )
       end
     end
 
     describe "#create_archv_exif_datastream" do
-      it "adds the archv-exif datastream" do
-        sample_image_path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
-        exif_xml = `#{ Rails.root }/lib/exif.pl #{ sample_image_path }`
-        @m.create_archv_exif_datastream( sample_image_path )
-        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to eq( exif_xml )
+      it "adds the ARCHV-EXIF datastream" do
+        exif_xml = `#{ Rails.root }/lib/exif.pl #{ @sample_tiff }`
+        jhove_xml = File.open( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ).read
+        @m.create_archv_exif_datastream( @sample_tiff )
+        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml )
       end
     end
 
     describe "#create_deliv_techmd_datastream" do
       it "adds the DELIV-TECHMD datastream" do
-        sample_image_path = "#{Rails.root}/spec/fixtures/images/internet.jp2"
         jhove_xml = File.open("#{Rails.root}/spec/fixtures/deliv_jhove_output.xml").read
-        @m.create_deliv_techmd_datastream( sample_image_path )
-        expect( @m.datastreams[ "DELIV-TECHMD" ].content ).to eq( jhove_xml )
+        @m.create_deliv_techmd_datastream( @sample_jp2 )
+        expect( @m.datastreams[ "DELIV-TECHMD" ].content ).to match_xml_except( jhove_xml, 'date' )
       end
     end
 
     describe "#create_deliv_ops_datastream" do
       it "populates the DELIV-OPS datastream" do
-        @m.create_deliv_ops_datastream( "#{ Rails.root }/spec/fixtures/images/internet.tiff" )
+        @m.create_deliv_techmd_datastream( @sample_jp2 )
+        @m.create_deliv_ops_datastream( @sample_jp2 )
         deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">  <svg:image x=\"0\" y=\"0\" height=\"600\" width=\"664\" xlink:href=\"inu-dil/hydra/test/#{ @m.pid }.jp2\"/></svg:svg>"
         expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml )
       end

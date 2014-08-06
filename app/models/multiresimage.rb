@@ -187,19 +187,6 @@ class Multiresimage < ActiveFedora::Base
 # imageHeight=$(cat $image_xml |  sed -n "s:.*<imageHeight>\(.*\)</imageHeight.*$:\1:p" | head -n 1)
 # imageServerRelativePath=$(cat $image_xml |  sed -n "s:.*<imageServerRelativePath>\(.*\)</imageServerRelativePath.*$:\1:p" | head -n 1)
 #
-# echo '<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">' > $svg_xml
-# echo '  <svg:image x="0" y="0" height="'$imageHeight'" width="'$imageWidth'" xlink:href="'$IMAGESERVER_RELATIVE_PATH$imageServerRelativePath'"></svg:image>' >> $svg_xml
-# echo '</svg:svg>' >> $svg_xml
-#
-# add_xml_datastream "$pid" "DELIV-OPS" "$svg_xml" "http://$FEDORA_SERVER/fedora/objects/$pid/datastreams/DELIV-OPS?controlGroup=M&dsLabel=SVG+Datastream"
-# if [ $? != 0 ] ; then exit; fi
-# # #
-
-# EXAMPLE DELIV-OPS content
-# <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-#   <svg:image x="0" y="0" height="2048" width="3072" xlink:href="inu-dil/hydra/test/RealVMC/afri_posters/inu:dil-8522d0b2-317e-4c4d-ba59-c717b4ddf379.jp2"/>
-# </svg:svg>
-# # #
 
     jp2 = create_jp2( img_location )
     width_and_height = get_image_width_and_height
@@ -235,7 +222,6 @@ class Multiresimage < ActiveFedora::Base
     unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
       raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
     end
-    debugger
     jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content

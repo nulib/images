@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jhove xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://hul.harvard.edu/ois/xml/ns/jhove" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/jhove http://hul.harvard.edu/ois/xml/xsd/jhove/1.6/jhove.xsd" name="JhoveToolkit" release="1.0" date="2009-08-06">
- <date>2014-08-06T11:59:21-05:00</date>
+ <date>2014-08-06T18:44:11-05:00</date>
  <repInfo uri="internet.tiff">
   <reportingModule release="1.7" date="2012-08-12">TIFF-hul</reportingModule>
   <format>TIFF</format>
