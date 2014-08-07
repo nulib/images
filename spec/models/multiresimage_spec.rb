@@ -40,9 +40,8 @@ describe Multiresimage do
     describe "#create_archv_exif_datastream" do
       it "adds the ARCHV-EXIF datastream" do
         exif_xml = `#{ Rails.root }/lib/exif.pl #{ @sample_tiff }`
-        jhove_xml = File.open( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ).read
         @m.create_archv_exif_datastream( @sample_tiff )
-        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml )
+        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml, 'FileAccessDate' )
       end
     end
 

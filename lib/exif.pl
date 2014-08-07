@@ -9,7 +9,7 @@ if ($#ARGV != 0) {
 
 my $image_path = $ARGV[0];
 my $pwd = cwd();
-my $EXIF_TOOL = "$pwd/lib/Image-ExifTool-9.68/exiftool -a -g1 -u --FileAccessDate ";
+my $EXIF_TOOL = "$pwd/lib/Image-ExifTool-9.68/exiftool -a -g1 -u";
 
 my $raw_metadata = `$EXIF_TOOL $image_path`;
 $raw_metadata =~ s/\&/&amp;/g;
