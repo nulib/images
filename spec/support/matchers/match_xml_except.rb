@@ -1,16 +1,14 @@
 RSpec::Matchers.define :match_xml_except do |*elements|
   # puts elements
   xml_new = elements.shift
-  element = elements.first
   match do |xml_orig|
     lines_eql = true
     xml_new_array = xml_new.lines.to_a
     xml_orig_array = xml_orig.lines.to_a
     xml_orig_array.each_with_index do |line, count|
       break unless lines_eql
-      puts line
-      puts xml_new_array[ count ]
-      next if element && /\b#{ element }\b/ =~ line
+      matches = elements.map { |element| /\b#{ element }\b/ =~ line }
+      next unless matches.empty?
       lines_eql = line == xml_new_array[ count ]
     end
     lines_eql
