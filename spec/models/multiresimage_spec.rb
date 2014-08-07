@@ -41,7 +41,7 @@ describe Multiresimage do
       it "adds the ARCHV-EXIF datastream" do
         exif_xml = `#{ Rails.root }/lib/exif.pl #{ @sample_tiff }`
         @m.create_archv_exif_datastream( @sample_tiff )
-        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml, 'FileAccessDate' )
+        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml, 'File_Access_Date_Time' )
       end
     end
 

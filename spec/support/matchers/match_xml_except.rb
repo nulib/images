@@ -8,7 +8,9 @@ RSpec::Matchers.define :match_xml_except do |*elements|
     xml_orig_array = xml_orig.lines.to_a
     xml_orig_array.each_with_index do |line, count|
       break unless lines_eql
-      next if element && line.include?( "<#{ element}" )
+      puts line
+      puts xml_new_array[ count ]
+      next if element && /\b#{ element }\b/ =~ line
       lines_eql = line == xml_new_array[ count ]
     end
     lines_eql
