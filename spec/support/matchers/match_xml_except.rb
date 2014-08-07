@@ -3,19 +3,15 @@ RSpec::Matchers.define :match_xml_except do |*elements|
   xml_new = elements.shift
   element = elements.first
   match do |xml_orig|
-    no_match = 0
+    line_diff = false
     xml_new_array = xml_new.lines.to_a
     xml_orig_array = xml_orig.lines.to_a
     xml_orig_array.each_with_index do |line, count|
-      break if no_match > 0
+      break if line_diff
       next if element && line.include?( element )
-      no_match += 1 unless line == xml_new_array[ count ]
+      line_diff = line != xml_new_array[ count ]
     end
-    if no_match == 0
-      true
-    else
-      false
-    end
+    !line_diff
   end
 
     # Optional failure messages
