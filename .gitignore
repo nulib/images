@@ -36,3 +36,4 @@ config/dil-config.yml
 
 tags
 
+spec/fixtures/images/jhove_output.xml
