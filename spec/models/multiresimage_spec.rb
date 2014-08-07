@@ -57,8 +57,12 @@ describe Multiresimage do
       it "populates the DELIV-OPS datastream" do
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         @m.create_deliv_ops_datastream( @sample_jp2 )
-        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">  <svg:image x=\"0\" y=\"0\" height=\"600\" width=\"664\" xlink:href=\"inu-dil/hydra/test/#{ @m.pid }.jp2\"/></svg:svg>"
-        expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml )
+        deliv_ops_xml = <<-EOF
+<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
+  <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"inu-dil/hydra/test/#{ @m.pid }.jp2\"/>
+</svg:svg>
+EOF
+        expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml.chomp )
       end
     end
   end

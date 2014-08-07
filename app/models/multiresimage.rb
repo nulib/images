@@ -179,9 +179,6 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_deliv_ops_datastream( img_location )
-#    require 'net/ssh'
-    require 'net/scp'
-
 # FROM ingest_processing_new.sh
 # imageWidth=$(cat $image_xml |  sed -n "s:.*<imageWidth>\(.*\)</imageWidth.*$:\1:p" | head -n 1)
 # imageHeight=$(cat $image_xml |  sed -n "s:.*<imageHeight>\(.*\)</imageHeight.*$:\1:p" | head -n 1)
@@ -195,14 +192,21 @@ class Multiresimage < ActiveFedora::Base
     ansel_location = DIL_CONFIG['ansel_location']
     deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
 
+    populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
+  end
+
+  def move_jp2_to_ansel
+    require 'net/scp'
+
+    ansel_location = DIL_CONFIG['ansel_location']
+    ansel_user     = DIL_CONFIG[ 'ssh_user' ]
+    ansel_password = DIL_CONFIG[ 'ssh_pw' ]
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
-                      DIL_CONFIG['ssh_user'],
+                      ansel_user,
                       jp2,
                       ansel_location,
-                      ssh: { password: DIL_CONFIG['ssh_pw'] } )
-
-    populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
+                      ssh: { password: ansel_password })
   end
 
 
@@ -210,10 +214,10 @@ class Multiresimage < ActiveFedora::Base
   def jp2_deliv_ops_xml( width, height, rel_path, pid )
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
-      <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ pid }.jp2"/>
-      </svg:svg>
-    EOF
+<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ pid }.jp2"/>
+</svg:svg>
+EOF
   end
 
 
