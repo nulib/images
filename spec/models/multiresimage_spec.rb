@@ -25,14 +25,14 @@ describe Multiresimage do
 
     before( :each ) do
       @m = Multiresimage.create
-      @sample_tiff = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+      @sample_tiff = "#{ Rails.root }/spec/fixtures/images/internet.tiff"
       @sample_jp2  = "#{ Rails.root }/spec/fixtures/images/internet.jp2"
     end
 
     describe "#create_archv_techmd_datastream" do
       it "populates the ARCHV-TECHMD datastream" do
-        @m.create_archv_techmd_datastream( @sample_tiff )
         jhove_xml = File.open( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ).read
+        @m.create_archv_techmd_datastream( @sample_tiff )
         expect( @m.datastreams["ARCHV-TECHMD"].content ).to match_xml_except( jhove_xml, 'date' )
       end
     end
@@ -48,7 +48,7 @@ describe Multiresimage do
 
     describe "#create_deliv_techmd_datastream" do
       it "adds the DELIV-TECHMD datastream" do
-        jhove_xml = File.open("#{Rails.root}/spec/fixtures/deliv_jhove_output.xml").read
+        jhove_xml = File.open("#{ Rails.root }/spec/fixtures/deliv_jhove_output.xml").read
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         expect( @m.datastreams[ "DELIV-TECHMD" ].content ).to match_xml_except( jhove_xml, 'date' )
       end
@@ -56,13 +56,13 @@ describe Multiresimage do
 
     describe "#create_deliv_ops_datastream" do
       it "populates the DELIV-OPS datastream" do
-        @m.create_deliv_techmd_datastream( @sample_jp2 )
-        @m.create_deliv_ops_datastream( @sample_jp2 )
         deliv_ops_xml = <<-EOF
 <svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
   <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"inu-dil/hydra/test/#{ @m.pid }.jp2\"/>
 </svg:svg>
 EOF
+        @m.create_deliv_techmd_datastream( @sample_jp2 )
+        @m.create_deliv_ops_datastream( @sample_jp2 )
         expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml.chomp )
       end
     end
