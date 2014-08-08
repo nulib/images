@@ -159,11 +159,12 @@ class Multiresimage < ActiveFedora::Base
         raise "Failed to create jp2 image"
       end
     else
-      jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
+
+      jp2_img = "#{self.pid}.jp2".gsub(/:/, '-') # File.basename(img_location, File.extname(img_location)) + ".jp2"
       jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
       return jp2_img_location if File.exist?( jp2_img_location )
 
-      `convert #{img_location} -define jp2:rate=30 '#{jp2_img_location}[1024x1024]'`
+      `convert #{img_location} -define jp2:rate=30 #{jp2_img_location}[1024x1024]`
 
       # The shell command above doesn't return any indicator about success or failure, so we need to see if the jp2 file has actually been created before continuing
       if File.file?(jp2_img_location)
@@ -191,11 +192,13 @@ class Multiresimage < ActiveFedora::Base
     height = width_and_height[ :height ]
     ansel_location = DIL_CONFIG['ansel_location']
     deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
+    move_jp2_to_ansel( jp2 )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
 
-  def move_jp2_to_ansel
+
+  def move_jp2_to_ansel( jp2 )
     require 'net/scp'
 
     ansel_location = DIL_CONFIG['ansel_location']
@@ -220,6 +223,16 @@ class Multiresimage < ActiveFedora::Base
 EOF
   end
 
+
+  def create_deliv_img_datastream( img_location )
+    jp2_name = self.pid.gsub(/:/, '-')
+    ds_location = "#{DIL_CONFIG[ 'ansel_url' ]}#{jp2_name}.jp2"
+
+    unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
+      raise "deliv-img failed for some reason and i hate it"
+    end
+
+  end
 
 
   def get_image_width_and_height
