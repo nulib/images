@@ -166,8 +166,7 @@ class Multiresimage < ActiveFedora::Base
 
       `convert #{img_location} -define jp2:rate=30 #{jp2_img_location}[1024x1024]`
 
-      # The shell command above doesn't return any indicator about success or failure, so we need to see if the jp2 file has actually been created before continuing
-      if File.file?(jp2_img_location)
+      if $?.to_i == 0 && File.file?(jp2_img_location)
         # copy the jp2 file to wherever we need it to reside for fedora
         # that location should be the ds_location that gets passed to populate_external_datastream
         jp2_img_location
@@ -180,12 +179,6 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_deliv_ops_datastream( img_location )
-# FROM ingest_processing_new.sh
-# imageWidth=$(cat $image_xml |  sed -n "s:.*<imageWidth>\(.*\)</imageWidth.*$:\1:p" | head -n 1)
-# imageHeight=$(cat $image_xml |  sed -n "s:.*<imageHeight>\(.*\)</imageHeight.*$:\1:p" | head -n 1)
-# imageServerRelativePath=$(cat $image_xml |  sed -n "s:.*<imageServerRelativePath>\(.*\)</imageServerRelativePath.*$:\1:p" | head -n 1)
-#
-
     jp2 = create_jp2( img_location )
     width_and_height = get_image_width_and_height
     width = width_and_height[ :width ]
