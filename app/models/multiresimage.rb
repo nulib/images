@@ -185,7 +185,6 @@ class Multiresimage < ActiveFedora::Base
     height = width_and_height[ :height ]
     ansel_location = DIL_CONFIG['ansel_location']
     deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
-    move_jp2_to_ansel( jp2 )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
@@ -194,7 +193,7 @@ class Multiresimage < ActiveFedora::Base
   def move_jp2_to_ansel( jp2 )
     require 'net/scp'
 
-    ansel_location = DIL_CONFIG['ansel_location']
+    ansel_location = DIL_CONFIG[ 'ansel_location' ]
     ansel_user     = DIL_CONFIG[ 'ssh_user' ]
     ansel_password = DIL_CONFIG[ 'ssh_pw' ]
     # Move jp2 file to ansel
@@ -218,6 +217,7 @@ EOF
 
 
   def create_deliv_img_datastream( img_location )
+    move_jp2_to_ansel( jp2 )
     jp2_name = self.pid.gsub(/:/, '-')
     ds_location = "#{DIL_CONFIG[ 'ansel_url' ]}#{jp2_name}.jp2"
 
