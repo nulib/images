@@ -177,7 +177,7 @@ class Multiresimage < ActiveFedora::Base
     `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
-  def create_deliv_ops_datastream( img_location )
+  def create_deliv_ops_datastream
     width_and_height = get_image_width_and_height
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]

@@ -62,7 +62,7 @@ describe Multiresimage do
 </svg:svg>
 EOF
         @m.create_deliv_techmd_datastream( @sample_jp2 )
-        @m.create_deliv_ops_datastream( @sample_jp2 )
+        @m.create_deliv_ops_datastream
         expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml.chomp )
       end
     end
