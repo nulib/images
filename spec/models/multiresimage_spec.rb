@@ -58,7 +58,7 @@ describe Multiresimage do
       it "populates the DELIV-OPS datastream" do
         deliv_ops_xml = <<-EOF
 <svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
-  <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"/dimages/public/images/inu-dil/hydra/test/from-menu/#{ @m.pid }.jp2\"/>
+  <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"/dimages/public/images/inu-dil/hydra/test/from-menu/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/>
 </svg:svg>
 EOF
         @m.create_deliv_techmd_datastream( @sample_jp2 )
