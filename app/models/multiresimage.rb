@@ -143,6 +143,22 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+  def create_archv_techmd_datastream( img_location )
+    jhove_xml = create_jhove_xml( img_location )
+
+    unless populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
+      raise "Failed to create Jhove datastream"
+    end
+  end
+
+  def create_archv_exif_datastream( img_location )
+    exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
+
+    unless populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
+      raise "Failed to create EXIF datastream"
+    end
+  end
+
   def jp2_img_name
     "#{ self.pid }.jp2".gsub( /:/, '-' )
   end
@@ -177,16 +193,6 @@ class Multiresimage < ActiveFedora::Base
     `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
-  def create_deliv_ops_datastream
-    width_and_height = get_image_width_and_height
-    width = width_and_height[ :width ]
-    height = width_and_height[ :height ]
-    ansel_location = DIL_CONFIG['ansel_location']
-    deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
-
-    populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
-  end
-
   def move_jp2_to_ansel
     require 'net/scp'
 
@@ -201,6 +207,16 @@ class Multiresimage < ActiveFedora::Base
                       ssh: { password: ansel_password })
   end
 
+  def create_deliv_ops_datastream
+    width_and_height = get_image_width_and_height
+    width = width_and_height[ :width ]
+    height = width_and_height[ :height ]
+    ansel_location = DIL_CONFIG['ansel_location']
+    deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
+
+    populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
+  end
+
   def jp2_deliv_ops_xml( width, height, rel_path, pid )
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
@@ -208,14 +224,6 @@ class Multiresimage < ActiveFedora::Base
   <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ jp2_img_name }"/>
 </svg:svg>
 EOF
-  end
-
-  def create_deliv_img_datastream( ds_location = nil )
-    ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
-
-    unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
-      raise "deliv-img failed for some reason and i hate it"
-    end
   end
 
   def get_image_width_and_height
@@ -246,19 +254,11 @@ EOF
     end
   end
 
-  def create_archv_techmd_datastream( img_location )
-    jhove_xml = create_jhove_xml( img_location )
+  def create_deliv_img_datastream( ds_location = nil )
+    ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
 
-    unless populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
-      raise "Failed to create Jhove datastream"
-    end
-  end
-
-  def create_archv_exif_datastream( img_location )
-    exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
-
-    unless populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
-      raise "Failed to create EXIF datastream"
+    unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
+      raise "deliv-img failed for some reason and i hate it"
     end
   end
 
