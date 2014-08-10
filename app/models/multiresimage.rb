@@ -144,38 +144,38 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
+  def jp2_img_name
+    "#{ self.pid }.jp2".gsub( /:/, '-' )
+  end
+
+  def jp2_img_path
+    Rails.root.join( 'tmp', jp2_img_name )
+  end
+
   def create_jp2( img_location )
-    jp2_img = jp2_file_name
-    jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
-    return jp2_img_location if File.exist?( jp2_img_location )
+    return jp2_img_path if File.exist?( jp2_img_path )
 
     if Rails.env == "staging"
-      create_jp2_staging( img_location, jp2_img_location )
+      create_jp2_staging( img_location, jp2_img_path )
     else
-      create_jp2_local( img_location, jp2_img_location )
+      create_jp2_local( img_location, jp2_img_path )
     end
 
-    if $?.to_i == 0 && File.file?( jp2_img_location )
-      # copy the jp2 file to wherever we need it to reside for fedora
-      # that location should be the ds_location that gets passed to populate_external_datastream
-      jp2_img_location
+    if $?.to_i == 0 && File.file?( jp2_img_path )
+      jp2_img_path
     else
       raise "Failed to create jp2 image"
     end
   end
 
-  def jp2_file_name
-    "#{ self.pid }.jp2".gsub( /:/, '-' )
+  def create_jp2_local( img_location, jp2_img_path )
+    `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
-  def create_jp2_local( img_location, jp2_img_location )
-    `convert #{img_location} -define jp2:rate=30 #{jp2_img_location}[1024x1024]`
-  end
-
-  def create_jp2_staging( img_location, jp2_img_location )
+  def create_jp2_staging( img_location, jp2_img_path )
     `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
     `export LD_LIBRARY_PATH`
-    `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_location}`
+    `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
 
@@ -191,17 +191,16 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  def move_jp2_to_ansel( jp2_img_location )
+  def move_jp2_to_ansel( jp2_img_path )
     require 'net/scp'
 
-    jp2_name = self.pid.gsub(/:/, '-')
-    ansel_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_name }.jp2"
+    ansel_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_img_name }"
     ansel_user     = DIL_CONFIG[ 'ssh_user' ]
     ansel_password = DIL_CONFIG[ 'ssh_pw' ]
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
                       ansel_user,
-                      jp2_img_location,
+                      jp2_img_path,
                       ansel_location,
                       ssh: { password: ansel_password })
   end
@@ -212,16 +211,16 @@ class Multiresimage < ActiveFedora::Base
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
 <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ pid }.jp2"/>
+  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ jp2_img_name }"/>
 </svg:svg>
 EOF
   end
 
 
-  def create_deliv_img_datastream( jp2_img_location )
-    move_jp2_to_ansel( jp2_img_location )
+  def create_deliv_img_datastream( jp2_img_path )
+    move_jp2_to_ansel( jp2_img_path )
     jp2_name = self.pid.gsub(/:/, '-')
-    # ds_location = "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_name}.jp2"
+    # ds_location = "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
     ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
@@ -253,9 +252,8 @@ EOF
 
 
   def create_deliv_techmd_datastream( img_location )
-    jp2_img_location = create_jp2( img_location )
-
-    jhove_xml = create_jhove_xml( jp2_img_location )
+    create_jp2( img_location )
+    jhove_xml = create_jhove_xml( jp2_img_path )
 
     unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
       raise "Failed to create Jhove datastream"
