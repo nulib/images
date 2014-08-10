@@ -38,7 +38,7 @@ describe Multiresimage do
     end
 
     describe "#create_archv_exif_datastream" do
-      it "adds the ARCHV-EXIF datastream" do
+      it "populates the ARCHV-EXIF datastream" do
         exif_xml = `#{ Rails.root }/lib/exif.pl #{ @sample_tiff }`
         sleep 1
         @m.create_archv_exif_datastream( @sample_tiff )
@@ -47,7 +47,7 @@ describe Multiresimage do
     end
 
     describe "#create_deliv_techmd_datastream" do
-      it "adds the DELIV-TECHMD datastream" do
+      it "populates the DELIV-TECHMD datastream" do
         jhove_xml = File.open("#{ Rails.root }/spec/fixtures/deliv_jhove_output.xml").read
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         expect( @m.datastreams[ "DELIV-TECHMD" ].content ).to match_xml_except( jhove_xml, 'date' )
@@ -69,7 +69,8 @@ EOF
 
     describe "#create_deliv_img_datastream" do
       it "populates the DELIV-IMG datastream" do
-        @m.create_deliv_img_datastream( @sample_jp2 )
+        public_jp2 = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
+        @m.create_deliv_img_datastream( public_jp2 )
         @m.save!
         expect( @m.datastreams[ "DELIV-IMG" ].content ).to_not be_nil
       end

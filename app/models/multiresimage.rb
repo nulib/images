@@ -143,7 +143,6 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
   def jp2_img_name
     "#{ self.pid }.jp2".gsub( /:/, '-' )
   end
@@ -156,9 +155,9 @@ class Multiresimage < ActiveFedora::Base
     return jp2_img_path if File.exist?( jp2_img_path )
 
     if Rails.env == "staging"
-      create_jp2_staging( img_location, jp2_img_path )
+      create_jp2_staging( img_location )
     else
-      create_jp2_local( img_location, jp2_img_path )
+      create_jp2_local( img_location )
     end
 
     if $?.to_i == 0 && File.file?( jp2_img_path )
@@ -168,19 +167,17 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  def create_jp2_local( img_location, jp2_img_path )
+  def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
-  def create_jp2_staging( img_location, jp2_img_path )
+  def create_jp2_staging( img_location )
     `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
     `export LD_LIBRARY_PATH`
     `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
-
   def create_deliv_ops_datastream( img_location )
-    jp2 = create_jp2( img_location )
     width_and_height = get_image_width_and_height
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
@@ -190,8 +187,7 @@ class Multiresimage < ActiveFedora::Base
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
 
-
-  def move_jp2_to_ansel( jp2_img_path )
+  def move_jp2_to_ansel
     require 'net/scp'
 
     ansel_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_img_name }"
@@ -205,8 +201,6 @@ class Multiresimage < ActiveFedora::Base
                       ssh: { password: ansel_password })
   end
 
-
-
   def jp2_deliv_ops_xml( width, height, rel_path, pid )
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
@@ -216,18 +210,13 @@ class Multiresimage < ActiveFedora::Base
 EOF
   end
 
-
-  def create_deliv_img_datastream( jp2_img_path )
-    move_jp2_to_ansel( jp2_img_path )
-    jp2_name = self.pid.gsub(/:/, '-')
-    # ds_location = "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
-    ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
+  def create_deliv_img_datastream( ds_location = nil )
+    ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed for some reason and i hate it"
     end
   end
-
 
   def get_image_width_and_height
     unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
@@ -239,7 +228,6 @@ EOF
     return { width: width, height: height }
   end
 
-
   def create_jhove_xml( img_location )
     require 'jhove_service'
 
@@ -248,8 +236,6 @@ EOF
     xml_loc = j.run_jhove( img_location )
     jhove_xml = File.open(xml_loc).read
   end
-
-
 
   def create_deliv_techmd_datastream( img_location )
     create_jp2( img_location )
@@ -260,8 +246,6 @@ EOF
     end
   end
 
-
-
   def create_archv_techmd_datastream( img_location )
     jhove_xml = create_jhove_xml( img_location )
 
@@ -270,12 +254,7 @@ EOF
     end
   end
 
-
-
   def create_archv_exif_datastream( img_location )
-    # run perl script on raw exif data
-    # output file
-
     exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
 
     unless populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
@@ -283,13 +262,11 @@ EOF
     end
   end
 
-
   def populate_datastream(xml, ds_name, ds_label, mime_type)
     self.datastreams[ds_name].content = xml
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
   end
-
 
   def populate_external_datastream( ds_name, ds_label, mime_type, ds_location )
     self.datastreams[ds_name].controlGroup = 'E'
