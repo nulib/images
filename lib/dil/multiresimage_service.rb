@@ -24,6 +24,7 @@ module DIL
 
           i.create_archv_techmd_datastream( params[:path] )
           i.create_archv_exif_datastream( params[:path] )
+          i.move_jp2_to_ansel
           i.create_deliv_techmd_datastream( params[:path] )
           i.create_deliv_ops_datastream( params[:path] )
           i.create_deliv_img_datastream( params[:path] )
