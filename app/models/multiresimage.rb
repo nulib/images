@@ -145,36 +145,37 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_jp2( img_location )
+    jp2_img = jp2_file_name
+    jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
+    return jp2_img_location if File.exist?( jp2_img_location )
+
     if Rails.env == "staging"
-      jp2_img = File.basename(img_location, File.extname(img_location)) + ".jp2"
-      jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
-      return jp2_img_location if File.exist?( jp2_img_location )
-
-      `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
-      `export LD_LIBRARY_PATH`
-      `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_location}`
-      if $?.to_i == 0 && File.file?(jp2_img_location)
-        jp2_img_location
-      else
-        raise "Failed to create jp2 image"
-      end
+      create_jp2_staging( img_location, jp2_img_location )
     else
-
-      jp2_img = "#{self.pid}.jp2".gsub(/:/, '-') # File.basename(img_location, File.extname(img_location)) + ".jp2"
-      jp2_img_location = "#{Rails.root}/tmp/#{jp2_img}"
-      return jp2_img_location if File.exist?( jp2_img_location )
-
-      `convert #{img_location} -define jp2:rate=30 #{jp2_img_location}[1024x1024]`
-
-      if $?.to_i == 0 && File.file?(jp2_img_location)
-        # copy the jp2 file to wherever we need it to reside for fedora
-        # that location should be the ds_location that gets passed to populate_external_datastream
-        jp2_img_location
-      else
-        raise "Failed to create jp2 image"
-      end
-
+      create_jp2_local( img_location, jp2_img_location )
     end
+
+    if $?.to_i == 0 && File.file?( jp2_img_location )
+      # copy the jp2 file to wherever we need it to reside for fedora
+      # that location should be the ds_location that gets passed to populate_external_datastream
+      jp2_img_location
+    else
+      raise "Failed to create jp2 image"
+    end
+  end
+
+  def jp2_file_name
+    "#{ self.pid }.jp2".gsub( /:/, '-' )
+  end
+
+  def create_jp2_local( img_location, jp2_img_location )
+    `convert #{img_location} -define jp2:rate=30 #{jp2_img_location}[1024x1024]`
+  end
+
+  def create_jp2_staging( img_location, jp2_img_location )
+    `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
+    `export LD_LIBRARY_PATH`
+    `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_location}`
   end
 
 
@@ -190,16 +191,17 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  def move_jp2_to_ansel( jp2 )
+  def move_jp2_to_ansel( jp2_img_location )
     require 'net/scp'
 
-    ansel_location = DIL_CONFIG[ 'ansel_location' ]
+    jp2_name = self.pid.gsub(/:/, '-')
+    ansel_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_name }.jp2"
     ansel_user     = DIL_CONFIG[ 'ssh_user' ]
     ansel_password = DIL_CONFIG[ 'ssh_pw' ]
     # Move jp2 file to ansel
     Net::SCP.upload!( "ansel.library.northwestern.edu",
                       ansel_user,
-                      jp2,
+                      jp2_img_location,
                       ansel_location,
                       ssh: { password: ansel_password })
   end
@@ -216,15 +218,15 @@ EOF
   end
 
 
-  def create_deliv_img_datastream( img_location )
-    move_jp2_to_ansel( jp2 )
+  def create_deliv_img_datastream( jp2_img_location )
+    move_jp2_to_ansel( jp2_img_location )
     jp2_name = self.pid.gsub(/:/, '-')
-    ds_location = "#{DIL_CONFIG[ 'ansel_url' ]}#{jp2_name}.jp2"
+    # ds_location = "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_name}.jp2"
+    ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed for some reason and i hate it"
     end
-
   end
 
 
@@ -292,12 +294,10 @@ EOF
 
 
   def populate_external_datastream( ds_name, ds_label, mime_type, ds_location )
-
-    self.datastreams[ds_name].dsLabel = ds_label
-    self.datastreams[ds_name].dsLocation = ds_location
-    self.datastreams[ds_name].mimeType = mime_type
     self.datastreams[ds_name].controlGroup = 'E'
-
+    self.datastreams[ds_name].dsLabel = ds_label
+    self.datastreams[ds_name].mimeType = mime_type
+    self.datastreams[ds_name].dsLocation = ds_location
   end
 
 
