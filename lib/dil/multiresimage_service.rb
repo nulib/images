@@ -24,16 +24,17 @@ module DIL
 
           i.create_archv_techmd_datastream( params[:path] )
           i.create_archv_exif_datastream( params[:path] )
-          i.move_jp2_to_ansel
+          #i.delay.move_jp2_to_ansel
+          Jp2Helper.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
           i.create_deliv_techmd_datastream( params[:path] )
-          i.create_deliv_ops_datastream( params[:path] )
+          i.create_deliv_ops_datastream
           i.create_deliv_img_datastream( params[:path] )
 
           i.save
 
           returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
         rescue StandardError => msg
-          returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+          returnXml = "<response><returnCode>Error</returnCode><description>#{msg}, #{msg.backtrace}</description></response>"
           # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
           logger.debug returnXml
         end

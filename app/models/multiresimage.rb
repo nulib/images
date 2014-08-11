@@ -114,7 +114,7 @@ class Multiresimage < ActiveFedora::Base
         work = self.create_vra_work(titleSet_display, vra)
         self.vraworks << work
 
-        #self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
+        self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
@@ -193,19 +193,6 @@ class Multiresimage < ActiveFedora::Base
     `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
-  def move_jp2_to_ansel
-    require 'net/scp'
-
-    ansel_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_img_name }"
-    ansel_user     = DIL_CONFIG[ 'ssh_user' ]
-    ansel_password = DIL_CONFIG[ 'ssh_pw' ]
-    # Move jp2 file to ansel
-    Net::SCP.upload!( "ansel.library.northwestern.edu",
-                      ansel_user,
-                      jp2_img_path,
-                      ansel_location,
-                      ssh: { password: ansel_password })
-  end
 
   def create_deliv_ops_datastream
     width_and_height = get_image_width_and_height
@@ -256,6 +243,8 @@ EOF
 
   def create_deliv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
+
+    #ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed for some reason and i hate it"
