@@ -17,4 +17,9 @@ class Jp2Helper < ActiveRecord::Base
                         ssh: { password: ansel_password })
     end
   end
+
+
+  def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
+
+  end
 end
