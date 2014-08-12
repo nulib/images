@@ -29,6 +29,8 @@ module DIL
           i.create_deliv_techmd_datastream( params[:path] )
           i.create_deliv_ops_datastream
           i.create_deliv_img_datastream( params[:path] )
+          # i.create_archv_img_datastream( params[:path] )
+          # ImageMover.delay.move_tiff_to_repo()
 
           i.save
 
