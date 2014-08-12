@@ -244,18 +244,18 @@ EOF
   def create_deliv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
 
-    #ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
-
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
-      raise "deliv-img failed for some reason and i hate it"
+      raise "deliv-img failed. (is the jp2 location accessible?)"
     end
   end
+
 
   def populate_datastream(xml, ds_name, ds_label, mime_type)
     self.datastreams[ds_name].content = xml
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
   end
+
 
   def populate_external_datastream( ds_name, ds_label, mime_type, ds_location )
     self.datastreams[ds_name].controlGroup = 'E'
