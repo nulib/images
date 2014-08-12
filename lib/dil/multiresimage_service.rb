@@ -25,7 +25,7 @@ module DIL
           i.create_archv_techmd_datastream( params[:path] )
           i.create_archv_exif_datastream( params[:path] )
           #i.delay.move_jp2_to_ansel
-          Jp2Helper.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
+          ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
           i.create_deliv_techmd_datastream( params[:path] )
           i.create_deliv_ops_datastream
           i.create_deliv_img_datastream( params[:path] )
