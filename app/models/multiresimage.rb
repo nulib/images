@@ -114,7 +114,8 @@ class Multiresimage < ActiveFedora::Base
         work = self.create_vra_work(titleSet_display, vra)
         self.vraworks << work
 
-        #self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
+        debugger
+        self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
@@ -159,6 +160,14 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+  def create_archv_img_datastream( ds_location = nil )
+    ds_location ||= "#{ DIL_CONFIG[ 'archv_url' ]}#{jp2_img_name}"
+
+    unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
+      raise "archv-img failed for some reason and i hate it"
+    end
+  end
+
   def jp2_img_name
     "#{ self.pid }.jp2".gsub( /:/, '-' )
   end
@@ -188,7 +197,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_jp2_staging( img_location )
-    `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
+   `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
     `export LD_LIBRARY_PATH`
     `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
@@ -256,6 +265,7 @@ EOF
 
   def create_deliv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
+    ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed for some reason and i hate it"

@@ -19,16 +19,22 @@ module DIL
       if params[:path] && params[:xml]
 
         begin
+          debugger
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
 
           i.create_archv_techmd_datastream( params[:path] )
+          i.save
           i.create_archv_exif_datastream( params[:path] )
-          i.move_jp2_to_ansel
+          i.save
+          #i.move_jp2_to_ansel
           i.create_deliv_techmd_datastream( params[:path] )
-          i.create_deliv_ops_datastream( params[:path] )
-          i.create_deliv_img_datastream( params[:path] )
+          i.save
+          i.create_deliv_ops_datastream
+          i.save
+          i.create_deliv_img_datastream
 
+          i.save
           i.save
 
           returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"

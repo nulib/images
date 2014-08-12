@@ -29,6 +29,14 @@ describe Multiresimage do
       @sample_jp2  = "#{ Rails.root }/spec/fixtures/images/internet.jp2"
     end
 
+    describe "#create_archv_img_datastream" do
+      it "populates the ARCHV-IMG datastream" do
+        @m.create_archv_img_datastream( "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif" )
+        @m.save!
+        expect( @m.datastreams[ "ARCHV-IMG" ].content ).to_not be_nil
+      end
+    end
+
     describe "#create_archv_techmd_datastream" do
       it "populates the ARCHV-TECHMD datastream" do
         jhove_xml = File.open( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ).read
