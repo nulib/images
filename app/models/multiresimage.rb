@@ -144,6 +144,7 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
   def create_archv_techmd_datastream( img_location )
     jhove_xml = create_jhove_xml( img_location )
 
@@ -151,6 +152,7 @@ class Multiresimage < ActiveFedora::Base
       raise "Failed to create Jhove datastream"
     end
   end
+
 
   def create_archv_exif_datastream( img_location )
     exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
@@ -172,8 +174,14 @@ class Multiresimage < ActiveFedora::Base
     "#{ self.pid }.jp2".gsub( /:/, '-' )
   end
 
+
   def jp2_img_path
     Rails.root.join( 'tmp', jp2_img_name )
+  end
+
+
+  def tiff_img_name
+    "#{ self.pid }.tif".gsub( /:/, '-' )
   end
 
   def create_jp2( img_location )
@@ -192,9 +200,11 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
+
 
   def create_jp2_staging( img_location )
    `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/`
@@ -202,19 +212,6 @@ class Multiresimage < ActiveFedora::Base
     `/lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
-  def move_jp2_to_ansel
-    require 'net/scp'
-
-    ansel_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_img_name }"
-    ansel_user     = DIL_CONFIG[ 'ssh_user' ]
-    ansel_password = DIL_CONFIG[ 'ssh_pw' ]
-    # Move jp2 file to ansel
-    Net::SCP.upload!( "ansel.library.northwestern.edu",
-                      ansel_user,
-                      jp2_img_path,
-                      ansel_location,
-                      ssh: { password: ansel_password })
-  end
 
   def create_deliv_ops_datastream
     width_and_height = get_image_width_and_height
@@ -226,6 +223,7 @@ class Multiresimage < ActiveFedora::Base
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
 
+
   def jp2_deliv_ops_xml( width, height, rel_path, pid )
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
@@ -234,6 +232,7 @@ class Multiresimage < ActiveFedora::Base
 </svg:svg>
 EOF
   end
+
 
   def get_image_width_and_height
     unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
@@ -245,6 +244,7 @@ EOF
     return { width: width, height: height }
   end
 
+
   def create_jhove_xml( img_location )
     require 'jhove_service'
 
@@ -253,6 +253,7 @@ EOF
     xml_loc = j.run_jhove( img_location )
     jhove_xml = File.open(xml_loc).read
   end
+
 
   def create_deliv_techmd_datastream( img_location )
     create_jp2( img_location )
@@ -263,20 +264,32 @@ EOF
     end
   end
 
+
   def create_deliv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
     ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
-      raise "deliv-img failed for some reason and i hate it"
+      raise "deliv-img failed. (is the jp2 location accessible?)"
     end
   end
+
+
+  def create_archv_img_datastream( ds_location = nil )
+    ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
+
+    unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
+      raise "archv-img failed."
+    end
+  end
+
 
   def populate_datastream(xml, ds_name, ds_label, mime_type)
     self.datastreams[ds_name].content = xml
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
   end
+
 
   def populate_external_datastream( ds_name, ds_label, mime_type, ds_location )
     self.datastreams[ds_name].controlGroup = 'E'
