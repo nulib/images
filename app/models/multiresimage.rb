@@ -267,7 +267,6 @@ EOF
 
   def create_deliv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
-    ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed. (is the jp2 location accessible?)"
@@ -277,7 +276,6 @@ EOF
 
   def create_archv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
-    ds_location = "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif"
 
     unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
       raise "archv-img failed."
