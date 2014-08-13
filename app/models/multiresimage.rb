@@ -114,7 +114,6 @@ class Multiresimage < ActiveFedora::Base
         work = self.create_vra_work(titleSet_display, vra)
         self.vraworks << work
 
-        debugger
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
@@ -164,6 +163,7 @@ class Multiresimage < ActiveFedora::Base
 
   def create_archv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'archv_url' ]}#{jp2_img_name}"
+    ds_location = "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif"
 
     unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
       raise "archv-img failed for some reason and i hate it"
@@ -217,8 +217,8 @@ class Multiresimage < ActiveFedora::Base
     width_and_height = get_image_width_and_height
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
-    ansel_location = DIL_CONFIG['ansel_location']
-    deliv_ops_xml = jp2_deliv_ops_xml( width, height, ansel_location, self.pid )
+    jp2_location = DIL_CONFIG['jp2_location']
+    deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location, self.pid )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
@@ -266,7 +266,7 @@ EOF
 
 
   def create_deliv_img_datastream( ds_location = nil )
-    ds_location ||= "#{ DIL_CONFIG[ 'ansel_url' ]}#{jp2_img_name}"
+    ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
     ds_location = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
 
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
@@ -277,6 +277,7 @@ EOF
 
   def create_archv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
+    ds_location = "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif"
 
     unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
       raise "archv-img failed."
