@@ -19,25 +19,23 @@ module DIL
       if params[:path] && params[:xml]
 
         begin
-          debugger
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
 
           i.create_archv_techmd_datastream( params[:path] )
-          i.save
           i.create_archv_exif_datastream( params[:path] )
-          ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
-          #i.move_jp2_to_ansel
+          # ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
           i.create_deliv_techmd_datastream( params[:path] )
-          i.save
           i.create_deliv_ops_datastream
-          i.save
           i.create_deliv_img_datastream
           i.create_archv_img_datastream
-          ImageMover.delay.move_tiff_to_repo()
+          # ImageMover.delay.move_tiff_to_repo()
+          i.edit_groups = [ 'registered' ]
+          i.save!
 
-          i.save
-          i.save
+          j = Multiresimage.find( i.pid )
+          j.save!
+
 
           returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
         rescue StandardError => msg
