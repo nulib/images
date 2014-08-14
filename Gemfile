@@ -28,6 +28,11 @@ source 'http://rubygems.org'
   gem 'net-scp'
   gem 'delayed_job_active_record'
 
+  # Use Capistrano for deployment
+  gem 'capistrano', '~> 3.2'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
