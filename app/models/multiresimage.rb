@@ -184,6 +184,7 @@ class Multiresimage < ActiveFedora::Base
     "#{ self.pid }.tif".gsub( /:/, '-' )
   end
 
+
   def create_jp2( img_location )
     return jp2_img_path if File.exist?( jp2_img_path )
 

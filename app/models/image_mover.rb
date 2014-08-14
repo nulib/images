@@ -7,7 +7,7 @@ class ImageMover < ActiveRecord::Base
       puts "assume the jp2 image was successfully moved"
     else
 
-      repo_location = "#{ DIL_CONFIG[ 'ansel_location' ]}/#{ jp2_img_name }"
+      repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}/#{ jp2_img_name }"
 
       scp_mover( server: DIL_CONIFG['jp2_server'], user: DIL_CONFIG[ 'jp2_ssh_user' ], password: DIL_CONFIG[ 'jp2_ssh_pw' ], local_img_path: jp2_img_path, remote_img_path: repo_location )
     end
