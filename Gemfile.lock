@@ -83,7 +83,6 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.5.3)
       ffi (~> 1.0, >= 1.0.11)
-    clamav (0.4.1)
     coderay (1.1.0)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
@@ -381,7 +380,6 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rvm
   capybara (= 1.1.2)
-  clamav (= 0.4.1)
   coffee-rails (~> 3.2.1)
   database_cleaner (= 0.8.0)
   debugger
