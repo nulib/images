@@ -80,14 +80,40 @@ class Multiresimage < ActiveFedora::Base
     work.titleSet_display_work = titleSet_display
     work.add_relationship(:has_image, "info:fedora/#{self.pid}")
 
+    # validate the work xml before we save it
+    validate_vra( work )
+
     work.save!
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
     work.update_relation_set(self.pid)
     work.update_ref_id(work.pid)
+
+    # re-validate the newly updated vra
+    validate_vra( work )
+
     work.save!
 
     work #you'd better
+  end
+
+
+  # returns nil is there weren't any validation errors
+  def validate_vra( vra )
+    require 'open-uri'
+
+    xsd = Nokogiri::XML::Schema(open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read)
+    doc = Nokogiri::XML(vra.datastreams["VRA"].content)
+
+    invalid = ""
+    xsd.validate(doc).each do |error|
+      invalid << error.message
+    end
+
+    if invalid
+      raise invalid
+    end
+
   end
 
 
@@ -106,6 +132,9 @@ class Multiresimage < ActiveFedora::Base
 
         #set VRA datastream to the xml document
         self.datastreams["VRA"].content = vra.to_s
+
+        #validate the vra
+        validate_vra( self )
 
         #todo: make groups be a param to the API (maybe)
         self.read_groups = ["registered"]
@@ -136,6 +165,9 @@ class Multiresimage < ActiveFedora::Base
 
           self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
         end
+
+        #last thing is to validate the vra to ensure it's valid after all the modifications
+        validate_vra( self )
 
       else
         raise "not an image type"
