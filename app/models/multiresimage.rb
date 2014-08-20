@@ -107,7 +107,7 @@ class Multiresimage < ActiveFedora::Base
 
     invalid = ""
     xsd.validate(doc).each do |error|
-      invalid << error.message
+      invalid << "Validation error: #{error.message}\n"
     end
 
     if invalid
