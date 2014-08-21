@@ -9,6 +9,10 @@ class Multiresimage < ActiveFedora::Base
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
 
+  require 'open-uri'
+
+  VRA_SCHEMA = open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read
+
   belongs_to :institutional_collection, :property=> :is_governed_by
 
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
@@ -100,9 +104,7 @@ class Multiresimage < ActiveFedora::Base
 
   # returns nil is there weren't any validation errors
   def validate_vra( vra )
-    require 'open-uri'
-
-    xsd = Nokogiri::XML::Schema(open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read)
+    xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
     doc = Nokogiri::XML(vra.datastreams["VRA"].content)
 
     invalid = ""
@@ -113,7 +115,6 @@ class Multiresimage < ActiveFedora::Base
     if invalid
       raise invalid
     end
-
   end
 
 
