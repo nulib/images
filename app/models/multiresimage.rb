@@ -103,9 +103,9 @@ class Multiresimage < ActiveFedora::Base
 
 
   # returns nil is there weren't any validation errors
-  def validate_vra( vra )
+  def validate_vra
     xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
-    doc = Nokogiri::XML(vra.datastreams["VRA"].content)
+    doc = Nokogiri::XML(self.datastreams["VRA"].content)
 
     invalid = ""
     xsd.validate(doc).each do |error|
@@ -165,7 +165,7 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        validate_vra( self )
+        validate_vra
 
       else
         raise "not an image type"
