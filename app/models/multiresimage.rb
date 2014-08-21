@@ -133,9 +133,6 @@ class Multiresimage < ActiveFedora::Base
         #set VRA datastream to the xml document
         self.datastreams["VRA"].content = vra.to_s
 
-        #validate the vra
-        validate_vra( self )
-
         #todo: make groups be a param to the API (maybe)
         self.read_groups = ["registered"]
 
