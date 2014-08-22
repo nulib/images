@@ -21,12 +21,11 @@ describe Multiresimage do
     end
   end
 
-  context "saving an image" do
+  context "vra validation" do
     describe "with invalid vra" do
-      m = Multiresimage.new
-      m.datastreams["VRA"].content = File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal.xml").read
-      expect(m.validate_vra).to raise_error
-
+      it "should fail" do
+        expect{MultiresimageHelper.validate_vra( File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal.xml").read )}.to raise_error
+      end
     end
   end
 

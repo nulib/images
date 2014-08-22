@@ -9,10 +9,6 @@ class Multiresimage < ActiveFedora::Base
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
 
-  require 'open-uri'
-
-  VRA_SCHEMA = open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read
-
   belongs_to :institutional_collection, :property=> :is_governed_by
 
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
@@ -85,7 +81,7 @@ class Multiresimage < ActiveFedora::Base
     work.add_relationship(:has_image, "info:fedora/#{self.pid}")
 
     # validate the work xml before we save it
-    validate_vra( work )
+    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
 
@@ -94,28 +90,13 @@ class Multiresimage < ActiveFedora::Base
     work.update_ref_id(work.pid)
 
     # re-validate the newly updated vra
-    validate_vra( work )
+    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
 
     work #you'd better
   end
 
-
-  # returns nil is there weren't any validation errors
-  def validate_vra
-    xsd = Nokogiri::XML::Schema(VRA_SCHEMA)
-    doc = Nokogiri::XML(self.datastreams["VRA"].content)
-
-    invalid = ""
-    xsd.validate(doc).each do |error|
-      invalid << "Validation error: #{error.message}\n"
-    end
-
-    if invalid
-      raise invalid
-    end
-  end
 
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
@@ -165,7 +146,7 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        validate_vra
+        MultiresimageHelper.validate_vra( self.datastreams["VRA"].content )
 
       else
         raise "not an image type"
