@@ -6,7 +6,7 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
    <vra:image>
-      
+
       <!--Agents-->
        <vra:agentSet>
          <vra:display></vra:display>
@@ -30,7 +30,7 @@
       <vra:dateSet>
          <vra:display/>
          <vra:date type="creation">
-            <vra:earliestDate></vra:earliestDate>
+            <vra:earliestDate>2014</vra:earliestDate>
          </vra:date>
       </vra:dateSet>
 
@@ -132,7 +132,7 @@
       <!-- Titles -->
       <vra:titleSet>
          <vra:display></vra:display>
-         <vra:title pref="true"></vra:title>
+         <vra:title></vra:title>
       </vra:titleSet>
 
       <!--Work Type-->
@@ -142,4 +142,4 @@
       </vra:worktypeSet>
    </vra:image>
 </vra:vra>
-    
+

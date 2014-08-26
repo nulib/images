@@ -66,7 +66,7 @@ class Multiresimage < ActiveFedora::Base
   before_create :vra_save
 
 
-  def create_vra_work(titleSet_display, vra, current_user=nil)
+  def create_vra_work(vra, current_user=nil)
     work = Vrawork.new(pid: mint_pid("dil"))
 
     work.edit_users = DIL_CONFIG['admin_staff']
@@ -77,7 +77,6 @@ class Multiresimage < ActiveFedora::Base
 
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-    work.titleSet_display_work = titleSet_display
     work.add_relationship(:has_image, "info:fedora/#{self.pid}")
 
     # validate the work xml before we save it
@@ -119,7 +118,7 @@ class Multiresimage < ActiveFedora::Base
         self.read_groups = ["registered"]
 
         #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(titleSet_display, vra)
+        work = self.create_vra_work(vra)
         self.vraworks << work
 
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
