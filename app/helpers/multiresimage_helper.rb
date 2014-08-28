@@ -4,16 +4,18 @@ module MultiresimageHelper
   def self.validate_vra( vra )
     doc = Nokogiri::XML( vra )
 
-    invalid = ""
+    invalid = []
     XSD.validate(doc).each do |error|
       invalid << "Validation error: #{error.message}\n"
     end
 
-    if invalid != ""
-      raise invalid
+    invalid.each do |error|
+      next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
+      next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
+      raise error
     end
 
-    true unless invalid
+    true
   end
 
 

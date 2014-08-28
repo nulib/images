@@ -423,7 +423,6 @@ EOF
     node_set[0].set_attribute("pref", "true")
     node_set[0].set_attribute("relids", work_pid)
     node_set[0].set_attribute("type", "imageOf")
-    node_set[0].set_attribute("label", "Image")
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end
