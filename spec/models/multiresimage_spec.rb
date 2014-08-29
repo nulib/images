@@ -134,7 +134,10 @@ EOF
   end
 
   context "with an associated work" do
-    xml = File.open("#{Rails.root}/spec/fixtures/vra_image_minimal.xml")
+    xml = File.read("#{Rails.root}/spec/fixtures/vra_minimal.xml")
+    doc = Nokogiri::XML( xml )
+    doc.xpath( "//vra:earliestDate" )[ 0 ].content = '0000'
+    xml = doc.to_s
 
     # this will create a vrawork and associate them with each other
     img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: "my:pid")

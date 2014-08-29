@@ -30,7 +30,11 @@ class Vrawork  < ActiveFedora::Base
 
   # The xml_template uses the vra:image tags when creating the vra work
   def update_vra_work_tag
-    vra_xml = self.datastreams["VRA"].ng_xml.to_s.gsub("<vra:image","<vra:work")
+    # Change the work reference to an image reference
+    vra_xml = self.datastreams["VRA"].ng_xml.to_s.sub("<vra:work","<vra:image")
+    vra_xml = vra_xml.gsub!("</vra:work>","</vra:image>")
+    # Change the image to a work
+    vra_xml = self.datastreams["VRA"].ng_xml.to_s.sub("<vra:image","<vra:work")
     vra_xml = vra_xml.gsub!("</vra:image>","</vra:work>")
     self.datastreams["VRA"].content = vra_xml
   end

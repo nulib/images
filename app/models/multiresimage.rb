@@ -85,8 +85,8 @@ class Multiresimage < ActiveFedora::Base
     work.save!
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
-    work.update_relation_set(self.pid)
     work.update_ref_id(work.pid)
+    work.update_relation_set(self.pid)
 
     # re-validate the newly updated vra
     MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
@@ -120,6 +120,9 @@ class Multiresimage < ActiveFedora::Base
         #create the vrawork that is related to this vraimage/multiresimage
         work = self.create_vra_work(vra)
         self.vraworks << work
+
+        vra.xpath( "/vra:vra/vra:work", "vra" => "http://www.vraweb.org/vracore.htm" ).attr( "id", work.pid )
+        vra.xpath( "/vra:vra/vra:work", "vra" => "http://www.vraweb.org/vracore.htm" ).attr( "refid", work.pid )
 
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
