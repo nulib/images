@@ -9,10 +9,11 @@ module MultiresimageHelper
       invalid << "Validation error: #{error.message}\n"
     end
 
-    invalid.each do |error|
-      next if error =~ /is not a valid value of the list type 'xs:IDREFS'/
-      next if error =~ /is not a valid value of the atomic type 'xs:IDREF'/
-      raise error
+    invalid.each do |err|
+      next if err =~ /is not a valid value of the list type 'xs:IDREFS'/
+      next if err =~ /is not a valid value of the atomic type 'xs:IDREF'/
+      next if err =~ /is not a valid value of the atomic type 'xs:ID'/
+      raise
     end
 
     true

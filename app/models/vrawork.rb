@@ -30,13 +30,20 @@ class Vrawork  < ActiveFedora::Base
 
   # The xml_template uses the vra:image tags when creating the vra work
   def update_vra_work_tag
+    image_pid = self.datastreams[ "VRA" ].ng_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
+
     # Change the work reference to an image reference
     vra_xml = self.datastreams["VRA"].ng_xml.to_s.sub("<vra:work","<vra:image")
-    vra_xml = vra_xml.gsub!("</vra:work>","</vra:image>")
+    vra_xml = vra_xml.sub("</vra:work>","</vra:image>")
     # Change the image to a work
     vra_xml = self.datastreams["VRA"].ng_xml.to_s.sub("<vra:image","<vra:work")
-    vra_xml = vra_xml.gsub!("</vra:image>","</vra:work>")
+    vra_xml = vra_xml.sub("</vra:image>","</vra:work>")
     self.datastreams["VRA"].content = vra_xml
+    # Swap id and refid attributes in the new image reference
+    node_set = self.datastreams[ "VRA" ].ng_xml.xpath( '/vra:vra/vra:work' )
+    node_set[ 1 ].name = 'image'
+    node_set[ 1 ][ 'id' ] = image_pid
+    node_set[ 1 ][ 'refid' ] = image_pid
   end
 
 

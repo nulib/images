@@ -121,8 +121,8 @@ class Multiresimage < ActiveFedora::Base
         work = self.create_vra_work(vra)
         self.vraworks << work
 
-        vra.xpath( "/vra:vra/vra:work", "vra" => "http://www.vraweb.org/vracore.htm" ).attr( "id", work.pid )
-        vra.xpath( "/vra:vra/vra:work", "vra" => "http://www.vraweb.org/vracore.htm" ).attr( "refid", work.pid )
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = work.pid
 
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
