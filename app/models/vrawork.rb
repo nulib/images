@@ -41,9 +41,11 @@ class Vrawork  < ActiveFedora::Base
     self.datastreams["VRA"].content = vra_xml
     # Swap id and refid attributes in the new image reference
     node_set = self.datastreams[ "VRA" ].ng_xml.xpath( '/vra:vra/vra:work' )
-    node_set[ 1 ].name = 'image'
-    node_set[ 1 ][ 'id' ] = image_pid
-    node_set[ 1 ][ 'refid' ] = image_pid
+    if node_set[ 1 ]
+      node_set[ 1 ].name = 'image'
+      node_set[ 1 ][ 'id' ] = image_pid
+      node_set[ 1 ][ 'refid' ] = image_pid
+    end
   end
 
 
