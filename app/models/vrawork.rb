@@ -27,24 +27,22 @@ class Vrawork  < ActiveFedora::Base
   delegate :culturalContextSet_display_work, :to=>:VRA, :unique=>true
   delegate :relationSet_display_work, :to=>:VRA, :unique=>true
 
-
   # The xml_template uses the vra:image tags when creating the vra work
   def update_vra_work_tag
-    image_pid = self.datastreams[ "VRA" ].ng_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
+    vra_xml = self.datastreams[ "VRA" ].ng_xml
+    image_pid = vra_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
 
-    # Change the work reference to an image reference
-    vra_xml = self.datastreams["VRA"].ng_xml.to_s.sub("<vra:work","<vra:image")
-    vra_xml = vra_xml.sub("</vra:work>","</vra:image>")
     # Change the image to a work
-    vra_xml = self.datastreams["VRA"].ng_xml.to_s.sub("<vra:image","<vra:work")
-    vra_xml = vra_xml.sub("</vra:image>","</vra:work>")
-    self.datastreams["VRA"].content = vra_xml
+    vra_image = vra_xml.xpath( '/vra:vra/vra:image' )
+    vra_image[ 0 ].name = 'work'
+
+    # Change the work reference to an image reference^M
     # Swap id and refid attributes in the new image reference
-    node_set = self.datastreams[ "VRA" ].ng_xml.xpath( '/vra:vra/vra:work' )
-    if node_set[ 1 ]
-      node_set[ 1 ].name = 'image'
-      node_set[ 1 ][ 'id' ] = image_pid
-      node_set[ 1 ][ 'refid' ] = image_pid
+    vra_work = vra_xml.xpath( '/vra:vra/vra:work' )
+    if vra_work[ 1 ]
+      vra_work[ 1 ].name = 'image'
+      vra_work[ 1 ][ 'id' ] = image_pid
+      vra_work[ 1 ][ 'refid' ] = image_pid
     end
   end
 
