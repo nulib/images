@@ -37,6 +37,6 @@ config/dil-config.yml
 
 tags
 
-/spec/fixtures/images/jhove_output.xml
+spec/fixtures/images/jhove_output.xml
 dropbox/123/jhove_output.xml
 
