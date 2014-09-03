@@ -105,14 +105,10 @@ class Multiresimage < ActiveFedora::Base
     if from_menu
       vra = Nokogiri::XML(vra_xml)
 
-      vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
-      if vra_type == "image"
+      if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
-        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", self.pid)
-
-        #set VRA datastream to the xml document
-        self.datastreams["VRA"].content = vra.to_s
+        vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #todo: make groups be a param to the API (maybe)
         self.read_groups = ["registered"]
@@ -121,16 +117,19 @@ class Multiresimage < ActiveFedora::Base
         work = self.create_vra_work(vra)
         self.vraworks << work
 
+        # Update work reference PID
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = work.pid
+
+        #update vra xml to point to the new, associated work
+        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'pref' ]   = 'true'
+        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
+        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
 
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
-
-        #update vra xml to point to the new, associated work
-        update_relation_set(work.pid)
 
         #TODO: parse the vra record for the collection record
         collection = nil
@@ -148,8 +147,8 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        MultiresimageHelper.validate_vra( self.datastreams["VRA"].content )
-
+        MultiresimageHelper.validate_vra( vra.to_xml )
+        self.datastreams[ 'VRA' ].content = vra.to_xml
       else
         raise "not an image type"
       end
