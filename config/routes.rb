@@ -12,9 +12,12 @@ DIL::Application.routes.draw do
   devise_scope :user do
     root :to => "catalog#index"
   end
-  
+
   #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
-  
+
+match "multiresimages/menu_publish" => "multiresimages#menu_publish", :via => :post
+
+
   resources :multiresimages do
     collection do
       get 'aware_tile'
@@ -31,13 +34,14 @@ DIL::Application.routes.draw do
       post 'permissions'
     end
   end
-  
+
   resources :dil_collections do
     collection do
       get "get_collections"=>"dil_collections#get_collections"
     end
   end
-  
+
+
   match "dil_collections/:pid/:id/:index" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
   match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
   match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
@@ -59,7 +63,7 @@ DIL::Application.routes.draw do
   match "uploads/notify" => "uploads#notify", :via => :post
   match "dil_collections/make_private/:id" => "dil_collections#make_private" , :via => :post
   match "dil_collections/make_public/:id" => "dil_collections#make_public" , :via => :post
-  
+
   resources :uploads, :only => [:index] do
     collection do
       post :enqueue
@@ -79,5 +83,5 @@ DIL::Application.routes.draw do
 
   match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
-  
+
 end

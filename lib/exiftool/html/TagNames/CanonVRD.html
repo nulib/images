@@ -1,0 +1,405 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>CanonVRD Tags</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h2 class=top>CanonVRD Tags</h2>
+<p>Canon Digital Photo Professional writes VRD (Recipe Data) information as a
+trailer record to JPEG, TIFF, CRW and CR2 images, or as a stand-alone VRD
+file. The tags listed below represent information found in this record.  The
+complete VRD data record may be accessed as a block using the Extra
+&#39;CanonVRD&#39; tag, but this tag is not extracted or copied unless specified
+explicitly.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>VRD1</td>
+<td class=c>-</td>
+<td>--&gt; <a href='CanonVRD.html#Ver1'>CanonVRD Ver1 Tags</a></td></tr>
+<tr class=b>
+<td class=r>1</td>
+<td>VRDStampTool</td>
+<td class=c>-</td>
+<td>--&gt; <a href='CanonVRD.html#StampTool'>CanonVRD StampTool Tags</a></td></tr>
+<tr>
+<td class=r>2</td>
+<td>VRD2</td>
+<td class=c>-</td>
+<td>--&gt; <a href='CanonVRD.html#Ver2'>CanonVRD Ver2 Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Ver1'>CanonVRD Ver1 Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>2</td>
+<td>VRDVersion</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>WBAdjRGBLevels</td>
+<td class=c>int16u[3]</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>24</td>
+<td>WhiteBalanceAdj</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Auto
+  <br>1 = Daylight
+  <br>2 = Cloudy
+  <br>3 = Tungsten
+  <br>4 = Fluorescent
+  <br>5 = Flash
+  <br>8 = Shade
+  <br>9 = Kelvin
+  <br>30 = Manual (Click)
+  <br>31 = Shot Settings</span></td></tr>
+<tr class=b>
+<td class=r>26</td>
+<td>WBAdjColorTemp</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>36</td>
+<td>WBFineTuneActive</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = No
+  <br>1 = Yes</span></td></tr>
+<tr class=b>
+<td class=r>40</td>
+<td>WBFineTuneSaturation</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>44</td>
+<td>WBFineTuneTone</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>46</td>
+<td>RawColorAdj</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Shot Settings
+  <br>1 = Faithful
+  <br>2 = Custom</span></td></tr>
+<tr>
+<td class=r>48</td>
+<td>RawCustomSaturation</td>
+<td class=c>int32s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>52</td>
+<td>RawCustomTone</td>
+<td class=c>int32s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>56</td>
+<td>RawBrightnessAdj</td>
+<td class=c>int32s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>60</td>
+<td>ToneCurveProperty</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Shot Settings
+  <br>1 = Linear
+  <br>2 = Custom 1
+  <br>3 = Custom 2
+  <br>4 = Custom 3
+  <br>5 = Custom 4
+  <br>6 = Custom 5</span></td></tr>
+<tr>
+<td class=r>122</td>
+<td>DynamicRangeMin</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>124</td>
+<td>DynamicRangeMax</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>272</td>
+<td>ToneCurveActive</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = No
+  <br>1 = Yes</span></td></tr>
+<tr class=b>
+<td class=r>276</td>
+<td>BrightnessAdj</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>277</td>
+<td>ContrastAdj</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>278</td>
+<td>SaturationAdj</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>286</td>
+<td>ColorToneAdj</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(in degrees, so -1 is the same as 359)</span></span></td></tr>
+<tr class=b>
+<td class=r>352</td>
+<td>RedCurvePoints</td>
+<td class=c>int16u[21]</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>394</td>
+<td>RedCurveLimits</td>
+<td class=c>int16u[4]</td>
+<td><span class=s><span class=n>(4 numbers: input and output highlight and shadow points)</span></span></td></tr>
+<tr class=b>
+<td class=r>410</td>
+<td>GreenCurvePoints</td>
+<td class=c>int16u[21]</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>452</td>
+<td>GreenCurveLimits</td>
+<td class=c>int16u[4]</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>468</td>
+<td>BlueCurvePoints</td>
+<td class=c>int16u[21]</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>510</td>
+<td>BlueCurveLimits</td>
+<td class=c>int16u[4]</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>526</td>
+<td>RGBCurvePoints</td>
+<td class=c>int16u[21]</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>568</td>
+<td>RGBCurveLimits</td>
+<td class=c>int16u[4]</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>580</td>
+<td>CropActive</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = No
+  <br>1 = Yes</span></td></tr>
+<tr>
+<td class=r>582</td>
+<td>CropLeft</td>
+<td class=c>int16u</td>
+<td><span class=s><span class=n>(crop coordinates in original unrotated image)</span></span></td></tr>
+<tr class=b>
+<td class=r>584</td>
+<td>CropTop</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>586</td>
+<td>CropWidth</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>588</td>
+<td>CropHeight</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>608</td>
+<td>CropAspectRatio</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Free
+  <br>1 = 3:2
+  <br>2 = 2:3
+  <br>3 = 4:3
+  <br>4 = 3:4
+  <br>5 = A-size Landscape
+  <br>6 = A-size Portrait
+  <br>7 = Letter-size Landscape
+  <br>8 = Letter-size Portrait
+  <br>9 = 4:5
+  <br>10 = 5:4
+  <br>11 = 1:1</span></td></tr>
+<tr class=b>
+<td class=r>610</td>
+<td>ConstrainedCropWidth</td>
+<td class=c>float</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>614</td>
+<td>ConstrainedCropHeight</td>
+<td class=c>float</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>618</td>
+<td>CheckMark</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Clear
+  <br>1 = 1
+  <br>2 = 2
+  <br>3 = 3</span></td></tr>
+<tr>
+<td class=r>622</td>
+<td>Rotation</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = 0
+  <br>1 = 90
+  <br>2 = 180
+  <br>3 = 270</span></td></tr>
+<tr class=b>
+<td class=r>624</td>
+<td>WorkColorSpace</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = sRGB
+  <br>1 = Adobe RGB
+  <br>2 = Wide Gamut RGB
+  <br>3 = Apple RGB
+  <br>4 = ColorMatch RGB</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='StampTool'>CanonVRD StampTool Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>StampToolCount</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Ver2'>CanonVRD Ver2 Tags</a></h2>
+<p>Tags added in DPP version 2.0 and later.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>4</td>
+<td>PictureStyle</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Standard
+  <br>1 = Portrait
+  <br>2 = Landscape
+  <br>3 = Neutral
+  <br>4 = Faithful
+  <br>5 = Monochrome</span></td></tr>
+<tr class=b>
+<td class=r>26</td>
+<td>RawColorToneAdj</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>28</td>
+<td>RawSaturationAdj</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>30</td>
+<td>RawContrastAdj</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>32</td>
+<td>RawLinear</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = No
+  <br>1 = Yes</span></td></tr>
+<tr class=b>
+<td class=r>34</td>
+<td>RawSharpnessAdj</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>36</td>
+<td>RawHighlightPoint</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>38</td>
+<td>RawShadowPoint</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>116</td>
+<td>MonochromeFilterEffect</td>
+<td class=c>int16s</td>
+<td><span class=s>-2 = None
+  <br>-1 = Yellow
+  <br>0 = Orange
+  <br>1 = Red
+  <br>2 = Green</span></td></tr>
+<tr class=b>
+<td class=r>118</td>
+<td>MonochromeToningEffect</td>
+<td class=c>int16s</td>
+<td><span class=s>-2 = None
+  <br>-1 = Sepia
+  <br>0 = Blue
+  <br>1 = Purple
+  <br>2 = Green</span></td></tr>
+<tr>
+<td class=r>120</td>
+<td>MonochromeContrast</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>122</td>
+<td>MonochromeLinear</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = No
+  <br>1 = Yes</span></td></tr>
+<tr>
+<td class=r>124</td>
+<td>MonochromeSharpness</td>
+<td class=c>int16s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>188</td>
+<td>ChrominanceNoiseReduction</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Off
+  <br>58 = Low
+  <br>100 = High</span></td></tr>
+<tr>
+<td class=r>190</td>
+<td>LuminanceNoiseReduction</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Off
+  <br>65 = Low
+  <br>100 = High</span></td></tr>
+<tr class=b>
+<td class=r>192</td>
+<td>ChrominanceNR_TIFF_JPEG</td>
+<td class=c>int16u</td>
+<td><span class=s>0 = Off
+  <br>33 = Low
+  <br>100 = High</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<hr>
+(This document generated automatically by Image::ExifTool::BuildTagLookup)
+<br><i>Last revised Oct 17, 2007</i>
+<p class=lf><a href='index.html'>&lt;-- ExifTool Tag Names</a></p>
+</body>
+</html>

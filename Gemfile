@@ -14,7 +14,7 @@ source 'http://rubygems.org'
   gem 'sqlite3', '1.3.6'
   gem 'bootstrap-sass'
   gem 'rufus-scheduler', '3.0.2'
-  
+
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
   gem 'devise', '2.1.3'
@@ -23,6 +23,10 @@ source 'http://rubygems.org'
   gem 'clamav', '0.4.1'
   gem 'rdf', '1.0'
   gem 'gon'
+  gem 'mini_exiftool'
+  gem 'jhove-service'
+  gem 'net-scp'
+  gem 'delayed_job_active_record'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -50,7 +54,7 @@ gem 'high_voltage'
 group :development, :test, :staging do
   gem 'jettywrapper', '1.4.1'
   gem 'rspec-rails', '>=2.9.0'
-  gem 'factory_girl_rails', '3.5.0' 
+  gem 'factory_girl_rails', '3.5.0'
   gem 'database_cleaner', '0.8.0'
   gem 'capybara', '1.1.2'
   gem 'bcrypt-ruby', '3.0.1'
@@ -69,3 +73,4 @@ end
 group :production do
   gem 'google-analytics-rails'
 end
+

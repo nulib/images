@@ -35,3 +35,8 @@ h2. testing the application
 rake hydra:fixtures:refresh RAILS_ENV=test
 rake spec
 </pre>
+
+h2. Local development only
+
+You'll need to install imagemagick to handle the tiff to jp2 conversion on your local machine. 
+brew install imagemagick --with-libtiff --with-jp2

@@ -1,0 +1,409 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Composite Tags</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h2 class=top>Composite Tags</h2>
+<p>
+The values of the composite tags are <b>Derived From</b> the values of other
+tags.  These are convenience tags which are calculated after all other
+information is extracted.
+</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag Name</th>
+<th>Writable</th><th>Derived From</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>Aperture</td>
+<td class=c>N</td>
+<td>FNumber
+  <br>ApertureValue</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>BlueBalance</td>
+<td class=c>N</td>
+<td>WB_RGGBLevels
+  <br>WB_RGBGLevels
+  <br>WB_RBGGLevels
+  <br>WB_GRBGLevels
+  <br>WB_GRGBLevels
+  <br>WB_RGBLevels
+  <br>WB_RBLevels
+  <br>WBBlueLevel
+  <br>WBGreenLevel</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>CFAPattern</td>
+<td class=c>N</td>
+<td>CFARepeatPatternDim
+  <br>CFAPattern2</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>CircleOfConfusion</td>
+<td class=c>N</td>
+<td>ScaleFactor35efl</td>
+<td><span class=s><span class=n>(this value may be incorrect if the image has been resized.  Calculated as
+D/1440, where D is the focal plane diagonal in mm)</span></span></td></tr>
+<tr>
+<td>ConditionalFEC</td>
+<td class=c>N</td>
+<td>FlashExposureComp
+  <br>FlashBits</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DOF</td>
+<td class=c>N</td>
+<td>FocusDistance
+  <br>FocalLength
+  <br>Aperture
+  <br>CircleOfConfusion</td>
+<td><span class=s><span class=n>(this value may be incorrect if the image has been resized)</span></span></td></tr>
+<tr>
+<td>DateCreated</td>
+<td class=c>N</td>
+<td>Kodak:YearCreated
+  <br>Kodak:MonthDayCreated</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DateTimeCreated</td>
+<td class=c>N</td>
+<td>DateCreated
+  <br>TimeCreated</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DateTimeOriginal</td>
+<td class=c>N</td>
+<td>DateTimeCreated</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>DigitalZoom</td>
+<td class=c>N</td>
+<td>Canon:ZoomSourceWidth
+  <br>Canon:ZoomTargetWidth
+  <br>Canon:DigitalZoom</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>DriveMode</td>
+<td class=c>N</td>
+<td>ContinuousDrive
+  <br>SelfTimer</td>
+<td><span class=s>0 = Continuous shooting
+  <br>1 = Self-timer Operation
+  <br>2 = Single-frame shooting</span></td></tr>
+<tr class=b>
+<td>Duration</td>
+<td class=c>N</td>
+<td>FLAC:SampleRate
+  <br>FLAC:Channels
+  <br>FLAC:TotalSamples</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Duration</td>
+<td class=c>N</td>
+<td>FileSize
+  <br>ID3Size
+  <br>MPEG:AudioBitrate
+  <br>MPEG:VideoBitrate
+  <br>MPEG:VBRFrames
+  <br>MPEG:SampleRate
+  <br>MPEG:MPEGAudioVersion</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Duration</td>
+<td class=c>N</td>
+<td>FrameRate
+  <br>FrameCount</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ExtenderStatus</td>
+<td class=c>N</td>
+<td>Olympus:Extender
+  <br>Olympus:LensType
+  <br>MaxApertureValue</td>
+<td><span class=s><span class=n>(Olympus cameras have the quirk that they may retain the extender settings
+after the extender is removed until the camera is powered off.  This tag is
+an attempt to represent the actual status of the extender.)</span>
+  <br>0 = Not attached
+  <br>1 = Attached
+  <br>2 = Removed</span></td></tr>
+<tr class=b>
+<td>FOV</td>
+<td class=c>N</td>
+<td>FocalLength
+  <br>ScaleFactor35efl
+  <br>FocusDistance</td>
+<td><span class=s><span class=n>(calculated for the long image dimension, this value may be incorrect for
+fisheye lenses, or if the image has been resized)</span></span></td></tr>
+<tr>
+<td>FileNumber</td>
+<td class=c>N</td>
+<td>DirectoryIndex
+  <br>FileIndex</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>FlashOn</td>
+<td class=c>N</td>
+<td>FlashBits
+  <br>Flash</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td>FlashType</td>
+<td class=c>N</td>
+<td>FlashBits</td>
+<td><span class=s>0 = Built-In Flash
+  <br>1 = External</span></td></tr>
+<tr class=b>
+<td>FocalLength35efl</td>
+<td class=c>N</td>
+<td>FocalLength
+  <br>ScaleFactor35efl</td>
+<td><span class=s><span class=n>(this value may be incorrect if the image has been resized)</span></span></td></tr>
+<tr>
+<td>GPSAltitude</td>
+<td class=c>N</td>
+<td>GPS:GPSAltitude
+  <br>GPS:GPSAltitudeRef</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSDateTime</td>
+<td class=c>N</td>
+<td>GPS:GPSDateStamp
+  <br>GPS:GPSTimeStamp</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>GPSLatitude</td>
+<td class=c>N</td>
+<td>GPS:GPSLatitude
+  <br>GPS:GPSLatitudeRef</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSLatitudeRef</td>
+<td class=c>N</td>
+<td>XMP:GPSLatitude</td>
+<td><span class=s>&#39;N&#39; = North
+  <br>&#39;S&#39; = South</span></td></tr>
+<tr>
+<td>GPSLongitude</td>
+<td class=c>N</td>
+<td>GPS:GPSLongitude
+  <br>GPS:GPSLongitudeRef</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>GPSLongitudeRef</td>
+<td class=c>N</td>
+<td>XMP:GPSLongitude</td>
+<td><span class=s>&#39;E&#39; = East
+  <br>&#39;W&#39; = West</span></td></tr>
+<tr>
+<td>GPSPosition</td>
+<td class=c>N</td>
+<td>GPSLatitude
+  <br>GPSLongitude</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>HyperfocalDistance</td>
+<td class=c>N</td>
+<td>FocalLength
+  <br>Aperture
+  <br>CircleOfConfusion</td>
+<td><span class=s><span class=n>(this value may be incorrect if the image has been resized)</span></span></td></tr>
+<tr>
+<td>ISO</td>
+<td class=c>N</td>
+<td>Canon:CameraISO
+  <br>Canon:BaseISO
+  <br>Canon:AutoISO</td>
+<td><span class=s><span class=n>(use CameraISO if numerical, otherwise calculate as BaseISO * AutoISO / 100)</span></span></td></tr>
+<tr class=b>
+<td>ImageHeight</td>
+<td class=c>N</td>
+<td>PostScript:ImageData
+  <br>PostScript:BoundingBox</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ImageSize</td>
+<td class=c>N</td>
+<td>ImageWidth
+  <br>ImageHeight</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ImageWidth</td>
+<td class=c>N</td>
+<td>PostScript:ImageData
+  <br>PostScript:BoundingBox</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>JpgFromRaw</td>
+<td class=c>Y</td>
+<td>JpgFromRawStart
+  <br>JpgFromRawLength</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>Lens</td>
+<td class=c>N</td>
+<td>ShortFocal
+  <br>LongFocal</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>Lens35efl</td>
+<td class=c>N</td>
+<td>ShortFocal
+  <br>LongFocal
+  <br>Lens
+  <br>ScaleFactor35efl</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LensID</td>
+<td class=c>N</td>
+<td>Nikon:LensIDNumber
+  <br>LensFStops
+  <br>MinFocalLength
+  <br>MaxFocalLength
+  <br>MaxApertureAtMinFocal
+  <br>MaxApertureAtMaxFocal
+  <br>MCUVersion
+  <br>Nikon:LensType</td>
+<td>--&gt; <a href='Nikon.html#LensID'>Nikon LensID Values</a></td></tr>
+<tr>
+<td>LensSpec</td>
+<td class=c>N</td>
+<td>Nikon:Lens
+  <br>Nikon:LensType</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>LightValue</td>
+<td class=c>N</td>
+<td>Aperture
+  <br>ShutterSpeed
+  <br>ISO</td>
+<td><span class=s><span class=n>(calculated LV -- similar to exposure value but includes ISO speed)</span></span></td></tr>
+<tr>
+<td>OriginalDecisionData</td>
+<td class=c>Y!</td>
+<td>OriginalDecisionDataOffset</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>OtherImage</td>
+<td class=c>N</td>
+<td>OtherImageStart
+  <br>OtherImageLength</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PreviewImage</td>
+<td class=c>Y</td>
+<td>PreviewImageStart
+  <br>PreviewImageLength
+  <br>PreviewImageValid
+  <br>PreviewImageStart (1)
+  <br>PreviewImageLength (1)</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>PreviewImageSize</td>
+<td class=c>N</td>
+<td>PreviewImageWidth
+  <br>PreviewImageHeight</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>PreviewImage</td>
+<td class=c>N</td>
+<td>ScreenNail</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>RedBalance</td>
+<td class=c>N</td>
+<td>WB_RGGBLevels
+  <br>WB_RGBGLevels
+  <br>WB_RBGGLevels
+  <br>WB_GRBGLevels
+  <br>WB_GRGBLevels
+  <br>WB_RGBLevels
+  <br>WB_RBLevels
+  <br>WBRedLevel
+  <br>WBGreenLevel</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>RedEyeReduction</td>
+<td class=c>N</td>
+<td>CanonFlashMode
+  <br>FlashBits</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr class=b>
+<td>ScaleFactor35efl</td>
+<td class=c>N</td>
+<td>FocalLength
+  <br>FocalLengthIn35mmFormat
+  <br>Composite:DigitalZoom
+  <br>FocalPlaneDiagonal
+  <br>FocalPlaneXSize
+  <br>FocalPlaneYSize
+  <br>FocalPlaneResolutionUnit
+  <br>FocalPlaneXResolution
+  <br>FocalPlaneYResolution
+  <br>ExifImageWidth
+  <br>ExifImageHeight
+  <br>CanonImageWidth
+  <br>CanonImageHeight
+  <br>ImageWidth
+  <br>ImageHeight</td>
+<td><span class=s><span class=n>(this value and any derived values may be incorrect if image has been resized)</span></span></td></tr>
+<tr>
+<td>ShootingMode</td>
+<td class=c>N</td>
+<td>CanonExposureMode
+  <br>EasyMode</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>ShutterCurtainHack</td>
+<td class=c>N</td>
+<td>FlashBits
+  <br>ShutterCurtainSync</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr>
+<td>ShutterSpeed</td>
+<td class=c>N</td>
+<td>ExposureTime
+  <br>ShutterSpeedValue
+  <br>BulbDuration</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>SubSecDateTimeOriginal</td>
+<td class=c>N</td>
+<td>DateTimeOriginal
+  <br>SubSecTimeOriginal</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>ThumbnailImage</td>
+<td class=c>Y</td>
+<td>ThumbnailOffset
+  <br>ThumbnailLength</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>WB_RGGBLevels</td>
+<td class=c>N</td>
+<td>Canon:WhiteBalance
+  <br>WB_RGGBLevelsAsShot
+  <br>WB_RGGBLevelsAuto
+  <br>WB_RGGBLevelsDaylight
+  <br>WB_RGGBLevelsCloudy
+  <br>WB_RGGBLevelsTungsten
+  <br>WB_RGGBLevelsFluorescent
+  <br>WB_RGGBLevelsFlash
+  <br>WB_RGGBLevelsCustom
+  <br>WB_RGGBLevelsShade
+  <br>WB_RGGBLevelsKelvin</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<hr>
+(This document generated automatically by Image::ExifTool::BuildTagLookup)
+<br><i>Last revised Jul 30, 2008</i>
+<p class=lf><a href='index.html'>&lt;-- ExifTool Tag Names</a></p>
+</body>
+</html>
