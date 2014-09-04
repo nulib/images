@@ -110,8 +110,8 @@
         </vra:textrefSet>
         <!-- Titles -->
         <vra:titleSet>
-            <vra:display>0000 - 0000</vra:display>
-            <vra:title pref="true">0000 - 0000</vra:title>
+            <vra:display></vra:display>
+            <vra:title pref="true"></vra:title>
         </vra:titleSet>
         <!--Work Type-->
         <vra:worktypeSet>

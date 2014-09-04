@@ -61,6 +61,7 @@ group :development, :test, :staging do
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
   gem 'debugger'
+  gem 'equivalent-xml', '>=0.5.0'
 end
 
 gem 'unicorn', '4.3.1'
