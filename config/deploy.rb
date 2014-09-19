@@ -41,8 +41,8 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       #execute :touch, release_path.join('tmp/restart.txt')
-      `kill $(ps -aef | grep '[u]nicorn_rails master' | awk '{print $2}')`
-      `nohup bundle exec unicorn_rails -p 3000 -E staging > /var/www/dil_hydra/unicorn.log 2>&1 &`
+      `kill $(ps -aef | grep '[u]nicorn_rails master' | awk '{print $2}');
+       nohup bundle exec unicorn_rails -p 3000 -E staging > /var/www/dil_hydra/unicorn.log 2>&1 &`
     end
   end
 
