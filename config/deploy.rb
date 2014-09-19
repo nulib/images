@@ -42,7 +42,7 @@ namespace :deploy do
       # Your restart mechanism here, for example:
       #execute :touch, release_path.join('tmp/restart.txt')
       execute "kill $(ps -aef | grep '[u]nicorn_rails master' | awk '{print $2}')"
-      execute "nohup bundle exec unicorn_rails -p 3000 -E staging > /var/www/dil_hydra/unicorn.log 2>&1 & sleep 2"
+      execute "cd /var/www/dil_hydra/current; nohup bundle exec unicorn_rails -p 3000 -E staging > /var/www/dil_hydra/current/unicorn.log 2>&1 & sleep 2"
     end
   end
 
