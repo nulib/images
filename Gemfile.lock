@@ -1,7 +1,6 @@
 GIT
-  remote: git@github.com:paclough/equivalent-xml.git
-  revision: a843004664efd5c7bd922d1ef093650bfc3480ac
-  branch: ignore-specified-attrs
+  remote: git@github.com:mbklein/equivalent-xml.git
+  revision: 43a7110d4c6d74ad649d9151df76059c28566f56
   specs:
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
