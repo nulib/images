@@ -26,7 +26,8 @@ describe Multiresimage do
       xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
       xml_from_rir  = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample_complete.xml" )
       m = Multiresimage.create( from_menu: true, vra_xml: xml_from_menu )
-      expect( m.datastreams[ 'VRA' ].content ).to match_xml_except( xml_from_rir, 'refid', 'relids' )
+      #expect( m.datastreams[ 'VRA' ].content ).to match_xml_except( xml_from_rir, 'refid', 'relids' )
+      expect( m.datastreams[ 'VRA' ].to_xml ).to be_equivalent_to( xml_from_rir ).ignoring_attr_values( 'relids', 'refid', 'id')
     end
   end
 
@@ -48,9 +49,9 @@ describe Multiresimage do
 
     describe "#create_archv_techmd_datastream" do
       it "populates the ARCHV-TECHMD datastream" do
-        jhove_xml = File.open( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ).read
+        jhove_xml = Nokogiri::XML.parse( File.read( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ))
         @m.create_archv_techmd_datastream( @sample_tiff )
-        expect( @m.datastreams["ARCHV-TECHMD"].content ).to match_xml_except( jhove_xml, 'date' )
+        expect( @m.datastreams["ARCHV-TECHMD"].content ).to be_equivalent_to( jhove_xml ).ignoring_content_of( "date" )
       end
     end
 

@@ -39,4 +39,6 @@ tags
 
 spec/fixtures/images/jhove_output.xml
 dropbox/123/jhove_output.xml
+config/projections.json
+notes.md
 
