@@ -20,13 +20,18 @@ source 'http://rubygems.org'
   gem 'devise', '2.1.3'
   gem 'omniauth-ldap', '1.0.2'
   gem 'mysql2', '0.3.11'
-  gem 'clamav', '0.4.1'
+  # gem 'clamav', '0.4.1'
   gem 'rdf', '1.0'
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'net-scp'
   gem 'delayed_job_active_record'
+
+  # Use Capistrano for deployment
+  gem 'capistrano', '~> 3.2'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -62,6 +67,7 @@ group :development, :test, :staging do
   gem 'simplecov', '0.7.1', :require => false, :group => :test
   gem 'debugger'
   gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
+  gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
 
 gem 'unicorn', '4.3.1'
