@@ -6,42 +6,42 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
   set_terminology do |t|
     t.root(:path=>"vra", :xmlns=>"http://www.vraweb.org/vracore4.htm", :schema=>"http://www.loc.gov/standards/vracore/vra.xsd" )
     t.vra_image(:path=>"image", :label=>"image", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
-		  t.titleSet(:path=>"titleSet", :label=>"title set") {
-			  t.titleSet_display(:path=>"display", :label=>"display")
-			  t.titleSet_title_pref(:path=>"title", :attributes=>{:pref=>"true"})
-		  }
-		  t.agentSet(:path=>"agentSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
+      t.titleSet(:path=>"titleSet", :label=>"title set") {
+        t.titleSet_display(:path=>"display", :label=>"display")
+        t.titleSet_title_pref(:path=>"title", :attributes=>{:pref=>"true"})
+      }
+      t.agentSet(:path=>"agentSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
         t.agentSet_display(:path=>"display", :label=>"display agent")
-		  }
-		  t.dateSet(:path=>"dateSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
+      }
+      t.dateSet(:path=>"dateSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
         t.dateSet_display(:path=>"display", :label=>"display date")
-		  }
-		  t.descriptionSet(:path=>"descriptionSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
+      }
+      t.descriptionSet(:path=>"descriptionSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
         t.descriptionSet_display(:path=>"display", :label=>"display description")
-		  }
-		  t.subjectSet(:path=>"subjectSet") {
+      }
+      t.subjectSet(:path=>"subjectSet") {
         t.subjectSet_display(:path=>"display", :label=>"display subject")
         t.subject(:path=>"subject", :label=>"subject") {
-				  t.subject_term(:path=>"term", :label=>"term")
+          t.subject_term(:path=>"term", :label=>"term")
         }
-		  }
+      }
 
       t.relationSet(:path=>"relationSet") {
         t.relationSet_display(:path=>"display", :label=>"Work")
         t.relation_preferred(:path=>"relation", :attributes=>{:pref=>"true", :type=>"imageOf"}, :label=>"Preferred Work") {
-		      t.relation_type(:path=>{:attribute=>"type"})
-		      t.relation_relids(:path=>{:attribute=>"relids"})
-		      t.relation_href(:path=>{:attribute=>"href"})
+          t.relation_type(:path=>{:attribute=>"type"})
+          t.relation_relids(:path=>{:attribute=>"relids"})
+          t.relation_href(:path=>{:attribute=>"href"})
         }
         t.relation_imageOf(:path=>"relation", :attributes=>{:type=>"imageOf"}, :label=>"Image of Work") {
           t.relation_type(:path=>{:attribute=>"type"})
-		      t.relation_relids(:path=>{:attribute=>"relids"})
-		      t.relation_href(:path=>{:attribute=>"href"})
+          t.relation_relids(:path=>{:attribute=>"relids"})
+          t.relation_href(:path=>{:attribute=>"href"})
         }
         t.relation(:path=>"relation", :label=>"Work") {
-		      t.relation_type(:path=>{:attribute=>"type"})
-		      t.relation_relids(:path=>{:attribute=>"relids"})
-		      t.relation_href(:path=>{:attribute=>"href"})
+          t.relation_type(:path=>{:attribute=>"type"})
+          t.relation_relids(:path=>{:attribute=>"relids"})
+          t.relation_href(:path=>{:attribute=>"href"})
         }
       }
     }
@@ -50,10 +50,10 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
       t.titleset(:path=>"titleSet", :label=>"title set") {
         t.titleSet_display(:path=>"display", :label=>"display")
         t.titleset_title_pref(:path=>"title", :attributes=>{:pref=>"true"})
-		  }
-		  t.agent_set(:path=>"agentSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
+      }
+      t.agent_set(:path=>"agentSet", :xmlns=>"http://www.vraweb.org/vracore4.htm") {
         t.display_agent(:path=>"display", :label=>"display agent")
-		  }
+      }
       t.material_set(:path=>"materialSet") {
         t.material(:path=>"material", :label=>"material")
       }
@@ -63,7 +63,7 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
       }
       t.subject_set(:path=>"subjectSet") {
         t.subject(:path=>"subject", :label=>"subject") {
-				  t.subject_term(:path=>"term", :label=>"term")
+          t.subject_term(:path=>"term", :label=>"term")
         }
       }
       t.relation_set(:path=>"relationSet") {
@@ -83,39 +83,39 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
 
 
   # Adds VRA image record to VRA
-	def add_image(image_node)
+  def add_image(image_node)
     nodeset = self.find_by_terms(:vra)
-	  image_node.first.add_namespace_definition("vra","http://www.vraweb.org/vracore4.htm")
-	  nodeset.first.add_child(image_node)
+    image_node.first.add_namespace_definition("vra","http://www.vraweb.org/vracore4.htm")
+    nodeset.first.add_child(image_node)
     self.content = self.ng_xml.to_s
     return nodeset
   end
 
 
-	# Generates new VRA datastream
+  # Generates new VRA datastream
   def self.xml_template
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.vra("xmlns"=>"http://www.vraweb.org/vracore4.htm", "xmlns:vra"=>"http://www.vraweb.org/vracore4.htm",
-		    "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance",
+        "xmlns:xsi"=>"http://www.w3.org/2001/XMLSchema-instance",
         "xsi:schemaLocation"=>"http://www.loc.gov/standards/vracore/vra.xsd") {
-			}
+      }
     end
     return builder.doc
   end
 
 
-	# Generates VRA Image
+  # Generates VRA Image
   def self.image_template item
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.image(:xmlns=>"http://www.vraweb.org/vracore4.htm") {
-		    xml.titleSet {
-				  xml.display
-				  xml.title(:pref=>"true")
-		    }
-		    xml.relationSet {
-				  xml.display
-				  xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
-		    }
+        xml.titleSet {
+          xml.display
+          xml.title(:pref=>"true")
+        }
+        xml.relationSet {
+          xml.display
+          xml.relation(:type=>"imageOf", :pref=>"true", :label=>"Work")
+        }
       }
     end
     return builder.doc
@@ -124,10 +124,10 @@ class VRAImageDatastream < ActiveFedora::NokogiriDatastream
 
   # Inserts a new vra_image
   def insert_vra_image(parms)
-	  node = Hydra::VRAImage.image_template({:title => parms[:title]}).root()
-	  nodeset = self.find_by_terms(:vra)
+    node = Hydra::VRAImage.image_template({:title => parms[:title]}).root()
+    nodeset = self.find_by_terms(:vra)
     unless nodeset.nil?
-		  self.ng_xml.root.add_child(node)
+      self.ng_xml.root.add_child(node)
       self.content = self.ng_xml.to_s
     end
     return node

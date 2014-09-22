@@ -21,6 +21,15 @@ describe Multiresimage do
     end
   end
 
+  describe "#vra_save" do
+    it 'creates the appropriate vra:image XML' do
+      xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
+      xml_from_rir  = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample_complete.xml" )
+      m = Multiresimage.create( from_menu: true, vra_xml: xml_from_menu )
+      expect( m.datastreams[ 'VRA' ].content ).to match_xml_except( xml_from_rir, 'refid', 'relids' )
+    end
+  end
+
   context "create datastreams" do
 
     before( :each ) do
@@ -133,7 +142,10 @@ EOF
   end
 
   context "with an associated work" do
-    xml = File.open("#{Rails.root}/spec/fixtures/vra_image_minimal.xml")
+    xml = File.read("#{Rails.root}/spec/fixtures/vra_minimal.xml")
+    doc = Nokogiri::XML( xml )
+    doc.xpath( "//vra:earliestDate" )[ 0 ].content = '0000'
+    xml = doc.to_s
 
     # this will create a vrawork and associate them with each other
     img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: "my:pid")

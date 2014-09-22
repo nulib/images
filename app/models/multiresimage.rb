@@ -66,7 +66,7 @@ class Multiresimage < ActiveFedora::Base
   before_create :vra_save
 
 
-  def create_vra_work(titleSet_display, vra, current_user=nil)
+  def create_vra_work(vra, current_user=nil)
     work = Vrawork.new(pid: mint_pid("dil"))
 
     work.edit_users = DIL_CONFIG['admin_staff']
@@ -77,18 +77,25 @@ class Multiresimage < ActiveFedora::Base
 
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-    work.titleSet_display_work = titleSet_display
     work.add_relationship(:has_image, "info:fedora/#{self.pid}")
+
+    # validate the work xml before we save it
+    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
-    work.update_relation_set(self.pid)
     work.update_ref_id(work.pid)
+    work.update_relation_set(self.pid)
+
+    # re-validate the newly updated vra
+    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
+
     work.save!
 
     work #you'd better
   end
+
 
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
@@ -98,29 +105,31 @@ class Multiresimage < ActiveFedora::Base
     if from_menu
       vra = Nokogiri::XML(vra_xml)
 
-      vra_type = "image" if vra.xpath("/vra:vra/vra:image").present?
-      if vra_type == "image"
+      if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
-        vra.xpath("/vra:vra/vra:image", "vra"=>"http://www.vraweb.org/vracore4.htm").attr("refid", self.pid)
-
-        #set VRA datastream to the xml document
-        self.datastreams["VRA"].content = vra.to_s
+        vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #todo: make groups be a param to the API (maybe)
         self.read_groups = ["registered"]
 
         #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(titleSet_display, vra)
+        work = self.create_vra_work(vra)
         self.vraworks << work
+
+        # Update work reference PID
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = work.pid
+
+        #update vra xml to point to the new, associated work
+        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'pref' ]   = 'true'
+        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
+        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
 
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
-
-        #update vra xml to point to the new, associated work
-        update_relation_set(work.pid)
 
         #TODO: parse the vra record for the collection record
         collection = nil
@@ -137,6 +146,9 @@ class Multiresimage < ActiveFedora::Base
           self.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
         end
 
+        #last thing is to validate the vra to ensure it's valid after all the modifications
+        MultiresimageHelper.validate_vra( vra.to_xml )
+        self.datastreams[ 'VRA' ].content = vra.to_xml
       else
         raise "not an image type"
       end
@@ -413,7 +425,6 @@ EOF
     node_set[0].set_attribute("pref", "true")
     node_set[0].set_attribute("relids", work_pid)
     node_set[0].set_attribute("type", "imageOf")
-    node_set[0].set_attribute("label", "Image")
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
     #self.datastreams["VRA"].dirty = true
   end

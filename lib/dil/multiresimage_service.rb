@@ -39,7 +39,7 @@ module DIL
 
           returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
         rescue StandardError => msg
-          returnXml = "<response><returnCode>Error</returnCode><description>#{msg}, #{msg.backtrace}</description></response>"
+          returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
           # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
           logger.debug returnXml
         end
