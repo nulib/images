@@ -23,7 +23,6 @@ class ImageMover < ActiveRecord::Base
 
 
   def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
-    DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
     logger.debug Rails.env
     logger.debug tiff_img_name
     logger.debug tiff_img_path
