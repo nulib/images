@@ -44,7 +44,7 @@ class ImageMover < ActiveRecord::Base
 
   private
 
-  def scp_mover( options )
+  def self.scp_mover( options )
     require 'net/scp'
 
     logger.debug "UPLOADING ..."
