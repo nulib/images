@@ -10,7 +10,7 @@ class ImageMover < ActiveRecord::Base
     if Rails.env == "development"
       puts "assume the jp2 image was successfully moved"
     else
-      repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}/#{ jp2_img_name }"
+      repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
       logger.debug repo_location
 
       logger.debug DIL_CONFIG[ 'jp2_server' ]
@@ -29,7 +29,7 @@ class ImageMover < ActiveRecord::Base
     if Rails.env == "development"
       puts "assume the tiff image was successfully moved"
     else
-      repo_location = "#{ DIL_CONFIG[ 'repo_location' ]}/#{ tiff_img_name }"
+      repo_location = "#{ DIL_CONFIG[ 'repo_location' ]}#{ tiff_img_name }"
       logger.debug repo_location
 
       logger.debug DIL_CONFIG[ 'repo_server' ]
