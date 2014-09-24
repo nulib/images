@@ -377,6 +377,7 @@ DEPENDENCIES
   capistrano3-unicorn
   capybara (= 1.1.2)
   coffee-rails (~> 3.2.1)
+  daemons
   database_cleaner (= 0.8.0)
   debugger
   delayed_job_active_record
