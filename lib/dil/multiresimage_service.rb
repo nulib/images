@@ -29,7 +29,7 @@ module DIL
           i.create_deliv_ops_datastream
           i.create_deliv_img_datastream
           i.create_archv_img_datastream
-          ImageMover.delay.move_tiff_to_repo()
+          ImageMover.delay.move_tiff_to_repo( i.tiff_img_name, params[ :path ])
           i.edit_groups = [ 'registered' ]
           i.save!
 
