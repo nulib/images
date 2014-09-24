@@ -1,9 +1,9 @@
 class ImageMover < ActiveRecord::Base
 
+  DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
   # This is sort of a weird class, but we created it so we could use the delayed_jobs gem to run the copying of huge tiff (and jp2) files to repository in the background and not effect the responsiveness of the entire app.
 
   def self.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
-    DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
     logger.debug Rails.env
     logger.debug jp2_img_name
     logger.debug jp2_img_path
