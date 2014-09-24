@@ -26,7 +26,7 @@ set :log_level, :debug
 set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{jetty} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
+set :linked_dirs, %w{jetty tmp/pids} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -43,6 +43,7 @@ namespace :deploy do
       #execute :touch, release_path.join('tmp/restart.txt')
       execute "kill $(ps -aef | grep '[u]nicorn_rails master' | awk '{print $2}')"
       execute "cd /var/www/dil_hydra/current; nohup bundle exec unicorn_rails -p 3000 -E staging > /var/www/dil_hydra/current/unicorn.log 2>&1 & sleep 2"
+      invoke 'delayed_job:restart'
     end
   end
 

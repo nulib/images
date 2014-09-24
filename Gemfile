@@ -32,6 +32,7 @@ source 'http://rubygems.org'
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
+  gem 'daemons'
 
 # Gems used only for assets and not required
 # in production environments by default.
