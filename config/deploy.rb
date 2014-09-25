@@ -23,7 +23,7 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml}
+set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml config/unicorn.rb}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{jetty} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
@@ -41,8 +41,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       #execute :touch, release_path.join('tmp/restart.txt')
-      execute "kill $(ps -aef | grep '[u]nicorn_rails master' | awk '{print $2}')"
-      execute "cd /var/www/dil_hydra/current; nohup bundle exec unicorn_rails -p 3000 -E staging > /var/www/dil_hydra/current/unicorn.log 2>&1 & sleep 2"
+      execute "/etc/init.d/unicorn.dil_hydra restart"
     end
   end
 
