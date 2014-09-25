@@ -20,7 +20,7 @@ source 'http://rubygems.org'
   gem 'devise', '2.1.3'
   gem 'omniauth-ldap', '1.0.2'
   gem 'mysql2', '0.3.11'
-  # gem 'clamav', '0.4.1'
+  gem 'clamav', '0.4.1'
   gem 'rdf', '1.0'
   gem 'gon'
   gem 'mini_exiftool'
@@ -32,6 +32,7 @@ source 'http://rubygems.org'
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
+  gem 'daemons'
 
 # Gems used only for assets and not required
 # in production environments by default.

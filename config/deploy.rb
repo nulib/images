@@ -26,7 +26,7 @@ set :log_level, :debug
 set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml config/unicorn.rb}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{jetty} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
+set :linked_dirs, %w{jetty tmp/pids log} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -42,6 +42,7 @@ namespace :deploy do
       # Your restart mechanism here, for example:
       #execute :touch, release_path.join('tmp/restart.txt')
       execute "/etc/init.d/unicorn.dil_hydra restart"
+      invoke 'delayed_job:restart'
     end
   end
 
