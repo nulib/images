@@ -34,6 +34,7 @@ vendor/servlet/
 
 config/database.yml
 config/dil-config.yml
+config/unicorn.rb
 
 tags
 
