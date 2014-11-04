@@ -30,7 +30,7 @@ begin
       if fedora_object.is_a? Multiresimage
         #find it's work object and delete
         work = fedora_object.vraworks.first
-        if work.empty?
+        if work.nil?
           log_file.puts("There is no work for this pid! Trying to delete the image object...")
           #fedora_object.delete
         else
@@ -40,7 +40,7 @@ begin
         end
       elsif fedora_object.is_a? Vrawork
         image = fedora_object.multiresimages.first
-        if image.empty?
+        if image.nil?
           log_file.puts("No image for this work! Trying to delete work anyway...")
           #fedora_object.delete
         else
