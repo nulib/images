@@ -1,16 +1,16 @@
-DIL::Application.routes.draw do
+Rails.application.routes.draw do
   Blacklight.add_routes(self)
   HydraHead.add_routes(self)
   Hydra::BatchEdit.add_routes(self)
 
   authenticated :user do
-    root :to => "catalog#index"
+    root "catalog#index"
   end
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   devise_scope :user do
-    root :to => "catalog#index"
+    root "catalog#index"
   end
 
   #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
