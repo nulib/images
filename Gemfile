@@ -32,7 +32,6 @@ source 'http://rubygems.org'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'daemons'
-
   gem 'therubyracer', '0.10.1'
   gem 'jquery-ui-rails'
 
@@ -47,7 +46,11 @@ source 'http://rubygems.org'
   gem 'high_voltage'
 
 group :development, :test, :staging do
-  gem 'jettywrapper', '1.4.1'
+  gem 'jettywrapper' #, '1.4.1'
+  gem 'rspec-rails', '>=2.9.0'
+  gem 'factory_girl_rails', '3.5.0'
+  gem 'database_cleaner', '0.8.0'
+  gem 'capybara', '1.1.2'
   gem 'bcrypt-ruby', '3.0.1'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
