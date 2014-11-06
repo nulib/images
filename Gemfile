@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 
   gem 'rails', '3.2.18'
-  gem 'rack', '1.4.5'
+  #gem 'rack' #, '1.4.5'
   gem 'json', '1.7.7'
   gem 'blacklight', '4.2'
   gem 'kaminari', '~> 0.13'
@@ -12,7 +12,7 @@ source 'http://rubygems.org'
   gem 'hydra-head', '6.4.1'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
-  gem 'bootstrap-sass'
+  gem 'bootstrap-sass', '2.2.2.0'
   gem 'rufus-scheduler', '3.0.2'
 
   # We will assume you're using devise in tutorials/documentation.
@@ -41,9 +41,8 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier', '>= 1.0.3'
   gem 'therubyracer', '0.10.1'
-  gem 'bootstrap-sass'
   gem 'jquery-ui-rails', '1.0.0'
-  gem "bootstrap-sass-rails", '2.0.3.0'
+  #gem "bootstrap-sass-rails", '2.0.3.0'
   gem 'ruby-xslt', '0.9.9'
 end
 
