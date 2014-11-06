@@ -2,12 +2,7 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test staging)))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
+Bundler.require(:default, Rails.env)
 
 module DIL
   class Application < Rails::Application
@@ -53,11 +48,11 @@ module DIL
     # config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
-    config.assets.enabled = true    
+    config.assets.enabled = true
     # Default SASS Configuration, check out https://github.com/rails/sass-rails for details
     config.assets.compress = !Rails.env.development?
     #config.sass.line_comments = Rails.env.development?
-    
+
     #Use SMTP to send emails
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
@@ -76,12 +71,12 @@ module DIL
 
     # Location where dil puts files to be processed
     config.processing_file_path = "/tmp"
-    
+
     config.public_permission_levels = {
       "No Access"=>"none",
       "Discover" => "discover",
-      "View" => "read" 
-    } 
+      "View" => "read"
+    }
     config.permission_levels = {
       "No Access"=>"none",
       "Discover" => "discover",

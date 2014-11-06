@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-  gem 'rails', '3.2.18'
+  gem 'rails', '~> 4.1'
   #gem 'rack' #, '1.4.5'
   gem 'json', '1.7.7'
   gem 'blacklight', '4.2'
@@ -17,7 +17,7 @@ source 'http://rubygems.org'
 
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
-  gem 'devise', '2.1.3'
+  gem 'devise' #, '2.1.3'
   gem 'omniauth-ldap', '1.0.2'
   gem 'mysql2', '0.3.11'
   gem 'clamav', '0.4.1'
@@ -37,8 +37,8 @@ source 'http://rubygems.org'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails', '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails', '>= 4'
+  gem 'coffee-rails', '>= 4'
   gem 'uglifier', '>= 1.0.3'
   gem 'therubyracer', '0.10.1'
   gem 'jquery-ui-rails', '1.0.0'
@@ -47,7 +47,7 @@ group :assets do
 end
 
 gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way
-gem 'jquery-rails', '2.0.2'
+gem 'jquery-rails', '>= 2.0.2'
 gem 'jquery.fileupload-rails', '0.1.1'
 
 gem 'uuid', '2.3.5'
@@ -57,7 +57,7 @@ gem 'hydra-batch-edit', '~>0.0.6'
 gem 'high_voltage'
 
 group :development, :test, :staging do
-  gem 'jettywrapper', '1.4.1'
+  gem 'jettywrapper' #, '1.4.1'
   gem 'rspec-rails', '>=2.9.0'
   gem 'factory_girl_rails', '3.5.0'
   gem 'database_cleaner', '0.8.0'
