@@ -125,8 +125,6 @@ GEM
     diff-lcs (1.2.5)
     ensure_valid_encoding (0.5.3)
     erubis (2.7.0)
-    exception_notification (3.0.1)
-      actionmailer (>= 3.0.4)
     execjs (2.2.2)
     factory_girl (3.5.0)
       activesupport (>= 3.0.0)
@@ -395,7 +393,6 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   equivalent-xml!
-  exception_notification (= 3.0.1)
   factory_girl_rails (= 3.5.0)
   gon
   google-analytics-rails
