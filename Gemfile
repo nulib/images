@@ -11,7 +11,6 @@ source 'http://rubygems.org'
   gem 'hydra-head', '~> 6.4'
 
   gem 'json', '1.7.7'
-  #gem 'exception_notification', '3.0.1'
   gem 'bootstrap-sass', '~>2'
   gem 'rufus-scheduler', '3.0.2'
   gem 'devise' #, '2.1.3'
