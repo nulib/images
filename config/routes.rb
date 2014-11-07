@@ -38,30 +38,34 @@ Rails.application.routes.draw do
 
   resources :dil_collections do
     collection do
-      get "get_collections"=>"dil_collections#get_collections"
+      get "get_collections"
+
+    end
+    member do
+
     end
   end
 
 
-  match "dil_collections/:pid/:id/:index" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
-  match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
+  get "dil_collections/:pid/:id/:index" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
+  get "dil_collections/:pid/:id" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
 
-  match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
-  match "multiresimages/svg/:id" => "multiresimages#get_svg"
-  match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
-  match "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy", :via => :get
-  match "external_search/search_hydra" => "external_search#index"
-  match "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
-  match "dil_collections/remove/:id/:pid" => "dil_collections#remove"#, :via => :post
-  match "dil_collections/new" => "dil_collections#new", :via => :post
-  match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
-  match "dil_collections/export/:id" => "dil_collections#export", :via => :post
-  match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
-  match "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
-  match "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }, :via => :post
-  match "uploads/notify" => "uploads#notify", :via => :post
-  match "dil_collections/make_private/:id" => "dil_collections#make_private" , :via => :post
-  match "dil_collections/make_public/:id" => "dil_collections#make_public" , :via => :post
+  patch "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
+  get "multiresimages/svg/:id" => "multiresimages#get_svg"
+  get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
+  get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy", :via => :get
+  get "external_search/search_hydra" => "external_search#index"
+  post "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
+  get "dil_collections/remove/:id/:pid" => "dil_collections#remove"#, :via => :post
+  post "dil_collections/new" => "dil_collections#new", :via => :post
+  post "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
+  post "dil_collections/export/:id" => "dil_collections#export", :via => :post
+  get "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
+  post "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
+  post "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }, :via => :post
+  post "uploads/notify" => "uploads#notify", :via => :post
+  post "dil_collections/make_private/:id" => "dil_collections#make_private" , :via => :post
+  post "dil_collections/make_public/:id" => "dil_collections#make_public" , :via => :post
 
   resources :uploads do #, :only => [:index] do
     collection do
@@ -74,13 +78,13 @@ Rails.application.routes.draw do
   resources :groups do
     resources :users, :only=>[:create, :edit, :destroy]
   end
-  match "groups/edit/:id" => "groups#edit", :via => :get
+  get "groups/edit/:id" => "groups#edit", :via => :get
 
 #  resources :policies
 
-  resources :technical_metadata, :only=>:index
+  #resources :technical_metadata, :only=>:index
 
-  match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
+  get 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
 
 end
