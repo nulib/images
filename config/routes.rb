@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   HydraHead.add_routes(self)
   Hydra::BatchEdit.add_routes(self)
 
-  authenticated :user do
-    root "catalog#index"
-  end
+  # authenticated :user do
+  #   root "catalog#index"
+  # end
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
@@ -15,14 +15,15 @@ Rails.application.routes.draw do
 
   #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
 
-match "multiresimages/menu_publish" => "multiresimages#menu_publish", :via => :post
-
 
   resources :multiresimages do
     collection do
       get 'aware_tile'
+      get 'aware_details'
       post 'add_datastream'
       post 'add_external_datastream'
+      post 'menu_publish'
+      post 'create_update_fedora_object'
       #TODO change to post or delete
       get 'delete_fedora_object'
       get 'clone_work'
@@ -44,11 +45,9 @@ match "multiresimages/menu_publish" => "multiresimages#menu_publish", :via => :p
 
   match "dil_collections/:pid/:id/:index" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
   match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
-  match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
-  #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
+
   match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
   match "multiresimages/svg/:id" => "multiresimages#get_svg"
-  match "multiresimages/aware_details" => "multiresimages#aware_details"
   match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   match "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy", :via => :get
   match "external_search/search_hydra" => "external_search#index"
@@ -64,13 +63,13 @@ match "multiresimages/menu_publish" => "multiresimages#menu_publish", :via => :p
   match "dil_collections/make_private/:id" => "dil_collections#make_private" , :via => :post
   match "dil_collections/make_public/:id" => "dil_collections#make_public" , :via => :post
 
-  resources :uploads, :only => [:index] do
+  resources :uploads do #, :only => [:index] do
     collection do
       post :enqueue
+      post :create
+      post :update_status
     end
   end
-  match "uploads/create" => "uploads#create"
-  match "uploads/update_status" => "uploads#update_status"
 
   resources :groups do
     resources :users, :only=>[:create, :edit, :destroy]
