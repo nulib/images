@@ -12,7 +12,7 @@ source 'http://rubygems.org'
   gem 'hydra-head', '6.4.1'
   #gem 'hydra-mods', '0.0.5'
   gem 'sqlite3', '1.3.6'
-  gem 'bootstrap-sass', '2.2.2.0'
+  gem 'bootstrap-sass', '~>2'
   gem 'rufus-scheduler', '3.0.2'
 
   # We will assume you're using devise in tutorials/documentation.
@@ -37,15 +37,14 @@ source 'http://rubygems.org'
 
 # Gems used only for assets and not required
 # in production environments by default.
-group :assets do
+
   gem 'sass-rails', '>= 4'
   gem 'coffee-rails', '>= 4'
   gem 'uglifier', '>= 1.0.3'
   gem 'therubyracer', '0.10.1'
-  gem 'jquery-ui-rails', '1.0.0'
+  gem 'jquery-ui-rails'
   #gem "bootstrap-sass-rails", '2.0.3.0'
   gem 'ruby-xslt', '0.9.9'
-end
 
 gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way
 gem 'jquery-rails', '>= 2.0.2'
