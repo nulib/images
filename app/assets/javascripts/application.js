@@ -6,7 +6,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.ui.all
+//= require jquery-ui
 //
 // Required by Blacklight (replaced blacklight/blacklight with list below to fix facets bug)
 
@@ -21,13 +21,13 @@
 
 //= require_tree .
 
-// The Iframe Transport is required for browsers without support for XHR file uploads 
+// The Iframe Transport is required for browsers without support for XHR file uploads
 //= require jquery.iframe-transport
 //= require jquery.fileupload
 //= require jquery.fileupload-ui
-//= require twitter/bootstrap
+//= require bootstrap
 //= require batch_edit
 
 
-		
+
 

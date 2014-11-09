@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 20140811191429) do
     t.integer  "user_id",     null: false
     t.string   "document_id"
     t.string   "title"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "user_type"
   end
 
@@ -40,8 +40,8 @@ ActiveRecord::Schema.define(version: 20140811191429) do
 
   create_table "groups", force: true do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "code",       null: false
   end
 
@@ -50,8 +50,8 @@ ActiveRecord::Schema.define(version: 20140811191429) do
     t.string   "image_filename", limit: 50
     t.string   "email",                     default: "",         null: false
     t.string   "status",         limit: 25,                      null: false
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "pid",                       default: "migrated", null: false
   end
 
@@ -59,15 +59,15 @@ ActiveRecord::Schema.define(version: 20140811191429) do
     t.string   "pid"
     t.string   "action"
     t.string   "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "searches", force: true do |t|
     t.text     "query_params"
     t.integer  "user_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "user_type"
   end
 
@@ -80,26 +80,26 @@ ActiveRecord::Schema.define(version: 20140811191429) do
   create_table "upload_files", force: true do |t|
     t.string   "pid"
     t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "upload_files", ["user_id"], name: "index_upload_files_on_user_id"
 
   create_table "users", force: true do |t|
-    t.string   "email",                              default: "", null: false
-    t.string   "encrypted_password",     limit: 128, default: "", null: false
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0
+    t.integer  "sign_in_count",          default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.string   "uid",                                             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "uid",                                 null: false
     t.text     "affiliations"
   end
 
