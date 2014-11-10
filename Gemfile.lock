@@ -145,25 +145,25 @@ GEM
     hike (1.2.3)
     hooks (0.3.6)
       uber (~> 0.0.4)
-    hydra-access-controls (6.4.1)
-      active-fedora (~> 6.6)
+    hydra-access-controls (6.5.2)
+      active-fedora (~> 6.7)
       activesupport
-      blacklight (~> 4.0)
+      blacklight (~> 4.7)
       cancan
       deprecation
     hydra-batch-edit (0.0.7)
       blacklight
-    hydra-core (6.4.1)
-      active-fedora
-      blacklight (~> 4.0)
+    hydra-core (6.5.2)
+      active-fedora (~> 6.7)
+      blacklight (~> 4.7)
       block_helpers
       deprecation (>= 0.0.5)
-      hydra-access-controls (= 6.4.1)
+      hydra-access-controls (= 6.5.2)
       jettywrapper (>= 1.4.1)
       rails (>= 3.2.3, < 5)
-    hydra-head (6.4.1)
-      hydra-access-controls (= 6.4.1)
-      hydra-core (= 6.4.1)
+    hydra-head (6.5.2)
+      hydra-access-controls (= 6.5.2)
+      hydra-core (= 6.5.2)
       rails (>= 3.2.6)
     hydra-ldap (0.0.3)
       net-ldap
@@ -399,7 +399,7 @@ DEPENDENCIES
   google-analytics-rails
   high_voltage
   hydra-batch-edit (~> 0.0.6)
-  hydra-head (= 6.4.1)
+  hydra-head (~> 6.4)
   hydra-ldap (= 0.0.3)
   jettywrapper
   jhove-service
