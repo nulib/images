@@ -1,4 +1,4 @@
-<%= form_for Multiresimage.new, :url=>uploads_create_path(), :html => { :multipart => true, :id => "fileupload"  } do |f| %>
+<%= form_for Multiresimage.new, :url=>uploads_path, :html => { :multipart => true, :id => "fileupload"  } do |f| %>
         <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
         <div class="fileupload-buttonbar">
                 <!-- The fileinput-button span is used to style the file input field as button -->
@@ -113,7 +113,7 @@
     $(function () {
         // Initialize the jQuery File Upload widget:
         $('#fileupload').fileupload({
-           acceptFileTypes: /(\.|\/)(tif|TIFF|jpe?g|JPE?G)$/i              
+           acceptFileTypes: /(\.|\/)(tif|TIFF|jpe?g|JPE?G)$/i
         });
         // Load existing files:
         $('#fileupload').each(function () {
