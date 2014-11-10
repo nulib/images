@@ -46,19 +46,9 @@ source 'http://rubygems.org'
 
 group :development, :test, :staging do
   gem 'jettywrapper' #, '1.4.1'
-  gem 'rspec-rails', '>=2.9.0'
-  gem 'factory_girl_rails', '3.5.0'
-  gem 'database_cleaner', '0.8.0'
-  gem 'capybara', '1.1.2'
-  gem 'bcrypt-ruby', '3.0.1'
-  gem 'launchy', '2.1.0'
-  gem 'simplecov', '0.7.1', :require => false, :group => :test
-  gem 'byebug'
-  gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
+  gem 'bcrypt-ruby'
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
-
-gem 'unicorn', '4.3.1'
 
 group :test do
   gem 'rspec-rails'
@@ -69,10 +59,13 @@ group :test do
   gem 'dotenv-rails'
 end
 
-
 group :development do
+  gem 'better_errors'
   gem 'sextant'
   gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
+  gem 'launchy'
+  gem 'simplecov', :require => false
+  gem 'byebug'
 end
 
 group :production do
