@@ -39,7 +39,9 @@ rake spec
 h2. Local development only
 
 You'll need to install imagemagick to handle the tiff to jp2 conversion on your local machine.
+<pre>
 brew install imagemagick --with-libtiff --with-jp2
+</pre>
 
 h2. Installing therubyracer
 
