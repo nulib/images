@@ -290,7 +290,7 @@ GEM
     rspec-support (3.1.2)
     ruby-prof (0.15.2)
     ruby-xslt (0.9.9)
-    rubydora (1.8.0)
+    rubydora (1.6.5)
       activemodel
       activesupport
       deprecation
