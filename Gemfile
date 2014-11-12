@@ -25,6 +25,7 @@ source 'http://rubygems.org'
   gem 'net-scp'
   gem 'delayed_job_active_record'
   gem 'protected_attributes'
+  gem 'binding_of_caller'
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.2'
