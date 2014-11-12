@@ -322,8 +322,14 @@ GEM
       rails (>= 3.2)
     simplecov (0.9.1)
       docile (~> 1.1.0)
-      multi_json (~> 1.0)
       simplecov-html (~> 0.8.0)
+    selenium-webdriver (2.44.0)
+      childprocess (~> 0.5)
+      multi_json (~> 1.0)
+      rubyzip (~> 1.0)
+      websocket (~> 1.0)
+      multi_json (~> 1.0)
+
     simplecov-html (0.8.0)
     slop (3.6.0)
     solrizer (3.1.1)
@@ -425,7 +431,6 @@ DEPENDENCIES
   ruby-xslt (= 0.9.9)
   rufus-scheduler (= 3.0.2)
   sass-rails (>= 4)
-  sextant
   simplecov
   sqlite3
   therubyracer (= 0.10.1)
