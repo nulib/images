@@ -34,7 +34,6 @@ source 'http://rubygems.org'
 
   gem 'therubyracer', '0.10.1'
   gem 'jquery-ui-rails'
-  gem 'ruby-xslt', '0.9.9'
 
   gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way
 
@@ -48,13 +47,12 @@ source 'http://rubygems.org'
 
 group :development, :test, :staging do
   gem 'jettywrapper' #, '1.4.1'
-  gem 'bcrypt-ruby'
+  gem 'bcrypt'
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
 
 group :development, :test do
   gem 'better_errors'
-  gem 'sextant'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'capybara'

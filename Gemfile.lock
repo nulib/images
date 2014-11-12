@@ -47,7 +47,6 @@ GEM
     addressable (2.2.8)
     arel (5.0.1.20140414130214)
     bcrypt (3.1.9)
-    bcrypt-ruby (3.0.1)
     better_errors (2.0.0)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
@@ -292,7 +291,6 @@ GEM
       rspec-mocks (~> 3.1.0)
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
-    ruby-xslt (0.9.9)
     rubydora (1.6.5)
       activemodel
       activesupport
@@ -319,8 +317,6 @@ GEM
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
       websocket (~> 1.0)
-    sextant (0.2.4)
-      rails (>= 3.2)
     simplecov (0.7.1)
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
@@ -380,7 +376,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bcrypt-ruby
+  bcrypt
   better_errors
   bootstrap-sass (~> 2)
   byebug
@@ -420,10 +416,8 @@ DEPENDENCIES
   rails (~> 4.1)
   rdf (= 1.0)
   rspec-rails
-  ruby-xslt (= 0.9.9)
   rufus-scheduler (= 3.0.2)
   sass-rails (>= 4)
-  sextant
   simplecov
   sqlite3
   therubyracer (= 0.10.1)
