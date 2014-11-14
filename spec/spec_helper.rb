@@ -7,6 +7,7 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'capybara/rspec'
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
@@ -71,7 +72,7 @@ def login(user)
     :info => {
         :name => user.uid + ' User',
         :email => user.uid + '@example.com',
-        :nickname => user.uid 
+        :nickname => user.uid
     },
     :extra => {
       :raw_info => {
@@ -86,7 +87,7 @@ def login(user)
   click_link "Login"
 #  click_link "sign in with LDAP"
   page.should have_selector("a[href='/users/edit']", :text=> user.email)
-  
+
 end
 
 
