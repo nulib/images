@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  
+
   # Users
-  
+
   factory :archivist, :parent=>:user do |u|
     uid 'archivist1'
   end
@@ -65,26 +65,26 @@ FactoryGirl.define do
     group_codes ["repository-admin"]
   end
 
-  
-  
+
+
   factory :user, :aliases => [:owner] do |u|
     sequence :uid do |n|
       "person#{n}"
     end
     email { "#{uid}@example.com" }
     password { uid }
-    group_codes []
+    #group_codes []
   end
 
   # Groups
-  
+
   factory :user_group, :class=>Group do |g|
     name 'Factory Group'
-    owner 
+    owner
   end
 
   # Collections
-  
+
   factory :collection, :class=>DILCollection do |g|
     sequence :title do |n|
       "Title #{n}"
