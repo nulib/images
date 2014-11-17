@@ -15,7 +15,9 @@ describe 'home page' do
     end
 
     context "logging in" do
-
+      it "should try to log in" do
+        click_link 'Login'
+      end
     end
 
   end
