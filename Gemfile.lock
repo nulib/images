@@ -314,6 +314,8 @@ GEM
       sprockets (~> 2.8, < 2.12)
       sprockets-rails (~> 2.0)
     scrub_rb (1.0.1)
+    sextant (0.2.4)
+      rails (>= 3.2)
     simplecov (0.9.1)
       docile (~> 1.1.0)
       multi_json (~> 1.0)
@@ -416,6 +418,7 @@ DEPENDENCIES
   rspec-rails
   rufus-scheduler (= 3.0.2)
   sass-rails (>= 4)
+  sextant
   simplecov
   sqlite3
   therubyracer (= 0.10.1)
