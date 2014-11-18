@@ -25,6 +25,10 @@ Rails.application.routes.draw do
     end
     member do
       post 'permissions'
+      # get 'svg'
+      # get 'get_image'
+      # get 'archival_image_proxy'
+      # patch 'updatecrop'
     end
   end
 
@@ -33,6 +37,15 @@ Rails.application.routes.draw do
       get "get_collections"
     end
     member do
+      get 'get_subcollections'
+      # post 'add'
+      # post 'remove'
+      # post 'move'
+      # post 'export'
+      # post 'add_to_batch_select'
+      # post 'remove_from_batch_select'
+      # post 'make_private'
+      # post 'make_public'
     end
   end
 
@@ -49,7 +62,8 @@ Rails.application.routes.draw do
     resources :users, :only=>[:create, :edit, :destroy]
   end
 
-
+  # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
+  # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
   get "multiresimages/svg/:id" => "multiresimages#get_svg"
   get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
@@ -57,6 +71,7 @@ Rails.application.routes.draw do
 
   get "dil_collections/:pid/:id/:index" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
   get "dil_collections/:pid/:id" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
+
   get "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
   post "dil_collections/add/:id/:member_id" => "dil_collections#add"
   post "dil_collections/remove/:id/:pid" => "dil_collections#remove"
@@ -66,7 +81,6 @@ Rails.application.routes.draw do
   post "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }
   post "dil_collections/make_private/:id" => "dil_collections#make_private"
   post "dil_collections/make_public/:id" => "dil_collections#make_public"
-  # post "dil_collections/new" => "dil_collections#new" #there is no 'new' action
 
   get "groups/edit/:id" => "groups#edit"
 
