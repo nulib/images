@@ -430,6 +430,7 @@ DEPENDENCIES
   ruby-xslt (= 0.9.9)
   rufus-scheduler (= 3.0.2)
   sass-rails (>= 4)
+  sextant
   simplecov
   sqlite3
   therubyracer (= 0.10.1)
