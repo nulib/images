@@ -206,6 +206,7 @@ class Multiresimage < ActiveFedora::Base
       create_jp2_local( img_location )
     end
 
+    sleep( 5 )
     if $?.to_i == 0 && File.file?( jp2_img_path )
       jp2_img_path
     else
