@@ -2,6 +2,7 @@
 # It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
 # The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
 # the institutional collection's permissions.
+require 'dil/pid_minter'
 
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods

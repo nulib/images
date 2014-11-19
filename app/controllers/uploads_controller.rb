@@ -1,3 +1,5 @@
+require 'lib/pid_minter'
+
 class UploadsController < ApplicationController
 
   include Hydra::Controller::UploadBehavior
