@@ -40,6 +40,8 @@
 
 require 'xml/xslt'
 require 'fileutils'
+require 'dil/pid_minter'
+
 include DIL::PidMinter
 
 # This is the main method of this process. This will read a folder at a specified path
