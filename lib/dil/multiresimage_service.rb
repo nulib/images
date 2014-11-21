@@ -577,17 +577,15 @@ module DIL
       #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
       fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
 
+      # Set up default institutional collection pid as being "Digital Image Library"
+      institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+
       # if this is part of an institutional collection, add that relationship
-      if collection.present?
-        # Set up default institutional collection pid as being "Digital Image Library"
-        institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
-
-        if DIL_CONFIG["institutional_collection"][collection]
+      if collection.present? and DIL_CONFIG["institutional_collection"][collection]
           institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
-        end
-
-        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
       end
+
+      fedora_object.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
 
       #add rels-ext CModel relationship
       #fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
