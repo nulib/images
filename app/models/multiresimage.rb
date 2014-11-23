@@ -240,7 +240,7 @@ class Multiresimage < ActiveFedora::Base
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
     xml = <<-EOF
 <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/inu-dil/hydra/test/menu/#{ jp2_img_name }"/>
+  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/inu-dil/hydra/test/#{ jp2_img_name }"/>
 </svg:svg>
 EOF
   end
