@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Search for a creator or keyword' do
+describe 'Create a new group' do
   describe 'after logging in' do
     before do
       user = FactoryGirl.create(:staff)
@@ -9,9 +9,11 @@ describe 'Search for a creator or keyword' do
     end
 
     it "searches for a creator" do
-      fill_in( 'q', '"Wilde, Oscar, 1854-1900"' )
+      fill_in( 'q', '*' )
       click_button( 'search' )
-      expect( page ).to have_selector( '#documents .listing', count: 3 )
+      fill_in( 'new_dil_collection_title', 'test_group_1' )
+      find( '#new_dil_collection_title' ).native.send_key( :Enter )
+      expect( page ).to have_content( 'test_group_1' )
     end
   end
 end
