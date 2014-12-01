@@ -47,11 +47,12 @@ class ImageMover < ActiveRecord::Base
     require 'net/scp'
 
     logger.debug "UPLOADING ..."
-    Net::SCP.upload!( options[:server],
-                      options[:user],
-                      options[:local_img_path],
-                      options[:remote_img_path],
-                      ssh: { password: options[:password] })
+#     Net::SCP.upload!( options[:server],
+#                       options[:user],
+#                       options[:local_img_path],
+#                       options[:remote_img_path],
+#                       ssh: { password: options[:password] })
+    `scp #{ options[ :local_img_path ]} #{ options[ :user ]}@#{ options[ :server ]}:#{ options[ :remote_img_path ]}`
     logger.debug "UPLOADING COMPLETE"
   end
 end
