@@ -11,7 +11,7 @@ class ImageMover < ActiveRecord::Base
     if Rails.env == "development"
       puts "assume the jp2 image was successfully moved"
     else
-      sleep( 10 )
+      #sleep( 10 )
       repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
       logger.debug repo_location
 
