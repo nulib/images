@@ -52,7 +52,7 @@ class ImageMover < ActiveRecord::Base
 #                       options[:local_img_path],
 #                       options[:remote_img_path],
 #                       ssh: { password: options[:password] })
-    `scp #{ options[ :local_img_path ]} #{ options[ :user ]}@#{ options[ :server ]}:#{ options[ :remote_img_path ]}`
+    `scp #{ options[ :local_img_path ]} pac913@ansel.library.northwestern.edu:/dimages/public/images/inu-dil/hydra/test`
     logger.debug "UPLOADING COMPLETE"
   end
 end
