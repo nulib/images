@@ -112,7 +112,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 <foxml:xmlContent>
 <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:nulib-rel="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
   <rdf:Description rdf:about="info:fedora/inu:dil-b5014da9-a0bd-4339-87fd-5672581204f1">
-    <nulib-rel:isGovernedBy rdf:resource="info:fedora/inu:dil-local-23655b1f-7029-4fb4-aa10-8ababe0ca63b"></nulib-rel:isGovernedBy>
+    <nulib-rel:isGovernedBy rdf:resource="info:fedora/inu:dil-00-23655b1f-7029-4fb4-aa10-8ababe0ca63b"></nulib-rel:isGovernedBy>
     <nulib-rel:isImageOf rdf:resource="info:fedora/inu:dil-9d1e86cd-356a-4e4f-9976-f5141dd1bf09"></nulib-rel:isImageOf>
     <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Multiresimage"></fedora-model:hasModel>
   </rdf:Description>
@@ -124,7 +124,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 <rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:nullib-rel="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <rdf:Description rdf:about="info:fedora/inu:dil-b5014da9-a0bd-4339-87fd-5672581204f1">
     <fedora-model:hasModel xmlns:nulib-rel="http://projecthydra.org/ns/relations#" rdf:resource="info:fedora/afmodel:Multiresimage"></fedora-model:hasModel>
-    <nulib-rel:isGovernedBy xmlns:nulib-rel="http://projecthydra.org/ns/relations#" rdf:resource="info:fedora/inu:dil-local-23655b1f-7029-4fb4-aa10-8ababe0ca63b"></nulib-rel:isGovernedBy>
+    <nulib-rel:isGovernedBy xmlns:nulib-rel="http://projecthydra.org/ns/relations#" rdf:resource="info:fedora/inu:dil-00-23655b1f-7029-4fb4-aa10-8ababe0ca63b"></nulib-rel:isGovernedBy>
     <nulib-rel:isImageOf xmlns:nulib-rel="http://projecthydra.org/ns/relations#" rdf:resource="info:fedora/inu:dil-9d1e86cd-356a-4e4f-9976-f5141dd1bf09"></nulib-rel:isImageOf>
     <fedora-model:hasModel rdf:resource="info:fedora/inu:imageCModel"></fedora-model:hasModel>
   </rdf:Description>
@@ -134,7 +134,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="rightsMetadata.0" LABEL="" CREATED="2014-11-21T11:47:45.417Z" MIMETYPE="text/xml" SIZE="520">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PHJpZ2h0c01ldGFkYXRhIHhtbG5zPSJodHRwOi8vaHlkcmEtY29sbGFiLnN0YW5mb3JkLmVkdS9zY2hl
               bWFzL3JpZ2h0c01ldGFkYXRhL3YxIiB2ZXJzaW9uPSIwLjEiPgogIDxjb3B5cmlnaHQ+CiAgICA8aHVt
               YW4gdHlwZT0idGl0bGUiLz4KICAgIDxodW1hbiB0eXBlPSJkZXNjcmlwdGlvbiIvPgogICAgPG1hY2hp
@@ -144,12 +144,12 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               ICAgIDwvbWFjaGluZT4KICA8L2FjY2Vzcz4KICA8YWNjZXNzIHR5cGU9ImVkaXQiPgogICAgPGh1bWFu
               Lz4KICAgIDxtYWNoaW5lLz4KICA8L2FjY2Vzcz4KICA8ZW1iYXJnbz4KICAgIDxodW1hbi8+CiAgICA8
               bWFjaGluZS8+CiAgPC9lbWJhcmdvPgo8L3JpZ2h0c01ldGFkYXRhPg==
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="VRA" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="VRA.0" LABEL="VRA metadata" CREATED="2014-11-21T11:47:45.469Z" MIMETYPE="text/xml" SIZE="4777">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PHZyYTp2cmEgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5j
               ZSIgeG1sbnM6Zm49Imh0dHA6Ly93d3cudzMub3JnLzIwMDUveHBhdGgtZnVuY3Rpb25zIiB4bWxuczpt
               YXJjPSJodHRwOi8vd3d3LmxvYy5nb3YvTUFSQzIxL3NsaW0iIHhtbG5zOm1vZHM9Imh0dHA6Ly93d3cu
@@ -230,18 +230,18 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               IDx2cmE6d29ya3R5cGVTZXQ+ICAgICAgICAgPHZyYTpkaXNwbGF5PlBhaW50aW5nPC92cmE6ZGlzcGxh
               eT4gICAgICAgICA8dnJhOndvcmt0eXBlPlBhaW50aW5nPC92cmE6d29ya3R5cGU+ICAgICAgPC92cmE6
               d29ya3R5cGVTZXQ+ICAgPC92cmE6aW1hZ2U+PC92cmE6dnJhPg==
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="DELIV-OPS" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="DELIV-OPS.0" LABEL="SVG Datastream" CREATED="2014-11-21T11:48:05.149Z" MIMETYPE="text/xml" SIZE="256">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PHN2ZzpzdmcgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9
               Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPiAgPHN2ZzppbWFnZSB4PSIwIiB5PSIwIiBoZWln
               aHQ9IjQwMDgiIHdpZHRoPSI1OTI4IiB4bGluazpocmVmPSJpbnUtZGlsL2h5ZHJhL3Rlc3QvUmVhbFZN
               Qy9PUkRFUlMvMTEzODcvaW51OmRpbC1iNTAxNGRhOS1hMGJkLTQzMzktODdmZC01NjcyNTgxMjA0ZjEu
               anAyIi8+PC9zdmc6c3ZnPg==
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="ARCHV-IMG" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
@@ -251,7 +251,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="ARCHV-EXIF" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="ARCHV-EXIF.0" LABEL="EXIF Technical Metadata" CREATED="2014-11-21T11:48:13.065Z" MIMETYPE="text/xml" SIZE="14179">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PGV4aWY+ICA8cmF3Pi0tLS0gRXhpZlRvb2wgLS0tLUV4aWZUb29sIFZlcnNpb24gTnVtYmVyICAgICAg
               ICAgOiA3LjM5LS0tLSBGaWxlIC0tLS1GaWxlIE5hbWUgICAgICAgICAgICAgICAgICAgICAgIDogaW51
               OmRpbC1iNTAxNGRhOS1hMGJkLTQzMzktODdmZC01NjcyNTgxMjA0ZjEudGlmRGlyZWN0b3J5ICAgICAg
@@ -489,12 +489,12 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               bW4iIHZhbHVlPSIwLjE0OTE5IDAuMDYzMjIgMC43NDQ1NyIgLz4gIDxpdGVtIGZpZWxkPSItLS0tX0Nv
               bXBvc2l0ZV8tLS0tIiB2YWx1ZT0iIiAvPiAgPGl0ZW0gZmllbGQ9IkltYWdlX1NpemUiIHZhbHVlPSI1
               OTI4eDQwMDgiIC8+PC9leGlmPg==
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="ARCHV-TECHMD" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="ARCHV-TECHMD.0" LABEL="MIX Technical Metadata" CREATED="2014-11-21T11:48:18.720Z" MIMETYPE="text/xml" SIZE="237676">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48amhvdmUgeG1sbnM6eHNpPSJodHRw
               Oi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeG1sbnM9Imh0dHA6Ly9odWwuaGFy
               dmFyZC5lZHUvb2lzL3htbC9ucy9qaG92ZSIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vaHVsLmhh
@@ -4457,7 +4457,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               OTJmNDFiNmEwOWEzNjhhPC9jaGVja3N1bT4gICA8Y2hlY2tzdW0gdHlwZT0iU0hBLTEiPmQzMGQ1YjVi
               Mjk5M2ZlOGRlYmZmYTgzOWIwNmE0NDQxOGM2ZTMzYzE8L2NoZWNrc3VtPiAgPC9jaGVja3N1bXM+IDwv
               cmVwSW5mbz48L2pob3ZlPg==
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 <foxml:datastream ID="DELIV-IMG" STATE="A" CONTROL_GROUP="E" VERSIONABLE="true">
@@ -4467,7 +4467,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
 </foxml:datastream>
 <foxml:datastream ID="DELIV-TECHMD" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
 <foxml:datastreamVersion ID="DELIV-TECHMD.0" LABEL="MIX Technical Metadata for JP2" CREATED="2014-11-21T11:48:30.748Z" MIMETYPE="text/xml" SIZE="23402">
-<foxml:binaryContent> 
+<foxml:binaryContent>
               PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48amhvdmUgeG1sbnM6eHNpPSJodHRw
               Oi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeG1sbnM9Imh0dHA6Ly9odWwuaGFy
               dmFyZC5lZHUvb2lzL3htbC9ucy9qaG92ZSIgeHNpOnNjaGVtYUxvY2F0aW9uPSJodHRwOi8vaHVsLmhh
@@ -4859,7 +4859,7 @@ xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/
               NTwvY2hlY2tzdW0+ICAgPGNoZWNrc3VtIHR5cGU9IlNIQS0xIj44YjUzMzkxZDA0YmZmYWY3MWMyNTcx
               OTNkMGJlNTE0OWI1NzYwMTcyPC9jaGVja3N1bT4gIDwvY2hlY2tzdW1zPiA8L3JlcEluZm8+PC9qaG92
               ZT4=
-</foxml:binaryContent> 
+</foxml:binaryContent>
 </foxml:datastreamVersion>
 </foxml:datastream>
 </foxml:digitalObject>
