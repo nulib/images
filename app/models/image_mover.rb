@@ -11,13 +11,12 @@ class ImageMover < ActiveRecord::Base
     if Rails.env == "development"
       puts "assume the jp2 image was successfully moved"
     else
-      #sleep( 10 )
       repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
       logger.debug repo_location
 
       logger.debug DIL_CONFIG[ 'jp2_server' ]
       logger.debug DIL_CONFIG[ 'jp2_ssh_user' ]
-      scp_mover( server: DIL_CONFIG['jp2_server'], user: DIL_CONFIG[ 'jp2_ssh_user' ], password: DIL_CONFIG[ 'jp2_ssh_pw' ], local_img_path: jp2_img_path, remote_img_path: repo_location )
+      scp_mover( server: DIL_CONFIG['jp2_server'], user: DIL_CONFIG[ 'jp2_ssh_user' ], local_img_path: jp2_img_path, remote_img_path: repo_location )
     end
   end
 
@@ -35,7 +34,7 @@ class ImageMover < ActiveRecord::Base
 
       logger.debug DIL_CONFIG[ 'repo_server' ]
       logger.debug DIL_CONFIG[ 'repo_ssh_user' ]
-      scp_mover( server: DIL_CONFIG['repo_server'], user: DIL_CONFIG[ 'repo_ssh_user' ], password: DIL_CONFIG[ 'repo_ssh_pw' ], local_img_path: tiff_img_path, remote_img_path: repo_location )
+      scp_mover( server: DIL_CONFIG['repo_server'], user: DIL_CONFIG[ 'repo_ssh_user' ], local_img_path: tiff_img_path, remote_img_path: repo_location )
     end
   end
 
@@ -44,15 +43,9 @@ class ImageMover < ActiveRecord::Base
   private
 
   def self.scp_mover( options )
-    require 'net/scp'
 
     logger.debug "UPLOADING ..."
-#     Net::SCP.upload!( options[:server],
-#                       options[:user],
-#                       options[:local_img_path],
-#                       options[:remote_img_path],
-#                       ssh: { password: options[:password] })
-    `scp #{ options[ :local_img_path ]} mntb@ansel.library.northwestern.edu:/dimages/public/images/inu-dil/hydra/test 2>&1`
+    `scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
     logger.debug $?
     logger.debug "UPLOADING COMPLETE"
   end
