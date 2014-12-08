@@ -265,8 +265,11 @@ EOF
     require 'jhove_service'
 
     # This parameter is where the output file will go
+    logger.debug( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
+    logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
+    logger.debug( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
