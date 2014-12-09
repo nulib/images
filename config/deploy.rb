@@ -40,8 +40,8 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      #execute :touch, release_path.join('tmp/restart.txt')
-      execute "/etc/init.d/unicorn.dil_hydra restart"
+      execute :touch, release_path.join('tmp/restart.txt')
+      #execute "/etc/init.d/unicorn.dil_hydra restart"
       invoke 'delayed_job:restart'
     end
   end
