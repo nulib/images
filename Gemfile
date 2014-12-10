@@ -62,7 +62,7 @@ group :development, :test do
   gem 'simplecov', :require => false
   gem 'byebug'
   gem 'sextant'
-  gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
+  gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
 
 group :production do
