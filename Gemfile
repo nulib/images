@@ -30,7 +30,7 @@ source 'http://rubygems.org'
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
-  gem 'capistrano-rvm'
+  gem 'capistrano-rbenv'
   gem 'daemons'
 
   gem 'therubyracer', '0.10.1'
