@@ -18,36 +18,22 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 RSpec.configure do |config|
   config.mock_with :rspec
   config.include Devise::TestHelpers, :type => :controller
-
+  config.include Capybara::DSL
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.include FactoryGirl::Syntax::Methods
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
-  config.use_transactional_fixtures = true
+  #config.use_transactional_fixtures = true
 
   # If true, the base class of anonymous controllers will be inferred
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
 
-  config.before(:suite) do
-    ## Clean out the repository
-      begin
-        Multiresimage.find_each({}, :rows=>1000) do |m|
-          ### Delete everything except the fixture
-          m.delete unless /^inu:dil-/.match(m.pid)
-        end
-        DILCollection.find_each({}, :rows=>1000) { |c| c.delete }
-        AdminPolicy.find_each({}, :rows=>1000) { |c| c.delete }
-      rescue ActiveFedora::ObjectNotFoundError => e
-        puts "Index is out of synch with repository. #{e.message}"
-        puts "Aborting repository cleanup"
-        ##nop - index is out of synch with repository. Try solrizing
-      end
-  end
 end
 
 module FactoryGirl
@@ -79,8 +65,8 @@ def login(user)
       }
     }
   }
-  stub_groups_for_user(user)
-  Hydra::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
+  # stub_groups_for_user(user)
+  # Hydra::LDAP.stub(:groups_owned_by_user).with(user.uid).and_return([])
 
   visit '/'
   click_link "Login"

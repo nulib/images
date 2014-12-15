@@ -2,14 +2,19 @@ require 'capybara/rspec'
 require 'spec_helper'
 require 'rake'
 
+
+# README: This test requires a collection to exist prior to running it. For the time being, whoever 
+# runs it locally needs to create a collection through the web interface. And I needed to run 
+# the rake hydra:fixtures:refresh command besdies the db:test:prepare commands in order to have images present.
+# Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
+
+
 Capybara.default_driver = :selenium
 
 describe 'Add an Image to a Collection',  :js => true do
   it "drags a draggable image element to a droppable collection element" do
    
     @driver = Capybara.default_driver
-    #will these run without first running the rake hydra:fixture:refresh command? confirm!!
-
     visit('https://localhost:3000/users/sign_in')
 
     fill_in 'username', :with => 'dpg674'
