@@ -1,0 +1,1430 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>exiftool Application Documentation</title>
+<link rev="made" href="mailto:root@b05.apple.com" />
+</head>
+
+<body style="background-color: white">
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;exiftool Application Documentation</span></strong></big>
+</td></tr>
+</table>
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#options">OPTIONS</a></li>
+	<ul>
+
+		<li><a href="#advanced_options">Advanced Options</a></li>
+	</ul>
+
+	<li><a href="#reading_examples">READING EXAMPLES</a></li>
+	<li><a href="#writing_examples">WRITING EXAMPLES</a></li>
+	<li><a href="#copying_examples">COPYING EXAMPLES</a></li>
+	<li><a href="#renaming_examples">RENAMING EXAMPLES</a></li>
+	<li><a href="#piping_examples">PIPING EXAMPLES</a></li>
+	<li><a href="#bugs">BUGS</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#see_also">SEE ALSO</a></li>
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>exiftool - Read and write meta information in files</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<p><strong>exiftool</strong> [<em>OPTIONS</em>] [-<em>TAG</em>...] [--<em>TAG</em>...] <em>FILE</em>...</p>
+<p><strong>exiftool</strong> [<em>OPTIONS</em>] -<em>TAG</em>[+-&lt;]=[<em>VALUE</em>]... <em>FILE</em>...</p>
+<p><strong>exiftool</strong> [<em>OPTIONS</em>] <strong>-TagsFromFile</strong> <em>SRCFILE</em>
+[-<em>SRCTAG</em>[&gt;<em>DSTTAG</em>]...] <em>FILE</em>...</p>
+<p><strong>exiftool</strong> [ <strong>-ver</strong> | <strong>-list</strong>[<strong>w</strong>|<strong>f</strong>|<strong>g</strong>[<em>NUM</em>]|<strong>d</strong>] ]</p>
+<p>For specific examples, see the <a href="#reading_examples">EXAMPLES</a> sections below.</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>A command-line interface to <a href="ExifTool.html">Image::ExifTool</a>, used for
+reading and writing meta information in image, audio and video files.
+<em>FILE</em> is a source file name, directory name, or <code>-</code> for the standard
+input.  Information is read from the source file and output in readable form
+to the console (or written to an output text file with the <strong>-w</strong> option).</p>
+<p>To write or copy information, new values are specified with the
+-<em>TAG</em>=[<em>VALUE</em>] syntax or the <strong>-TagsFromFile</strong> option.  This causes
+<em>FILE</em> to be rewritten, and by default the original file is preserved with
+<code>_original</code> appended to the file name.  (Be sure to verify that the new
+file is OK before erasing the original.)  Once in write mode, exiftool will
+ignore any read-specific options.</p>
+<p>Below is a list of file types and meta information formats currently
+supported by ExifTool (r = read, w = write, c = create):</p>
+<pre>
+                File Types                 |    Meta Information
+  ---------------------------------------  |  --------------------
+  3FR   r       ITC   r       PPM   r/w    |  EXIF           r/w/c
+  ACR   r       JNG   r/w     PPT   r      |  GPS            r/w/c
+  AI    r       JP2   r/w     PS    r/w    |  IPTC           r/w/c
+  AIFF  r       JPEG  r/w     PSD   r/w    |  XMP            r/w/c
+  APE   r       K25   r       QTIF  r      |  MakerNotes     r/w/c
+  ARW   r       KDC   r       RA    r      |  Photoshop IRB  r/w/c
+  ASF   r       M4A   r       RAF   r/w    |  ICC Profile    r/w/c
+  AVI   r       MEF   r/w     RAM   r      |  MIE            r/w/c
+  BMP   r       MIE   r/w/c   RAW   r/w    |  JFIF           r/w/c
+  BTF   r       MIFF  r       RIFF  r      |  Ducky APP12    r/w/c
+  CR2   r/w     MNG   r/w     RM    r      |  CIFF           r/w
+  CRW   r/w     MOS   r/w     SR2   r      |  AFCP           r/w
+  CS1   r/w     MOV   r       SRF   r      |  JPEG 2000      r
+  DCM   r       MP3   r       SVG   r      |  DICOM          r
+  DCR   r       MP4   r       SWF   r      |  Flash          r
+  DIVX  r       MPC   r       THM   r/w    |  FlashPix       r
+  DNG   r/w     MPG   r       TIFF  r/w    |  QuickTime      r
+  DOC   r       MRW   r/w     VRD   r/w/c  |  GeoTIFF        r
+  EPS   r/w     NEF   r/w     WAV   r      |  PrintIM        r
+  ERF   r/w     OGG   r       WDP   r/w    |  ID3            r
+  FLAC  r       ORF   r/w     WMA   r      |  Kodak Meta     r
+  FLV   r       PBM   r/w     WMV   r      |  Ricoh RMETA    r
+  FPX   r       PDF   r/w     X3F   r      |  Picture Info   r
+  GIF   r/w     PEF   r/w     XLS   r      |  Adobe APP14    r
+  HDP   r/w     PGM   r/w     XMP   r/w/c  |  APE            r
+  HTML  r       PICT  r                    |  Vorbis         r
+  ICC   r/w/c   PNG   r/w                  |  (and more)</pre>
+<p>Note:  If <em>FILE</em> is a directory name, then only file types with recognized
+extensions are processed when reading, and only writable types are written.
+However, the <strong>-ext</strong> option may be used to force processing of files with
+any extension.</p>
+<p>
+</p>
+<hr />
+<h1><a name="options">OPTIONS</a></h1>
+<p>Case is not significant for any command-line option (including tag and group
+names), except for single-character options if the corresponding upper case
+option is defined.  Multiple options may NOT be combined into a single
+argument, because that would be interpreted as a tag name.</p>
+<dl>
+<dt><strong><a name="item__2dtag"><strong>-</strong><em>TAG</em></a></strong><br />
+</dt>
+<dd>
+Extract information for specified tag (ie. <code>-CreateDate</code>).  See
+<a href="TagNames/index.html">Image::ExifTool::TagNames</a> for documentation on
+available tag names.  A tag name may include a leading group name separated
+by a colon (ie. <code>-XMP:Creator</code>).  Any family 0 or 1 group name may be used,
+and the group name may be prefixed by a digit to specify family number (ie.
+<code>-1IPTC:Keywords</code>).  Use the <strong>-listg</strong> or <strong>-listg1</strong> option to list valid
+family 0 or 1 group names.
+</dd>
+<dd>
+<p>A special tag name of <code>All</code> may be used to indicate all meta information.
+This is particularly useful when a group name is specified to extract all
+information in a group.  (<code>*</code> is a synonym for <code>All</code>, but must be quoted
+if used on the command line to prevent shell globbing.)</p>
+</dd>
+<dd>
+<p>If no tags are specified, all available information is extracted.</p>
+</dd>
+<dd>
+<p>Note:  Descriptions, not tag names, are shown by default when extracting
+information.  Use the <strong>-s</strong> option to see the tag names instead.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2d_2dtag"><strong>--</strong><em>TAG</em></a></strong><br />
+</dt>
+<dd>
+Exclude specified tag from extracted information.  Same as the <strong>-x</strong> option.
+May also be used following a <strong>-TagsFromFile</strong> option to exclude tags from
+being copied, or to exclude groups from being deleted when deleting all
+information (ie. <code>-all= --exif:all</code> deletes all but EXIF information).
+</dd>
+<dd>
+<p>Note that this will not exclude individual tags from a group delete.
+Instead, the tags must be recovered using the <strong>-TagsFromFile</strong> option.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtag_5b_2b_2d_5d_3d_5bvalue_5d"><strong>-</strong><em>TAG</em>[+-]<strong>=</strong>[<em>VALUE</em>]</a></strong><br />
+</dt>
+<dd>
+Write a new value for the specified tag (ie. <code>-comment=wow</code>), or delete the
+tag if no <em>VALUE</em> is given (ie. <code>-comment=</code>). <code>+=</code> and <code>-=</code> are used to
+add or remove existing entries from a list, or to shift date/time values
+(see <a href="http://search.cpan.org/dist/Image-ExifTool/lib/Image/ExifTool/Shift.pl">Image::ExifTool::Shift.pl</a> for details),
+and <code>-=</code> may be used to conditionally remove or replace a tag (see
+<a href="#writing_examples">WRITING EXAMPLES</a> for examples).
+</dd>
+<dd>
+<p>If a group name is not specified for <em>TAG</em>, then the information is written
+to the preferred group, which is the first group in the following list where
+<em>TAG</em> is valid:  1) EXIF, 2) IPTC, 3) XMP, 4) MakerNotes.</p>
+</dd>
+<dd>
+<p>The special <code>All</code> tag may be used in this syntax only if a <em>VALUE</em> is NOT
+given.  This causes all meta information to be deleted (or all information
+in a group if <code>-GROUP:All=</code> is used).  Note that not all groups are
+deletable.  Also, within an image some groups may be contained within
+others, and these groups are removed if the super group is deleted.  Below
+are lists of these group dependencies:</p>
+</dd>
+<dd>
+<pre>
+  JPEG Image:
+  - Deleting EXIF or IFD0 also deletes ExifIFD, GlobParamIFD,
+    GPS, IFD1, InteropIFD, MakerNotes, PrintIM and SubIFD.
+  - Deleting ExifIFD also deletes InteropIFD and MakerNotes.
+  - Deleting Photoshop also deletes IPTC.</pre>
+</dd>
+<dd>
+<pre>
+  TIFF Image:
+  - Deleting EXIF only removes ExifIFD which also deletes
+    InteropIFD and MakerNotes.</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtag_3c_3ddatfile_or__2dtag_3c_3dfmt"><strong>-</strong><em>TAG</em>&lt;=<em>DATFILE</em> or <strong>-</strong><em>TAG</em>&lt;=<em>FMT</em></a></strong><br />
+</dt>
+<dd>
+Set the value of a tag from the contents of file <em>DATFILE</em>.  The file name
+may also be given by a <em>FMT</em> string where %d, %f and %e represent the
+directory, file name and extension of the original <em>FILE</em> (see the <strong>-w</strong>
+option for more details).  Note that quotes are required around this
+argument to prevent shell redirection since it contains a <code>&lt;</code> symbol.
+<code>+&lt;=</code> or <code>-&lt;=</code> may also be used to add or delete specific list
+entries, or to shift date/time values.
+</dd>
+<p></p>
+<dt><strong><a name="item__2d_40_argfile"><strong>-@</strong> <em>ARGFILE</em></a></strong><br />
+</dt>
+<dd>
+Read command-line arguments from the specified file.  The file contains one
+argument per line (NOT one option per line -- some options require
+additional arguments which must be placed on separate lines).  Blank lines
+and lines beginning with <code>#</code> and are ignored.   Normal shell processing of
+arguments is not performed, which among other things means that arguments
+should not be quoted.  <em>ARGFILE</em> may exist relative to either the current
+directory or the exiftool directory unless an absolute pathname is given.
+</dd>
+<dd>
+<p>For example, the following <em>ARGFILE</em> will set the value of Copyright to
+``Copyright YYYY, Phil Harvey'', where ``YYYY'' is the year of CreateDate:</p>
+</dd>
+<dd>
+<pre>
+    -d
+    %Y
+    -copyright&lt;Copyright $createdate, Phil Harvey</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2da"><strong>-a</strong></a></strong><br />
+</dt>
+<dd>
+<strong>A</strong>llow duplicate tag names in the output.  Without this option, duplicates
+are suppressed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2db"><strong>-b</strong></a></strong><br />
+</dt>
+<dd>
+Output requested data in <strong>b</strong>inary format without tag names or descriptions.
+This option is mainly used for extracting embedded images, but it may also
+be useful in separating values of list-type tags since a newline is used
+instead of a comma to separate these values in the <strong>-b</strong> output.  Also,
+control characters (such as newlines) in text strings are not replaced by
+'.' as they are in the default output.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dc_fmt"><strong>-c</strong> <em>FMT</em></a></strong><br />
+</dt>
+<dd>
+Set the print format for GPS <strong>c</strong>oordinates.  <em>FMT</em> uses the same syntax as
+the <code>printf</code> format string.  The specifiers correspond to degrees, minutes
+and seconds in that order, but minutes and seconds are optional.  For
+example, the following table gives the output for the same coordinate using
+various formats:
+</dd>
+<dd>
+<pre>
+            FMT                  Output
+    -------------------    ------------------
+    &quot;%d deg %d' %.2f&quot;\&quot;    54 deg 59' 22.80&quot;   (the default)
+    &quot;%d deg %.4f min&quot;      54 deg 59.3800 min
+    &quot;%.6f degrees&quot;         54.989667 degrees</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dd_fmt"><strong>-d</strong> <em>FMT</em></a></strong><br />
+</dt>
+<dd>
+Set the format for <strong>d</strong>ate/time tag values.  Consult <code>strftime</code> man page
+for <em>FMT</em> syntax. The default format is equivalent to ``%Y:%m:%d %H:%M:%S''.
+This option has no effect on date-only or time-only tags, ignores timezone
+information if present, and currently doesn't apply when writing.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dd"><strong>-D</strong></a></strong><br />
+</dt>
+<dd>
+Show tag ID number in <strong>D</strong>ecimal.
+</dd>
+<p></p>
+<dt><strong><a name="item__2de"><strong>-e</strong></a></strong><br />
+</dt>
+<dd>
+Print <strong>e</strong>xisting tags only -- don't calculate composite tags.
+</dd>
+<p></p>
+<dt><strong><a name="item__2de"><strong>-E</strong></a></strong><br />
+</dt>
+<dd>
+<strong>E</strong>scape characters in output values for HTML.  Implied with the <strong>-h</strong>
+option.
+</dd>
+<p></p>
+<dt><strong><a name="item_ext"><strong>-ext</strong> <em>EXT</em> (or <strong>--ext</strong> <em>EXT</em>)</a></strong><br />
+</dt>
+<dd>
+Process only files with (<strong>-ext</strong>) or without (<strong>--ext</strong>) a specified
+extension.  There may be multiple <strong>-ext</strong> and <strong>--ext</strong> options.  Extensions may
+begin with a leading '.', and case is not significant.  For example:
+</dd>
+<dd>
+<pre>
+    exiftool -ext .JPG DIR            # process only JPG files
+    exiftool --ext crw --ext dng DIR  # process all but CRW and DNG
+    exiftool --ext . DIR              # ignore if no extension</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2df"><strong>-f</strong></a></strong><br />
+</dt>
+<dd>
+<strong>F</strong>orce printing of tags even if their values are not found.
+</dd>
+<p></p>
+<dt><strong><a name="item__2df_5boffset_5d"><strong>-F</strong>[<em>OFFSET</em>]</a></strong><br />
+</dt>
+<dd>
+Fix the base for maker notes offsets.  A common problem with some image
+editors is that offsets in the maker notes are not adjusted properly when
+the file is modified.  This may cause the wrong values to be extracted for
+some maker note entries when reading the edited file.  This option allows an
+integer <em>OFFSET</em> to be specified for adjusting the maker notes base offset.
+If no <em>OFFSET</em> is given, ExifTool takes its best guess at the correct base.
+Note that exiftool will automatically fix the offsets for images which store
+original offset information (ie. newer Canon models).  Offsets are fixed
+permanently if used when writing an image.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dfast"><strong>-fast</strong></a></strong><br />
+</dt>
+<dd>
+Increase speed of extracting information from JPEG images.  With this
+option, ExifTool will not scan to the end of a JPEG image to check for an
+AFCP or PreviewImage trailer.  The speed benefits are small when reading
+images directly from disk, but can be substantial if piping images through a
+network connection.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dg_5bnum_5d"><strong>-g</strong>[<em>NUM</em>]</a></strong><br />
+</dt>
+<dd>
+Organize output by tag <strong>g</strong>roup.  <em>NUM</em> specifies the group family number,
+and may be 0 (general location), 1 (specific location) or 2 (category).  If
+not specified, <strong>-g0</strong> is assumed.  Use the <strong>-listg</strong> option to list all
+group names for a specified family.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dg_5bnum_5d"><strong>-G</strong>[<em>NUM</em>]</a></strong><br />
+</dt>
+<dd>
+Same as <strong>-g</strong> but print <strong>G</strong>roup name for each tag.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dh"><strong>-h</strong></a></strong><br />
+</dt>
+<dd>
+Use <strong>H</strong>TML formatting for output.  Implies <strong>-E</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dh"><strong>-H</strong></a></strong><br />
+</dt>
+<dd>
+Show tag ID number in <strong>H</strong>exadecimal.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dhtmldump_5boffset_5d"><strong>-htmlDump</strong>[<em>OFFSET</em>]</a></strong><br />
+</dt>
+<dd>
+Generate a dynamic web page containing a hex dump of the EXIF information.
+This can be a very powerful tool for low-level analysis of EXIF information.
+The <strong>-htmlDump</strong> option is also invoked if the <strong>-v</strong> and <strong>-h</strong> options are
+used together.  The verbose level controls the maximum length of the blocks
+dumped.  An <em>OFFSET</em> may be given to specify the base for displayed
+offsets.  If not provided, the EXIF/TIFF base offset is used.  Use
+<strong>-htmlDump0</strong> for absolute offsets.  Currently only EXIF and TIFF
+information is dumped, but the -u option can be used to give a raw hex dump
+of other file formats.
+</dd>
+<p></p>
+<dt><strong><a name="item__2di_dir"><strong>-i</strong> <em>DIR</em></a></strong><br />
+</dt>
+<dd>
+<strong>I</strong>gnore specified directory name.  May be multiple <strong>-i</strong> options.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dif_expr"><strong>-if</strong> <em>EXPR</em></a></strong><br />
+</dt>
+<dd>
+Specify a condition to be evaluated before processing each <em>FILE</em>.  <em>EXPR</em>
+is a Perl-like expression containing tag names prefixed by <code>$</code> symbols.  It
+is evaluated with the tags from each <em>FILE</em> in turn, and processing
+proceeds only if the expression returns true.  Unlike Perl variable names,
+tag names are not case sensitive and may contain a hyphen or a leading group
+name separated by a colon.  When multiple <strong>-if</strong> options are used, all
+conditions must be satisfied to process the file.  Below are a few examples:
+</dd>
+<dd>
+<pre>
+    # extract shutterspeed from all Canon images in a directory
+    exiftool -shutterspeed -if '$make eq &quot;Canon&quot;' dir</pre>
+</dd>
+<dd>
+<pre>
+    # add one hour to all images created on or after Apr. 2, 2006
+    exiftool -alldates+=1 -if '$CreateDate ge &quot;2006:04:02&quot;' dir</pre>
+</dd>
+<dd>
+<pre>
+    # set EXIF ISO value if possible, unless it is set already
+    exiftool '-exif:iso&lt;iso' -if 'not $exif:iso' dir</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dk"><strong>-k</strong></a></strong><br />
+</dt>
+<dd>
+Pause with the message <code>-- press any key --</code> before terminating.  This
+option is used to prevent the command window from closing when run as a
+Windows drag and drop application.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dl"><strong>-l</strong></a></strong><br />
+</dt>
+<dd>
+Use <strong>l</strong>ong 2-line Canon-style output format.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dl"><strong>-L</strong></a></strong><br />
+</dt>
+<dd>
+Convert 16-bit Unicode characters in output to Windows <strong>L</strong>atin1 (cp1252)
+instead of the default UTF-8.  When writing, -L is used to specify that
+input text values are Latin1 instead of UTF-8.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dlist_2c__2dlistw_2c__2dlistf_2c__2dlistg_5bnum_"><strong>-list</strong>, <strong>-listw</strong>, <strong>-listf</strong>, <strong>-listg</strong>[<em>NUM</em>], <strong>-listd</strong></a></strong><br />
+</dt>
+<dd>
+Print a <strong>list</strong> of all valid tag names (<strong>-list</strong>), all <strong>w</strong>ritable tag names
+(<strong>-listw</strong>), all recognized <strong>f</strong>ile extensions (<strong>-listf</strong>), all tag
+<strong>g</strong>roups [in a specified family] (<strong>-listg</strong>[<em>NUM</em>]), or all <strong>d</strong>eletable
+tag groups (<strong>-listd</strong>).  The <strong>-list</strong> and <strong>-listw</strong> options may be followed
+by an additional argument of the form <code>-GROUP:All</code> to list all tags in a
+specific group.  With <strong>-listg</strong>, <em>NUM</em> may be given to specify the group
+family, otherwise family 0 is assumed. For example:
+</dd>
+<dd>
+<pre>
+    -list               # list all tag names
+    -list -EXIF:All     # list all EXIF tags
+    -listw -XMP-dc:All  # list all writable XMP-dc tags
+    -listf              # list all recognized file extensions
+    -listg1             # list all groups in family 1
+    -listd              # list all deletable groups</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dm"><strong>-m</strong></a></strong><br />
+</dt>
+<dd>
+Ignore <strong>m</strong>inor errors.  Allows writing if some minor errors occur, or
+extraction of embedded images that aren't in standard JPG format.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dn"><strong>-n</strong></a></strong><br />
+</dt>
+<dd>
+Read and write values as <strong>n</strong>umbers instead of words.  This option disables
+the print conversion that is applied when extracting values to make them
+more readable, and the inverse print conversion when writing.  For example:
+</dd>
+<dd>
+<pre>
+    &gt; exiftool -Orientation -S a.jpg
+    Orientation: Rotate 90 CW
+    &gt; exiftool -Orientation -S -n a.jpg
+    Orientation: 6</pre>
+</dd>
+<dd>
+<p>and the following two writing commands have the same effect</p>
+</dd>
+<dd>
+<pre>
+    &gt; exiftool -Orientation='Rotate 90 CW' a.jpg
+    &gt; exiftool -Orientation=6 -n a.jpg</pre>
+</dd>
+<p></p>
+<dt><strong><a name="item__2do_outfile_or_fmt"><strong>-o</strong> <em>OUTFILE</em> or <em>FMT</em></a></strong><br />
+</dt>
+<dd>
+Set the <strong>o</strong>utput file or directory name when writing information.  (Without
+this option, the original file is renamed to <code>FILE_original</code> and output is
+sent to <em>FILE</em>.)  The output file name may also be specified using a <em>FMT</em>
+string in which %d, %f and %e represent the directory, file name and
+extension of <em>FILE</em>.  Also, %c may be used to add a copy number.  See the
+<strong>-w</strong> option for <em>FMT</em> string examples.
+</dd>
+<dd>
+<p>The output file is taken to be a directory name if it already exists as a
+directory or if the name ends with '/'.  Output directories are created if
+necessary.  Existing files will not be overwritten.  Combining the
+<strong>-overwrite_original</strong> option with <strong>-o</strong> causes the original source file to
+be erased after the output file is successfully written.</p>
+</dd>
+<dd>
+<p>A special feature of this option allows it to be used to create certain
+types of files from scratch.  Currently, this can only be done with XMP and
+ICC/ICM files.  The file is created from a combination of information in
+<em>FILE</em> and tag values assigned on the command line.  This is done by
+specifying a file extension of '.XMP', '.ICC' or '.ICM' for <em>OUTFILE</em>.  The
+output file may be created even if no <em>FILE</em> is specified, provided some
+appropriate tag values are specified on the command line.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2doverwrite_original"><strong>-overwrite_original</strong></a></strong><br />
+</dt>
+<dd>
+Overwrite the original <em>FILE</em> (instead of preserving it by adding
+<code>_original</code> to the file name) when writing information to an image.
+Caution: This option should only be used if you already have separate backup
+copies of your image files.  The overwrite is implemented by renaming a
+temporary file.
+</dd>
+<p></p>
+<dt><strong><a name="item__2doverwrite_original_in_place"><strong>-overwrite_original_in_place</strong></a></strong><br />
+</dt>
+<dd>
+Similar to the <strong>-overwrite_original</strong> option except that an extra step is
+added to allow the original file attributes to be preserved.  On a Macintosh
+for example, this preserves the original file type, creator and icon.  This
+is implemented by copying the contents of a temporary file over the
+original, then deleting the temporary file.  The extra step results in
+slower performance, so the <strong>-overwrite_original</strong> option should be used
+instead unless necessary.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dp_fmtfile_or_str"><strong>-p</strong> <em>FMTFILE</em> or <em>STR</em></a></strong><br />
+</dt>
+<dd>
+<strong>P</strong>rint output in the format specified by the given file or string (and
+ignore other format options).  Tag names in the format file or string begin
+with a <code>$</code> symbol and may contain an optional group name.  Case is not
+significant.  Braces <code>{}</code> may be used around the tag name to separate it
+from subsequent text.  Use <code>$$</code> to represent a <code>$</code> symbol.  <code>$/</code> may be
+used for a newline.  In the file, lines beginning with <code>#</code> are ignored. For
+example, this format file:
+</dd>
+<dd>
+<pre>
+    # this is a comment line
+    File $FileName was created on $DateTimeOriginal
+    (f/$Aperture, ${ShutterSpeed}s, ISO $EXIF:ISO)</pre>
+</dd>
+<dd>
+<p>produces output like this:</p>
+</dd>
+<dd>
+<pre>
+    File test.jpg was created on 2003:10:31 15:44:19
+    (f/5.6, 1/60s, ISO 100)</pre>
+</dd>
+<dd>
+<p>If a tag does not exist, the output value is set to '-' if the <strong>-f</strong> option
+is used.  Otherwise a minor warning is issued and the line with the missing
+tag is not printed.  However, if the <strong>-m</strong> option is used, minor warnings
+are ignored and the line is printed with an empty tag value.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dp"><strong>-P</strong></a></strong><br />
+</dt>
+<dd>
+<strong>P</strong>reserve date/time of original file (<code>FileModifyDate</code>) when writing.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dq"><strong>-q</strong></a></strong><br />
+</dt>
+<dd>
+<strong>Q</strong>uiet processing.  One <strong>-q</strong> suppresses normal informational messages,
+and a second <strong>-q</strong> suppresses warnings as well.  Error messages can not be
+suppressed, although minor errors may be downgraded to warnings with the
+<strong>-m</strong> option.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dr"><strong>-r</strong></a></strong><br />
+</dt>
+<dd>
+<strong>R</strong>ecursively scan subdirectories.  Only meaningful if <em>FILE</em> is a
+directory name.
+</dd>
+<p></p>
+<dt><strong><a name="item__2ds"><strong>-s</strong></a></strong><br />
+</dt>
+<dd>
+Print tag names instead of descriptions.  This is the <strong>s</strong>hort output
+format.  Add up to 3 <strong>-s</strong> options for even shorter formats:
+</dd>
+<dd>
+<pre>
+    -s        - print tag names instead of descriptions
+    -s -s     - no extra spaces to column-align values
+    -s -s -s  - print values only</pre>
+</dd>
+<dd>
+<p>Also effective when combined with <strong>-t</strong> or <strong>-h</strong> options.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2ds"><strong>-S</strong></a></strong><br />
+</dt>
+<dd>
+Very <strong>s</strong>hort format.  The same as two <strong>-s</strong> options.  Extra spaces used
+to column-align values are not printed.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dscanforxmp"><strong>-ScanForXMP</strong></a></strong><br />
+</dt>
+<dd>
+Scan all files (even unrecognized formats) for XMP information unless found
+already.  When combined with the <strong>-fast</strong> option, only unrecognized file
+types are scanned.  Warning: It can be time consuming to scan large files.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dt"><strong>-t</strong></a></strong><br />
+</dt>
+<dd>
+Output a <strong>t</strong>ab-delimited list of description/values (useful for database
+import).  May be combined with <strong>-s</strong> to print tag names instead of
+descriptions, or <strong>-S</strong> to print tag values only, tab-delimited on a single
+line.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dt"><strong>-T</strong></a></strong><br />
+</dt>
+<dd>
+Output tag values in <strong>T</strong>able form.  (Equivalent to <strong>-t -S -q -f</strong>.)
+</dd>
+<p></p>
+<dt><strong><a name="item__2dtagsfromfile_srcfile_or_fmt"><strong>-TagsFromFile</strong> <em>SRCFILE</em> or <em>FMT</em></a></strong><br />
+</dt>
+<dd>
+Copy tag values from <em>SRCFILE</em> to <em>FILE</em>.  Tag names on the command line
+after this option specify the tags to be copied, or excluded from the copy.
+If no tags are specified, then all tags from the source file are copied.
+More than one <strong>-TagsFromFile</strong> option may be used to copy tags from multiple
+files.
+</dd>
+<dd>
+<p>By default, this option will commute information between same-named tags in
+different groups and write each tag to the preferred group.  This allows
+information to be automatically translated when copying between images of
+different formats.  However, if a group name is specified for a tag then the
+information is written to the original group (unless redirected to another
+group, see below).  This works even if <code>All</code> is used as a group name, so
+<code>-All:All</code> is used to specify that all information be copied to the same
+group in the destination file.</p>
+</dd>
+<dd>
+<p><em>SRCFILE</em> may be the same as <em>FILE</em> to move information around within a
+file.  In this case, <code>@</code> may be used to represent the source file (ie.
+<code>-TagsFromFile @</code>), permitting this feature to be used for batch processing
+multiple files (see note 3 below).  Specified tags are then copied from each
+file in turn as it is rewritten.  For advanced batch use, the source file
+name may also be specified using a <em>FMT</em> string in which %d, %f and %e
+represent the directory, file name and extension of <em>FILE</em>.  See <strong>-w</strong>
+option for <em>FMT</em> string examples.</p>
+</dd>
+<dd>
+<p>A powerful redirection feature allows a destination tag to be specified for
+each extracted tag.  With this feature, information may be written to a tag
+with a different name or group.  This is done using
+&quot;'-<em>SRCTAG</em>&gt;<em>DSTTAG</em>'&quot; on the command line after
+<strong>-TagsFromFile</strong> (&quot;'-<em>DSTTAG</em>&lt;<em>SRCTAG</em>'&quot; also works).
+Note that this argument must be quoted to prevent shell redirection, and
+there is no <code>=</code> sign as when assigning new values.  Both source and
+destination tags may be prefixed by a group name, and <code>All</code> or <code>*</code> may be
+used as a tag or group name.  If no destination group is specified, the
+information is written to the preferred group.  As a convenience,
+<code>-TagsFromFile @</code> is assumed for any redirected tags which are specified
+without a prior <strong>-TagsFromFile</strong> option.  Copied tags may also be added or
+deleted from a list with arguments of the form
+&quot;'-<em>SRCTAG</em>+&gt;<em>DSTTAG</em>'&quot; or
+&quot;'-<em>SRCTAG</em>-&gt;<em>DSTTAG</em>'&quot;.</p>
+</dd>
+<dd>
+<p>An extension of the redirection feature allows strings involving tag names
+to be used on the right hand side of the <code>&lt;</code> symbol with the syntax
+&quot;'-<em>DSTTAG</em>&lt;<em>STR</em>'&quot;, where tag names in <em>STR</em> are
+prefixed with a <code>$</code> symbol.  See the <strong>-p</strong> option for more details about
+this syntax.  Strings starting with a <code>=</code> sign must insert a single space
+after the <code>&lt;</code> to avoid confusion with the <code>&lt;=</code> syntax which would
+otherwise attempt to set the tag value from the contents of a file.  A
+single space at the start of the string is removed if it exists, but all
+other whitespace is preserved.</p>
+</dd>
+<dd>
+<p>See <a href="#copying_examples">COPYING EXAMPLES</a> for examples using <strong>-TagsFromFile</strong>.</p>
+</dd>
+<dd>
+<p>Notes:</p>
+</dd>
+<dd>
+<p>1) Be aware of the difference between excluding a tag from being copied
+(--<em>TAG</em>), and deleting a tag (-<em>TAG</em>=).  Excluding a tag prevents it from
+being copied to the destination image, but deleting will remove a
+pre-existing tag from the image.</p>
+</dd>
+<dd>
+<p>2) The maker note information is copied as a block, so it isn't affected
+like other information by subsequent tag assignments on the command line.
+Also, since the PreviewImage referenced from the maker notes may be rather
+large, it is not copied, and must be transferred separately if desired.</p>
+</dd>
+<dd>
+<p>3) When performing complex batch processing, it is important to note that
+the order of operations is different for tags copied in batch mode.  In
+general, tags are copied from batch-mode files after all other command-line
+arguments have been applied.  (The exception is that a group delete is
+always performed last if there are no subsequent tag assignments on the
+command line.)  For example, the following two commands are not equivalent:</p>
+</dd>
+<dd>
+<pre>
+    # (not batch mode):  Sets xmp:title to 'NEW'
+    exiftool -tagsfromfile a.jpg -xmp:title -xmp:title=NEW a.jpg</pre>
+</dd>
+<dd>
+<pre>
+    # (batch mode):  Preserves original title if it exists
+    exiftool -tagsfromfile @ -xmp:title -xmp:title=NEW a.jpg</pre>
+</dd>
+<dd>
+<p>4) The normal behaviour of copied tags differs subtly from assigned tags for
+List-type tags.  When copying to a list, each copied tag overrides any
+previous operations on the list.  While this avoids duplicate list items
+when copying groups of tags from a file containing redundant information, it
+also prevents values from different tags from being copied into the same
+list when this is the intent.  To change this, a <strong>-addTagsFromFile</strong> option
+is provided to allow multiple items to be copied to the same list.  Other
+than this difference, <strong>-addTagsFromFile</strong> is equivalent to <strong>-tagsFromFile</strong>.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2du"><strong>-u</strong></a></strong><br />
+</dt>
+<dd>
+Extract values of <strong>u</strong>nknown tags.  Add another <strong>-u</strong> to also extract
+unknown information from binary data blocks.
+</dd>
+<p></p>
+<dt><strong><a name="item__2du"><strong>-U</strong></a></strong><br />
+</dt>
+<dd>
+Extract values of <strong>u</strong>nknown tags as well as unknown information from binary
+data blocks.  This is the same as two <strong>-u</strong> options.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dv_5bnum_5d"><strong>-v</strong>[<em>NUM</em>]</a></strong><br />
+</dt>
+<dd>
+Print <strong>v</strong>erbose messages.  <em>NUM</em> specifies the level of verbosity in the
+range 0-5, with higher numbers being more verbose.  If <em>NUM</em> is not given,
+then each <strong>-v</strong> option increases the level of verbosity by 1.  This option
+suppresses normal console output unless specific tags are being extracted.
+<strong>-v0</strong> is used when writing to print only the processed file names, and the
+``Nothing changed'' message for files that were not modified.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dver"><strong>-ver</strong></a></strong><br />
+</dt>
+<dd>
+Print version number and exit.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dw_ext_or_fmt"><strong>-w</strong> <em>EXT</em> or <em>FMT</em></a></strong><br />
+</dt>
+<dd>
+<strong>W</strong>rite console output to a file with name ending in <em>EXT</em> for each source
+file.  The output file name is obtained by replacing the source file
+extension (including the '.') with the specified extension (and a '.' is
+added to the start of <em>EXT</em> if it didn't contain one).  Alternatively, a
+<em>FMT</em> string may be used to give more control over the output file name and
+directory.  In the format string, %d, %f and %e represent the directory,
+filename and extension of the source file, and %c represents a copy number
+which is automatically incremented if the file already exists.  %d includes
+the trailing '/' if necessary, but %e does not include the leading '.'.  For
+example:
+</dd>
+<dd>
+<pre>
+    -w %d%f.txt       # same effect as &quot;-w txt&quot;
+    -w dir/%f_%e.out  # write files to &quot;dir&quot; as &quot;FILE_EXT.out&quot;
+    -w dir2/%d%f.txt  # write to &quot;dir2&quot;, keeping dir structure
+    -w a%c.txt        # write to &quot;a.txt&quot; or &quot;a1.txt&quot; or &quot;a2.txt&quot;...</pre>
+</dd>
+<dd>
+<p>Existing files will not be overwritten, and output directories are created
+automatically if necessary.</p>
+</dd>
+<dd>
+<p>Note:  In a Windows BAT file the '%' character is represented by ``%%'', so
+an argument like ``%d%f.txt'' is written as ``%%d%%f.txt''.</p>
+</dd>
+<dd>
+<p>Advanced features:  A substring of the original file name, directory or
+extension may be taken by specifying a field width immediately following the
+'%' character.  If the width is negative, the substring is taken from the
+end.  The substring position (characters to ignore at the start or end of
+the string) may be given by a second optional value after a decimal point.
+For example:</p>
+</dd>
+<dd>
+<pre>
+    Input File Name     Format Specifier    Output File Name
+    ----------------    ----------------    ----------------
+    Picture-123.jpg     %7f.txt             Picture.txt
+    Picture-123.jpg     %-.4f.out           Picture.out
+    Picture-123.jpg     %7f.%-3f            Picture.123
+    Picture-123a.jpg    Meta%-3.1f.txt      Meta123.txt</pre>
+</dd>
+<dd>
+<p>For %c, these modifiers have a different effects.  If a field width is
+given, the copy number is padded with zeros to the specified width.  A
+leading '-' adds a dash before the copy number, and a '+' adds an underline.
+By default, a copy number of zero is omitted, but this can be changed by
+adding a decimal point to the modifier.  For example:</p>
+</dd>
+<dd>
+<pre>
+    -w A%-cZ.txt      # AZ.txt, A-1Z.txt, A-2Z.txt ...
+    -w B%5c.txt       # B.txt, B00001.txt, B00002.txt ...
+    -w C%.c.txt       # C0.txt, C1.txt, C2.txt ...
+    -w D%-.c.txt      # D-0.txt, D-1.txt, D-2.txt ...
+    -w E%-.4c.txt     # E-0000.txt, E-0001.txt, E-0002.txt ...
+    -w F%-.4nc.txt    # F-0001.txt, F-0002.txt, F-0003.txt ...
+    -w G%+c.txt       # G.txt, G_1.txt G_2.txt ...
+    -w H%-lc.txt      # H.txt, H-b.txt, H-c.txt ...</pre>
+</dd>
+<dd>
+<p>All format codes may be modified by 'l' or 'u' to specify lower or upper
+case respectively (ie. ``%le'' for a lower case file extension).  When used to
+modify the copy number (%c), the numbers are changed to an alphabetical base
+(see example H above).  Also, %c may be modified by 'n' to count using
+natural numbers starting from 1, instead of 0 (see example F).</p>
+</dd>
+<dd>
+<p>This same <em>FMT</em> syntax is used with the <strong>-o</strong> and <strong>-TagsFromFile</strong> options,
+although %c is only valid for output file names.</p>
+</dd>
+<p></p>
+<dt><strong><a name="item__2dx_tag"><strong>-x</strong> <em>TAG</em></a></strong><br />
+</dt>
+<dd>
+E<strong>x</strong>clude the specified tag.  There may be multiple <strong>-x</strong> options.  This
+has the same effect as --<em>TAG</em> on the command line.  May also be used
+following a <strong>-TagsFromFile</strong> option to exclude tags from being copied.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dz"><strong>-z</strong></a></strong><br />
+</dt>
+<dd>
+When reading, causes information to be extracted from .g<strong>z</strong> and .b<strong>z</strong>2
+compressed images.  (Only one image per archive.)  When writing, causes
+compressed information to be written if supported by the image format.  (ie.
+The PNG format supports compressed text.)
+</dd>
+<p></p></dl>
+<p>
+</p>
+<h2><a name="advanced_options">Advanced Options</a></h2>
+<p>The following options allow complex processing to be performed with a single
+command without the need for additional scripting.  This may be particularly
+useful for implementations such as Windows drag-and-drop applications.
+These options may also be used to improve performance in multi-pass
+processing by reducing the overhead required to load exiftool for each
+invocation.</p>
+<dl>
+<dt><strong><a name="item__2dcommon_args"><strong>-common_args</strong></a></strong><br />
+</dt>
+<dd>
+Specifies that all arguments following this option are common to all
+executed commands when <strong>-execute</strong> is used.  This is the only option that
+may not be used inside a <strong>-@</strong> <em>ARGFILE</em>.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dexecute"><strong>-execute</strong></a></strong><br />
+</dt>
+<dd>
+Execute command for all arguments up to this point on the command line.
+Allows multiple commands to be executed from a single command line.
+</dd>
+<p></p>
+<dt><strong><a name="item__2dsrcfile_fmt"><strong>-srcfile</strong> <em>FMT</em></a></strong><br />
+</dt>
+<dd>
+Specify a different source file to be processed based on the name of the
+original file.  This may be useful in some special situations for processing
+related preview images or sidecar files.  See the <strong>-w</strong> option for a
+description of the <em>FMT</em> syntax.  Note that file name <em>FMT</em> strings for
+all options are based on the original file name specified on the command
+line, not the name of the source file specified by <strong>-srcfile</strong>.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="reading_examples">READING EXAMPLES</a></h1>
+<dl>
+<dt><strong><a name="item_exiftool__2da__2du__2dg1_a_2ejpg">exiftool -a -u -g1 a.jpg</a></strong><br />
+</dt>
+<dd>
+Print all meta information in an image, including duplicate and unknown
+tags, sorted by group (for family 1).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dcommon_dir">exiftool -common dir</a></strong><br />
+</dt>
+<dd>
+Print common meta information for all images in <code>dir</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dt__2dcreatedate__2daperture__2dshutter">exiftool -T -createdate -aperture -shutterspeed -iso dir &gt; out.txt</a></strong><br />
+</dt>
+<dd>
+List meta information in tab-delimited column form for all images in ``dir''
+to an output text file named ``out.txt''.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2ds__2dimagesize__2dexposuretime_b_2ejpg">exiftool -s -ImageSize -ExposureTime b.jpg</a></strong><br />
+</dt>
+<dd>
+Print ImageSize and ExposureTime tag names and values.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dl__2dcanon_c_2ejpg_d_2ejpg">exiftool -l -canon c.jpg d.jpg</a></strong><br />
+</dt>
+<dd>
+Print standard Canon information from two image files.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dr__2dw__2etxt__2dcommon_pictures">exiftool -r -w .txt -common pictures</a></strong><br />
+</dt>
+<dd>
+Recursively extract common meta information from files in <code>pictures</code>
+directory, writing text output into files with the same names but with a
+<code>.txt</code> extension.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dp__27_24filename_has_date__24datetimeo">exiftool -p '$filename has date $dateTimeOriginal' -q -f dir</a></strong><br />
+</dt>
+<dd>
+Print one line of output containing the file name and DateTimeOriginal for
+each image in directory <code>dir</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2db__2dthumbnailimage_image_2ejpg__3e_th">exiftool -b -ThumbnailImage image.jpg &gt; thumbnail.jpg</a></strong><br />
+</dt>
+<dd>
+Save thumbnail image from <code>image.jpg</code> to a file called <code>thumbnail.jpg</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2db__2dpreviewimage_118_1834_2ejpg__3e_p">exiftool -b -PreviewImage 118_1834.JPG &gt; preview.jpg</a></strong><br />
+</dt>
+<dd>
+Extract preview image from JPG file and write it to <code>preview.jpg</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2db__2djpgfromraw__2dw__jfr_2ejpg__2dext">exiftool -b -JpgFromRaw -w _JFR.JPG -ext CRW -r .</a></strong><br />
+</dt>
+<dd>
+Recursively extract JPG image from all Canon CRW files in the current
+directory, adding <code>_JFR.JPG</code> for the name of the output JPG files.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dd__27_25r__25a_2c__25b__25e_2c__25y_27">exiftool -d '%r %a, %B %e, %Y' -DateTimeOriginal -S -s *.jpg</a></strong><br />
+</dt>
+<dd>
+Print formatted date/time for all JPG files in a directory.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2difd1_3axresolution__2difd1_3ayresoluti">exiftool -IFD1:XResolution -IFD1:YResolution</a></strong><br />
+</dt>
+<dd>
+Extract image resolution from EXIF IFD1 information (thumbnail image IFD).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dxmp__2db_a_2ejpg__3e_out_2exmp">exiftool -xmp -b a.jpg &gt; out.xmp</a></strong><br />
+</dt>
+<dd>
+Extract complete XMP data record intact from <code>a.jpg</code> and write it to
+<code>out.xmp</code> using the special <code>XMP</code> tag (see the Extra tags in
+<a href="TagNames/index.html">Image::ExifTool::TagNames</a>).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dicc_profile__2db__2dw_icc_image_2ejpg">exiftool -icc_profile -b -w icc image.jpg</a></strong><br />
+</dt>
+<dd>
+Save complete ICC_Profile from an image to an output file with the same name
+and an extension of <code>.icc</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dhtmldump__2dw_tmp_2f_25f__25e_2ehtml_t">exiftool -htmldump -w tmp/%f_%e.html t/images</a></strong><br />
+</dt>
+<dd>
+Generate HTML pages from a hex dump of EXIF information in all images from
+the <code>t/images</code> directory.  The output HTML files are written to the <code>tmp</code>
+directory (which is created if it didn't exist), with names of the form
+'FILENAME_EXT.html'.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="writing_examples">WRITING EXAMPLES</a></h1>
+<p>Note that quotes are necessary around arguments which contain certain
+special characters such as <code>&gt;</code>, <code>&lt;</code> or any white space.  These
+quoting techniques are shell dependent, but the examples below will work for
+most Unix shells.  With the Windows cmd shell however, double quotes should
+be used (ie. -Comment=``This is a new comment'').</p>
+<dl>
+<dt><strong><a name="item_exiftool__2dcomment_3d_27this_is_a_new_comment_27_">exiftool -Comment='This is a new comment' dst.jpg</a></strong><br />
+</dt>
+<dd>
+Write new comment to a JPG image (replaces any existing comment).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dcomment_3d__2do_newdir__2a_2ejpg">exiftool -comment= -o newdir *.jpg</a></strong><br />
+</dt>
+<dd>
+Remove comment from all JPG images in the current directory, writing the
+modified images to a new directory.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dkeywords_3dexif__2dkeywords_3deditor_d">exiftool -keywords=EXIF -keywords=editor dst.jpg</a></strong><br />
+</dt>
+<dd>
+Replace existing keyword list with two new keywords (<code>EXIF</code> and <code>editor</code>).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dkeywords_2b_3dword__2do_newfile_2ejpg_">exiftool -Keywords+=word -o newfile.jpg src.jpg</a></strong><br />
+</dt>
+<dd>
+Copy a source image to a new file, and add a keyword (<code>word</code>) to the
+current list of keywords.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dcredit_2d_3dxxx_dir">exiftool -credit-=xxx dir</a></strong><br />
+</dt>
+<dd>
+Delete Credit information from all files in a directory where the Credit
+value was (<code>xxx</code>).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dall_3d_dst_2ejpg">exiftool -all= dst.jpg</a></strong><br />
+</dt>
+<dd>
+Delete all meta information from an image.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dall_3d__2dcomment_3d_27lonely_27_dst_2">exiftool -all= -comment='lonely' dst.jpg</a></strong><br />
+</dt>
+<dd>
+Delete all meta information from an image and add a comment back in.  (Note
+that the order is important: <code>-comment='lonely' -all=</code> would also delete
+the new comment.)
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dall_3d__2d_2djfif_3aall_dst_2ejpg">exiftool -all= --jfif:all dst.jpg</a></strong><br />
+</dt>
+<dd>
+Delete all meta information except JFIF group from an image.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dphotoshop_3aall_3d_dst_2ejpg">exiftool -Photoshop:All= dst.jpg</a></strong><br />
+</dt>
+<dd>
+Delete Photoshop meta information from an image (note that the Photoshop
+information also includes IPTC).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dr__2dxmp_2dcrss_3aall_3d_dir">exiftool -r -XMP-crss:all= DIR</a></strong><br />
+</dt>
+<dd>
+Recursively delete all XMP-crss information from images in a directory.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dthumbnailimage_3c_3dthumb_2ejpg_27_">exiftool '-ThumbnailImage&lt;=thumb.jpg' dst.jpg</a></strong><br />
+</dt>
+<dd>
+Set the thumbnail image from specified file (Note: The quotes are neccessary
+to prevent shell redirection).
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2djpgfromraw_3c_3d_25d_25f_jfr_2ejpg_">exiftool '-JpgFromRaw&lt;=%d%f_JFR.JPG' -ext CRW -r .</a></strong><br />
+</dt>
+<dd>
+Recursively write JPEG images with filenames ending in <code>_JFR.JPG</code> to the
+JpgFromRaw tag of like-named files with extension <code>.CRW</code> in the current
+directory.  (This is the inverse of the <code>-JpgFromRaw</code> command of the
+<a href="#reading_examples">READING EXAMPLES</a> section above.)
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2ddatetimeoriginal_2d_3d_270_3a0_3a0_1_3">exiftool -DateTimeOriginal-='0:0:0 1:30:0' dir</a></strong><br />
+</dt>
+<dd>
+Adjust original date/time of all images in directory <code>dir</code> by subtracting
+one hour and 30 minutes.  (This is equivalent to <code>-DateTimeOriginal-=1.5</code>.
+See <a href="http://search.cpan.org/dist/Image-ExifTool/lib/Image/ExifTool/Shift.pl">Image::ExifTool::Shift.pl</a> for details.)
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dcreatedate_2b_3d3__2dmodifydate_2b_3d3">exiftool -createdate+=3 -modifydate+=3 a.jpg b.jpg</a></strong><br />
+</dt>
+<dd>
+Add 3 hours to the CreateDate and ModifyDate timestamps of two images.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dalldates_2b_3d1_3a30__2dif__27_24make_">exiftool -AllDates+=1:30 -if '$make eq ``Canon''' dir</a></strong><br />
+</dt>
+<dd>
+Shift the values of DateTimeOriginal, CreateDate and ModifyDate forward by 1
+hour and 30 minutes for all Canon images in a directory.  (The AllDates tag
+is provided as a shortcut for these three tags, allowing them to be accessed
+via a single tag.)
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dxmp_3acity_3dkingston_image1_2ejpg_ima">exiftool -xmp:city=Kingston image1.jpg image2.nef</a></strong><br />
+</dt>
+<dd>
+Write a tag to the XMP group of two images.  (Without the <code>xmp:</code> this tag
+would get written to the IPTC group since <code>City</code> exists in both, and IPTC
+is preferred by default.)
+</dd>
+<p></p>
+<dt><strong><a name="item_unknown">exiftool -LightSource-='Unknown (0)' dst.tiff</a></strong><br />
+</dt>
+<dd>
+Delete <code>LightSource</code> tag only if it is unknown with a value of 0.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dwhitebalance_2d_3dauto__2dwhitebalance">exiftool -whitebalance-=auto -WhiteBalance=tung dst.jpg</a></strong><br />
+</dt>
+<dd>
+Set <code>WhiteBalance</code> to <code>Tungsten</code> only if it was previously <code>Auto</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2do__25d_25f_2exmp_dir">exiftool -o %d%f.xmp dir</a></strong><br />
+</dt>
+<dd>
+Create XMP meta information data files for all images in <code>dir</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2do_test_2exmp__2downer_3dphil__2dtitle_">exiftool -o test.xmp -owner=Phil -title='XMP File'</a></strong><br />
+</dt>
+<dd>
+Create an XMP data file only from tags defined on the command line.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dicc_profile_3c_3d_25d_25f_2eicc_27_">exiftool '-ICC_Profile&lt;=%d%f.icc' image.jpg</a></strong><br />
+</dt>
+<dd>
+Write ICC_Profile to an image from a <code>.icc</code> file of the same name.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="copying_examples">COPYING EXAMPLES</a></h1>
+<p>These examples demonstrate the ability to copy tag values between files.</p>
+<dl>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_src_2ecrw_dst_2ejpg">exiftool -TagsFromFile src.crw dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy the values of all writable tags from <code>src.crw</code> to <code>dst.jpg</code>, writing
+the information to the preferred groups.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_src_2ejpg__2dall_3aall_ds">exiftool -TagsFromFile src.jpg -all:all dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy the values of all writable tags from <code>src.jpg</code> to <code>dst.jpg</code>,
+preserving the original tag groups.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dall_3d__2dtagsfromfile_src_2ejpg__2dex">exiftool -all= -tagsfromfile src.jpg -exif:all dst.jpg</a></strong><br />
+</dt>
+<dd>
+Erase all meta information from <code>dst.jpg</code> image, then copy EXIF tags from
+<code>src.jpg</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_a_2ejpg_out_2exmp">exiftool -tagsfromfile a.jpg out.xmp</a></strong><br />
+</dt>
+<dd>
+Copy meta information <code>a.jpg</code> to an XMP data file.  If the XMP data file
+<code>out.xmp</code> already exists, it will be updated with the new information.
+Otherwise the XMP data file will be created.  Only XMP, ICC and MIE files
+may be created like this (other file types may be edited but not created).
+See <a href="#writing_examples">WRITING EXAMPLES</a> above for another technique to generate XMP files.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_a_2ejpg__2dxmp_3aall_3d__">exiftool -tagsFromFile a.jpg -XMP:All= -ThumbnailImage= -m b.jpg</a></strong><br />
+</dt>
+<dd>
+Copy all meta information from <code>a.jpg</code> to <code>b.jpg</code>, deleting all XMP
+information and the thumbnail image from the destination.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_src_2ejpg__2dtitle__2daut">exiftool -TagsFromFile src.jpg -title -author=Phil dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy title from one image to another and set a new author name.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_a_2ejpg__2diso__2dtagsfro">exiftool -TagsFromFile a.jpg -ISO -TagsFromFile b.jpg -comment
+dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy ISO from one image and Comment from another image to a destination
+image.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_src_2ejpg__2dexif_3aall__">exiftool -tagsfromfile src.jpg -exif:all --subifd:all dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy only the EXIF information from one image to another, excluding SubIFD
+tags.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2ddatetimeoriginal_3efilemodifydate_2">exiftool '-DateTimeOriginal&gt;FileModifyDate' dir</a></strong><br />
+</dt>
+<dd>
+Use the original date from the meta information to set the same file's
+filesystem modification date for all images in a directory.  (Note that
+<code>-TagsFromFile @</code> is assumed if no other <strong>-TagsFromFile</strong> is specified when
+redirecting information as in this example.)
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_src_2ejpg__27_2dall_3exmp">exiftool -TagsFromFile src.jpg '-all&gt;xmp:all' dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy all possible information from <code>src.jpg</code> and write in XMP format to
+<code>dst.jpg</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2d_40_iptc2xmp_2eargs__2diptc_3aall_3d_a">exiftool -@ iptc2xmp.args -iptc:all= a.jpg</a></strong><br />
+</dt>
+<dd>
+Translate IPTC information to XMP with appropriate tag name conversions, and
+delete the original IPTC information from an image.  This example uses
+iptc2xmp.args, which is a file included with the ExifTool distribution that
+contains the required arguments to convert IPTC information to XMP format.
+Also included with the distribution is xmp2iptc.args, which performs the
+inverse conversion.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile__25d_25f_2ecrw__2dr__2dex">exiftool -tagsfromfile %d%f.CRW -r -ext JPG dir</a></strong><br />
+</dt>
+<dd>
+Recursively rewrite all <code>JPG</code> images in <code>dir</code> with information copied from
+the corresponding <code>CRW</code> images in the same directories.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dmake_2b_3ekeywords_27_image_2ejpg">exiftool '-make+&gt;keywords' image.jpg</a></strong><br />
+</dt>
+<dd>
+Add camera make to list of keywords.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dcomment_3ciso_3d_24exif_3aiso_expos">exiftool '-comment&lt;ISO=$exif:iso Exposure=${shutterspeed}' dir</a></strong><br />
+</dt>
+<dd>
+Set the Comment tag of all images in <code>dir</code> from the values of the EXIF:ISO
+and ShutterSpeed tags.  The resulting comment will be in the form ``ISO=100
+Exposure=1/60''.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dtagsfromfile_src_2ejpg__2dicc_profile_">exiftool -TagsFromFile src.jpg -icc_profile dst.jpg</a></strong><br />
+</dt>
+<dd>
+Copy ICC_Profile from one image to another.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dif__27_24jpgfromraw_27__2db__2djpgfrom">exiftool -if '$jpgfromraw' -b -jpgfromraw -w %d%f_%ue.jpg -execute
+-if '$previewimage' -b -previewimage -w %d%f_%ue.jpg -execute
+-tagsfromfile @ -srcfile %d%f_%ue.jpg -overwrite_original
+-common_args --ext jpg DIR</a></strong><br />
+</dt>
+<dd>
+[Advanced] Extract JpgFromRaw or PreviewImage from all but JPG files in DIR,
+saving them with file names like <code>image_EXT.jpg</code>, then add all meta
+information from the original files to the extracted images.  Here, the
+command line is broken into three sections (separated by <strong>-execute</strong>
+options), and each is executed as if it were a separate command.  The
+<strong>-common_args</strong> option causes the <code>--ext jpg DIR</code> arguments to be applied
+to all three commands, and the <strong>-srcfile</strong> option allows the extracted JPG
+image to be the source file for the third command (whereas the RAW files are
+the source files for the other two commands).
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="renaming_examples">RENAMING EXAMPLES</a></h1>
+<p>By writing the <code>FileName</code> and <code>Directory</code> tags, files are renamed and/or
+moved to new directories.  This can be particularly useful and powerful for
+organizing files by date when combined with the <strong>-d</strong> option.  New
+directories are created as necessary, but existing files will not be
+overwritten.  The format codes %d, %f and %e may be used in the new file
+name to represent the directory, name and extension of the original file,
+and %c may be used to add a copy number if the file already exists (see the
+<strong>-w</strong> option for details).  Note that if used within a date format string,
+an extra '%' must be added to pass these codes through the date/time parser.
+(And further note that in a Windows batch file, all '%' characters must also
+be escaped, so in this extreme case '%%%%f' is necessary to pass a simple
+'%f' through the two levels of parsing.)</p>
+<dl>
+<dt><strong><a name="item_exiftool__2dfilename_3dnew_2ejpg_dir_2fold_2ejpg">exiftool -filename=new.jpg dir/old.jpg</a></strong><br />
+</dt>
+<dd>
+Rename <code>old.jpg</code> to <code>new.jpg</code> in directory <code>dir</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2ddirectory_3d_25e_dir">exiftool -directory=%e dir</a></strong><br />
+</dt>
+<dd>
+Move all files from directory <code>dir</code> into directories named by the original
+file extensions.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2ddirectory_3cdatetimeoriginal_27__2d">exiftool '-Directory&lt;DateTimeOriginal' -d %Y/%m/%d dir</a></strong><br />
+</dt>
+<dd>
+Move all files in <code>dir</code> into a directory hierarchy based on year, month and
+day of <code>DateTimeOriginal</code>.  ie) This command would move the file
+<code>dir/image.jpg</code> with a <code>DateTimeOriginal</code> of <code>2005:10:12 16:05:56</code> to
+<code>2005/10/12/image.jpg</code>.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dfilename_3c_25f__24_7bfocallength_7">exiftool '-filename&lt;%f_${focallength}.%e' dir</a></strong><br />
+</dt>
+<dd>
+Rename all files in <code>dir</code> by adding FocalLength to the file name.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dfilename_3ccreatedate_27__2dd__25y_">exiftool '-FileName&lt;CreateDate' -d %Y%m%d_%H%M%S%%-c.%%e dir</a></strong><br />
+</dt>
+<dd>
+Rename all images in <code>dir</code> according to the <code>CreateDate</code> date and time,
+adding a copy number with leading '-' if the file already exists (<code>%-c</code>),
+and preserving the original file extension (<code>%e</code>).  Note the extra '%'
+necessary to escape the filename codes (<code>%c</code> and <code>%e</code>) in the date format
+string.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__2dr__27_2dfilename_3ccreatedate_27__2dd_">exiftool -r '-FileName&lt;CreateDate' -d %Y-%m-%d/%H%M_%%f.%%e dir</a></strong><br />
+</dt>
+<dd>
+Both the directory and the filename may be changed together via the
+<code>FileName</code> tag if the new <code>FileName</code> contains a '/'.  The example above
+recursively renames all images in a directory by adding a <code>CreateDate</code>
+timestamp to the start of the filename, then moves them into new directories
+named by date.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool__27_2dfilename_3c_24_7bcreatedate_7d__24f">exiftool '-FileName&lt;${CreateDate}_$filenumber.jpg' -d %Y%m%d *.jpg</a></strong><br />
+</dt>
+<dd>
+Set the filename of all JPG images in the current directory from the
+CreateDate and FileNumber tags, in the form ``20060507_118-1861.jpg''.
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="piping_examples">PIPING EXAMPLES</a></h1>
+<dl>
+<dt><strong><a name="item_cat_a_2ejpg__7c_exiftool__2d">cat a.jpg | exiftool -</a></strong><br />
+</dt>
+<dd>
+Extract information from stdin.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool_image_2ejpg__2dthumbnailimage__2db__7c_ex">exiftool image.jpg -thumbnailimage -b | exiftool -</a></strong><br />
+</dt>
+<dd>
+Extract information from an embedded thumbnail image.
+</dd>
+<p></p>
+<dt><strong><a name="item_cat_a_2ejpg__7c_exiftool__2diptc_3akeywords_2b_3df">cat a.jpg | exiftool -iptc:keywords+=fantastic - &gt; b.jpg</a></strong><br />
+</dt>
+<dd>
+Add an IPTC keyword in a pipeline, saving output to a new file.
+</dd>
+<p></p>
+<dt><strong><a name="item_wget__2dqo__2d_http_3a_2f_2fa_2edomain_2ecom_2fbig">wget -qO - <a href="http://a.domain.com/bigfile.jpg">http://a.domain.com/bigfile.jpg</a> | exiftool -fast -</a></strong><br />
+</dt>
+<dd>
+Extract information from an image over the internet using the GNU wget
+utility.  The <strong>-fast</strong> option prevents exiftool from scanning for trailer
+information, so only the meta information header is transferred.
+</dd>
+<p></p>
+<dt><strong><a name="item_exiftool_a_2ejpg__2dthumbnailimage__2db__7c_exifto">exiftool a.jpg -thumbnailimage -b | exiftool -comment=wow - |
+exiftool a.jpg -thumbnailimage'&lt;=-'</a></strong><br />
+</dt>
+<dd>
+Add a comment to an embedded thumbnail image.  (Why anyone would want to do
+this I don't know, but I've included this as an example to illustrate the
+flexibility of ExifTool.)
+</dd>
+<p></p></dl>
+<p>
+</p>
+<hr />
+<h1><a name="bugs">BUGS</a></h1>
+<p>ExifTool does not handle information stored in the resource fork on
+Macintosh filesystems.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Copyright 2003-2008, Phil Harvey</p>
+<p>This is free software; you can redistribute it and/or modify it under the
+same terms as Perl itself.</p>
+<p>
+</p>
+<hr />
+<h1><a name="see_also">SEE ALSO</a></h1>
+<p><a href="ExifTool.html">Image::ExifTool(3pm)</a>,
+<a href="TagNames/index.html">Image::ExifTool::TagNames(3pm)</a>,
+<a href="http://search.cpan.org/dist/Image-ExifTool/lib/Image/ExifTool/Shortcuts.pm">Image::ExifTool::Shortcuts(3pm)</a>,
+<a href="http://search.cpan.org/dist/Image-ExifTool/lib/Image/ExifTool/Shift.pl">Image::ExifTool::Shift.pl</a></p>
+<table border="0" width="100%" cellspacing="0" cellpadding="3">
+<tr><td class="block" style="background-color: #cccccc" valign="middle">
+<big><strong><span class="block">&nbsp;exiftool Application Documentation</span></strong></big>
+</td></tr>
+</table>
+
+</body>
+
+</html>

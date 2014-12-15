@@ -1,0 +1,23 @@
+[ExifTool, ExifTool, ExifTool]  - ExifTool Version Number: 7.24
+[File, File, Image]  - File Name: XMP.svg
+[File, File, Image]  - Directory: t/images
+[File, File, Image]  - File Size: 1402 bytes
+[File, File, Time]  - File Modification Date/Time: 2008:04:07 08:40:21
+[File, File, Image]  - File Type: SVG
+[File, File, Image]  - MIME Type: image/svg+xml
+[SVG, SVG, Image] width - Image Width: 4in
+[SVG, SVG, Image] height - Image Height: 3in
+[SVG, SVG, Image] version - SVG Version: 1.1
+[SVG, SVG-myfoo, Unknown] descTitle - Desc Title: This is a financial report
+[SVG, SVG-myfoo, Unknown] descDescrEmph - Desc Descr Emph: myfoo
+[SVG, SVG-myfoo, Unknown] descSceneWhat - Desc Scene What: widget $growth
+[SVG, SVG-myfoo, Unknown] descSceneContains - Desc Scene Contains: $three $graph-bar
+[SVG, SVG-myfoo, Unknown] descSceneWhen - Desc Scene When: 1998 $through 2000
+[XMP, XMP-dc, Image] title - Title: MyFoo Financial Report
+[XMP, XMP-dc, Image] description - Description: $three $bar $thousands $dollars $from 1998 $through 2000
+[XMP, XMP-dc, Author] publisher - Publisher: Example Organization
+[XMP, XMP-dc, Time] date - Date: 2000:04:11
+[XMP, XMP-dc, Image] format - Format: image/svg+xml
+[XMP, XMP-dc, Other] language - Language: en
+[XMP, XMP-dc, Author] creator - Creator: Irving Bird, Mary Lambert
+[Composite, Composite, Image]  - Image Size: 4inx3in

@@ -1,0 +1,123 @@
+<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra.xsd">
+    <vra:image refid="inu:dil-0f5613bf-306d-4311-8870-155eb55b875d">
+        <!--Agents-->
+        <vra:agentSet>
+            <vra:display/>
+            <vra:agent>
+                <vra:name type="corporate" vocab="lcnaf"/>
+                <vra:attribution/>
+                <vra:role vocab="RDA"/>
+            </vra:agent>
+            <vra:agent>
+                <vra:name type="corporate" vocab="lcnaf"/>
+            </vra:agent>
+        </vra:agentSet>
+        <!--Cultural Context-->
+        <vra:culturalContextSet>
+            <vra:display/>
+            <vra:culturalContext/>
+        </vra:culturalContextSet>
+        <!--Dates-->
+        <vra:dateSet>
+            <vra:display/>
+            <vra:date type="creation">
+                <vra:earliestDate>0000</vra:earliestDate>
+            </vra:date>
+        </vra:dateSet>
+        <!--Description-->
+        <vra:descriptionSet>
+            <vra:display/>
+            <vra:notes/>
+            <vra:description/>
+        </vra:descriptionSet>
+        <!--Inscription-->
+        <vra:inscriptionSet>
+            <vra:display/>
+            <vra:inscription>
+                <vra:text/>
+            </vra:inscription>
+        </vra:inscriptionSet>
+        <!--Location-->
+        <vra:locationSet>
+            <vra:display/>
+            <vra:location type="creation">
+                <vra:name type="geographic"/>
+            </vra:location>
+            <vra:location type="repository">
+                <vra:name type="geographic"/>
+            </vra:location>
+            <vra:location>
+                <vra:refid source="DIL"/>
+                <vra:refid source="Voyager"/>
+            </vra:location>
+        </vra:locationSet>
+        <!--Materials-->
+        <vra:materialSet>
+            <vra:display/>
+            <vra:material/>
+        </vra:materialSet>
+        <!--Measurements-->
+        <vra:measurementsSet>
+            <vra:display/>
+            <vra:measurements/>
+        </vra:measurementsSet>
+        <!--Relation-->
+        <vra:relationSet>
+            <vra:display/>
+            <vra:relation pref="true" type="imageOf" relids="inu:dil-754753e1-5827-475f-b9af-cef682a200ee"/>
+        </vra:relationSet>
+        <!--Rights-->
+        <vra:rightsSet>
+            <vra:display/>
+            <vra:rights>
+                <vra:rightsHolder/>
+                <vra:text/>
+            </vra:rights>
+        </vra:rightsSet>
+        <!--Style Period-->
+        <vra:stylePeriodSet>
+            <vra:display/>
+            <vra:stylePeriod/>
+        </vra:stylePeriodSet>
+        <!--Subjects-->
+        <vra:subjectSet>
+            <vra:display/>
+            <vra:subject>
+                <vra:term type="geographicPlace" vocab="lcnaf"/>
+            </vra:subject>
+            <vra:subject>
+                <vra:term type="personalName" vocab="lcnaf"/>
+            </vra:subject>
+            <vra:subject>
+                <vra:term type="personalName" vocab="lcnaf"/>
+            </vra:subject>
+            <vra:subject>
+                <vra:term type="otherTopic"/>
+            </vra:subject>
+            <vra:subject>
+                <vra:term type="descriptiveTopic" vocab="lcsh"/>
+            </vra:subject>
+        </vra:subjectSet>
+        <!--Technique-->
+        <vra:techniqueSet>
+            <vra:display/>
+            <vra:technique/>
+        </vra:techniqueSet>
+        <!--Textref-->
+        <vra:textrefSet>
+            <vra:display/>
+            <vra:textref/>
+        </vra:textrefSet>
+        <!-- Titles -->
+        <vra:titleSet>
+            <vra:display></vra:display>
+            <vra:title pref="true"></vra:title>
+        </vra:titleSet>
+        <!--Work Type-->
+        <vra:worktypeSet>
+            <vra:display/>
+            <vra:worktype/>
+        </vra:worktypeSet>
+    </vra:image>
+    <vra:work id="inu:dil-754753e1-5827-475f-b9af-cef682a200ee" refid="inu:dil-754753e1-5827-475f-b9af-cef682a200ee"/>
+</vra:vra>

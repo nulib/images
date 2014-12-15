@@ -1,0 +1,743 @@
+==========================================================================
+Release Notes for Aware JPEG2000 SDK
+Version 3.7.1
+March 11, 2005
+==========================================================================
+
+New Features:
+
+* Support for Multi-Component Transformations, from Part 2 of the
+  JPEG2000 standard, has been added, which improves the compression
+  efficiency for volumetric data.
+
+* The core JPEG2000 encoder decoder have been further optimized,
+  especially on x86 systems.
+
+Bug fixes:
+
+- Uninitialized memory conditions that caused intermittent crashes on
+  WinCE corrected.
+
+- Floating-point color-conversion code produced bad results when the
+  number of columns in the image was not a multiple of four.
+
+- Several corrections to the TIFF reader and writer to ensure proper
+  operation in 64-bit builds (including Solaris, Linux, and Win64).
+
+- Single bit-per-pixel TIFF images are now supported.
+
+- TIFF images with a transparency (alpha) channel are now supported.
+
+- aw_j2k_get_input_j2k_progression_info() returned incorrect values
+  for resolution levels and quality layers (bug in 3.7.0; corrected in
+  3.7.1).
+
+Known Bugs and Limitations:
+
+- Encoding or decoding images with more than 8 bits per pixel per
+  channel using a region of interest (ROI) is not supported at this
+  time.
+
+==========================================================================
+Revision History
+==========================================================================
+2.0.0 - SDK
+May 18, 2001
+Initial Release of the revised API.
+
+2.0.1 - SDK
+June 14, 2001
+New features:
+* Substantial speed optimization for both encoder and decoder.
+* Shared library was added to the Unix releases of the SDK.
+Bug fixes:
+- Raw input files were not handled correctly when the bit depth was
+  greater than 8 bits per channel.
+- PNM output files were not created correctly when the bit depth was
+  greater than 8 bits per channel.
+
+2.0.1 - iPaq Browser Plugin
+June 2001
+Bug fixes:
+- The plugin was unable to download images through a proxy.
+
+2.0.2 - iPaq Browser Plugin
+July 4, 2001
+New features:
+* New release to incorporate updates from the SDK, including speed
+  optimizations, JP2 bugs, and buffer de-installation issues.
+* Installation program is now available, to install the four files
+  included in this release: CEInstall.cab, CEInstall.ini, Readme.txt
+  and CEInstall.exe
+
+2.0.3 - Desktop Browser Plugin
+July 5, 2001
+New features:
+* New release to incorporate updates speed optimizations from the
+  SDK.
+* IE Plugin now goes to embedded mode if URL doesn't have j2k/jp2
+  extension.
+* Netscape plugin supports both j2k and jp2 extensions.
+
+2.0.4 - SDK
+July 13, 2001
+New features:
+* Release includes speed optimizations to the JPEG 2000 encoder and
+  decoder.
+* J2K Tool: Full transform button is back.
+Bug fixes:
+- aw_j2k_get_input_j2k_tile_info() was not returning valid
+  information.
+- Pixels in images produced from a partial decompression of a JPEG2000
+  image were incorrectly scaled, resulting in overly bright images.
+- JP2 files were not decoded correctly.
+- JPEG files were not decoded correctly.
+
+
+2.1.0 - SDK
+August 27, 2001
+New features:
+* Speed optimization, including speeding up of partial resolution
+  decompression.
+* Added the function aw_j2k_set_input_j2k_selected_tile(), which
+  allows decoding of individual tiles from a JPEG 2000 image, to the
+  API.
+* Added support for odd image and tile offsets, and odd tile sizes.
+* Added support for component marker registration.  Added
+  aw_j2k_set_output_j2k_component_registration() and
+  aw_j2k_get_input_j2k_component_registration() to the API.
+* Sped up the sub resolution decoding
+Bug fixes:
+- The reversible 5-3 transform did not round correctly; as a
+  consequence, images compressed losslessly would not decoded
+  losslessly with other JPEG2000 decoders.
+- Partial resolution decompression resulted in grayed-out thumb-nail
+  images.
+
+2.1.1 - SDK
+August 29, 2001
+New features:
+* Support for more than 3 image components was added; the SDK now
+  supports up to 256 color components.
+Bug fixes:
+- Encoding single channel PGM images occasionally crashed the
+  library.
+- Quantization of images transformed using the reversible 5-3
+  transform was handled incorrectly.  This bug was also manifested in
+  that JPEG 2000 images created by other encoders using the 5-3
+  transform were not always decodable correctly by the SDK.
+
+2.1.2 - SDK
+September 7, 2001
+Bug fixes:
+- Decompression of the lowest resolution in a JPEG 2000 image resulted
+  in gray images.
+- Images with two resolution levels were not decoded correctly,
+  resulting in lowered quality in the decompressed images.
+- Images with more than 8 bits per pixel per channel were not
+  converted correctly to BMP on output.
+
+2.1.5 - SDK
+September 18, 2001
+New features:
+* aw_j2k_get_input_j2k_progression_byte_offsets() was added to the
+  SDK.
+Bug fixes:
+- Interleaved raw images were neither read nor written correctly.
+- Images used for indication of region of interest were not read
+  correctly.
+- Partial decompression using aw_j2k_set_input_j2k_progression_level()
+  resulted in grayed-out images, when the progression order was by
+  resolution.
+
+2.1.6 - SDK
+September 19, 2001
+New features:
+* aw_j2k_get_input_j2k_progression_offsets() was renamed to
+  aw_j2k_get_input_j2k_progression_byte_count() to better indicate its
+  functionality.
+
+2.1.7 - SDK
+October 2, 2001
+New features:
+* The SDK is now available in three flavors: the full featured
+  release, JPEG 2000 and raw only release, and a JPEG 2000
+  decoder-only release.  The J2K/raw release only supports J2K, JP2,
+  and raw file formats, resulting in a smaller library.  The J2K
+  decoder-only release supports J2K and JP2 as the only input formats
+  and raw as the only output format, resulting in a smaller-still
+  library.
+* Added support for reading and writing tile length marker (TLM)
+  segments in J2K codestreams.
+* Added support for multiple comments, as well for targeting a
+  comment to a specific tile header part (by tile index).
+* Added the functions aw_j2k_set_input_raw_endianness() and
+  aw_j2k_set_output_raw_endianness() to specify endianness of raw
+  images.
+* Added support for decoding JPEG 2000 profile level 0 and 1
+  codestreams.
+* Added support for reading and writing of 16 bit TIFF files, as well
+  as multi-strip TIFF files.
+* Added support for bottom-left Targa images.
+Bug fixes:
+- Raw images with bit depth that is not a multiple of eight were not
+  read correctly.
+- Images with more than 8 bits per pixel per channel were not
+  converted correctly to Targa on output.
+- The quality of JPEG-2000 images compressed using the reversible 9-7
+  transform was severely degraded due to a bug in computing image
+  statistics.
+- In Images compressed with a large number of tiles, a small number of
+  them were corrupt due to incorrect handling of the lowest resolution
+  data.
+- Images created with multiple quality layers and arithmetic coder
+  termination at the end of codeblocks were not decoded correctly
+  (unless only the first quality layer was decoded).  Encoding of such
+  images is still not done correctly.
+- The SDK crashed when a tolerance was specified.
+
+2.2.0 - SDK
+October 11, 2001
+New features:
+* Added support for fixed point operation.  Added
+  aw_j2k_set_internal_option() to allow the selection of fixed or
+  floating point operations.
+* Better debugging support: the SDK will now return errors if the API
+  functions are not provided a pointer to the library object (the
+  aw_j2k_object argument).
+* Predictable termination is now supported by both the arithmetic
+  encoder and decoder.
+* Added aw_j2k_set_output_j2k_arithmetic_coding_options() to enable
+  the predictable termination option, as well as to set the other
+  termination options (arithmetic context reset and termination
+  frequency).
+Bug fixes:
+- Reading raw images with interleaved channel data (with 8 bits per
+  pixel per channel) crashed the SDK.
+- JPEG 2000 reformatting crashed the library for multi-channel images.
+- Partial resolution decoding of images with odd tile sizes, offsets,
+  or odd image offsets was not handled correctly.  The decoded images
+  were corrupted.
+- Tolerance functionality restored.
+- Creating a region of interest by specifying a shape for the region
+  caused occasional crashes.
+- Tiff images that are written with the opposite endianness than the
+  local machine and have multiple strips were not read correctly.
+
+2.2.1 - SDK
+October 25, 2001
+New features:
+* Memory usage by the library was reduced by 35% when encoding JPEG
+  2000 images, and 40% when decoding.
+* Multiple speed optimizations.
+Bug fixes:
+- Another problem reading images that are used to indicate the
+  region of interest.  This bug was introduced in version 2.2.0.
+- aw_j2k_get_input_j2k_bytes_read() did not return correct information
+  from a reformatting operation (when both the input and output images
+  were JPEG 2000 images).
+- The library leaked memory when aw_j2k_get_output_image() was called
+  a second time without an intervening call to
+  aw_j2k_set_input_image()
+- Corrected handling for non-multiple-of-eight bit depths.
+
+2.2.2 - SDK
+October 31, 2001
+New features:
+* More speed optimizations.
+Bug fixes:
+- The arithmetic encoder was set to terminate at the end of each
+  coding pass, which produces larger compressed files.  The default is
+  now set to terminate only at the end of the codeblock.
+
+2.2.3 - SDK
+November 8, 2001
+New features:
+* Added support for encoding and decoding subsampled images.
+* Added support for decoding only a single desired channel from a
+  multi-channel image.
+* The API was extended with several new functions to support the
+  above two changes.
+Bug fixes:
+- Tolerance control is improved.
+- Quality of images was degraded (sometimes severely so) due to
+  dropping of data bytes from the last quality layer in the encoder
+  (the quality degradation was due to the decoder, correctly,
+  substituting incorrect data for the missing bytes).
+- J2K Tool: UI bug with external image is fixed.
+
+2.2.4 - Tool
+Bug Fixes :
+- 12 Bit image is supported
+- A number of bugs involving 16 bit input images are fixed.
+
+2.2.5 - SDK
+December 11, 2001
+New features:
+* Various speed optimizations
+* Better support for decoding subsampled images
+
+2.2.5 - Plugin
+December 11, 2001
+New features:
+* Subsampled Files and Files with more than 3 channels are supported
+
+2.5.0 Pre1 - SDK
+February 14, 2002
+New features:
+* Substantial speed optimization for both encoder and decoder.
+* Improved rate control, accurate to 1-2% of target ratio.
+* Substantially improved image quality for 5-3
+* Improved layering, including the capability to control the size of
+  the different layers.
+
+2.5.0 Pre2 - SDK
+February 19, 2002
+New features:
+* Further optimizations
+
+2.5.0 - SDK
+March 18, 2002
+New features:
+* Substantial speed optimization for both encoder and decoder, including:
+  - optimized C implementation of the bit modeler and arithmetic
+    coder.
+  - MMX, SSE and 3DNow optimization of the color transform, wavelet
+    transform, and quantization blocks, for x86 systems.
+* Improved rate control, accurate to 1-2% of target ratio.
+* Substantially improved image quality when using the reversible 5-3
+  transform.
+* Improved layering, including the capability to control the sizes of
+  the different layers.
+* Support for adding PLT (packet length -- tile header) markers, as
+  well as for decoding images with PLT and PLM (packet length -- main
+  header) markers.
+Bug fixes:
+- Decoder now correctly handles changing the number of guard bits
+  between channels.
+- The reconstruction offset value was not handled correctly, reducing
+  image quality when decoding images that were compressed via code-
+  stream truncation.  As a result of the fix, the reconstruction
+  offset value is no longer settable via the API function
+  aw_j2k_set_input_j2k_rvalue().  It is now hard coded to 0.5.
+- Various issues surrounding compression with a very deep transform
+  tree were corrected.
+- The region of interest is no longer applied at the lowest level of
+  the transform, which produces images with a background.  Before this
+  change, the background would sometimes be gray -- completely lacking
+  in information.
+- Encoding and decoding of images with region of interest is now
+  working again (bug outstanding since the 2.5pre1 release).
+- Small tiles at the edge of an image are no longer clobbered by the
+  encoder (bug outstanding since the 2.5pre1 release).
+- Errors in the fixed point implementation causing a decrease in the
+  quality of images compressed using the fixed-point irreversible
+  (9-7) path were corrected.
+
+2.5.1 - Tool
+April 4, 2002
+* Recompiled with the new SDK version (2.5.0), along with (as yet)
+  unreleased SDK patches.
+Bug fixes:
+- Fixed point partial resolution overflow corrected.
+- Fixed point decode quality improved.
+
+2.5.2 - SDK
+April 12, 2002
+Bug fixes:
+- Fixed point partial resolution overflow corrected.
+- Fixed point decode quality improved.
+- Handling of JPEG 2000 images with more than 256 color channels
+  corrected.
+- Handling of reserved JPEG 2000 markers corrected.
+- Reenabled support for gray-scale images in BMP format.
+
+2.6.0 - SDK
+July 3, 2002
+New Features:
+* Further optimizations to both encoder and decoder.
+* New function aw_j2k_get_input_j2k_selected_tile_geometry() added.
+* The vertically causal context formation option is now supported in
+  both the encoder and decoder.  New flags have been added for
+  aw_j2k_set_output_j2k_arithmetic_coding_option().
+* New function aw_j2k_set_output_j2k_quantization_binwidth_scale()
+  added.  This function gives control over the scale of the
+  quantization binwidths, which can allow a trade-off between speed
+  and rate-control accuracy at very low compression ratios.
+Bug fixes:
+- Encoding or decoding images with the arithmetic coder termination
+  set to the end of each coding pass is now supported again.
+- Encoding or decoding images with the arithmetic coder context reset
+  set to the end of each coding pass is corrected.
+- Decoding images with subsampled components and odd image or tile
+  offsets is corrected.
+- Better handling for reducing resolution when reformatting an image.
+  The resulting JPEG 2000 codestream is now subsampled correctly.
+- Better handling for subsampled components.  Decompression of a
+  single, subsampled component from a JPEG 2000 image to other file
+  formats (e.g. BMP) is now handled correctly.  Decompression of
+  multiple subsampled components does not upsample when not necessary.
+- Decoder now correctly decodes JPEG 2000 images with COC markers --
+  ones that change various coding options on a per-component basis
+  (options such as wavelet transform type and depth, codeblock width
+  and height, and arithmetic termination options).
+
+2.6.1 - SDK
+July 22, 2002
+New Features:
+* Multiple versions of the JPEG 2000 library are now included with the
+  release, in the following subdirectories:
+  o all-file-formats    - this version includes support for all the file
+                          formats, including JPEG 2000 (both J2K
+                          codestreams and the JP2 file format), JPEG,
+                          TIFF, DICOM, PNM, BMP, TARGA, and raw.
+  o j2k-jp2-raw-only    - this version includes support only for the
+                          JPEG 2000 formats (J2K and JP2) and raw, for
+                          both encode and decode.
+  o j2k-jp2-decode-only - this version includes support only for
+                          decoding the JPEG 2000 formats (J2K and
+                          JP2).  The only output format supported is
+                          raw.
+  As all of these libraries implement the same API, code that uses
+  these libraries does not have to be recompiled in order to switch
+  from one version to another.
+* Images with multiple tile parts per tile (also referred to as
+  interleaved tile parts) are now supported.
+
+3.0.0 - SDK
+October 15, 2002
+New Features:
+* The exchange of memory buffers between the SDK and its callers has
+  changed.  Memory buffers allocated by the SDK (in functions
+  aw_j2k_get_output_image(), aw_j2k_get_output_image_type(),
+  aw_j2k_get_output_image_raw(), and aw_j2k_get_input_j2k_comments())
+  should now be freed using the new API function aw_j2k_free().  In
+  addition, the code calling those functions controls whether new
+  buffers are allocated or old buffers are reused by those functions.
+  See the discussion in the manual, in Section 4.2, for more details.
+* The libraries have been renamed, in order to harmonize the naming
+  conventions across platforms.  On Windows, the library is now called
+  awj2k.dll, and on Unix it is called libawj2k.so (for the
+  dynamically-linked library) or libawj2k.a (for the statically linked
+  library).
+* Support for the PGX image format is now included.  PGX is a single-
+  channel image format used to store the reference images in the JPEG
+  2000 compliance image set.
+Bug fixes:
+- Several bugs in handling precincts in the decoder were corrected.
+- Several bugs in handling progression order changes were corrected in
+  the decoder.
+- Several bugs in the predictable termination mode of the encoder
+  were corrected; these bugs would cause the final coding passes of
+  each layer to occasionally appear improperly-terminated.
+
+3.1.0 - SDK
+December 6, 2002
+New Features:
+* The SDK now passes the JP2 compliance test.
+* New API function added, which allows precincts to be created.  The
+  function is aw_j2k_set_output_j2k_channel_precinct_size().
+* Partial decoding based on region is now possible through the use of
+  aw_j2k_set_input_j2k_region_level().  This function will constrain
+  the decoder to decode only the precincts that contribute to the
+  region specified to the function.
+* Small optimizations for the compression of gray-scale images on x86
+  platforms.
+* The x86 MMX and SSE optimizations that have been available in the
+  Win32 release are now being compiled into the Linux release, making
+  it 5 to 20% faster.  The 3Dnow! optimizations are not yet available
+  on Linux.
+Bug Fixes:
+- Several bugs in the reformatter were corrected.
+- The SDK mishandled images where the fixed-point wavelet transform
+  was run on a single column or a single row.  This could happen with
+  certain combinations of tiles and transform depths.
+- Single channel (gray-scale) JPEG images (not JPEG 2000) caused
+  occasional crashes.  This is now corrected.
+
+3.1.1 - SDK
+December 16, 2002
+Bug Fixes:
+- Signed data was not handled properly on conversion to JPEG 2000
+  format.
+- 16 bit data was mishandled during compression when using the AMD
+  3Dnow! instruction set.
+
+3.2.0 - SDK
+February 27, 2003
+New Features:
+* Error-resilient mode of operation for the J2K decoder, which
+  decompresses as much as possible from a truncated or corrupt image.
+  The mode can be set via the new aw_j2k_set_input_j2k_error_handling()
+  API function; the decoder status can be retrieved via the new
+  aw_j2k_get_input_j2k_decoder_status() API function.
+* Support for handling metadata and color space information with JP2
+  images, via the following new functions:
+  - aw_j2k_set_output_enum_colorspace()
+  - aw_j2k_set_output_jp2_restricted_ICCProfile()
+  - aw_j2k_set_output_jp2_add_metadata_box()
+  - aw_j2k_set_output_jp2_add_UUIDInfo_box()
+  - aw_j2k_get_input_jp2_num_metadata_boxes()
+  - aw_j2k_get_input_jp2_metadata_box()
+  - aw_j2k_get_input_jp2_UUIDInfo_box()
+  - aw_j2k_get_input_jp2_enum_colorspace()
+  - aw_j2k_get_input_jp2_restricted_ICCProfile()
+* Several optimizations, including SSE2 support for Pentium IV
+  processors.
+* The new j2kdriver program now supports every API function.
+Bug Fixes:
+- Certain AMD Duron processors were misdetected as having SSE support
+  when they do not, causing crashes.  This is now corrected in Win32,
+  but not yet for Linux on x86.
+
+3.3.0 - SDK
+August 11, 2003
+New Features:
+* Improved support for DICOM multi-frame images.  New API function
+  aw_j2k_set_input_dcm_frame_index() enables the selection of a single
+  frame or all frames for encoding or decoding.
+* Images can now be compressed to a quality target instead of a file
+  size or bitrate target.  Two new API functions enable this
+  functionality:
+  - aw_j2k_set_output_j2k_psnr() for setting the quality of the final
+    layer;
+  - aw_j2k_set_output_j2k_layer_psnr() for setting the quality of any
+    layer.
+  An estimate of the quality of any layer from a compression of an
+  image to JPEG 2000 (whether compressed to a quality or to a bitrate)
+  can be obtained by calling
+  aw_j2k_get_output_j2k_layer_psnr_estimate().
+* The reformatter can now change the sizes of precincts in a
+  compressed JPEG2000 image.
+* Handling of JPEG2000 with multiple tile parts per tile has been
+  improved.  Unneeded tile parts are no longer parsed resulting in
+  improved decompression speed.  As part of this, the codestream is
+  not fully parsed when it is first inputted into the library object
+  (only the main header is parsed), which implies two things: first,
+  only comments from the main header are retrievable before the image
+  is decompressed.  Once the image is decompressed, comments from the
+  headers of tiles that were decompressed are also available.
+  Comments from tiles that were not decompressed are not available.
+  Second, the last parameter of aw_j2k_get_input_j2k_progression_info,
+  progression_available, can no longer returns useful information,
+  since the codestream is not parsed on input.  However, the default
+  behavior of the library is to decompress as much of an image as is
+  present in a codestream, so the original use for this parameter (to
+  enable partial decompression of truncated images) is not lost.
+* Improved implementation of the fixed-point arithmetic for the
+  irreversible 9-7 wavelet provides increased speed.  Fixed-point may
+  now be used with up to 16 bits per pixel per component, and with any
+  transform depth.
+* Improved error resilience -- the last, incomplete, packet in a
+  truncated codestream was previously not decoded.  Now, all the
+  complete coding passes that are detectable in such a packet are
+  decoded, improving the quality of the image.
+Bug Fixes:
+- Gray-scale BMP images with nonlinear color maps are now supported.
+- Decoding of partial resolution images from non resolution
+  progressive JPEG2000 images resulted in distorted images.
+
+3.3.1 - SDK
+September 15, 2003
+Bug Fixes:
+- The SDK is now compliant in fixed-point arithmetic mode.
+- PGX-format reading bug was corrected.
+- aw_j2k_get_input_j2k_bytes_read(),
+  aw_j2k_get_input_j2k_progression_info(), and
+  aw_j2k_get_input_j2k_progression_byte_count() now work correctly,
+  returning the proper information for incomplete codestreams (or
+  incompletely decoded codestreams, in the case of the first
+  function).
+
+3.3.2 - SDK
+September 19, 2003
+Bug Fixes:
+- aw_j2k_get_input_j2k_bytes_read(),
+  aw_j2k_get_input_j2k_progression_info(), and
+  aw_j2k_get_input_j2k_progression_byte_count() did not work correctly
+  for DICOM images with embedded JPEG2000 codestreams.
+- A serious bugs corrected in parsing partial DICOM images with
+  embedded JPEG2000 codestreams.
+
+3.4.0 - SDK
+February 19, 2004
+New Features:
+* API support for inputting raw image data incrementally by region.
+  New functions added:
+  - aw_j2k_set_input_image_raw_region()
+  - aw_j2k_set_output_j2k_header_option()
+* API support for modifying various compression parameters on for
+  specific tiles and specific channels of tiles.  New functions added:
+  - aw_j2k_set_output_j2k_color_xform_ex()
+  - aw_j2k_set_output_j2k_error_resilience_ex()
+  - aw_j2k_set_output_j2k_xform_ex()
+  - aw_j2k_set_output_j2k_layer_bitrate_ex()
+  - aw_j2k_set_output_j2k_layer_ratio_ex()
+  - aw_j2k_set_output_j2k_layer_size_ex()
+  - aw_j2k_set_output_j2k_layer_psnr_ex()
+  - aw_j2k_set_output_j2k_quantization_ex()
+  - aw_j2k_set_output_j2k_quantization_binwidth_scale_ex()
+  - aw_j2k_set_output_j2k_guard_bits_ex()
+  - aw_j2k_set_output_j2k_precinct_size_ex()
+  - aw_j2k_set_output_j2k_codeblock_size_ex()
+  - aw_j2k_set_output_j2k_arithmetic_coding_option_ex()
+  - aw_j2k_set_output_j2k_coding_predictor_offset_ex()
+  - aw_j2k_set_output_j2k_tile_data_toc_ex()
+
+3.4.1 - SDK
+March 17, 2004
+Bug fixes:
+- The length of the last tile part in a codestream may be set to 0;
+  this was not handled properly.
+- The encoding by region API now allows for image tile parts to be
+  generated separately from the main image header.
+- 64-bit platform corrections.
+
+3.4.2 - SDK
+March 30, 2004
+Bug fixes:
+- Handling of large (> 2GB) output images improved.
+- The reformatting operation now correctly copies TLM and PLT marker
+  segments from the original to the new JPEG2000 codestream.
+
+3.4.3 - SDK
+April 26, 2004
+Bug fixes:
+- aw_j2k_get_input_j2k_progression_byte_count() did not return correct
+  values if the input codestream was truncated.
+
+3.4.4 - SDK
+May 7, 2004
+Bug fixes:
+- Decompression of a raw image containing multiple color channels to a
+  non-interleaved format in the non-native endianness mode returned
+  corrupted images.
+- Reading of ICC color profiles from TIFF images was corrected.
+
+3.4.5 - SDK
+May 25, 2004
+Bug fixes:
+- The photometric interpretation DICOM tag (group 0x28, element 0x04)
+  for DICOM images containing JPEG2000 codestreams was not always set
+  properly.  In particular, if the codestream used the reversible 5-3
+  wavelet and the component decorrelating transform, the tag was not
+  always set to YBR_RCT.
+
+3.4.6 - SDK
+May 26: 2004
+Bug fixes:
+- Lossless compression was not always achieved for very small images
+  or when the number of transform levels was very high.
+
+3.4.7 - SDK
+July 7, 2004
+Bug fixes:
+- The JPEG2000 decoder crashed when given corrupted J2K images --
+  specifically, when the packetheaders indicate that there are more
+  bitplanes in the packet than permitted by the bitdepth of the image,
+  and wavelet transform and quantization applied to it.
+- The component decorrelating transform did not handle color images
+  with less than 8 bits per pixel per color channel correctly.
+- Several memory leaks were plugged.
+
+3.5.0 - SDK
+September 8, 2004
+New Features:
+* API support for specifying the padding of pixels in raw image data.
+  New functions added:
+  - aw_j2k_set_input_image_raw_ex()
+  - aw_j2k_get_output_image_raw_ex()
+* The 12- and 16-bit grayscale and 16-bit packed RGB TARGA file
+  formats are now supported.
+
+3.5.1 - SDK
+September 14, 2004
+New Features:
+* TIFF images with run length encoding (RLE) compression are now
+  supported.
+Bug fixes:
+- The new function, aw_j2k_set_input_image_raw_ex(), did not handle
+  little-endian data properly on little-endian machines (Linux and
+  Win32).
+- The TIFF reader now properly handles tiled and palettized TIFF images.
+
+3.5.2 - SDK
+September 27, 2004
+Bug fixes:
+- aw_j2k_get_input_j2k_progression_byte_count() returned a count that
+  was larger by one than the correct count when the full progression
+  level was requested.
+
+3.5.3 - SDK
+October 4, 2004
+Bug fixes:
+- Tiled TIFF images were not read properly on big-endian computers.
+
+3.5.5 - SDK
+October 14, 2004
+Bug fixes:
+- aw_j2k_get_output_image() failed when the user supplied a buffer and
+  requested a JP2 image.
+- aw_j2k_get_output_image_raw() did not return a proper image when the
+  image had signed data that was less than 16 bits in depth, and the
+  non-interleaved option was selected.
+- The JPEG2000 decoder returned errors when encountering image
+  truncation even when the error handling was set to resilient.
+
+3.6.0 - SDK
+January 7, 2005
+New Features:
+* JPEG at both 8- and 12-bits per pixel per color channel, as well as
+  lossless JPEG, are now supported.
+* DICOM images containing JPEG and lossless JPEG are now supported.
+* TIFF images with LZW-compressed image data are now supported.
+* Added aw_j2k_get_input_tif_resolution_info(), which extracts the
+  resolution information from an input TIFF image.
+* The Win64 platform is now supported; the graphical example programs
+  have not yet been ported, but the DLL, the command-line interface,
+  and the control are all ported and tested.
+Bug fixes:
+- A bug in decompressing truncated JPEG2000 images that caused
+  intermittent crashes has been resolved.
+- Corrected a floating-point overflow condition.  This overflow was
+  ignored by most systems and produced correct results; on some
+  systems, however, the overflow generated an exception that was not
+  caught.
+- Corrected a problem handling small tiles in the fixed-point
+  transform.  This issue caused tiled images that had small tiles at
+  the edges to potentially see some degraded image quality on those
+  smaller edge tiles.
+- Corrected a problem in performing the wavelet transform to a depth
+  of 31 levels.
+- Corrected a problem that caused the creation of incorrect packet
+  headers for very small subbands with lossless compression and
+  arithmetic coding termination at the end of each coding pass.
+
+3.7.0 - SDK
+March 7, 2005
+New Features:
+* Support for Multi-Component Transformations, from Part 2 of the
+  JPEG2000 standard, has been added, which improves the compression
+  efficiency for volumetric data.
+* The core JPEG2000 encoder decoder have been further optimized,
+  especially on x86 systems.
+Bug fixes:
+- Uninitialized memory conditions that caused intermittent crashes on
+  WinCE corrected.
+- Floating-point color-conversion code produced bad results when the
+  number of columns in the image was not a multiple of four.
+- Several corrections to the TIFF reader and writer to ensure proper
+  operation in 64-bit builds (including Solaris, Linux, and Win64).
+- Single bit-per-pixel TIFF images are now supported.
+- TIFF images with a transparency (alpha) channel are now supported.
+
+3.7.1 - SDK
+March 11, 2005
+Bug fixes:
+- aw_j2k_get_input_j2k_progression_info() returned incorrect values
+  for resolution levels and quality layers.
+
+==========================================================================
+ $Workfile: release_notes.txt $ $Revision: 35 $
+ Last Modified: $Date: 3/11/05 11:31a $ by: $Author: Rgut $
+==========================================================================

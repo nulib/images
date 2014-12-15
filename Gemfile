@@ -14,7 +14,7 @@ source 'http://rubygems.org'
   gem 'sqlite3', '1.3.6'
   gem 'bootstrap-sass'
   gem 'rufus-scheduler', '3.0.2'
-  
+
   # We will assume you're using devise in tutorials/documentation.
   # You are free to implement your own User/Authentication solution in its place.
   gem 'devise', '2.1.3'
@@ -23,6 +23,16 @@ source 'http://rubygems.org'
   gem 'clamav', '0.4.1'
   gem 'rdf', '1.0'
   gem 'gon'
+  gem 'mini_exiftool'
+  gem 'jhove-service'
+  gem 'net-scp'
+  gem 'delayed_job_active_record'
+
+  # Use Capistrano for deployment
+  gem 'capistrano', '~> 3.2'
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'daemons'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -50,13 +60,15 @@ gem 'high_voltage'
 group :development, :test, :staging do
   gem 'jettywrapper', '1.4.1'
   gem 'rspec-rails', '>=2.9.0'
-  gem 'factory_girl_rails', '3.5.0' 
+  gem 'factory_girl_rails', '3.5.0'
   gem 'database_cleaner', '0.8.0'
   gem 'capybara', '1.1.2'
   gem 'bcrypt-ruby', '3.0.1'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
   gem 'debugger'
+  gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
+  gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
 
 gem 'unicorn', '4.3.1'
@@ -69,3 +81,4 @@ end
 group :production do
   gem 'google-analytics-rails'
 end
+
