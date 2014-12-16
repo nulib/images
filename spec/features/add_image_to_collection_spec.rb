@@ -7,7 +7,8 @@ require 'rake'
 # runs it locally needs to create a collection through the web interface (and add an image to that collection). And I needed to run
 # the rake hydra:fixtures:refresh command besdies the db:test:prepare commands in order to have images present.
 # Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
-# You'll also need to have firefox 24 installed to run the tests.
+
+# You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
 
 
 Capybara.default_driver = :selenium
