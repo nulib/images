@@ -50,6 +50,7 @@ group :development, :test, :staging do
   gem 'jettywrapper' #, '1.4.1'
   gem 'bcrypt'
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
+  gem 'dotenv-rails'
 end
 
 group :development, :test do
