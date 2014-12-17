@@ -31,6 +31,7 @@ vendor/servlet/
 .ruby-version
 .rvmrc
 .secret
+.env
 
 config/database.yml
 config/dil-config.yml
