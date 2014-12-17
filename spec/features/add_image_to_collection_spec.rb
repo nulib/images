@@ -20,7 +20,7 @@ describe 'Add an Image to a Collection',  :js => true do
     visit('https://localhost:3000/users/sign_in')
 
     fill_in 'username', :with => 'dpg674'
-    fill_in 'password', :with => 'ix9bash6baif4biag)'
+    fill_in 'password', :with => 'ih6bbiag)aif4x9bas'
     click_button('signIn')
 
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
