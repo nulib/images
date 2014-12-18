@@ -7,7 +7,8 @@ require 'rake'
 # runs it locally needs to create a collection through the web interface (and add an image to that collection). And I needed to run
 # the rake hydra:fixtures:refresh command besdies the db:test:prepare commands in order to have images present.
 # Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
-# You'll also need to have firefox 24 installed to run the tests.
+
+# You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
 
 
 Capybara.default_driver = :selenium
@@ -18,8 +19,8 @@ describe 'Add an Image to a Collection',  :js => true do
     @driver = Capybara.default_driver
     visit('https://localhost:3000/users/sign_in')
 
-    fill_in 'username', :with => 'dpg674'
-    fill_in 'password', :with => 'ix9bash6baif4biag)'
+    fill_in 'username', :with => ENV["TEST_USER_ID"]
+    fill_in 'password', :with => ENV["TEST_USER_PASSWORD"]
     click_button('signIn')
 
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
