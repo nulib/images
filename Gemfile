@@ -69,6 +69,9 @@ group :development, :test, :staging do
   gem 'debugger'
   gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
+end
+
+group :development, :test do
   gem 'dotenv-rails'
 end
 
