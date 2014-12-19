@@ -47,21 +47,29 @@ source 'http://rubygems.org'
   gem 'high_voltage'
 
 group :development, :test, :staging do
-  gem 'jettywrapper' #, '1.4.1'
-  gem 'bcrypt'
+  gem 'better_errors'
+  gem 'jettywrapper', '1.4.1'
+  gem 'bcrypt-ruby', '3.0.1'
+  gem 'launchy', '2.1.0'
+  gem 'simplecov', '0.7.1', :require => false, :group => :test
+  gem 'debugger'
+  gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
   gem 'dotenv-rails'
 end
 
-group :development, :test do
-  gem 'better_errors'
+gem 'unicorn', '4.3.1'
+
+group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-  gem 'capybara'
   gem 'database_cleaner'
-  gem 'launchy'
-  gem 'simplecov', :require => false
-  gem 'byebug'
+  gem 'capybara'
+  gem 'rspec-steps'
+end
+
+
+group :development do
   gem 'sextant'
   gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
