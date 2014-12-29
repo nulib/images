@@ -58,7 +58,6 @@ gem 'hydra-batch-edit', '~>0.0.6'
 gem 'high_voltage'
 
 group :development, :test, :staging do
-  gem 'better_errors'
   gem 'jettywrapper', '1.4.1'
   gem 'bcrypt-ruby', '3.0.1'
   gem 'launchy', '2.1.0'
