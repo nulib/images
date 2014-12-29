@@ -57,10 +57,6 @@ group :development, :test, :staging do
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
 
-group :development, :test do
-  gem 'dotenv-rails'
-end
-
 gem 'unicorn', '4.3.1'
 
 group :test do
@@ -69,6 +65,7 @@ group :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'rspec-steps'
+  gem 'dotenv-rails'
 end
 
 
@@ -80,4 +77,3 @@ end
 group :production do
   gem 'google-analytics-rails'
 end
-
