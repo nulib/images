@@ -117,18 +117,15 @@ steps 'Users can Manage their Groups of Images',  :js => true do
         img = find(:css, 'img')        
         find(:css, 'img').click()       
       end
-      
-      sleep(2)
-      #okay. expect parent of group, the li, to contain in its outer div child the subgroup.
-      puts 'see what you expect to see - subgroup'
-      page.should have_selector('a', :text => 'Test Subgroup')
+    end  
 
+    sleep(2)
+    #okay. expect parent of group, the li, to contain in its outer div child the subgroup.
+    puts 'see what you expect to see - subgroup'
 
-      #expect(page).to have_css('div.outer > div.inner > ul.accordion > li.collection > h2 > a', :text => 'Test Subgroup')
-
-    end
-        
-    #puts the_test_group
+    our_subgroup = false
+    our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
+    expect(our_subgroup).to be_true
 
   end
 
