@@ -20,24 +20,13 @@ end
 
 def cleanup
   # Delete test group
-  #click, wait, click delete 
   visit('https://localhost:3000/')
-
-  #click_link('Test Group')
   within('#imageCollection') do
-    puts 'hello'
     click_link('Test Group')
   end
-  sleep(4)
+  sleep(2)
   click_link('Delete')
-  sleep(4)
- # page.accept_alert 'Delete this group?' do
- #try this instead: 
- #page.driver.browser.execute_script
- #https://groups.google.com/forum/?fromgroups=#!topic/ruby-capybara/YcZwyPdMJFU
-  click_button('OK')
-#  end
-
+  page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
 end
 
 
@@ -51,15 +40,12 @@ steps 'Users can Manage their Groups of Images',  :js => true do
       click_button('signIn')
       sleep(2)
       #it would be really fantastic to have a group created here. 
-     
       #LIKE THIS ONE
-      # fill_in('new_dil_collection_title', with: 'Test Group')
-      # page.evaluate_script("document.forms[1].submit()")
-      # sleep(4)
+      fill_in('new_dil_collection_title', with: 'Test Group')
+      page.evaluate_script("document.forms[1].submit()")
+      sleep(2)
 
     end
-
-    #this might be unnecessary because after happens after steps? -- well -- would need to be done somehow within a step. maybe a cleanup step.
   
   # it "lets a user add an image to a group" do
   #   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
@@ -95,15 +81,59 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   # end
 
   it "lets a user add a subgroup to a group" do 
-    pending
     #check it out, you CAN create a test group.
-    # fill_in('new_dil_collection_title', with: 'Test Subgroup')
-    # page.evaluate_script("document.forms[1].submit()")  
-    # sleep(2)
+    fill_in('new_dil_collection_title', with: 'Test Subgroup')
+    page.evaluate_script("document.forms[1].submit()")
+    sleep(2)
+    # drag it onto the test group
+    # test that if you click the subgroup it has the correct parent group in its page
+    # and that if you click the expand button on the parent group you see the subgroup name 
+    # underneath it
+    group = '', subgroup = '', group_parent = ''
+
+    all('.accordion li').each do |el|
+      within(el) do 
+        h2 = find(:css, 'h2')
+        if h2[:title] == "Test Group"
+          sleep(2)
+          group = h2
+          group_parent = el
+        end 
+ 
+        if h2[:title] == "Test Subgroup"
+          sleep(2)
+          subgroup = h2
+        end 
+      end
+    end
+
+    drag_n_drop(subgroup, group)
+    sleep(2)
+    page.should_not have_selector('a', :text => 'Test Subgroup')
+    
+    within(group) do
+      icon = find(:css, 'span')    
+      within(icon) do  
+        img = find(:css, 'img')        
+        find(:css, 'img').click()       
+      end
+      
+      sleep(2)
+      #okay. expect parent of group, the li, to contain in its outer div child the subgroup.
+      puts 'see what you expect to see - subgroup'
+      page.should have_selector('a', :text => 'Test Subgroup')
+
+
+      #expect(page).to have_css('div.outer > div.inner > ul.accordion > li.collection > h2 > a', :text => 'Test Subgroup')
+
+    end
+        
+    #puts the_test_group
+
   end
 
   it "cleans up after itself" do
-    cleanup
+    # cleanup
   end
 
 
