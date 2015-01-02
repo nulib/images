@@ -19,77 +19,80 @@ def drag_n_drop(source, target)
 end
 
 def cleanup
-  # Delete test group
+  # Delete test group 
   visit('https://localhost:3000/')
   within('#imageCollection') do
     click_link('Test Group')
   end
   sleep(2)
   click_link('Delete')
+
   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
 end
 
 
+def make_test_group(name)
+  fill_in('new_dil_collection_title', with: name)
+  page.evaluate_script("document.forms[1].submit()")
+  sleep(2)
+end
+
+
 steps 'Users can Manage their Groups of Images',  :js => true do
-    before :all do
-      @driver = Capybara.default_driver
-      visit('https://localhost:3000/users/sign_in')
+  before :all do
+    @driver = Capybara.default_driver
+    visit('https://localhost:3000/users/sign_in')
 
-      fill_in 'username', :with => ENV["TEST_USER_ID"]
-      fill_in 'password', :with => ENV["TEST_USER_PASSWORD"]
-      click_button('signIn')
-      sleep(2)
-      #it would be really fantastic to have a group created here. 
-      #LIKE THIS ONE
-      fill_in('new_dil_collection_title', with: 'Test Group')
-      page.evaluate_script("document.forms[1].submit()")
-      sleep(2)
-
-    end
+    fill_in 'username', :with => ENV["TEST_USER_ID"]
+    fill_in 'password', :with => ENV["TEST_USER_PASSWORD"]
+    click_button('signIn')
+    sleep(2)
+    make_test_group('Test Group')
+  end
   
-  # it "lets a user add an image to a group" do
-  #   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-  #   source = page.find(:css, "#images li:first img")  
-  #   source_title = page.find(:css, "#documents div:first .listing a")
-  #   img_href = source_title[:href]
+  it "lets a user add an image to a group" do
+    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    source = page.find(:css, "#images li:first img")  
+    source_title = page.find(:css, "#documents div:first .listing a")
+    img_href = source_title[:href]
 
-  #   target = page.find(:css, "h2.ui-droppable:first a")
-  #   target_text = target.text()
+    target = page.find(:css, "h2.ui-droppable:first a")
+    target_text = target.text()
     
-  #   img_base_src = img_href.split("inu:")[1]
-  #   drag_n_drop(source, target)
-  #   sleep(4)
-  #   click_link(target_text)
+    img_base_src = img_href.split("inu:")[1]
+    drag_n_drop(source, target)
+    sleep(4)
+    click_link(target_text)
     
-  #   sleep(5)
-  #   image_present = false
+    sleep(5)
+    image_present = false
     
-  #   all('img').each do |img| 
-  #     if img[:src].include?(img_base_src) 
-  #       image_present = true 
-  #     end
-  #   end
-  #   image_present.should be_true
-  # end
+    all('img').each do |img| 
+      if img[:src].include?(img_base_src) 
+        image_present = true 
+      end
+    end
+    image_present.should be_true
+  end
 
-  # it "lets a user search with a keyword" do
-  #   fill_in('q', with: 'Marche')
-  #   page.evaluate_script("document.forms[0].submit()")
-  #   sleep(5)
+  it "lets a user search with a keyword" do
+    fill_in('q', with: 'Party time')
+    page.evaluate_script("document.forms[0].submit()")
+    sleep(5)
 
-  #   expect(page).to have_css("a", :text => "Marche")
-  # end
+    expect(page).to have_css("a", :text => "Party time")
+  end
 
   it "lets a user add a subgroup to a group" do 
-    #check it out, you CAN create a test group.
-    fill_in('new_dil_collection_title', with: 'Test Subgroup')
-    page.evaluate_script("document.forms[1].submit()")
-    sleep(2)
     # drag it onto the test group
     # test that if you click the subgroup it has the correct parent group in its page
     # and that if you click the expand button on the parent group you see the subgroup name 
     # underneath it
-    group = '', subgroup = '', group_parent = ''
+    visit('https://localhost:3000')
+    sleep(2)
+    make_test_group('Test Subgroup')
+
+    group = '', subgroup = '', group_parent = false
 
     all('.accordion li').each do |el|
       within(el) do 
@@ -97,7 +100,6 @@ steps 'Users can Manage their Groups of Images',  :js => true do
         if h2[:title] == "Test Group"
           sleep(2)
           group = h2
-          group_parent = el
         end 
  
         if h2[:title] == "Test Subgroup"
@@ -108,6 +110,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     end
 
     drag_n_drop(subgroup, group)
+
     sleep(2)
     page.should_not have_selector('a', :text => 'Test Subgroup')
     
@@ -120,17 +123,32 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     end  
 
     sleep(2)
-    #okay. expect parent of group, the li, to contain in its outer div child the subgroup.
-    puts 'see what you expect to see - subgroup'
-
     our_subgroup = false
     our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
     expect(our_subgroup).to be_true
 
+    click_link('Test Subgroup')
+    sleep(2)
+
+    h4 = page.find('#sidebar div:first-child h4')
+    sleep(2)
+    a = page.find('#sidebar div:nth-child(2) a')
+
+    if h4.text() == 'Parent Collections' and a[:text] == 'Test Group'
+      group_parent = true
+    end
+
+    expect(group_parent).to be_true 
+
+    #delete the subgroup
+    sleep(2)
+    click_link('Delete')
+
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
   end
 
   it "cleans up after itself" do
-    # cleanup
+    cleanup
   end
 
 
