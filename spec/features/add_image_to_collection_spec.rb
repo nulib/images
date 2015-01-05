@@ -181,6 +181,68 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
   end
 
+
+
+  it 'lets a user navigate to next and previous images in a group' do 
+    # these tests assume that the images in first, 6th and 8th place are different, will have different urls.
+    # they are fixture data so should be consistent.
+
+    #add two images to test group
+    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    first_title = page.find(:css, "#documents div:first-child .listing a")
+    first_href = first_title[:href]
+
+    page.find(:css, "#images li:first-child img").click()
+    sleep(2)
+    click_button('Add to Image Group')
+    sleep(2)
+    select('Test Group')
+    click_button('Save')
+    sleep(8)
+
+    visit('https://localhost:3000/catalog?f%5Bworktype_facet%5D%5B%5D=Photography%2C+Film+and+Video')
+    sleep(3)
+    
+    second_title = page.find(:css, "#documents div:first-child .listing a")
+    second_href = second_title[:href]  
+
+    page.find(:css, "#images li:first-child img").click() 
+    sleep(4)
+
+    click_button('Add to Image Group')
+    sleep(2)
+    select('Test Group')
+    click_button('Save')
+    sleep(4)
+
+    visit('https://localhost:3000/')
+    sleep(2)
+
+    page.find('a', :text => 'Test Group').click()
+    sleep(3)
+
+
+    # click the first image, which should be first title. click next and the href on the 
+    # page should be the second title. on that page click previous, you should go back to page and see the first href there
+
+    page.find(:css, "#images li:first-child img").click()
+    sleep(4)
+    click_link('Next')
+
+    # okay not quite - you need to know the page is about the image you navigated to, the href will 
+    # be on the page in the next and previous buttons.
+
+    # you may need to check that src includes, not matches - img[:src].include?(img_base_src) 
+    expect(page).to have_selector('a', :href => second_href, :text => 'Small Image Download (JPG)')
+
+    click_link('Previous')
+    sleep(4)
+
+    expect(page).to have_selector('a', :href => first_href, :text => 'Small Image Download (JPG)')
+    sleep(1)
+
+  end
+
   it "cleans up after itself" do
     cleanup
   end
