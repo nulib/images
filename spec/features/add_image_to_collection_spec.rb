@@ -21,6 +21,7 @@ end
 def cleanup
   # Delete test group 
   visit('https://localhost:3000/')
+  sleep(2)
   within('#imageCollection') do
     click_link('Test Group')
   end
@@ -82,6 +83,39 @@ steps 'Users can Manage their Groups of Images',  :js => true do
 
     expect(page).to have_css("a", :text => "Party time")
   end
+
+  it "lets a user add an image to a group from the image view page" do
+
+    #this test adds an image, saving a reference to its href, then goes to the group's page
+    # and confirms an element with that href is on the page, then deletes the item from the test group
+
+    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    img = page.find(:css, "#documents div:first .listing a")
+
+    img_caption = img[:href]
+
+    page.find(:css, "#images li:first img").click()
+
+    sleep(2)
+
+    click_button('Add to Image Group')
+    sleep(2)
+    select('Test Group')
+    click_button('Save')
+    sleep(2)
+
+    visit('https://localhost:3000/')
+    sleep(2)
+
+    page.find('a', :text => 'Test Group').click()
+    sleep(2)
+
+    expect(page).to have_selector('a', :href => img_caption)
+    page.find(:css, '.member-remove').click()
+
+    sleep(2)
+  end
+
 
   it "lets a user add a subgroup to a group" do 
     # drag it onto the test group
