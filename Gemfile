@@ -59,10 +59,6 @@ gem 'high_voltage'
 
 group :development, :test, :staging do
   gem 'jettywrapper', '1.4.1'
-  gem 'rspec-rails', '>=2.9.0'
-  gem 'factory_girl_rails', '3.5.0'
-  gem 'database_cleaner', '0.8.0'
-  gem 'capybara', '1.1.2'
   gem 'bcrypt-ruby', '3.0.1'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
@@ -71,18 +67,22 @@ group :development, :test, :staging do
   gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
 
-group :development, :test do
+gem 'unicorn', '4.3.1'
+
+group :test do
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'rspec-steps'
   gem 'dotenv-rails'
 end
 
-gem 'unicorn', '4.3.1'
 
 group :development do
-  gem 'better_errors'
   gem 'sextant'
 end
 
 group :production do
   gem 'google-analytics-rails'
 end
-
