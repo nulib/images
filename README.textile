@@ -52,6 +52,8 @@ You'll need a .env file in the root of your applications directory that contains
 
 Also make sure the rails server is running before running these selenium tests.
 
+You'll need to be connected to the VPN.
+
 <pre>
 rspec spec/features/add_image_to_collection_spec.rb
 </pre>
