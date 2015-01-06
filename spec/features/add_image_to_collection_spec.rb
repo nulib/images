@@ -52,6 +52,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   end
   
   it "lets a user add an image to a group" do
+    #DIL-4095
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     source = page.find(:css, "#images li:first img")  
     source_title = page.find(:css, "#documents div:first .listing a")
@@ -77,6 +78,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   end
 
   it "lets a user search with a keyword" do
+    # DIL-4069
     fill_in('q', with: 'Party time')
     page.evaluate_script("document.forms[0].submit()")
     sleep(5)
@@ -86,8 +88,9 @@ steps 'Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user add an image to a group from the image view page" do
 
-    #this test adds an image, saving a reference to its href, then goes to the group's page
+    # this test adds an image, saving a reference to its href, then goes to the group's page
     # and confirms an element with that href is on the page, then deletes the item from the test group
+    # DIL-4082
 
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     img = page.find(:css, "#documents div:first .listing a")
@@ -122,6 +125,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     # test that if you click the subgroup it has the correct parent group in its page
     # and that if you click the expand button on the parent group you see the subgroup name 
     # underneath it
+    #DIL-4081
     visit('https://localhost:3000')
     sleep(2)
     make_test_group('Test Subgroup')
@@ -186,7 +190,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   it 'lets a user navigate to next and previous images in a group' do 
     # these tests assume that the images in first, 6th and 8th place are different, will have different urls.
     # they are fixture data so should be consistent.
-
+    #DIL-4084
     #add two images to test group
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     first_title = page.find(:css, "#documents div:first-child .listing a")
@@ -229,10 +233,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     sleep(4)
     click_link('Next')
 
-    # okay not quite - you need to know the page is about the image you navigated to, the href will 
-    # be on the page in the next and previous buttons.
-
-    # you may need to check that src includes, not matches - img[:src].include?(img_base_src) 
+    #the page's main image, the image available for download, is the second or first one
     expect(page).to have_selector('a', :href => second_href, :text => 'Small Image Download (JPG)')
 
     click_link('Previous')
@@ -241,6 +242,35 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     expect(page).to have_selector('a', :href => first_href, :text => 'Small Image Download (JPG)')
     sleep(1)
 
+  end
+
+
+  it "lets a user make a group private" do
+    #DIL-4087
+    click_link('Test Group')
+    sleep(5)
+    click_link('Make this Group Private')
+    sleep(5)
+    
+    expect(page).to_not have_selector('a', :text => 'Share this Group')
+    expect(page).to have_selector('a', :text => 'Make this Group Sharable')
+  end
+
+  it "lets a user share a group" do
+    #DIL-4087
+    group = find('a', :text => 'Test Group')
+    group_url = group[:href]
+
+    click_link('Test Group')
+    sleep(5)
+    click_link('Share this Group')
+
+    #expect box with url in it to appear, also share this group copy
+    expect(page).to have_css('#copypath', :href => group_url)
+    share_box = find('#toppathwrap')
+    sleep(2)
+
+    expect(share_box.text.include?('Copy this link and share it!')).to be_true
   end
 
   it "cleans up after itself" do
