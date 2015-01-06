@@ -2,7 +2,7 @@
 lock '3.2.1'
 
 set :application, 'dil_hydra'
-set :repo_url, 'git@github.com:nulib/dil_hydra.git'
+set :repo_url, 'git@github.com:nulib/images.git'
 
 # Default branch is :master
 ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
