@@ -108,10 +108,10 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     sleep(2)
 
     visit('https://localhost:3000/')
-    sleep(2)
+    sleep(4)
 
     page.find('a', :text => 'Test Group').click()
-    sleep(2)
+    sleep(3)
 
     expect(page).to have_selector('a', :href => img_caption)
     page.find(:css, '.member-remove').click()
@@ -242,6 +242,18 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     expect(page).to have_selector('a', :href => first_href, :text => 'Small Image Download (JPG)')
     sleep(1)
 
+    visit('https://localhost:3000/')
+    sleep(3)
+
+    page.find('a', :text => 'Test Group').click()
+    sleep(3)
+
+    #cleanup - delete the images
+    all('.member-remove').each do |el|
+      el.click()
+      sleep(3)
+    end
+
   end
 
 
@@ -254,6 +266,10 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     
     expect(page).to_not have_selector('a', :text => 'Share this Group')
     expect(page).to have_selector('a', :text => 'Make this Group Sharable')
+
+    #cleanup - make the group public again
+    click_link('Make this Group Sharable')
+    sleep(2)
   end
 
   it "lets a user share a group" do
@@ -271,6 +287,63 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     sleep(2)
 
     expect(share_box.text.include?('Copy this link and share it!')).to be_true
+  end
+
+
+  it "lets a user delete a subgroup" do
+    #DIL-4088
+    make_test_group('Test Subgroup')
+
+    group = '', subgroup = ''
+
+    all('.accordion li').each do |el|
+      within(el) do 
+        h2 = find(:css, 'h2')
+        if h2[:title] == "Test Group"
+          sleep(2)
+          group = h2
+        end 
+ 
+        if h2[:title] == "Test Subgroup"
+          sleep(2)
+          subgroup = h2
+        end 
+      end
+    end
+
+    drag_n_drop(subgroup, group)
+    
+    sleep(3)
+    
+    click_link('Test Group')
+    sleep(3)
+
+    page.should have_selector('#images')
+    #does this need to delete the subgroup explicitly?
+    page.find(:css, '.member-remove').click()
+    sleep(3)
+    page.should_not have_selector('#images')
+
+  end
+
+  it "lets a user rename a group" do 
+    click_link('Test Group')
+    sleep(4)
+
+    click_button('rename_image_group_link')
+    fill_in('dil_collection_title', with: "New and Different Subgroup Name")
+    page.evaluate_script("document.forms[2].submit()")
+    sleep(2)
+
+    group_title = find('#accordion h2')
+
+    expect(group_title.text()).to eq("New and Different Subgroup Name") 
+
+    #clean up by re-naming back to Test Group
+    click_button('rename_image_group_link')
+    fill_in('dil_collection_title', with: "Test Group")
+    page.evaluate_script("document.forms[2].submit()")
+    sleep(2)
   end
 
   it "cleans up after itself" do
