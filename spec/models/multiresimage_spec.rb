@@ -1,21 +1,98 @@
 require 'spec_helper'
 
 describe Multiresimage do
+
   describe "a new instance with a file name" do
     subject { Multiresimage.new(:file_name=>'readme.txt') }
     its(:file_name) { should  == 'readme.txt' }
   end
 
-  describe "should have an admin policy" do
-    before do
-      @policy = AdminPolicy.create
-    end
-    after do
-      @policy.delete
-    end
-    subject { Multiresimage.new(:admin_policy=>@policy) }
-    its(:admin_policy) { should == @policy } 
+  pending("It doesn't look like we're using policies") do
+    describe "should have an admin policy" do
+      before do
+        @policy = AdminPolicy.create
+      end
+      after do
+        @policy.delete
+      end
+      subject { Multiresimage.new(:admin_policy=>@policy) }
+      its(:admin_policy) { should == @policy }
 
+    end
+  end
+
+  describe "#vra_save" do
+    it 'creates the appropriate vra:image XML' do
+      xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
+      xml_from_rir  = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample_complete.xml" )
+      m = Multiresimage.create( from_menu: true, vra_xml: xml_from_menu )
+      #expect( m.datastreams[ 'VRA' ].content ).to match_xml_except( xml_from_rir, 'refid', 'relids' )
+      expect( m.datastreams[ 'VRA' ].to_xml ).to be_equivalent_to( xml_from_rir ).ignoring_attr_values( 'relids', 'refid', 'id')
+    end
+  end
+
+  context "create datastreams" do
+
+    before( :each ) do
+      @m = Multiresimage.create
+      @sample_tiff = "#{ Rails.root }/spec/fixtures/images/internet.tiff"
+      @sample_jp2  = "#{ Rails.root }/spec/fixtures/images/internet.jp2"
+    end
+
+    describe "#create_archv_img_datastream" do
+      it "populates the ARCHV-IMG datastream" do
+        @m.create_archv_img_datastream( "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif" )
+        @m.save!
+        expect( @m.datastreams[ "ARCHV-IMG" ].content ).to_not be_nil
+      end
+    end
+
+    describe "#create_archv_techmd_datastream" do
+      it "populates the ARCHV-TECHMD datastream" do
+        jhove_xml = Nokogiri::XML.parse( File.read( "#{Rails.root}/spec/fixtures/archv_jhove_output.xml" ))
+        @m.create_archv_techmd_datastream( @sample_tiff )
+        expect( @m.datastreams["ARCHV-TECHMD"].content ).to be_equivalent_to( jhove_xml ).ignoring_content_of( "date" )
+      end
+    end
+
+    describe "#create_archv_exif_datastream" do
+      it "populates the ARCHV-EXIF datastream" do
+        exif_xml = `#{ Rails.root }/lib/exif.pl #{ @sample_tiff }`
+        sleep 1
+        @m.create_archv_exif_datastream( @sample_tiff )
+        expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml, 'File_Access_Date_Time', 'File Access Date/Time' )
+      end
+    end
+
+    describe "#create_deliv_techmd_datastream" do
+      it "populates the DELIV-TECHMD datastream" do
+        jhove_xml = File.open("#{ Rails.root }/spec/fixtures/deliv_jhove_output.xml").read
+        @m.create_deliv_techmd_datastream( @sample_jp2 )
+        expect( @m.datastreams[ "DELIV-TECHMD" ].content ).to match_xml_except( jhove_xml, 'date' )
+      end
+    end
+
+    describe "#create_deliv_ops_datastream" do
+      it "populates the DELIV-OPS datastream" do
+        deliv_ops_xml = <<-EOF
+<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
+  <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"/dimages/public/images/inu-dil/hydra/test/from-menu/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/>
+</svg:svg>
+EOF
+        @m.create_deliv_techmd_datastream( @sample_jp2 )
+        @m.create_deliv_ops_datastream
+        expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml.chomp )
+      end
+    end
+
+    describe "#create_deliv_img_datastream" do
+      it "populates the DELIV-IMG datastream" do
+        public_jp2 = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
+        @m.create_deliv_img_datastream( public_jp2 )
+        @m.save!
+        expect( @m.datastreams[ "DELIV-IMG" ].content ).to_not be_nil
+      end
+    end
   end
 
   describe "should belong to multiple collections" do
@@ -25,9 +102,9 @@ describe Multiresimage do
       @collection3 = FactoryGirl.create(:collection)
     end
     subject { Multiresimage.new(:collections=>[@collection1, @collection2]) }
-    its(:collections) { should == [@collection1, @collection2] } 
+    its(:collections) { should == [@collection1, @collection2] }
   end
-  
+
   describe "created with a file" do
     before do
       @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')
@@ -44,7 +121,7 @@ describe Multiresimage do
     end
 
     it "should store the mimeType of the 'raw' datastream" do
-      @subject.raw.mimeType.should == 'image/jpeg' 
+      @subject.raw.mimeType.should == 'image/jpeg'
     end
 
     it "should have to_jq_upload" do
@@ -57,7 +134,7 @@ describe Multiresimage do
         @subject.stub(:pid =>'my:pid')
       end
       subject {@subject.write_out_raw}
-      it { should match /\/tmp\/The_Tilled_Field.jpg#{$$}\.0/ } 
+      it { should match /\/tmp\/The_Tilled_Field.jpg#{$$}\.0/ }
       after do
         `rm #{subject}`
       end
@@ -65,13 +142,22 @@ describe Multiresimage do
     end
   end
 
-  context "with a vra datastream" do
-    subject { Multiresimage.find('inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26') }
-    it "should have related_ids" do
-      subject.related_ids.should == ["inu:dil-0b63522b-1747-47b6-9f0e-0d8f0710654b"]
-    end
+  context "with an associated work" do
+    xml = File.read("#{Rails.root}/spec/fixtures/vra_minimal.xml")
+    doc = Nokogiri::XML( xml )
+    doc.xpath( "//vra:earliestDate" )[ 0 ].content = '0000'
+    xml = doc.to_s
 
+    # this will create a vrawork and associate them with each other
+    img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: "my:pid")
+    img.save
+
+    it "should have related_ids" do
+      img.related_ids.first.should eq img.vraworks.first.pid
+    end
   end
+
+
   context "to_solr" do
     before do
       @img = Multiresimage.new
@@ -79,9 +165,9 @@ describe Multiresimage do
     end
     subject { @img.to_solr }
     it "should have title_display" do
-      subject['title_display'].should == "Evanston Public Library. Exterior: facade" 
+      subject['title_display'].should == "Evanston Public Library. Exterior: facade"
     end
-  end 
+  end
 
   context "with rightsMetadata" do
     subject do
@@ -115,7 +201,7 @@ describe Multiresimage do
     it "should update the work" do
       @img.update_attributes(:titleSet_display => "Woah cowboy")
       @img.vraworks.first.titleSet_display_work.should == "Woah cowboy"
-      
+
     end
   end
 

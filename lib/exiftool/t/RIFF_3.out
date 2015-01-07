@@ -1,0 +1,40 @@
+[ExifTool, ExifTool, ExifTool]  - ExifTool Version Number: 7.20
+[File, File, Image]  - File Name: RIFF.avi
+[File, File, Image]  - Directory: t/images
+[File, File, Image]  - File Size: 390 bytes
+[File, File, Time]  - File Modification Date/Time: 2006:09:29 10:06:20
+[File, File, Image]  - File Type: AVI
+[File, File, Image]  - MIME Type: video/avi
+[RIFF, RIFF, Video] 0 - Frame Rate: 15
+[RIFF, RIFF, Video] 1 - Max Data Rate: 201.2 kB/s
+[RIFF, RIFF, Video] 4 - Frame Count: 233
+[RIFF, RIFF, Video] 6 - Stream Count: 2
+[RIFF, RIFF, Video] 8 - Image Width: 320
+[RIFF, RIFF, Video] 9 - Image Height: 240
+[RIFF, RIFF, Video] 0 - Stream Type: Video
+[RIFF, RIFF, Video] 1 - Codec: mjpg
+[RIFF, RIFF, Video] 10 - Quality: 10000
+[RIFF, RIFF, Video] 11 - Sample Size: Variable
+[RIFF, RIFF, Video] 0 - Stream Type: Audio
+[RIFF, RIFF, Video] 1 - Codec: 
+[RIFF, RIFF, Video] 10 - Quality: 10000
+[RIFF, RIFF, Video] 11 - Sample Size: 1 byte
+[RIFF, RIFF, Audio] 0 - Encoding: Microsoft PCM
+[RIFF, RIFF, Audio] 1 - Num Channels: 1
+[RIFF, RIFF, Audio] 2 - Sample Rate: 11024
+[RIFF, RIFF, Audio] 4 - Avg Bytes Per Sec: 11024
+[RIFF, RIFF, Audio] 7 - Bits Per Sample: 8
+[RIFF, RIFF, Time] IDIT - Date/Time Original: 2003:03:10 15:04:43
+[RIFF, RIFF, Audio] ISFT - Software: CanonMVI01
+[BMP, BMP, Image] 4 - Image Width: 320
+[BMP, BMP, Image] 8 - Image Height: 240
+[BMP, BMP, Image] 12 - Planes: 1
+[BMP, BMP, Image] 14 - Bit Depth: 24
+[BMP, BMP, Image] 16 - Compression: MJPG
+[BMP, BMP, Image] 20 - Image Length: 230400
+[BMP, BMP, Image] 24 - Pixels Per Meter X: 0
+[BMP, BMP, Image] 28 - Pixels Per Meter Y: 0
+[BMP, BMP, Image] 32 - Num Colors: Use BitDepth
+[BMP, BMP, Image] 36 - Num Important Colors: All
+[Composite, Composite, Other]  - Duration: 15.53 s
+[Composite, Composite, Image]  - Image Size: 320x240

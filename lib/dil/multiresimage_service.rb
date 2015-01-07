@@ -4,10 +4,55 @@ module DIL
     # include Blacklight::SolrHelper
     include DIL::PidMinter
 
+
     # This method/web service is called from other applications (Orbeon VRA Editor, migration scripts).
     # The URL to call this method/web service is http://localhost:3000/multiresimages/create_update_fedora_object.xml
     # It's expecting a pid param in the URL (it will check the VRA xml in the xml), as well as VRA xml in the POST request.
     # This method will create or update a Fedora object using the VRA xml that's included in the POST request
+
+
+
+    def menu_publish
+      logger.debug "menu_publish api was just called"
+
+
+      if params[:path] && params[:xml]
+
+        begin
+          i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
+          i.save
+
+          i.create_archv_techmd_datastream( params[:path] )
+          i.create_archv_exif_datastream( params[:path] )
+          ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
+          i.create_deliv_techmd_datastream( params[:path] )
+          i.create_deliv_ops_datastream
+          i.create_deliv_img_datastream
+          i.create_archv_img_datastream
+          ImageMover.delay.move_tiff_to_repo( i.tiff_img_name, params[ :path ])
+          i.edit_groups = [ 'registered' ]
+          i.save!
+
+          j = Multiresimage.find( i.pid )
+          j.save!
+
+
+          returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+        rescue StandardError => msg
+          returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+          # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
+          logger.debug returnXml
+        end
+      else
+        returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image path and VRA xml.</description></response>"
+      end
+      respond_to do |format|
+        format.xml {render :layout => false, :xml => returnXml}
+      end
+    end
+
+
+
 
     def create_update_fedora_object
       begin #for exception handling
@@ -530,17 +575,15 @@ module DIL
       #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
       fedora_object.add_relationship(:is_image_of, "info:fedora/" + rel_pid)
 
+      # Set up default institutional collection pid as being "Digital Image Library"
+      institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+
       # if this is part of an institutional collection, add that relationship
-      if collection.present?
-        # Set up default institutional collection pid as being "Digital Image Library"
-        institutional_collection_pid = DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
-
-        if DIL_CONFIG["institutional_collection"][collection]
+      if collection.present? and DIL_CONFIG["institutional_collection"][collection]
           institutional_collection_pid = DIL_CONFIG["institutional_collection"][collection]["pid"]
-        end
-
-        fedora_object.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
       end
+
+      fedora_object.add_relationship(:is_governed_by, "info:fedora/" + institutional_collection_pid)
 
       #add rels-ext CModel relationship
       #fedora_object.add_relationship(:has_model, "info:fedora/inu:VRACModel")
@@ -605,36 +648,13 @@ module DIL
 
     def update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
 
-      #load Fedora object
       fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
-
-      #set datastream to xml from the request
-
-      #if datastream doesn't already exist, add_datastream
-      #if (fedora_object.datastreams[ds_name].nil?)
-        #new_ds = ActiveFedora::Datastream.new(fedora_object, ds_name)
-        #fedora_object.add_datastream(new_ds)
-      #end
-
-      #create datastream
-      #fedora_object.send(ds_name)
-
-      #set datastream content
-      #fedora_object.datastreams[ds_name].content = xml
 
       fedora_object.send(ds_name).content = xml
       fedora_object.send(ds_name).dsLabel = ds_label
       fedora_object.send(ds_name).mimeType = mime_type
 
-      #save Fedora object
-      #debugger
       fedora_object.save
-
-      #update the solr index
-      #debugger
-      #if (ds_name=="VRA")
-       # fedora_object.update_index()
-      #end
 
       returnXml = "<response><returnCode>Update successful</returnCode><pid>" + pid + "</pid></response>"
 

@@ -1,0 +1,553 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+  <title>ExifTool FAQ</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+<style type="text/css">
+<!--
+pre { color: #800; margin-left: 2em }
+-->
+</style>
+</head>
+<body>
+<h1 class='up'>ExifTool FAQ</h1>
+
+<font size='+1'><b>Index</b></font>
+<table><tr><td><ol>
+<li><a href="#Q1">Discussion forum</a>
+<li><a href="#Q2">Determining tag names</a>
+<li><a href="#Q3">Problems with duplicate tags</a>
+<li><a href="#Q4">Aperture and shutter speed</a>
+<li><a href="#Q5">Date and time formats</a>
+<li><a href="#Q6">"Can't convert TAG" errors</a>
+<li><a href="#Q7">Deleting all EXIF from a TIFF</a>
+<li><a href="#Q8">Writing Make, Model and MakerNotes</a>
+</ol></td><td valign='top'><ol start=9>
+<li><a href="#Q9">Tag locations when copying</a>
+<li><a href="#Q10">Coded character sets</a>
+<li><a href="#Q11">User-defined tags</a>
+<li><a href="#Q12">Export to database</a>
+<li><a href="#Q13">Output file size</a>
+<li><a href="#Q14">GPS coordinate format</a>
+<li><a href="#Q15">MakerNote errors</a>
+</ol></td></tr></table>
+
+<hr>
+<a name="Q1"></a>
+<p>1. <b>"Is there a forum for discussing ExifTool issues?"</b></p>
+
+<blockquote>
+ExifTool issues can be discussed on the CPAN forum at
+<a href="http://www.cpanforum.com/dist/Image-ExifTool">http://www.cpanforum.com/dist/Image-ExifTool</a>
+</blockquote>
+
+<a name="Q2"></a>
+<p>2. <b>"How do I determine the tag name for some information?"</b></p>
+
+<blockquote>
+When you run exiftool, by default it prints descriptions, not tag names, for
+the information it extracts.  To print the tag names instead, use the
+<code>&#8209;s</code> option.  Also, see the <a href="TagNames/index.html">tag names
+documentation</a> for a complete list of available tag names.</blockquote>
+
+<blockquote>Tag names may be optionally prefixed by a family 0 or 1 group name
+to specify a particular information type or location.  Use the
+<code>&#8209;g0</code> and <code>&#8209;g1</code> (or
+<code>&#8209;G0</code> and <code>&#8209;G1</code>) options when extracting
+information to see the corresponding group names.
+</blockquote>
+
+<a name="Q3"></a>
+<p>3a. <b>"ExifTool reports the wrong value or doesn't extract a tag"</b>,
+<br>3b. <b>"ExifTool doesn't write a tag properly"</b>, or
+<br>3c. <b>"Other software can't read information written by ExifTool"</b></p>
+
+<blockquote>
+Make sure you are looking at the right information.  Information may be
+duplicated in different locations within an image.  When in doubt, use
+"<code>exiftool -a -G1 FILENAME</code>" to show all information and the
+locations in the file.  In this command, <code>&#8209;a</code> allows
+duplicate tags to be displayed, <code>&#8209;G1</code> shows the family 1
+group name (ie. the location) of each tag, and "<code>FILENAME</code>" is
+the name of your image file.  Also, it may be helpful to add
+<code>&#8209;s</code> to show the actual tag names instead of the
+descriptions (and possibly <code>&#8209;D</code> or <code>&#8209;H</code> to
+show the tag ID numbers if you are familiar with these).</blockquote>
+
+<blockquote>When duplicate tags exist, only one is extracted unless the
+<code>-a</code> option is used.  Beware that options like <code>-EXIF:all</code>
+select all EXIF tags from the extracted tags, so if any EXIF tags have been
+hidden by duplicate tags in other locations, they will not appear in the output
+for <code>-EXIF:all</code>.</blockquote>
+
+<blockquote>If you are having problems with other software reading information
+written by ExifTool, if possible try first writing the information from the
+other software, then use ExifTool to determine where the information was
+written. Once you know where it should go, you can use ExifTool to write to this
+location.</blockquote>
+
+<blockquote>You can read or write information in a specific location by
+prefixing the tag name on the command line with the desired group name.  ie)
+"<code>&#8209;ExifIFD:DateTimeOriginal</code>"
+</blockquote>
+
+<a name="Q4"></a>
+<p>4. <b>"ExifTool reports more than one shutter speed or aperture value, and
+they are slightly different"</b></p>
+
+<blockquote>
+There are a number of different ways that aperture and shutter speed information
+get saved in an image.  The standard EXIF values (EXIF:FNumber and
+EXIF:ExposureTime) should correspond to the values displayed by your camera, but
+these values may have been rounded off.  The APEX values (EXIF:ApertureValue and
+EXIF:ShutterSpeedValue) may be different due to their own round-off errors.  If
+available, the MakerNotes values are the typically the most accurate because
+they haven't been rounded off at all, but you may see odd values like 1/102
+instead of 1/100, etc.
+</blockquote>
+
+<a name="Q5"></a>
+<p>5. <b>"How do I format date and time information for writing?"</b></p>
+
+<blockquote>All information (including date/time information) is written in the
+same format as it is read out.  When reading, ExifTool converts all date and
+time information to standard EXIF format, so this is also the way it is
+specified when writing. The standard EXIF date/time format is "<code>YYYY:MM:DD
+hh:mm:ss</code>", and some meta information formats such as XMP also allow
+sub-seconds and a timezone to be specified.  The timezone format is
+"<code>+hh:mm</code>", "<code>&#8209;hh:mm</code>" or "<code>Z</code>". If a
+timezone is required but not specified, exiftool adds the local timezone if
+possible (ie. if strftime supports "%z" on your system), otherwise
+"<code>Z</code>" is assumed. For example:
+
+<pre>exiftool "-xmp:dateTimeOriginal=2005:10:23 20:06:34.33-05:00" a.jpg
+</pre>
+
+ExifTool will attempt to reformat input date/time values into this standard
+format unless the <code>-n</code> option is used.
+</blockquote>
+
+<a name="Q6"></a>
+<p>6. <b>"I get the following error when writing a tag:
+'<code>Can't convert TAG (not in PrintConv)</code>'"</b></p>
+
+<blockquote>
+ExifTool applies a print conversion (PrintConv) to the printed values of all
+tags. These print conversions are documented for all tags in the <b>Values</b>
+column of the <a href="TagNames/index.html">Tag Name documentation</a>.  For
+example, the GPSAltitudeRef tag defines the following conversions:
+<pre>0 = Above Sea Level
+1 = Below Sea Level
+</pre>
+For this tag, a value of '0' is printed as 'Above Sea Level', and '1' is printed
+as 'Below Sea Level'.  Reading and writing with ExifTool is symmetrical, so a
+value that is printed as 'Above Sea Level' must also be written in that form.
+(ie. The inverse print conversion is applied when writing values.) For example,
+to write GPSAltitudeRef you can type:
+<pre>exiftool "-gpsaltituderef=Above Sea Level" image.jpg
+</pre>
+or any unambiguous short form may be used and ExifTool will know what you mean, ie)
+<pre>exiftool -gpsaltituderef=above image.jpg
+</pre>
+Alternatively, the print conversion can be disabled with the <code>&#8209;n</code>
+option. In this case the printed value of GPSAltitudeRef will be '0' or '1', and
+the value is written in the same way. So the following command has exactly the
+same effect as the commands above:
+<pre>exiftool -gpsaltituderef=0 -n image.jpg
+</pre>
+Integer values may also be specified in hexadecimal (with a leading '0x').  For
+example, the following commands are all valid and accomplish the same thing:
+<pre>exiftool -flash=1 -n image.jpg
+exiftool -flash=0x1 -n image.jpg
+exiftool -flash=fired image.jpg
+</pre>
+Programmers: If you are calling Image::ExifTool functions from your own script,
+the two techniques look like this:
+<pre>$exifTool->SetNewValue(GPSAltitudeRef => 'Above Sea Level');
+$exifTool->SetNewValue(GPSAltitudeRef => 0, Type => 'ValueConv');
+</pre>
+</blockquote>
+
+<a name="Q7"></a>
+<p>7. <b>"I can't delete all EXIF information from a TIFF file using
+'<code>exiftool -exif:all= img.tif</code>'"</b></p>
+
+<blockquote>
+This is because of the way a TIFF file is structured.  With a JPEG image, this
+command will remove IFD0 (the main Image File Directory) as well as any
+subdirectories, thus removing all EXIF information.  But with the TIFF format,
+the main image itself is stored in IFD0, so deleting this directory would
+destroy the image.  Instead, ExifTool just deletes the ExifIFD subdirectory, so
+any information stored in other directories is preserved.</blockquote>
+
+<blockquote>Use "<code>exiftool -a -G1 -s img.tif</code>" to
+see where the information is stored.  Any information remaining in other IFD's
+must be deleted separately from a TIFF file if desired.
+</blockquote>
+
+<a name="Q8"></a>
+<p>8a. <b>"All maker note information is lost if I change the Make or Model tag"</b>, or
+<br>8b. <b>"I can't copy maker note information to an image"</b></p>
+
+<blockquote>
+The Make and Model tags are used by some image utilities (including ExifTool) to
+determine the format of the maker note information.  Deleting or changing either
+of these tags may prevent these utilities from recognizing or properly
+interpreting the maker notes.  Also beware that the maker notes information may
+be damaged if an image is edited when the maker notes are not properly
+recognized. So it is a good idea not to edit the Make and Model tags in the
+first place.</blockquote>
+
+<blockquote>If you really want to delete the Make and Model information, you
+might as well delete the maker notes too.  You can do this with the either of
+the following commands:
+<pre>exiftool -make= -model= -makernotes:all= image.jpg
+exiftool -make= -model= -makernotes= image.jpg
+</pre>
+For the same reason, maker notes can not be copied to an image with an
+incompatible Make or Model.  To do this, the Make and Model tags must also be
+copied.  ie)
+<pre>exiftool -tagsfromfile src.jpg -makernotes -make -model dst.jpg
+</pre>
+(Note that in this case the "<code>-makernotes:all</code>" syntax does not
+work because it attempts to copy the maker note tags individually, but they
+must be copied as a block with "<code>-makernotes</code>".)
+</blockquote>
+
+<a name="Q9"></a>
+<p>9a. <b>"The information is different when I copy all tags to a new file"</b>, or
+<br>9b. <b>"The tag locations change when I use <code>&#8209;tagsfromfile</code>
+to copy information"</b></p>
+
+<blockquote>
+This feature is explained in the
+<a href="exiftool_pod.html#item__2dtagsfromfile_srcfile_or_fmt">exiftool
+application documentation</a>, but the question is common enough that it is
+discussed here in more detail.</blockquote>
+
+<blockquote>By default, ExifTool will store information in preferred locations
+when either writing new information or copying information between files. This
+freedom allows ExifTool to write or copy information to files of different
+formats without requiring the user to know details about where the information
+is stored.</blockquote>
+
+<blockquote>The preferred locations for information written to JPEG images are
+1) EXIF, 2) IPTC, 3) XMP and 4) MakerNotes.  As an example, information
+extracted from the maker notes will be preferentially written (on a tag-by-tag
+basis) in EXIF format when copying information between two JPEG images.  But if
+a specific tag doesn't exist in EXIF, then the tag is written to the first valid
+group in the order specified above.  The advantage of "translating" the
+information to EXIF is that it then becomes readable by applications which only
+support standard EXIF.  The disadvantage is that you don't get an exact copy of
+the original information structure.</blockquote>
+
+<blockquote>But ExifTool gives you the ability to customize this behaviour to
+write the information to wherever you want.  This is done by specifying a group
+name for the tag(s) to be copied.  This applies even if the group name is
+"<code>all</code>", in which case the original group is preserved.  So to copy
+all information and preserve the original structure, use this syntax:
+
+<pre>exiftool -tagsfromfile src.jpg -all:all dst.jpg
+</pre>
+
+By specifying a group name with "<code>&#8209;all:all</code>", the location of the
+information is preserved.  (Specifically, since no destination tag was
+specified the source group "<code>all</code>" was assumed, thus preserving
+the original group.)</blockquote>
+
+<blockquote>Here are some examples to show you the type of control you have over
+where the information is written. All commands in each example are equivalent:
+
+<pre><span class='blk'># copy all tags to preferred groups (no destination group)</span>
+exiftool -tagsfromfile src.jpg dst.jpg
+exiftool -tagsfromfile src.jpg -all dst.jpg
+exiftool -tagsfromfile src.jpg "-all&gt;all" dst.jpg
+exiftool -tagsfromfile src.jpg "-all:all&gt;all" dst.jpg
+
+<span class='blk'># copy all tags, preserving original group (destination group 'all')</span>
+exiftool -tagsfromfile src.jpg -all:all dst.jpg
+exiftool -tagsfromfile src.jpg "-all&gt;all:all" dst.jpg
+exiftool -tagsfromfile src.jpg "-all:all&gt;all:all" dst.jpg
+
+<span class='blk'># copy all tags to EXIF group only (destination group 'exif')</span>
+exiftool -tagsfromfile src.jpg "-all&gt;exif:all" dst.jpg
+exiftool -tagsfromfile src.jpg "-all:all&gt;exif:all" dst.jpg
+
+<span class='blk'># copy XMP tags to XMP group (destination group 'xmp' or 'all')</span>
+exiftool -tagsfromfile src.jpg "-xmp:all" dst.jpg
+exiftool -tagsfromfile src.jpg "-xmp:all&gt;xmp:all" dst.jpg
+exiftool -tagsfromfile src.jpg "-xmp:all&gt;all:all" dst.jpg
+
+<span class='blk'># copy XMP tags to preferred groups (no destination group)</span>
+exiftool -tagsfromfile src.jpg "-xmp:all&gt;all" dst.jpg
+
+<span class='blk'># copy XMP tags to EXIF only (destination group 'exif')</span>
+exiftool -tagsfromfile src.jpg "-xmp:all&gt;exif:all" dst.jpg
+</pre>
+
+The same rules illustrated above also apply when copying individual tags.</blockquote>
+
+<blockquote>Note: If no destination group is specified, a new tag is created if
+necessary only in the preferred group, but if the same tag already exists in
+another group, then this information is also updated.  (Otherwise inconsistent
+values for the same information would exist in different locations. Of course,
+you can always generate inconsistencies like this if you really want to by
+specifically writing contradictory information to different groups.)
+</blockquote>
+
+<a name="Q10"></a>
+<p>10. <b>"How does ExifTool handle coded character sets?"</b></p>
+
+<blockquote>
+Certain meta information formats allow coded character sets other than plain
+ASCII.   When reading, 8-bit encodings are passed straight through ExifTool
+without translation (unless otherwise specified below), and multi-byte encodings
+are translated to UTF-8 by default, or Windows Latin1 with the
+<code>&#8209;L</code> option (or by setting the "<code>Charset</code>" option to
+"<code>Latin</code>" via the API).  When writing, the inverse translations are
+performed.  (Alternatively, special characters may be translated to HTML
+character entities by using the <code>&#8209;E</code> option, but this only
+applies when reading.) More specific details are given below about how character
+coding is handled for EXIF, IPTC, XMP, ID3 and PDF information:</blockquote>
+
+<blockquote><b>EXIF</b>: Most textual EXIF information is stored in ASCII
+format, however some EXIF tags (UserComment, GPSProcessingMethod and
+GPSAreaInformation) may be also be encoded in Unicode or JIS.  When reading
+information, Unicode text is translated to UTF-8, or Windows Latin1 with the
+<code>&#8209;L</code> option.  Other encodings are not translated. When writing,
+text is stored as ASCII unless the string contains special characters, in which
+case it is translated from UTF-8 or Latin1 (depending on the
+<code>&#8209;L</code> option) and stored as Unicode if allowed by the tag
+specification.  The EXIF "XP" tags (XPTitle, XPComment, etc) are always stored
+as Unicode, and are read and written as either UTF-8, or Windows Latin1 with the
+<code>&#8209;L</code> option.</blockquote>
+
+<blockquote><b>IPTC</b>: The value of the IPTC:CodedCharacterSet tag determines
+how the internal IPTC string values are interpreted.  If CodedCharacterSet
+exists and has a value of "<code>UTF8</code>" (or
+"<code>ESC&nbsp;%&nbsp;G</code>") then string values are assumed to be stored as
+UTF-8, otherwise Latin1 (cp1252) coding is assumed. When reading, these strings
+are translated to UTF-8 by default, or Latin1 with the <code>&#8209;L</code>
+option.  When writing, the inverse translation is performed.  No translation is
+done if the internal (IPTC) and external (ExifTool) character sets are the same.
+Note that ISO 2022 character set shifting is not supported.  Instead, a warning
+is issued and the string is not translated if an ISO 2022 shift code is found.
+See the <a href="http://www.iptc.org/IIM/">IPTC specification</a> for more
+information about IPTC character coding.</blockquote>
+
+<blockquote><b>XMP</b>: Exiftool reads XMP encoded as UTF-8, UTF-16 or UTF-32,
+and converts them all to UTF-8 internally.  Also, all XML character entity
+references and numeric character references are converted.  When writing,
+ExifTool always encodes XMP as UTF-8, converting the following 5 characters to
+XML character references: <code>&amp; &lt; &gt; &#39; &quot;</code>. By default
+no further translation is performed, however the <code>&#8209;L</code> option
+may be used used to translate text to Windows Latin1 when reading or from
+Windows Latin1 when writing.</blockquote>
+
+<blockquote><b>ID3</b>: The ID3v1 specification officially supports only ISO
+8859-1 encoding although some applications may incorrectly use other character
+sets.  ExifTool assumes proper ISO 8859-1 encoding and translates to UTF-8 by
+default, or disables translation with the <code>&#8209;L</code> option (since
+ISO 8859-1 is a subset of Windows Latin1).  ID3v2 text is may be stored with a
+number of different encodings, and ExifTool translates them all to UTF-8 by
+default or Windows Latin1 with the <code>&#8209;L</code> option.  ExifTool does
+not currently write ID3 information.</blockquote>
+
+<blockquote><b>PDF</b>: PDF text strings are stored in either PDFDocEncoding
+(similar to Windows Latin1) or Unicode (UCS-2).  When reading, ExifTool
+translates to UTF-8 by default, or Windows Latin1 with the <code>&#8209;L</code>
+option.  When writing, exiftool encodes UTF-8 or Latin1 text as Unicode only if
+the string contains special characters, otherwise PDFDocEncoding is
+used.</blockquote>
+
+<a name="Q11"></a>
+<p>11. <b>"My user-defined tags don't work"</b></p>
+
+<blockquote>
+For examples of how to add user-defined tags, see the
+<a href="config.html">ExifTool_config</a> file in the ExifTool distribution. To
+activate this file, rename it to "<code>.ExifTool_config</code>" and copy it to
+your <b>HOME</b> directory. With this installed, you should be able to write and
+read the example tags (such as "<code>NewXMPxxxTag1</code>").  Try this first
+before you attempt to define your own tags.</blockquote>
+
+<blockquote>If this doesn't work, the most common problem is that the
+"<code>.ExifTool_config</code>" configuration file isn't getting loaded
+properly, and there are two things you
+can try:  1) Set either the <b>HOME</b> or the <b>EXIFTOOL_HOME</b> environment
+variable to the name of the directory where you put your
+"<code>.ExifTool_config</code>" file, or 2) put the config file in the same
+directory as the exiftool script.  (Also, be sure the config filename starts
+with a dot!  In the Windows GUI you may be not be able to generate a file name
+that starts with a '<code>.</code>', but it can be done from the command line
+using the '<code>rename</code>' command.)</blockquote>
+
+<blockquote>If necessary, you can verify that ExifTool is loading your config
+file by adding the following line to your file:
+
+<pre>print "LOADED!\n";
+</pre>
+
+If you see a "<code>LOADED!</code>" message when you run exiftool, but your new
+tags still don't work, make sure you are using the proper tag name and that the
+file you are writing can support these names.  Try copying the
+"<code>t/images/Writer.jpg</code>" file from the distribution and running
+exiftool with the following command:
+
+<pre>exiftool -v3 -NewXMPxxxTag1=test Writer.jpg
+</pre>
+
+If ExifTool recognizes the new tag, the first line of output from this command
+should be
+
+<pre>"Writing XMP-xxx:NewXMPxxxTag1"
+</pre>
+
+Then you can read back the new tag with "<code>exiftool -s Writer.jpg</code>".
+</blockquote>
+
+<blockquote>To specify the config file directory from within a Perl script when
+using the ExifTool API, set the <b>EXIFTOOL_HOME</b> environment variable before
+loading the ExifTool module:
+
+<pre>BEGIN { $ENV{EXIFTOOL_HOME} = '/config_file_directory' }
+use Image::ExifTool;
+</pre></blockquote>
+
+<a name="Q12"></a>
+<p>12. <b>"How do I export information from exiftool into a database?"</b></p>
+
+<blockquote>
+It is usually easiest to export information formatted as a tab-delimited list of
+values.  The following exiftool options may be useful for this purpose:
+<pre>-t  - use a tab instead of spaces to separate output values
+-S  - very short format (with -t, prints only tag values)
+-q  - quiet (supresses any other messages)
+-f  - force '-' to be printed for non-existent values
+-T  - shortcut for the combination of all above options (-t -S -q -f)
+-r  - recursively process files in subdirectories
+</pre>
+
+And here is an example command line:
+
+<pre>exiftool -T -r -filename -aperture -ISO t/images > out.txt
+</pre></blockquote>
+
+<blockquote>This command recursively processes all images in the
+"<code>t/images</code>" directory, extracting FileName, Aperture and ISO tags,
+and writing the output to a file called "<code>out.txt</code>".  After the
+command has executed, the output file will contain information in the following
+format:
+
+<pre>Canon.jpg       14.0    100
+Casio.jpg       2.0     -
+Nikon.nef       3.5     200
+OlympusE1.jpg   4.5     400
+</pre>
+
+It should be possible to import a file like this directly into most database
+applications.  On the command line, any list of tag names may be used, and
+any number of file or directory names may be specified. (Hint: If your
+command line starts to get too long, you may want to look into using the
+<code>&#8209;@</code> option and/or the <a href="index.html#shortcut">ShortCut</a>
+feature).
+</blockquote>
+
+<a name="Q13"></a>
+<p>13. <b>"Why is my file smaller after I use ExifTool to write information?"</b></p>
+
+<blockquote>
+There are various specific reasons why this can happen, but the general answer
+is:  When ExifTool writes an image, the meta information may be restructured in
+such a way that it takes less space than in the original file.</blockquote>
+
+<blockquote>For instance, the EXIF/TIFF standard allows for blocks of
+unreferenced data to exist in an image.  Some digital cameras write JPEG or
+TIFF-based RAW files which contain large blocks of unused data, usually filled
+with binary zeros.  The reason for this could be to simplify camera algorithms
+by allowing variable-sized information to be written at fixed offsets in the
+output image.  When ExifTool rewrites an image it does not copy these unused
+blocks.  This can result in a significant reduction in file size for some
+images.
+</blockquote>
+
+<blockquote>Also, the size of an XMP record may easily shrink or grow when it is
+rewritten, even if no meta information is changed.  This is partly due to the
+fact that the XMP specification recommends a few KB of padding at the end of the
+record (ExifTool adds 2424 bytes by default), and partly due to the flexibility
+of the XMP format which allows the information to be written in various styles,
+some of which are more compact than others.
+</blockquote>
+
+<blockquote>ExifTool does not modify the image data itself, so editing a file is
+"lossless" as far as the image is concerned.</blockquote>
+
+<a name="Q14"></a>
+<p>14. <b>"What format do I use for writing GPS coordinates?"</b></p>
+
+<blockquote>ExifTool is very flexible in the formats allowed for entering GPS
+coordinates.  Any string containing between 1 and 3 floating point numbers is
+valid.  The numbers represent degrees, (and optionally) minutes and
+seconds.</blockquote>
+
+<blockquote>For EXIF GPS coordinates, the reference direction is specified
+separately with the EXIF:GPSLatitudeRef or EXIF:GPSLongitudeRef
+tag.</blockquote>
+
+<blockquote>For XMP GPS coordinates, the reference direction is specified within
+the XMP:GPSLatitude or XMP:GPSLongitude value, with west longitudes and south
+latitudes being specified either by negative coordinate values or by ending the
+string with "<code>W</code>" or "<code>S</code>". </blockquote>
+
+<blockquote>Here are some examples of equivalent ways to specify a GPS
+latitude in both EXIF and XMP:
+
+<pre>exiftool "-exif:gpslatitude=42 30 0.00" -exif:gpslatituderef=S a.jpg
+exiftool "-exif:gpslatitude=42 deg 30.00 min" -exif:gpslatituderef=S a.jpg
+exiftool -exif:gpslatitude=42.5 -exif:gpslatituderef=S a.jpg
+
+exiftool "-xmp:gpslatitude=42 30 0.00 S" a.jpg
+exiftool -xmp:gpslatitude=42.50S a.jpg
+exiftool -xmp:gpslatitude=-42.5 a.jpg
+</pre>
+
+Similar styles may be used for longitude.  ExifTool will convert any of these
+coordinate styles to the proper format for the specific tag used.
+</blockquote>
+
+<a name="Q15"></a>
+<p>15. <b>"I get MakerNote warnings or errors when reading or writing information"</b></p>
+
+<blockquote>Problems like this may be caused by image editing software which
+doesn't properly update offsets in the MakerNotes when rewriting an image. In
+many cases, ExifTool will detect this type of problem and issue a warning like
+this:
+
+<pre>Warning: [minor] Possibly incorrect maker notes offsets (fix by -340?)
+</pre>
+
+(Be aware that if multiple warnings occur, the <code>-a</code> option must be
+used so see them all, since by default only one warning is displayed per file.)
+If this warning occurs, you can use the <code>-F</code> option to attempt to fix
+the problem.  When writing, <code>-F</code> applies a permanent correction to
+the maker notes.  Note that some Makernote information may be lost permanently
+if the proper correction is not applied when writing images with this
+problem.</blockquote>
+
+<blockquote>Any error that occurs while writing will prevent the file from being
+written.  However, most Makernote errors are designated as <b>minor</b>, which
+allows them to be ignored by using the <code>-m</code> option.  For example:
+
+<pre>Error: [minor] Bad format (65535) for MakerNotes entry 17 - image.jpg
+</pre>
+
+Using <b>-m</b> will downgrade the minor error to a warning, allowing the file
+to be written, but some Makernote information may be lost when ignoring certain
+types of errors like this.
+</blockquote>
+<hr>
+<i>Last revised July 22, 2008</i>
+<p class='lf'><a href="index.html">&lt;-- Back to ExifTool home page</a></p>
+</body>
+</html>

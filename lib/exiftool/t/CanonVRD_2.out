@@ -1,0 +1,58 @@
+[ExifTool, ExifTool, ExifTool]  - ExifTool Version Number: 7.00
+[File, File, Image]  - File Name: CanonVRD.vrd
+[File, File, Image]  - Directory: t/images
+[File, File, Image]  - File Size: 1768 bytes
+[File, File, Time]  - File Modification Date/Time: 2006:11:07 22:13:23
+[File, File, Image]  - File Type: VRD
+[File, File, Image]  - MIME Type: application/unknown
+[CanonVRD, CanonVRD, Image] 2 - VRD Version: 2.00
+[CanonVRD, CanonVRD, Image] 8 - WB Adj RGB Levels: 832 832 928
+[CanonVRD, CanonVRD, Image] 24 - White Balance Adj: Manual (Click)
+[CanonVRD, CanonVRD, Image] 26 - WB Adj Color Temp: 5600
+[CanonVRD, CanonVRD, Image] 36 - WB Fine Tune Active: Yes
+[CanonVRD, CanonVRD, Image] 40 - WB Fine Tune Saturation: 0
+[CanonVRD, CanonVRD, Image] 44 - WB Fine Tune Tone: 358
+[CanonVRD, CanonVRD, Image] 46 - Raw Color Adj: Shot Settings
+[CanonVRD, CanonVRD, Image] 48 - Raw Custom Saturation: 0
+[CanonVRD, CanonVRD, Image] 52 - Raw Custom Tone: 0
+[CanonVRD, CanonVRD, Image] 56 - Raw Brightness Adj: -0.83
+[CanonVRD, CanonVRD, Image] 60 - Tone Curve Property: Shot Settings
+[CanonVRD, CanonVRD, Image] 122 - Dynamic Range Min: 0
+[CanonVRD, CanonVRD, Image] 124 - Dynamic Range Max: 4095
+[CanonVRD, CanonVRD, Image] 272 - Tone Curve Active: Yes
+[CanonVRD, CanonVRD, Image] 276 - Brightness Adj: 0
+[CanonVRD, CanonVRD, Image] 277 - Contrast Adj: 0
+[CanonVRD, CanonVRD, Image] 278 - Saturation Adj: 119
+[CanonVRD, CanonVRD, Image] 286 - Color Tone Adj: 0
+[CanonVRD, CanonVRD, Image] 352 - Red Curve Points: (0,0) (5,16) (11,30) (58,101) (106,154) (154,198) (202,233) (228,246) (255,255)
+[CanonVRD, CanonVRD, Image] 394 - Red Curve Limits: 255 0 255 0
+[CanonVRD, CanonVRD, Image] 410 - Green Curve Points: (7,4) (11,23) (16,34) (59,100) (104,147) (149,187) (196,219) (221,232) (248,240)
+[CanonVRD, CanonVRD, Image] 452 - Green Curve Limits: 248 7 240 4
+[CanonVRD, CanonVRD, Image] 468 - Blue Curve Points: (0,0) (5,19) (10,32) (57,104) (104,156) (152,199) (200,233) (227,247) (255,255)
+[CanonVRD, CanonVRD, Image] 510 - Blue Curve Limits: 255 0 255 0
+[CanonVRD, CanonVRD, Image] 526 - RGB Curve Points: (0,0) (255,255)
+[CanonVRD, CanonVRD, Image] 568 - RGB Curve Limits: 255 0 255 0
+[CanonVRD, CanonVRD, Image] 580 - Crop Active: Yes
+[CanonVRD, CanonVRD, Image] 582 - Crop Left: 1164
+[CanonVRD, CanonVRD, Image] 584 - Crop Top: 608
+[CanonVRD, CanonVRD, Image] 586 - Crop Width: 564
+[CanonVRD, CanonVRD, Image] 588 - Crop Height: 123
+[CanonVRD, CanonVRD, Image] 608 - Crop Aspect Ratio: Free
+[CanonVRD, CanonVRD, Image] 610 - Constrained Crop Width: 5.5
+[CanonVRD, CanonVRD, Image] 614 - Constrained Crop Height: 1.2
+[CanonVRD, CanonVRD, Image] 618 - Check Mark: 3
+[CanonVRD, CanonVRD, Image] 622 - Rotation: 0
+[CanonVRD, CanonVRD, Image] 624 - Work Color Space: ColorMatch RGB
+[CanonVRD, CanonVRD, Image] 4 - Picture Style: Standard
+[CanonVRD, CanonVRD, Image] 26 - Raw Color Tone Adj: -4
+[CanonVRD, CanonVRD, Image] 28 - Raw Saturation Adj: 0
+[CanonVRD, CanonVRD, Image] 30 - Raw Contrast Adj: 0
+[CanonVRD, CanonVRD, Image] 32 - Raw Linear: No
+[CanonVRD, CanonVRD, Image] 34 - Raw Sharpness Adj: 1
+[CanonVRD, CanonVRD, Image] 36 - Raw Highlight Point: 4095
+[CanonVRD, CanonVRD, Image] 38 - Raw Shadow Point: 0
+[CanonVRD, CanonVRD, Image] 116 - Monochrome Filter Effect: Yellow
+[CanonVRD, CanonVRD, Image] 118 - Monochrome Toning Effect: Purple
+[CanonVRD, CanonVRD, Image] 120 - Monochrome Contrast: 3
+[CanonVRD, CanonVRD, Image] 122 - Monochrome Linear: No
+[CanonVRD, CanonVRD, Image] 124 - Monochrome Sharpness: 4
