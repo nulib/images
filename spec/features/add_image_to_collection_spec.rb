@@ -2,14 +2,13 @@ require 'capybara/rspec'
 require 'spec_helper'
 require 'rake'
 
-# README: This test requires a collection to exist prior to running it. For the time being, whoever
-# runs it locally needs to create a collection through the web interface (and add an image to that collection). And I needed to run
-# the rake hydra:fixtures:refresh command besdies the db:test:prepare commands in order to have images present.
-# Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
+# README: Run the rake hydra:fixtures:refresh command besides the db:test:prepare commands in order to have 
+# images present. Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
 
 # You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
 # need a teardown that removes each image from collection after each test 
 # 12/19 - using fixture data like "Marche" for search term; new gem for maintaining session among specific tests
+# you need a .env file with the credentials in it, in your root directory, also
 
 Capybara.default_driver = :selenium
 
@@ -324,6 +323,18 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     sleep(3)
     page.should_not have_selector('#images')
 
+    #maybe go to test group page and expect not to see icon showing presence of subgroup
+
+  end
+
+
+  it "lets a user delete a group" do 
+    #DIL-4090
+    cleanup
+
+    expect(page).to_not have_content('Test Group')
+
+    make_test_group('Test Group')
   end
 
   it "lets a user rename a group" do 
@@ -344,6 +355,41 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     fill_in('dil_collection_title', with: "Test Group")
     page.evaluate_script("document.forms[2].submit()")
     sleep(2)
+  end
+
+
+  it "lets a user save a TIFF or jpeg" do 
+    #DIL-4091
+    # click the download original tiff or jpeg button
+    # and test that you get a page with an image file on with the correct src - jpg or tiff
+    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    page.find(:css, "#images li:first img").click()
+
+    sleep(4)
+    img = page.find('a', :text => "Small Image Download (JPG)")
+
+
+  
+    pid = img[:href].split("inu:")[1]
+
+    click_link('Small Image Download (JPG)')
+
+    sleep(4)
+
+    new_window = page.driver.browser.window_handles.last 
+    
+    image_present = false
+
+    page.within_window new_window do
+    
+      all('img').each do |img| 
+        if img[:src].include?(pid) 
+          image_present = true 
+        end
+      end
+    end
+
+    image_present.should be_true
   end
 
   it "cleans up after itself" do
