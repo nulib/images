@@ -206,6 +206,7 @@ class Multiresimage < ActiveFedora::Base
       create_jp2_local( img_location )
     end
 
+    #sleep( 5 )
     if $?.to_i == 0 && File.file?( jp2_img_path )
       jp2_img_path
     else
@@ -237,9 +238,12 @@ class Multiresimage < ActiveFedora::Base
 
   def jp2_deliv_ops_xml( width, height, rel_path, pid )
     rel_path = rel_path.chop if rel_path.end_with?( '/' )
+    path_array = rel_path.split('/')
+    short_path = path_array[4, path_array.length].join('/')
+
     xml = <<-EOF
 <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="#{ rel_path }/#{ jp2_img_name }"/>
+  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{short_path}/#{ jp2_img_name }"/>
 </svg:svg>
 EOF
   end
@@ -260,8 +264,11 @@ EOF
     require 'jhove_service'
 
     # This parameter is where the output file will go
+    logger.debug( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
+    logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
+    logger.debug( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
