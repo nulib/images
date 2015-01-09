@@ -4,12 +4,9 @@
 # is considered to be the first unless any hosts have the primary
 # property set.  Don't declare `role :all`, it's a meta role.
 
-#role :app, %w{deploy@emo-d.library.northwestern.edu}
-#role :web, %w{deploy@emo-d.library.northwestern.edu}
-#role :db,  %w{deploy@emo-d.library.northwestern.edu}
-role :app, %w{deploy@cecil.library.northwestern.edu}
-role :web, %w{deploy@cecil.library.northwestern.edu}
-role :db,  %w{deploy@cecil.library.northwestern.edu}
+role :app, %w{deploy@images-s.library.northwestern.edu}
+role :web, %w{deploy@images-s.library.northwestern.edu}
+role :db,  %w{deploy@images-s.library.northwestern.edu}
 
 # Extended Server Syntax
 # ======================
@@ -17,8 +14,7 @@ role :db,  %w{deploy@cecil.library.northwestern.edu}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-#server 'emo-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
-server 'cecil.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
+server 'images-s.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
 
 
 # Custom SSH Options
