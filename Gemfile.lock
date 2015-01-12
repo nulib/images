@@ -82,12 +82,19 @@ GEM
     capistrano-rails (1.1.2)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+<<<<<<< HEAD
     capistrano-rbenv (2.0.2)
       capistrano (~> 3.1)
       sshkit (~> 1.3)
     capistrano3-unicorn (0.2.1)
       capistrano (~> 3.1, >= 3.1.0)
     capybara (2.4.4)
+=======
+    capistrano-rvm (0.1.1)
+      capistrano (~> 3.0)
+      sshkit (~> 1.2)
+    capybara (1.1.2)
+>>>>>>> removing unicorn gems, they aren't needed anymore
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
@@ -196,7 +203,10 @@ GEM
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
+<<<<<<< HEAD
     kgio (2.9.2)
+=======
+>>>>>>> removing unicorn gems, they aren't needed anymore
     launchy (2.1.0)
       addressable (~> 2.2.6)
     libv8 (3.3.10.4)
@@ -373,10 +383,6 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.6)
-    unicorn (4.3.1)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     uuid (2.3.5)
       macaddr (~> 1.0)
     warden (1.2.3)
@@ -398,7 +404,6 @@ DEPENDENCIES
   capistrano (~> 3.2)
   capistrano-rails
   capistrano-rbenv
-  capistrano3-unicorn
   capybara
   clamav (= 0.4.1)
   coffee-rails (>= 4)
@@ -439,5 +444,4 @@ DEPENDENCIES
   sqlite3
   therubyracer (= 0.10.1)
   uglifier (>= 1.0.3)
-  unicorn (= 4.3.1)
   uuid (= 2.3.5)
