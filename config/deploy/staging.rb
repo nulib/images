@@ -14,8 +14,12 @@ role :db,  %w{deploy@images-s.library.northwestern.edu}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-#server 'emo-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
 server 'images-s.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
+
+
+# rbenv setup
+# ==================
+set :rbenv_ruby, '1.9.3-p551'
 
 
 # Custom SSH Options
