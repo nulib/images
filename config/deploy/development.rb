@@ -19,7 +19,7 @@ server 'images-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db
 
 # rbenv setup
 # ==================
-set :rbenv_ruby, '1.9.3p550'
+set :rbenv_ruby, '1.9.3-p550'
 
 
 # Custom SSH Options
