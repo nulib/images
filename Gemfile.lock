@@ -377,6 +377,7 @@ DEPENDENCIES
   daemons
   database_cleaner
   debugger
+  debugger-ruby_core_source
   delayed_job_active_record
   devise (= 2.1.3)
   dotenv-rails
