@@ -62,8 +62,8 @@ group :development, :test, :staging do
   gem 'bcrypt-ruby', '3.0.1'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
-  gem 'debugger-ruby_core_source'
-  gem 'debugger'
+  #gem 'debugger-ruby_core_source'
+  #gem 'debugger'
   gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
 end
 
