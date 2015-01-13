@@ -33,7 +33,7 @@ def add_images_to_test_group(name)
 
   #you need unique images
   #this is the best way to reference the image element, because it doesn't contain a pid or url, and the link with caption is below it
-  source = page.find("#images li:first img") 
+  source = page.find("#images li:first-child img") 
   target = page.find('a', :text => name)
 
   drag_n_drop(source, target)
@@ -41,8 +41,8 @@ def add_images_to_test_group(name)
   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
   sleep(10)
 
-  source2 = page.find("#images li:first img") 
-  target2 = page.find("h2.ui-droppable:first a")
+  source2 = page.find("#images li:first-child img") 
+  target2 = page.find("h2.ui-droppable:first-child a")
 
   drag_n_drop(source2, target2)
 
@@ -50,8 +50,8 @@ def add_images_to_test_group(name)
   visit('https://localhost:3000/catalog?f%5Bworktype_facet%5D%5B%5D=Photography%2C+Film+and+Video')
   sleep(10)
 
-  source3 = page.find("#images li:first img") 
-  target3 = page.find("h2.ui-droppable:first a")
+  source3 = page.find("#images li:first-child img") 
+  target3 = page.find("h2.ui-droppable:first-child a")
 
   drag_n_drop(source3, target3)
   sleep(10)
@@ -96,6 +96,13 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     click_button('signIn')
     sleep(10)
   end
+
+  # after :all do 
+  #   if page.find('a', :text => 'Log Out')
+  #     click_link('Log Out')
+  #     sleep(10)
+  #   end
+  # end
   
   it "lets a user add an image to a group" do
     #DIL-4095
@@ -500,54 +507,25 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   #   sleep(10)
   # end
 
-  # it "lets you do a facets (narrowing) search" do
-  #   #Dil-4093
-  #   #logout
-  #   click_link('Log Out')
-  #   sleep(10)
-  #   within('.facets-collapse') do |parent_el|
-  #     within(parent_el) do |el|
-  #       puts "hi there #{el.find('h5').text()}"
-  #       if el.find('h5').text() == 'Creator'
-  #         puts 'hey'
-  #         el.click()
-  #         #you'll need to do el.find('ul li a .count')
-  #       end
-  #     end
-  #   end
+  it "lets you do a facets (narrowing) search" do
+    #Dil-4093
+    #logout
+    click_link('Log Out')
+    sleep(10)
+    result_count = ''
+    all('.facets-collapse div').each do |parent_el|
+      h5 = parent_el.find('h5')
+      if h5.text() == 'Creator'
+        h5.click()
+        sleep(10)
+        result_count = parent_el.find('ul li .count')
+      end
+    end
 
-  #   sleep(10)
+    sleep(10)
 
-  #   expect(find('.count').text()).to eq('1') 
-  #   sleep(10)
-  # end 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    expect(result_count.text()).to eq('1') 
+    sleep(10)
+  end 
 
 end
