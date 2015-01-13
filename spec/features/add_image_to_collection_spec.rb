@@ -10,7 +10,6 @@ require 'rake'
 # 12/19 - using fixture data like "Marche" for search term; new gem for maintaining session among specific tests
 # you need a .env file with the credentials in it, in your root directory, also
 
-#########@ might be a good idea to create and remove test group with every test!!!!!!!!!#########
 
 Capybara.default_driver = :selenium
 
@@ -100,7 +99,8 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   
   it "lets a user add an image to a group" do
     #DIL-4095
-    #visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    visit('https://localhost:3000')
+    sleep(10)
     make_test_group('Test Group')
 
     visit('https://localhost:3000/catalog?f%5Bworktype_facet%5D%5B%5D=Photography%2C+Film+and+Video')
@@ -382,11 +382,11 @@ steps 'Users can Manage their Groups of Images',  :js => true do
 
 
     sleep(10)
-      click_link('Test Subgroup')
-      sleep(10)
-      click_link('Delete')
+    click_link('Test Subgroup')
+    sleep(10)
+    click_link('Delete')
 
-      page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
     sleep(10)
    end
 
