@@ -23,14 +23,14 @@ end
 def make_test_group(name)
   fill_in('new_dil_collection_title', with: name)
   page.evaluate_script("document.forms[1].submit()")
-  sleep(2)
+  sleep(10)
 end
 
 def add_images_to_test_group(name)
   #add images 
   fill_in('q', with: "Woman in an Armchair")
   page.evaluate_script("document.forms[0].submit()")
-  sleep(5)
+  sleep(10)
 
   #you need unique images
   #this is the best way to reference the image element, because it doesn't contain a pid or url, and the link with caption is below it
@@ -40,7 +40,7 @@ def add_images_to_test_group(name)
   drag_n_drop(source, target)
 
   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-  sleep(4)
+  sleep(10)
 
   source2 = page.find("#images li:first img") 
   target2 = page.find("h2.ui-droppable:first a")
@@ -49,23 +49,23 @@ def add_images_to_test_group(name)
 
 
   visit('https://localhost:3000/catalog?f%5Bworktype_facet%5D%5B%5D=Photography%2C+Film+and+Video')
-  sleep(4)
+  sleep(10)
 
   source3 = page.find("#images li:first img") 
   target3 = page.find("h2.ui-droppable:first a")
 
   drag_n_drop(source3, target3)
-  sleep(3)
+  sleep(10)
 end
 
 def delete_test_group(name)
   # Delete test group 
   visit('https://localhost:3000/')
-  sleep(2)
+  sleep(10)
   within('#imageCollection') do
     click_link(name)
   end
-  sleep(2)
+  sleep(10)
   click_link('Delete')
 
   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
@@ -73,15 +73,15 @@ end
 
 def remove_images_from_test_group(name)
   visit('https://localhost:3000')
-  sleep(2)
+  sleep(10)
 
   click_link(name)
 
-  sleep(3)
+  sleep(10)
 
   all('.member-remove').each do |el|
     el.click()
-    sleep(3)
+    sleep(10)
   end
 end
 
@@ -95,7 +95,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     fill_in 'username', :with => ENV["TEST_USER_ID"]
     fill_in 'password', :with => ENV["TEST_USER_PASSWORD"]
     click_button('signIn')
-    sleep(2)
+    sleep(10)
   end
   
   it "lets a user add an image to a group" do
@@ -113,10 +113,10 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     
     img_base_src = img_href.split("inu:")[1]
     drag_n_drop(source, target)
-    sleep(4)
+    sleep(10)
     click_link(target_text)
     
-    sleep(5)
+    sleep(10)
     image_present = false
     
     all('img').each do |img| 
@@ -128,14 +128,14 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     image_present.should be_true
 
     delete_test_group('Test Group')
-    sleep(2)
+    sleep(10)
   end
 
   it "lets a user search with a keyword" do
     # DIL-4069
     fill_in('q', with: 'Party time')
     page.evaluate_script("document.forms[0].submit()")
-    sleep(5)
+    sleep(10)
 
     expect(page).to have_css("a", :text => "Party time")
   end
@@ -147,9 +147,9 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     # DIL-4082
 
     visit('https://localhost:3000')
-    sleep(2)
+    sleep(10)
     make_test_group('Test Group')
-    sleep(3)
+    sleep(10)
 
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     img = page.find("#documents div:first .listing a")
@@ -158,23 +158,23 @@ steps 'Users can Manage their Groups of Images',  :js => true do
 
     page.find("#images li:first img").click()
 
-    sleep(2)
+    sleep(10)
 
     click_button('Add to Image Group')
-    sleep(2)
+    sleep(10)
     select('Test Group')
     click_button('Save')
-    sleep(2)
+    sleep(10)
 
     visit('https://localhost:3000/')
-    sleep(4)
+    sleep(10)
 
     page.find('a', :text => 'Test Group').click()
-    sleep(3)
+    sleep(10)
 
     expect(page).to have_selector('a', :href => img_caption)
     delete_test_group('Test Group')
-    sleep(3)
+    sleep(10)
   end
 
 
@@ -185,11 +185,11 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     # underneath it
     #DIL-4081
     visit('https://localhost:3000')
-    sleep(2)
+    sleep(10)
     make_test_group('Test Group')
-    sleep(2)
+    sleep(10)
     make_test_group('Test Subgroup')
-    sleep(2)
+    sleep(10)
     
     group = '', subgroup = '', group_parent = false
 
@@ -197,12 +197,12 @@ steps 'Users can Manage their Groups of Images',  :js => true do
       within(el) do 
         h2 = find(:css, 'h2')
         if h2[:title] == "Test Group"
-          sleep(2)
+          sleep(10)
           group = h2
         end 
  
         if h2[:title] == "Test Subgroup"
-          sleep(2)
+          sleep(10)
           subgroup = h2
         end 
       end
@@ -210,7 +210,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
 
     drag_n_drop(subgroup, group)
 
-    sleep(2)
+    sleep(10)
     page.should_not have_selector('a', :text => 'Test Subgroup')
     
     within(group) do
@@ -220,16 +220,16 @@ steps 'Users can Manage their Groups of Images',  :js => true do
       end
     end  
 
-    sleep(2)
+    sleep(10)
     our_subgroup = false
     our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
     expect(our_subgroup).to be_true
 
     click_link('Test Subgroup')
-    sleep(2)
+    sleep(10)
 
     h4 = page.find('#sidebar div:first-child h4')
-    sleep(2)
+    sleep(10)
     a = page.find('#sidebar div:nth-child(2) a')
 
     if h4.text() == 'Parent Collections' and a[:text] == 'Test Group'
@@ -242,7 +242,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
     
     delete_test_group('Test Group')
-    sleep(2)
+    sleep(10)
   end
 
 
@@ -251,20 +251,20 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     # they are fixture data so should be consistent.
     #DIL-4084
     visit('https://localhost:3000')
-    sleep(2)
+    sleep(10)
     make_test_group('Test Group')
-    sleep(3)
+    sleep(10)
 
     add_images_to_test_group('Test Group')
-    sleep(3)
+    sleep(10)
     
     visit('https://localhost:3000')
 
-    sleep(3)
+    sleep(10)
 
     click_link('Test Group')
 
-    sleep(3)
+    sleep(10)
 
     first_title = page.find("#gallery_container #images:first-child a")
     first_href = first_title[:href]
@@ -276,17 +276,17 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     # page should be the second title. on that page click previous, you should go back to page and see the first href there
 
     page.find("#images li:first-child img").click()
-    sleep(4)
+    sleep(10)
     click_link('Next')
 
     #the page's main image, the image available for download, is the second or first one
     expect(page).to have_selector('a', :href => second_href, :text => 'Small Image Download (JPG)')
 
     click_link('Previous')
-    sleep(4)
+    sleep(10)
 
     expect(page).to have_selector('a', :href => first_href, :text => 'Small Image Download (JPG)')
-    sleep(1)
+    sleep(10)
 
     #remove_images_from_test_group('Test Group')
     delete_test_group('Test Group')
@@ -297,13 +297,13 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     #DIL-4087
     visit('https://localhost:3000')
     make_test_group('Test Group')
-    sleep(4)
+    sleep(10)
 
     click_link('Test Group')
-    sleep(2)
+    sleep(10)
 
     click_link('Make this Group Private')
-    sleep(4)
+    sleep(10)
     
     expect(page).to_not have_selector('a', :text => 'Share this Group')
     expect(page).to have_selector('a', :text => 'Make this Group Sharable')
@@ -311,7 +311,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     #cleanup - make the group public again
     click_link('Make this Group Sharable')
     delete_test_group('Test Group')
-    sleep(2)
+    sleep(10)
   end
 
   it "lets a user share a group" do
@@ -319,32 +319,32 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     visit('https://localhost:3000')
     make_test_group('Test Group')
 
-    sleep(3)
+    sleep(10)
     group = find('a', :text => 'Test Group')
     group_url = group[:href]
 
     click_link('Test Group')
-    sleep(4)
+    sleep(10)
     click_link('Share this Group')
-    sleep(2)
+    sleep(10)
     #expect box with url in it to appear, also share this group copy
     expect(page).to have_css('#copypath', :href => group_url)
     share_box = find('#toppathwrap')
-    sleep(2)
+    sleep(10)
 
     expect(share_box.text.include?('Copy this link and share it!')).to be_true
 
     delete_test_group('Test Group')
-    sleep(2)
+    sleep(10)
   end
 
 
   it "lets a user delete a subgroup" do
     #DIL-4088
     visit('https://localhost:3000')
-    sleep(2)
+    sleep(10)
     make_test_group('Test Group')
-    sleep(2)
+    sleep(10)
     make_test_group('Test Subgroup')
 
     group = '', subgroup = ''
@@ -353,12 +353,12 @@ steps 'Users can Manage their Groups of Images',  :js => true do
       within(el) do 
         h2 = find('h2')
         if h2[:title] == "Test Group"
-          sleep(2)
+          sleep(10)
           group = h2
         end 
  
         if h2[:title] == "Test Subgroup"
-          sleep(2)
+          sleep(10)
           subgroup = h2
         end 
       end
@@ -366,28 +366,28 @@ steps 'Users can Manage their Groups of Images',  :js => true do
 
     drag_n_drop(subgroup, group)
     
-    sleep(3)
+    sleep(10)
     
     click_link('Test Group')
-    sleep(3)
+    sleep(10)
 
     page.should have_selector('#images')
     page.find('.member-remove').click()
     
-    sleep(3)
+    sleep(10)
     page.should_not have_selector('#images')
 
 
     delete_test_group('Test Group')
 
 
-    sleep(3)
+    sleep(10)
       click_link('Test Subgroup')
-      sleep(2)
+      sleep(10)
       click_link('Delete')
 
       page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-    sleep(2)
+    sleep(10)
    end
 
 
@@ -396,11 +396,11 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     visit('https://localhost:3000')
   
     make_test_group('Test Group')
-    sleep(2)
+    sleep(10)
     expect(page).to have_content('Test Group')
 
     delete_test_group('Test Group')
-    sleep(2)
+    sleep(10)
     expect(page).to_not have_content('Test Group')
     #cleanup - each tests creates and deletes test group
   end
@@ -409,15 +409,15 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     visit('https://localhost:3000') 
 
     make_test_group('Test Group')
-    sleep(2)
+    sleep(10)
 
     click_link("Test Group")
-    sleep(2)
+    sleep(10)
 
     click_button('rename_image_group_link')
     fill_in('dil_collection_title', with: "New and Different Subgroup Name")
     page.evaluate_script("document.forms[2].submit()")
-    sleep(2)
+    sleep(10)
 
     group_title = find('#accordion h2')
 
@@ -427,7 +427,7 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     click_button('rename_image_group_link')
     fill_in('dil_collection_title', with: "Test Group")
     page.evaluate_script("document.forms[2].submit()")
-    sleep(2)
+    sleep(10)
 
     #cleanup - delete test group
     delete_test_group('Test Group')
@@ -441,14 +441,14 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     page.find(:css, "#images li:first img").click()
 
-    sleep(4)
+    sleep(10)
     img = page.find('a', :text => "Small Image Download (JPG)")
   
     pid = img[:href].split("inu:")[1]
 
     click_link('Small Image Download (JPG)')
 
-    sleep(4)
+    sleep(10)
 
     new_window = page.driver.browser.window_handles.last 
     
@@ -466,39 +466,88 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     image_present.should be_true
   end
 
-  #going to leave this out for now, because not sure how to delete the detail image safely.
+  going to leave this out for now, because not sure how to delete the detail image safely.
 
-  # it "lets you make a detail from an image" do 
-  #   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-  #   page.find("#images li:first img").click()
+  it "lets you make a detail from an image" do 
+    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    page.find("#images li:first img").click()
   
-  #   sleep(5)
+    sleep(10)
 
-  #   original_h1 = find(".page-header h1").text()
-  #   expect(page).to_not have_content('My Image Details')
+    original_h1 = find(".page-header h1").text()
+    expect(page).to_not have_content('My Image Details')
     
-  #   img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
+    img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
     
-  #   sleep(2)
-  #   img.click()
+    sleep(10)
+    img.click()
   
-  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    sleep(10)
+
+    new_h1 = find(".page-header h1").text()
+
+    expect("#{original_h1} [DETAIL]").to eq(new_h1)
+    expect(page).to have_content('My Image Details')    
+
+    click_link('My Image Details')
+    sleep(10)
+
+    click_link('Delete')
+    sleep(10)
+
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    sleep(10)
+  end
+
+  # it "lets you do a facets (narrowing) search" do
+  #   #Dil-4093
+  #   #logout
+  #   click_link('Log Out')
+  #   sleep(10)
+  #   within('.facets-collapse') do |parent_el|
+  #     within(parent_el) do |el|
+  #       puts "hi there #{el.find('h5').text()}"
+  #       if el.find('h5').text() == 'Creator'
+  #         puts 'hey'
+  #         el.click()
+  #         #you'll need to do el.find('ul li a .count')
+  #       end
+  #     end
+  #   end
+
   #   sleep(10)
 
-  #   new_h1 = find(".page-header h1").text()
+  #   expect(find('.count').text()).to eq('1') 
+  #   sleep(10)
+  # end 
 
-  #   expect("#{original_h1} [DETAIL]").to eq(new_h1)
-  #   expect(page).to have_content('My Image Details')    
 
-  #   click_link('My Image Details')
-  #   sleep(5)
 
-  #   click_link('Delete')
-  #   sleep(5)
 
-  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-  #   sleep(2)
-  # end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 end
