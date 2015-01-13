@@ -8,7 +8,7 @@ require 'rake'
 # You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
 # need a teardown that removes each image from collection after each test 
 # 12/19 - using fixture data like "Marche" for search term; new gem for maintaining session among specific tests
-# you need a .env file with the credentials in it, in your root directory, also
+# you need a .env file with the credentials in it, in your root directory, also.
 
 
 Capybara.default_driver = :selenium
@@ -27,7 +27,7 @@ end
 
 def add_images_to_test_group(name)
   #add images 
-  fill_in('q', with: "Woman in an Armchair")
+  fill_in('q', with: "every man")
   page.evaluate_script("document.forms[0].submit()")
   sleep(10)
 
@@ -47,7 +47,7 @@ def add_images_to_test_group(name)
   drag_n_drop(source2, target2)
 
 
-  visit('https://localhost:3000/catalog?f%5Bworktype_facet%5D%5B%5D=Photography%2C+Film+and+Video')
+  visit('https://localhost:3000/catalog?f[worktype_facet][]=Prints')
   sleep(10)
 
   source3 = page.find("#images li:first-child img") 
@@ -86,7 +86,7 @@ end
 
 #Tests
 
-steps 'Users can Manage their Groups of Images',  :js => true do
+steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   before :all do
     @driver = Capybara.default_driver
     visit('https://localhost:3000/users/sign_in')
@@ -96,21 +96,15 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     click_button('signIn')
     sleep(10)
   end
-
-  # after :all do 
-  #   if page.find('a', :text => 'Log Out')
-  #     click_link('Log Out')
-  #     sleep(10)
-  #   end
-  # end
   
+ 
   it "lets a user add an image to a group" do
     #DIL-4095
     visit('https://localhost:3000')
     sleep(10)
     make_test_group('Test Group')
 
-    visit('https://localhost:3000/catalog?f%5Bworktype_facet%5D%5B%5D=Photography%2C+Film+and+Video')
+    visit('https://localhost:3000/catalog?f[worktype_facet][]=Prints')
     source = page.find("#images li:first img")  
     source_title = page.find("#documents div:first .listing a")
     img_href = source_title[:href]
@@ -506,26 +500,31 @@ steps 'Users can Manage their Groups of Images',  :js => true do
   #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
   #   sleep(10)
   # end
-
-  # it "lets you do a facets (narrowing) search" do
-  #   #Dil-4093
-  #   #logout
-  #   click_link('Log Out')
-  #   sleep(10)
-  #   result_count = ''
-  #   all('.facets-collapse div').each do |parent_el|
-  #     h5 = parent_el.find('h5')
-  #     if h5.text() == 'Creator'
-  #       h5.click()
-  #       sleep(10)
-  #       result_count = parent_el.find('ul li .count')
-  #     end
-  #   end
-
-  #   sleep(10)
-
-  #   expect(result_count.text()).to eq('1') 
-  #   sleep(10)
-  # end 
-
+  # it "tests logout" do
+  #   bye
+  # end
 end
+
+steps "Logged out users can use Images too",  :js => true do
+  it "lets you do a facets (narrowing) search" do
+    #Dil-4093
+    visit("https://localhost:3000")
+    sleep(2)
+
+    result_count = ''
+    all('.facets-collapse div').each do |parent_el|
+      h5 = parent_el.find('h5')
+      if h5.text() == 'Creator'
+        h5.click()
+        sleep(10)
+        result_count = parent_el.find('ul li .count')
+      end
+    end
+
+    sleep(10)
+
+    expect(result_count.text()).to eq('1') 
+    sleep(10)
+  end 
+end
+
