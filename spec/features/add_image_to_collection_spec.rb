@@ -466,39 +466,39 @@ steps 'Users can Manage their Groups of Images',  :js => true do
     image_present.should be_true
   end
 
-  going to leave this out for now, because not sure how to delete the detail image safely.
+  # going to leave this out for now, because not sure how to delete the detail image safely.
 
-  it "lets you make a detail from an image" do 
-    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-    page.find("#images li:first img").click()
+  # it "lets you make a detail from an image" do 
+  #   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+  #   page.find("#images li:first img").click()
   
-    sleep(10)
+  #   sleep(10)
 
-    original_h1 = find(".page-header h1").text()
-    expect(page).to_not have_content('My Image Details')
+  #   original_h1 = find(".page-header h1").text()
+  #   expect(page).to_not have_content('My Image Details')
     
-    img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
+  #   img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
     
-    sleep(10)
-    img.click()
+  #   sleep(10)
+  #   img.click()
   
-    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-    sleep(10)
+  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+  #   sleep(10)
 
-    new_h1 = find(".page-header h1").text()
+  #   new_h1 = find(".page-header h1").text()
 
-    expect("#{original_h1} [DETAIL]").to eq(new_h1)
-    expect(page).to have_content('My Image Details')    
+  #   expect("#{original_h1} [DETAIL]").to eq(new_h1)
+  #   expect(page).to have_content('My Image Details')    
 
-    click_link('My Image Details')
-    sleep(10)
+  #   click_link('My Image Details')
+  #   sleep(10)
 
-    click_link('Delete')
-    sleep(10)
+  #   click_link('Delete')
+  #   sleep(10)
 
-    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-    sleep(10)
-  end
+  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+  #   sleep(10)
+  # end
 
   # it "lets you do a facets (narrowing) search" do
   #   #Dil-4093
