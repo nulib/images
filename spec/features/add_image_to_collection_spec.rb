@@ -509,12 +509,12 @@ steps "Logged out users can use Images too",  :js => true do
   it "lets you do a facets (narrowing) search" do
     #Dil-4093
     visit("https://localhost:3000")
-    sleep(2)
+    sleep(10)
 
     result_count = ''
     all('.facets-collapse div').each do |parent_el|
       h5 = parent_el.find('h5')
-      if h5.text() == 'Creator'
+      if h5.text() == 'Work Type'
         h5.click()
         sleep(10)
         result_count = parent_el.find('ul li .count')
@@ -523,7 +523,7 @@ steps "Logged out users can use Images too",  :js => true do
 
     sleep(10)
 
-    expect(result_count.text()).to eq('1') 
+    expect(result_count.text()).to eq('3') 
     sleep(10)
   end 
 end
