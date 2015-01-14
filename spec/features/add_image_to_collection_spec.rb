@@ -26,7 +26,7 @@ def make_test_group(name)
 end
 
 def add_images_to_test_group(name)
-  #add images 
+  #add images to name (test group)
   fill_in('q', with: "every man")
   page.evaluate_script("document.forms[0].submit()")
   sleep(10)
@@ -134,11 +134,20 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user search with a keyword" do
     # DIL-4069
-    fill_in('q', with: 'Party time')
+    fill_in('q', with: 'every man')
     page.evaluate_script("document.forms[0].submit()")
     sleep(10)
 
-    expect(page).to have_css("a", :text => "Party time")
+    results = false
+
+    all('.listing a').each do |el|
+
+      if el.text().include?('Every man')
+        results = true
+      end
+    end
+    expect(results).to be_true
+
   end
 
   it "lets a user add an image to a group from the image view page" do
@@ -467,10 +476,21 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     image_present.should be_true
   end
 
-  # going to leave this out for now, because not sure how to delete the detail image safely.
-
   # it "lets you make a detail from an image" do 
-  #   visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+
+  #   #change this test. create test group. add images to test group.
+  #   #create detail, confirm detail is in group too. then just delete test group.
+
+  #   visit('https://localhost:3000')
+  #   sleep(10)
+  #   make_test_group('Test Group')
+  #   sleep(10)
+  #   add_images_to_test_group('Test Group')
+  #   sleep(10)
+
+  #   click_link('Test Group')
+  #   sleep(10)
+
   #   page.find("#images li:first img").click()
   
   #   sleep(10)
@@ -478,10 +498,22 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   #   original_h1 = find(".page-header h1").text()
   #   expect(page).to_not have_content('My Image Details')
     
-  #   img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
-    
+  #   #img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
+
+  #   svg = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]')
+   
+  #   camera = ''
+   
+  #   within(svg) do
+  #     all(:xpath, '*[name()="image"]').each do |el|
+  #       if el[:href] == "/assets/croptool/camera.png"
+  #         camera = el
+  #       end
+  #     end
+  #   end
+
   #   sleep(10)
-  #   img.click()
+  #   camera.click()
   
   #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
   #   sleep(10)
@@ -489,20 +521,35 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   #   new_h1 = find(".page-header h1").text()
 
   #   expect("#{original_h1} [DETAIL]").to eq(new_h1)
-  #   expect(page).to have_content('My Image Details')    
+  #   expect(page).to have_content('My Image Details')  
+
+  #   #expect to see image on image details page, as well as test group page  
 
   #   click_link('My Image Details')
   #   sleep(10)
+  #   expect(page).to have_content(new_h1)
+
+
+  #   click_link('Test Group')
+  #   sleep(10)
+  #   expect(page).to have_content(new_h1)
+
+
+  #   delete_test_group('Test Group')
+  #   sleep(10)
+
+
+  #   click_link('My Image Details')  
+  #   sleep(10)
 
   #   click_link('Delete')
+    
   #   sleep(10)
-
   #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+
   #   sleep(10)
   # end
-  # it "tests logout" do
-  #   bye
-  # end
+
 end
 
 steps "Logged out users can use Images too",  :js => true do
