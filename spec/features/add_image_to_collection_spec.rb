@@ -132,6 +132,34 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     sleep(10)
   end
 
+ it "lets a user export to PowerPoint" do
+   #DIL-4085
+   visit('https://localhost:3000')
+   sleep(10)
+   make_test_group('PPT Group')
+
+   visit('https://localhost:3000/catalog?f[worktype_facet][]=Prints')
+   source = page.find("#images li:first img")  
+   source_title = page.find("#documents div:first .listing a")
+   img_href = source_title[:href]
+
+   target = page.find("h2.ui-droppable:first a")
+   target_text = target.text()
+   
+   img_base_src = img_href.split("inu:")[1]
+   drag_n_drop(source, target)
+   sleep(10)
+   click_link(target_text)
+   
+   sleep(10)
+   click_link("Export to PowerPoint")
+
+   page.should have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
+
+   delete_test_group('PPT Group')
+   sleep(10)
+ end
+
   it "lets a user search with a keyword" do
     # DIL-4069
     fill_in('q', with: 'every man')
