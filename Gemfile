@@ -31,7 +31,7 @@ source 'http://rubygems.org'
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
-  gem 'capistrano-rvm'
+  gem 'capistrano-rbenv'
   gem 'daemons'
 
 # Gems used only for assets and not required
@@ -62,12 +62,11 @@ group :development, :test, :staging do
   gem 'bcrypt-ruby', '3.0.1'
   gem 'launchy', '2.1.0'
   gem 'simplecov', '0.7.1', :require => false, :group => :test
-  gem 'debugger'
+  #gem 'debugger-ruby_core_source'
+  #gem 'debugger'
   gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
-  gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
 end
 
-gem 'unicorn', '4.3.1'
 
 group :test do
   gem 'rspec-rails'

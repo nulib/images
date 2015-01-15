@@ -23,13 +23,20 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml config/unicorn.rb}
+set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml }
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{jetty tmp/pids log} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# rbenv setup
+set :rbenv_type, :user
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+set :rbenv_roles, :all # default value
+
 
 # Default value for keep_releases is 5
 set :keep_releases, 5
@@ -40,8 +47,7 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      #execute :touch, release_path.join('tmp/restart.txt')
-      execute "/etc/init.d/unicorn.dil_hydra restart"
+      execute :touch, release_path.join('tmp/restart.txt')
       invoke 'delayed_job:restart'
     end
   end
