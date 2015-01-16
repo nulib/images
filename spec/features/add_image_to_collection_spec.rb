@@ -38,7 +38,7 @@ def add_images_to_test_group(name)
 
   drag_n_drop(source, target)
 
-  visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+  visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
   sleep(10)
 
   source2 = page.find("#images li:first-child img")
@@ -47,7 +47,7 @@ def add_images_to_test_group(name)
   drag_n_drop(source2, target2)
 
 
-  visit('https://localhost:3000/catalog?f[worktype_facet][]=Prints')
+  visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
   sleep(10)
 
   source3 = page.find("#images li:first-child img")
@@ -59,7 +59,7 @@ end
 
 def delete_test_group(name)
   # Delete test group
-  visit('https://localhost:3000/')
+  visit('http://localhost:3000/')
   sleep(10)
   within('#imageCollection') do
     click_link(name)
@@ -71,7 +71,7 @@ def delete_test_group(name)
 end
 
 def remove_images_from_test_group(name)
-  visit('https://localhost:3000')
+  visit('http://localhost:3000')
   sleep(10)
 
   click_link(name)
@@ -89,7 +89,7 @@ end
 steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   before :all do
     @driver = Capybara.default_driver
-    visit('https://localhost:3000/users/sign_in')
+    visit('http://localhost:3000/users/sign_in')
 
     fill_in 'username', :with => ENV["TEST_USER_ID"]
     fill_in 'password', :with => ENV["TEST_USER_PASSWORD"]
@@ -100,11 +100,11 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user add an image to a group" do
     #DIL-4095
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     sleep(10)
     make_test_group('Test Group')
 
-    visit('https://localhost:3000/catalog?f[worktype_facet][]=Prints')
+    visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
     source = page.find("#images li:first img")
     source_title = page.find("#documents div:first .listing a")
     img_href = source_title[:href]
@@ -134,11 +134,11 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
  it "lets a user export to PowerPoint" do
    #DIL-4085
-   visit('https://localhost:3000')
+   visit('http://localhost:3000')
    sleep(10)
    make_test_group('PPT Group')
 
-   visit('https://localhost:3000/catalog?f[worktype_facet][]=Prints')
+   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
    source = page.find("#images li:first img")
    source_title = page.find("#documents div:first .listing a")
    img_href = source_title[:href]
@@ -184,12 +184,12 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     # and confirms an element with that href is on the page, then deletes the item from the test group
     # DIL-4082
 
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     sleep(10)
     make_test_group('Test Group')
     sleep(10)
 
-    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     img = page.find("#documents div:first .listing a")
 
     img_caption = img[:href]
@@ -204,7 +204,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     click_button('Save')
     sleep(10)
 
-    visit('https://localhost:3000/')
+    visit('http://localhost:3000/')
     sleep(10)
 
     page.find('a', :text => 'Test Group').click()
@@ -222,7 +222,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     # and that if you click the expand button on the parent group you see the subgroup name
     # underneath it
     #DIL-4081
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     sleep(10)
     make_test_group('Test Group')
     sleep(10)
@@ -288,7 +288,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     # these tests assume that the images in first, 6th and 8th place are different, will have different urls.
     # they are fixture data so should be consistent.
     #DIL-4084
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     sleep(10)
     make_test_group('Test Group')
     sleep(10)
@@ -296,7 +296,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     add_images_to_test_group('Test Group')
     sleep(10)
 
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
 
     sleep(10)
 
@@ -333,7 +333,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user make a group private" do
     #DIL-4087
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     make_test_group('Test Group')
     sleep(10)
 
@@ -354,7 +354,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user share a group" do
     #DIL-4087
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     make_test_group('Test Group')
 
     sleep(10)
@@ -379,7 +379,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user delete a subgroup" do
     #DIL-4088
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
     sleep(10)
     make_test_group('Test Group')
     sleep(10)
@@ -431,7 +431,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   it "lets a user delete a group" do
     #DIL-4090
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
 
     make_test_group('Test Group')
     sleep(10)
@@ -444,7 +444,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   end
 
   it "lets a user rename a group" do
-    visit('https://localhost:3000')
+    visit('http://localhost:3000')
 
     make_test_group('Test Group')
     sleep(10)
@@ -476,7 +476,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     #DIL-4091
     # click the download original tiff or jpeg button
     # and test that you get a page with an image file on with the correct src - jpg or tiff
-    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
     page.find(:css, "#images li:first img").click()
 
     sleep(10)
@@ -509,7 +509,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   #   #change this test. create test group. add images to test group.
   #   #create detail, confirm detail is in group too. then just delete test group.
 
-  #   visit('https://localhost:3000')
+  #   visit('http://localhost:3000')
   #   sleep(10)
   #   make_test_group('Test Group')
   #   sleep(10)
@@ -583,7 +583,7 @@ end
 steps "Logged out users can use Images too",  :js => true do
   it "lets you do a facets (narrowing) search" do
     #Dil-4093
-    visit("https://localhost:3000")
+    visit("http://localhost:3000")
     sleep(10)
 
     result_count = ''
