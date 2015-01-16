@@ -1,11 +1,12 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Multiresimage do
 
-  describe "a new instance with a file name" do
-    subject { Multiresimage.new(:file_name=>'readme.txt') }
-    its(:file_name) { should  == 'readme.txt' }
-  end
+  # This isn't a valid test. We don't instantiate these objects with file names
+  # describe "a new instance with a file name" do
+  #   m = Multiresimage.new(:file_name=>'readme.txt')
+  #   expect(m.file_name).to eq('readme.txt')
+  # end
 
   pending("It doesn't look like we're using policies") do
     describe "should have an admin policy" do
@@ -106,42 +107,6 @@ EOF
     its(:collections) { should == [@collection1, @collection2] }
   end
 
-  describe "created with a file" do
-    before do
-      @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')
-      @file.stub(:original_filename => "The_Tilled_Field.jpg")
-      @file.stub(:content_type =>"image/jpeg")
-      @subject = Multiresimage.new
-      @subject.attach_file([@file])
-      @subject.save!
-      @file.rewind
-    end
-
-    it "should store the contents in the 'raw' datastream" do
-      @subject.raw.content.should == @file.read
-    end
-
-    it "should store the mimeType of the 'raw' datastream" do
-      @subject.raw.mimeType.should == 'image/jpeg'
-    end
-
-    it "should have to_jq_upload" do
-      @subject.stub(:pid =>'my:pid')
-      @subject.to_jq_upload.should == { :name=> "The_Tilled_Field.jpg", :size=>98982, :delete_url=>'/multiresimages/my:pid', :delete_type=>'DELETE', :url=>'/multiresimages/my:pid'}
-    end
-
-    describe "write_out_raw" do
-      before do
-        @subject.stub(:pid =>'my:pid')
-      end
-      subject {@subject.write_out_raw}
-      it { should match /\/tmp\/The_Tilled_Field.jpg#{$$}\.0/ }
-      after do
-        `rm #{subject}`
-      end
-
-    end
-  end
 
   context "with an associated work" do
     xml = File.read("#{Rails.root}/spec/fixtures/vra_minimal.xml")
