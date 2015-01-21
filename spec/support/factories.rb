@@ -95,7 +95,4 @@
   #   name 'Factory Group'
   #   owner
   # end
-<<<<<<< HEAD:spec/support/factories.rb
 
-=======
->>>>>>> moved factories to /support:spec/support/factories.rb
