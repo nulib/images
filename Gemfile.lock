@@ -194,7 +194,6 @@ GEM
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kgio (2.9.3)
     launchy (2.1.0)
       addressable (~> 2.2.6)
     libv8 (3.3.10.4)
@@ -262,7 +261,6 @@ GEM
       activesupport (= 4.1.7)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    raindrops (0.13.0)
     rake (10.3.2)
     rdf (1.0.0)
       addressable (>= 2.2)
@@ -372,10 +370,6 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.6)
-    unicorn (4.3.1)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     uuid (2.3.5)
       macaddr (~> 1.0)
     warden (1.2.3)
@@ -389,7 +383,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bcrypt
   better_errors
   binding_of_caller
   bootstrap-sass (~> 2)
@@ -399,7 +392,7 @@ DEPENDENCIES
   capistrano-rails
   capistrano-rbenv
   capybara
-  clamav (= 0.4.1)
+  clamav
   coffee-rails (>= 4)
   daemons
   database_cleaner
@@ -420,18 +413,16 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   jquery.fileupload-rails
-  json (= 1.7.7)
   launchy
   mini_exiftool
-  mysql2 (= 0.3.11)
-  net-scp
+  mysql2
   omniauth-ldap (= 1.0.2)
   protected_attributes
-  rails (~> 4.1)
-  rdf (= 1.0)
+  rails (~> 4.1.0)
+  rdf
   rspec-rails
   rspec-steps
-  rufus-scheduler (= 3.0.2)
+  rufus-scheduler
   sass-rails (>= 4)
   selenium-webdriver
   sextant
@@ -439,5 +430,4 @@ DEPENDENCIES
   sqlite3
   therubyracer (= 0.10.1)
   uglifier (>= 1.0.3)
-  unicorn (= 4.3.1)
-  uuid (= 2.3.5)
+  uuid
