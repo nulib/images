@@ -47,7 +47,9 @@ source 'http://rubygems.org'
 group :development, :test, :staging do
   gem 'jettywrapper' #, '1.4.1'
   gem 'bcrypt'
-  gem 'capistrano3-unicorn' # I'm not 100% that this should be here, but i didn't want to create another group
+  gem 'launchy'
+  gem 'simplecov', :require => false
+  gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
 
 group :test do
@@ -63,9 +65,6 @@ end
 group :development do
   gem 'better_errors'
   gem 'sextant'
-  gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
-  gem 'launchy'
-  gem 'simplecov', :require => false
   gem 'byebug'
 end
 
