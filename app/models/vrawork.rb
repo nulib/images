@@ -1,7 +1,7 @@
 class Vrawork  < ActiveFedora::Base
   include Hydra::ModelMethods
   #include ActiveFedora::Relationships
-  include Hydra::ModelMixins::RightsMetadata
+  include Hydra::AccessControls::Permissions
 
   after_create :update_vra_work_tag
 

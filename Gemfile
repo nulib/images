@@ -8,8 +8,8 @@ source 'http://rubygems.org'
   gem 'jquery-rails'
   gem 'jbuilder', '~> 2.0'
 
-  gem 'hydra-head', '~> 6.4'
-  gem 'bootstrap-sass', '~> 2'
+  gem 'hydra-head', '~> 7.2.2'
+  #gem 'bootstrap-sass', '~> 2'
   #gem 'json', '1.7.7'
 
   gem 'rufus-scheduler'
@@ -17,7 +17,7 @@ source 'http://rubygems.org'
   gem 'omniauth-ldap', '1.0.2' # TODO: see if we're using this
 
   gem 'clamav'
-  gem 'rdf'
+  #gem 'rdf'
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
@@ -38,8 +38,8 @@ source 'http://rubygems.org'
   gem 'jquery.fileupload-rails'
 
   gem 'uuid'
-  gem 'hydra-ldap', '0.0.3'
-  gem 'hydra-batch-edit', '~>0.0.6'
+  gem 'hydra-ldap' #, '0.0.3'
+  #gem 'hydra-batch-edit' #, '~>0.0.6'
   gem 'high_voltage'
 
 group :development, :test, :staging do

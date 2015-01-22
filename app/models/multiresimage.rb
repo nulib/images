@@ -6,7 +6,7 @@ require 'dil/pid_minter'
 
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
-  include Hydra::ModelMixins::RightsMetadata
+  include Hydra::AccessControls::Permissions
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
 
@@ -54,6 +54,9 @@ class Multiresimage < ActiveFedora::Base
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
       :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
+
+  has_attributes :titleSet_display, datastream: :VRA, multiple: false
+
 
   delegate :file_name, :to=>:properties, :unique=>true
   delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
