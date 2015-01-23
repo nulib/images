@@ -5,7 +5,7 @@ class Vrawork  < ActiveFedora::Base
 
   after_create :update_vra_work_tag
 
-  has_and_belongs_to_many :multiresimages, :class => "Multiresimage", :property=> :has_image
+  has_and_belongs_to_many :multiresimages, :class_name => "Multiresimage", :property=> :has_image
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
