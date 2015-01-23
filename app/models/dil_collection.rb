@@ -31,9 +31,8 @@ class DILCollection < ActiveFedora::Base
   # Uses the Hydra modsCollection profile for collection list
   has_metadata :name => "members", :type => Hydra::ModsCollectionMembers
 
-  delegate :title, :to=>'descMetadata', :unique=>true
-
-  delegate :owner, :to => 'members', :unique => true
+  has_attributes :title, datastream: :descMetadata, multiple: false
+  has_attributes :owner, datastream: :members, multiple: false
 
   validates :title, :presence => true
 
@@ -236,7 +235,7 @@ class DILCollection < ActiveFedora::Base
     solr_doc = super(solr_doc)
 
     #if collection is a top-level collection
-    if (self.RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf")
+    if (self.rels_ext.to_rels_ext.exclude? "fedora-relations-model:isMemberOf")
       value = "true"
     else
       value = "false"
