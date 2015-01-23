@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
   gem 'rails', '~> 4.1.0'
-  gem 'sqlite3'
   gem 'sass-rails', '>= 4'
   gem 'coffee-rails', '>= 4'
   gem 'uglifier', '>= 1.0.3'
@@ -44,6 +43,7 @@ source 'http://rubygems.org'
 
 group :development, :test, :staging do
   gem 'jettywrapper'
+  gem 'sqlite3'
 end
 
 group :test do
@@ -64,7 +64,6 @@ group :development do
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'byebug'
-  gem 'sqlite3' 
 end
 
 group :production do
