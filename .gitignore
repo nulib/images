@@ -22,6 +22,7 @@ config/hydra-ldap.yml
 config/fedora.yml
 config/database.yml
 config/dil-config.yml
+config/secrets.yml
 *.swp
 *.swo
 *.swn
