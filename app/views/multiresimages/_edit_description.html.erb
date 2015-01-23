@@ -13,12 +13,12 @@
       <div class="control-group">
         <%= f.label "#{vraSetName}", :class=>"control-label" %>
         <div class="controls" id="#{vraSetName}Set">
-          <%= f.hidden_field (vraSetName+"Set_display").to_sym, :name=>"multiresimage[#{vraSetName}Set_display]", :id=>"multiresimage_#{vraSetName}Set_value", :class=>'span6'%>
+          <%= f.hidden_field (vraSetName+"Set_display").to_sym, :name=>"multiresimage[#{vraSetName}Set_display]", :id=>"multiresimage_#{vraSetName}Set_value", :class=>'col-md-6'%>
           <% if  @multiresimage.send((vraSetName + "Set_display").to_sym).present?%>
             <% displays =  @multiresimage.send((vraSetName + "Set_display").to_sym).split(";") %>  
             <% displays.each_with_index do |display,index| %>
               <% display.strip! %>
-              <p><%= text_field_tag "multiresimage_#{vraSetName}Set_display_#{index}", display, :class=>'span5'%>
+              <p><%= text_field_tag "multiresimage_#{vraSetName}Set_display_#{index}", display, :class=>'col-md-5'%>
               <%= f.submit :-, :type=>"button", :id=>"multiresimage_delete_#{vraSetName}Set_display_#{index}", :class=>'minusFieldBtn' %>
             <% end %>
           <%end%>

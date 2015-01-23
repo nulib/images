@@ -3,9 +3,9 @@
   <%= render :partial=>'dil_collections/add' %>
 <% end %>
 
-<div id="sidebar" class="span3"><%= sidebar_items.join().html_safe %></div>
+<div id="sidebar" class="col-md-3"><%= sidebar_items.join().html_safe %></div>
 
-<div id="accordion" class="span9">
+<div id="accordion" class="col-md-9">
 <% if can?(:edit, @collection) %>
   <span class="edit-browse">
     <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
