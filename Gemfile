@@ -64,6 +64,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'byebug'
+  gem 'sqlite3' 
 end
 
 group :production do

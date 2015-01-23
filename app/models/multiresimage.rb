@@ -49,13 +49,25 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+ # delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+ #      :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
+ #      :techniqueSet_display, :locationSet_display, :materialSet_display,
+ #      :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
+ #      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
+
+
+attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
-      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
+      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display]
 
-  has_attributes :titleSet_display, datastream: :VRA, multiple: false
+
+  attributes.each do |att|
+    has_attributes att, datastream: :VRA, multiple: false
+  end
+
+ # has_attributes :titleSet_display, datastream: :VRA, multiple: false
 
 
   delegate :file_name, :to=>:properties, :unique=>true
