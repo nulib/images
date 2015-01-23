@@ -19,13 +19,17 @@ class Vrawork  < ActiveFedora::Base
   # External datastream
   has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
 
-  delegate :titleSet_display_work, :to=>:VRA, :unique=>true
-  delegate :agentSet_display_work, :to=>:VRA, :unique=>true
-  delegate :dateSet_display_work, :to=>:VRA, :unique=>true
-  delegate :descriptionSet_display_work, :to=>:VRA, :unique=>true
-  delegate :subjectSet_display_work, :to=>:VRA, :unique=>true
-  delegate :culturalContextSet_display_work, :to=>:VRA, :unique=>true
-  delegate :relationSet_display_work, :to=>:VRA, :unique=>true
+
+  attributes = [ :titleSet_display_work, :agentSet_display_work,
+                :dateSet_display_work, :descriptionSet_display_work,
+                :subjectSet_display_work, :culturalContextSet_display_work,
+                :relationSet_display_work ]
+
+  attributes.each do |att|
+    has_attributes att, datastream: :VRA, multiple: false
+  end
+
+
 
   # The xml_template uses the vra:image tags when creating the vra work
   def update_vra_work_tag
