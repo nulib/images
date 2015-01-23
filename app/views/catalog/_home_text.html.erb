@@ -1,7 +1,7 @@
 <div class="row-fluid">
     <ul class="thumbnails">
       <% DIL_CONFIG["institutional_collection"].each do |key, inst_collection| %>
-        <li class="span4">
+        <li class="col-md-4">
         <a href="<%=inst_collection["solr_url"]%>" class="thumbnail"><img src="<%=inst_collection["image_url"]%>"></img></a><h4><%=inst_collection["title"]%></h4>
         </li>
       <% end %>

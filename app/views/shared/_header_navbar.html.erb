@@ -8,9 +8,9 @@ the_logo = "repository-images.png"
   <div class="container logo-search">
     <div class="row">
 
-    <div class="span6" id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
+    <div class="col-md-6" id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
     
-    <div class="span6" id="searchbar">         
+    <div class="col-md-6" id="searchbar">         
       <%= render_search_bar  %>
     </div>
 
