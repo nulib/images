@@ -7,7 +7,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
-//
+//= require bootstrap
+//= require blacklight/blacklight
 
 //= require_tree .
 
@@ -15,7 +16,7 @@
 //= require jquery.iframe-transport
 //= require jquery.fileupload
 //= require jquery.fileupload-ui
-//= require bootstrap
+
 
 
 
