@@ -1,8 +1,8 @@
 h2. Developer prereqs
 
-Ruby 1.9.3
+Ruby 2.x
 git
-java jre
+java jre (at least 1.6, but 1.8 will be more future proof when we start to use fedora 4)
 
 
 h2. Installation and Configuration

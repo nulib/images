@@ -20,7 +20,6 @@ class DILCollection < ActiveFedora::Base
 
   has_and_belongs_to_many :parent_collections, :class_name=> "DILCollection", :property=> :is_member_of
   has_and_belongs_to_many :subcollections, :class_name=> "DILCollection", :property=> :has_subcollection
-  #belongs_to :parent, :class_name=> "DILCollection", :property=> :is_member_of
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
@@ -31,9 +30,8 @@ class DILCollection < ActiveFedora::Base
   # Uses the Hydra modsCollection profile for collection list
   has_metadata :name => "members", :type => Hydra::ModsCollectionMembers
 
-  delegate :title, :to=>'descMetadata', :unique=>true
-
-  delegate :owner, :to => 'members', :unique => true
+  has_attributes :title, datastream: :descMetadata, multiple: false
+  has_attributes :owner, datastream: :members, multiple: false
 
   validates :title, :presence => true
 
@@ -47,9 +45,6 @@ class DILCollection < ActiveFedora::Base
       #add to the rels-ext ds
       fedora_object.add_relationship(:is_member_of, "info:fedora/#{self.pid}")
       add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
-
-      #self.multiresimages << fedora_object
-      #self.add_relationship(:has_image, "info:fedora/#{fedora_object.pid}")
 
      elsif (fedora_object.instance_of?(DILCollection))
 
@@ -151,10 +146,9 @@ class DILCollection < ActiveFedora::Base
         size = img_width > img_height ? img_width > 950 ? 950 : img_width : img_height > 700 ? 700 : img_height
         logger.debug("PID: #{pid}")
         export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}#{size}</url><metadata></metadata></image>"
-        #export_xml << "<metadata><title>Title: #{fedora_object.titleSet_display}</title><agent>Agent: #{fedora_object.agentSet_display}</agent><date>Date: #{fedora_object.dateSet_display}</date>" << "<description>Description: #{fedora_object.descriptionSet_display}</description><subject>Subject: #{fedora_object.subjectSet_display}</subject></metadata></image>"
         logger.debug("export_xml debug:" << export_xml)
       end
-    end #end each
+    end
 
    return export_xml
   end
@@ -164,39 +158,34 @@ class DILCollection < ActiveFedora::Base
   # Called from the multiresimages controller for the detail, and from the uploads controller for the upload
   class << self
   include DIL::PidMinter
-  def add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
+    def add_image_to_personal_collection(personal_collection_search_result, collection_name, new_image, user_key)
 
-    #If personal collection (either Details or Uploads) doesn't exist, create it and add image to it
-    logger.debug("personal collection search result:" + personal_collection_search_result.to_s)
-    if !personal_collection_search_result.present?
-      #authorize!(:create, DILCollection)
+      #If personal collection (either Details or Uploads) doesn't exist, create it and add image to it
+      logger.debug("personal collection search result:" + personal_collection_search_result.to_s)
+      if !personal_collection_search_result.present?
 
-	  #create new collection, update it's metadata and save
-	  new_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
-	  #new_collection.pid(mint_pid("dil-local"))
-	  new_collection.apply_depositor_metadata(user_key)
-	  #new_collection.set_collection_type('dil_collection')
-	  logger.debug("collection_name: " << collection_name)
-	  new_collection.descMetadata.title = collection_name
-	  new_collection.save!
+    	  #create new collection, update it's metadata and save
+    	  new_collection = DILCollection.new(:pid=>mint_pid("dil-local"))
+    	  new_collection.apply_depositor_metadata(user_key)
+    	  logger.debug("collection_name: " << collection_name)
+    	  new_collection.descMetadata.title = collection_name
+    	  new_collection.save!
 
-	  #add image to collection (either a detail or an upload)
-      new_collection.insert_member(new_image)
+    	  #add image to collection (either a detail or an upload)
+        new_collection.insert_member(new_image)
 
-    #If personal collection (either Details or Uploads) does exist, add image to it
-    elsif personal_collection_search_result.present?
-      #get pid from array
-      pid = personal_collection_search_result[0]["id"]
+      #If personal collection (either Details or Uploads) does exist, add image to it
+      elsif personal_collection_search_result.present?
+        #get pid from array
+        pid = personal_collection_search_result[0]["id"]
 
-      #get collection object
-      collection = DILCollection.find(pid)
+        #get collection object
+        collection = DILCollection.find(pid)
 
-      #add image to collection
-      collection.insert_member(new_image)
+        #add image to collection
+        collection.insert_member(new_image)
+      end
     end
-
-  end
-
   end
 
   def get_subcollections_json
@@ -236,7 +225,7 @@ class DILCollection < ActiveFedora::Base
     solr_doc = super(solr_doc)
 
     #if collection is a top-level collection
-    if (self.RELS_EXT.to_rels_ext.exclude? "fedora-relations-model:isMemberOf")
+    if (self.rels_ext.to_rels_ext.exclude? "fedora-relations-model:isMemberOf")
       value = "true"
     else
       value = "false"
