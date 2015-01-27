@@ -23,7 +23,7 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml }
+set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml config/secret.yml }
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{jetty tmp/pids log} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
