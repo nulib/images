@@ -102,7 +102,7 @@ class SVGDatastream < ActiveFedora::OmDatastream
   end
 
 
-  def to_solr(solr_doc=Solr::Document.new)
+  def to_solr(solr_doc = Hash.new)
     super(solr_doc)
     #solr_doc << {:object_type_facet => "Multiresimage"}
     ::Solrizer::Extractor.insert_solr_field_value(solr_doc, "object_type_facet", "Multiresimage")
