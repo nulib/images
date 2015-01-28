@@ -1,6 +1,6 @@
 GIT
-  remote: git@github.com:mbklein/equivalent-xml.git
-  revision: 43a7110d4c6d74ad649d9151df76059c28566f56
+  remote: https://github.com/mbklein/equivalent-xml.git
+  revision: 1d1dc4919e120db599164fc81351913e2c62d11e
   specs:
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)
