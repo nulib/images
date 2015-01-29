@@ -1,9 +1,9 @@
-<% sidebar_items << capture do %>
+<% @sidebar_items = capture do %>
   <%= render :partial=>'parent_collections' %>
   <%= render :partial=>'dil_collections/add' %>
 <% end %>
 
-<div id="sidebar" class="col-md-3"><%= sidebar_items.join().html_safe %></div>
+<div id="sidebar" class="col-md-3"><%= @sidebar_items %></div>
 
 <div id="accordion" class="col-md-9">
 <% if can?(:edit, @collection) %>
