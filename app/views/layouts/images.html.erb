@@ -12,6 +12,7 @@
     <%= include_gon %>
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "application" %>
+	<%= yield :page_scripts %>
     <%= csrf_meta_tags %>
     <%= analytics_init if Rails.env.production? %>
   </head>

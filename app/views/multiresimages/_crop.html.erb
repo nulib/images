@@ -1,10 +1,7 @@
-<script type="text/javascript">
-	$(document).ready(function()
-	{
-		// The last parameter hides the crop tool if the image is already a crop, or if the user is logged out
-		CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %>);
-	});
-</script>
+<% content_for :page_scripts do %>
+	<%= javascript_include_tag 'croptool/index.js' %>
+<% end %>
+
 <!-- crop tool above -->
 <!-- <div id="crop-tool" style="background-color:#000000; width:100%; height: 500px; border: thin solid blue;"> -->
 	<div id="crop-tool" style="background-color:#000000; width: 800px; height: 800px; border: thin solid blue;">
@@ -20,6 +17,7 @@
 		</div> <!-- end #collection -->
 	</div> <!-- end #crop-tool -->
 
-<% content_for :page_scripts do %>
-	<%= javascript_include_tag 'croptool/croptool' %>
-<% end %>
+	<script type="text/javascript">
+			// The last parameter hides the crop tool if the image is already a crop, or if the user is logged out
+			CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %>);
+	</script>
