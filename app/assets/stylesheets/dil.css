@@ -312,9 +312,8 @@ svg image {
 	font-size: 13px;
 }
 .signin-box input[type=text], .signin-box input[type=password], .signin-box textarea {
-	width: 18em;
+	width: 14em;
 }
-
 
 .signin-box label.remember {
 	display: inline-table;
