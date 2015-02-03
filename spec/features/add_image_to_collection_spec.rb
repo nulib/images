@@ -6,8 +6,8 @@ require 'rake'
 # images present. Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
 
 # You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
-# need a teardown that removes each image from collection after each test 
-# 12/19 - using fixture data like "Marche" for search term; new gem for maintaining session among specific tests
+
+# 12/19 - using fixture data; new gem for maintaining session among specific tests
 # you need a .env file with the credentials in it, in your root directory, also.
 
 
@@ -132,7 +132,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     sleep(10)
   end
 
- it "lets a user export to PowerPoint" do
+  it "lets a user export to PowerPoint" do
    #DIL-4085
    visit('https://localhost:3000')
    sleep(10)
@@ -158,7 +158,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
    delete_test_group('PPT Group')
    sleep(10)
- end
+  end
 
   it "lets a user search with a keyword" do
     # DIL-4069
@@ -504,79 +504,79 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     image_present.should be_true
   end
 
-  # it "lets you make a detail from an image" do 
+  it "lets you make a detail from an image" do 
 
-  #   #change this test. create test group. add images to test group.
-  #   #create detail, confirm detail is in group too. then just delete test group.
+    #change this test. create test group. add images to test group.
+    #create detail, confirm detail is in group too. then just delete test group.
 
-  #   visit('https://localhost:3000')
-  #   sleep(10)
-  #   make_test_group('Test Group')
-  #   sleep(10)
-  #   add_images_to_test_group('Test Group')
-  #   sleep(10)
+    visit('https://localhost:3000')
+    sleep(10)
+    make_test_group('Test Group')
+    sleep(10)
+    add_images_to_test_group('Test Group')
+    sleep(10)
 
-  #   click_link('Test Group')
-  #   sleep(10)
+    click_link('Test Group')
+    sleep(10)
 
-  #   page.find("#images li:first img").click()
+    page.find("#images li:first img").click()
   
-  #   sleep(10)
+    sleep(10)
 
-  #   original_h1 = find(".page-header h1").text()
-  #   expect(page).to_not have_content('My Image Details')
+    original_h1 = find(".page-header h1").text()
+    expect(page).to_not have_content('My Image Details')
     
-  #   #img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
+    #img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
 
-  #   svg = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]')
+    svg = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]')
    
-  #   camera = ''
+    camera = ''
    
-  #   within(svg) do
-  #     all(:xpath, '*[name()="image"]').each do |el|
-  #       if el[:href] == "/assets/croptool/camera.png"
-  #         camera = el
-  #       end
-  #     end
-  #   end
+    within(svg) do
+      all(:xpath, '*[name()="image"]').each do |el|
+        if el[:href] == "/assets/croptool/camera.png"
+          camera = el
+        end
+      end
+    end
 
-  #   sleep(10)
-  #   camera.click()
+    sleep(10)
+    camera.click()
   
-  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-  #   sleep(10)
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    sleep(10)
 
-  #   new_h1 = find(".page-header h1").text()
+    new_h1 = find(".page-header h1").text()
 
-  #   expect("#{original_h1} [DETAIL]").to eq(new_h1)
-  #   expect(page).to have_content('My Image Details')  
+    expect("#{original_h1} [DETAIL]").to eq(new_h1)
+    expect(page).to have_content('My Image Details')  
 
-  #   #expect to see image on image details page, as well as test group page  
+    #expect to see image on image details page, as well as test group page  
 
-  #   click_link('My Image Details')
-  #   sleep(10)
-  #   expect(page).to have_content(new_h1)
-
-
-  #   click_link('Test Group')
-  #   sleep(10)
-  #   expect(page).to have_content(new_h1)
+    click_link('My Image Details')
+    sleep(10)
+    expect(page).to have_content(new_h1)
 
 
-  #   delete_test_group('Test Group')
-  #   sleep(10)
+    click_link('Test Group')
+    sleep(10)
+    expect(page).to have_content(new_h1)
 
 
-  #   click_link('My Image Details')  
-  #   sleep(10)
+    delete_test_group('Test Group')
+    sleep(10)
 
-  #   click_link('Delete')
+
+    click_link('My Image Details')  
+    sleep(10)
+
+    click_link('Delete')
     
-  #   sleep(10)
-  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    sleep(10)
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
 
-  #   sleep(10)
-  # end
+    sleep(10)
+  end
 
 end
 
