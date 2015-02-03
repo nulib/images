@@ -1,4 +1,4 @@
-require 'lib/pid_minter'
+require 'lib/dil/pid_minter'
 
 class UploadsController < ApplicationController
 
