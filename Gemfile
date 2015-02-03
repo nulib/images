@@ -64,7 +64,7 @@ group :development, :test, :staging do
   gem 'simplecov', '0.7.1', :require => false, :group => :test
   #gem 'debugger-ruby_core_source'
   #gem 'debugger'
-  gem 'equivalent-xml', :git => 'git@github.com:mbklein/equivalent-xml.git'
+  gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
 
 
@@ -84,4 +84,5 @@ end
 
 group :production do
   gem 'google-analytics-rails'
+  gem 'pg'
 end
