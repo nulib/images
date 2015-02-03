@@ -45,10 +45,11 @@ label.batch_toggle {
         padding: 12px;
         border: 3px solid white;
 		word-wrap: break-word;
-        width: 160px;
+        width: 210px;
         height: 200px;
 		text-align: left;
 		background-color: #efefef;
+    font-size: 13px;
 }
 
 .listing #images, .listing-collection {
@@ -60,6 +61,8 @@ label.batch_toggle {
     vertical-align: middle;
     position: relative;
 }
+
+#images ul {padding:0;margin:0}
 
 .listing #images img, .listing-collection #images img {
 	position: absolute;
@@ -101,8 +104,8 @@ clear:both;
 }
 
 a.member-remove { 
-	top: -24px;
-	right: -38px;
+	top: 2px;
+	right: 18px;
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
@@ -434,17 +437,7 @@ html, body {
   border: none;
 }
 
-/* Twitter bootstrap thumbnails class margin fix */
-.row-fluid {
-  ul.thumbnails {
-    li.col-md-12 + li { margin-left : 0px; }
-    li.col-md-6:nth-child(2n + 3) { margin-left : 0px; }
-    li.col-md-4:nth-child(3n + 4) { margin-left : 0px; }
-    li.col-md-3:nth-child(4n + 5) { margin-left : 0px; }
-    li.col-md-2:nth-child(6n + 7) { margin-left : 0px; }
-    li.col-md-1:nth-child(12n + 13) { margin-left : 0px; }
-  }
-}
+a:link.thumbnail, a:visited.thumbnail, a:active.thumbnail {border: 1px solid #ddd}
 
 #accordion button, p, form {
   padding: 0.5em;
