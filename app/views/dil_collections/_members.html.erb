@@ -36,7 +36,7 @@
 					<%= title.nil?  ? pid : title.truncate(50) %>
 				</a>
 				<% if can?(:edit, @collection) %>
-					<a href="/dil_collections/remove/<%= @collection.pid %>/<%= pid %>" class="member-remove">&#x2715;</a>
+					<%= link_to "&#x2715;".html_safe, "/dil_collections/remove/#{@collection.pid}/#{pid}",  class: "member-remove", method: :delete %>
 				<% end %>
 			</div>
 		</div>
