@@ -73,7 +73,7 @@ Rails.application.routes.draw do
 
   get "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
   post "dil_collections/add/:id/:member_id" => "dil_collections#add"
-  post "dil_collections/remove/:id/:pid" => "dil_collections#remove"
+  delete "dil_collections/remove/:id/:pid" => "dil_collections#remove"
   post "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
   post "dil_collections/export/:id" => "dil_collections#export"
   post "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }
