@@ -34,8 +34,6 @@ source 'http://rubygems.org'
 
   gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way
 
-  gem 'jquery.fileupload-rails'
-
   gem 'uuid'
   gem 'hydra-ldap' #, '0.0.3'
   #gem 'hydra-batch-edit' #, '~>0.0.6'
