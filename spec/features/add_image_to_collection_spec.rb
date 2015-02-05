@@ -93,56 +93,54 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   before :all do
     @driver = Capybara.default_driver
     visit('http://localhost:3000/users/sign_in')
-
-    fill_in 'username', :with => Rails.application.secrets["test_user_id"]
-    fill_in 'password', :with => Rails.application.secrets["test_user_password"]
+    within("#new_user") do
+      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
+      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
+    end
     click_button('signIn')
-    sleep(8)
   end
 
 
-  # it "lets a user add an image to a group" do
-  #   #DIL-4095
-  #   visit('http://localhost:3000')
-  #   sleep(8)
-  #   make_test_group('Test Group')
+  it "lets a user add an image to a group" do
+    #DIL-4095
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    find_link('Work Type').click
+    find_link('Prints').click
 
-  #   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
+    source_li = page.find("#images li", match: :first)
+    source = source_li.find("img")
 
+    source_tag = page.find("#documents div", match: :first)
+    source_title = source_tag.find(".listing a", match: :first)
+    img_href = source_title[:href]
 
-  #   source_li = page.find("#images li", match: :first)
-  #   source = source_li.find("img")
+    target_tag = page.find("h2.ui-droppable", match: :first)
 
-  #   source_tag = page.find("#documents div", match: :first)
-  #   source_title = source_tag.find(".listing a", match: :first)
-  #   img_href = source_title[:href]
+    target = target_tag.find("a")
+    target_text = target.text()
 
-  #   target_tag = page.find("h2.ui-droppable", match: :first)
+    img_base_src = img_href.split("inu:")[1]
+    drag_n_drop(source, target)
+    sleep(8)
+    click_link(target_text, match: :first)
 
-  #   target = target_tag.find("a")
-  #   target_text = target.text()
+    sleep(8)
+    image_present = false
 
-  #   img_base_src = img_href.split("inu:")[1]
-  #   drag_n_drop(source, target)
-  #   sleep(8)
-  #   click_link(target_text, match: :first)
+    all('img').each do |img|
+      if img[:src].include?(img_base_src)
+        image_present = true
+      end
+    end
 
-  #   sleep(8)
-  #   image_present = false
+    expect(image_present).to be_truthy
 
-  #   all('img').each do |img|
-  #     if img[:src].include?(img_base_src)
-  #       image_present = true
-  #     end
-  #   end
+    delete_test_group('Test Group')
+    sleep(8)
+  end
 
-  #   expect(image_present).to be_truthy
-
-  #   delete_test_group('Test Group')
-  #   sleep(8)
-  # end
-
- it "lets a user export to PowerPoint" do
+ xit "lets a user export to PowerPoint" do
    #DIL-4085
    visit('http://localhost:3000')
    sleep(8)
@@ -519,102 +517,13 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
  #    image_present.should be_truthy
  #  end
 
-  # it "lets you make a detail from an image" do
-
-  #   #change this test. create test group. add images to test group.
-  #   #create detail, confirm detail is in group too. then just delete test group.
-
-  #   visit('http://localhost:3000')
-  #   sleep(8)
-  #   make_test_group('Test Group')
-  #   sleep(8)
-  #   add_images_to_test_group('Test Group')
-  #   sleep(8)
-
-  #   click_link('Test Group')
-  #   sleep(8)
-
-  #   page.find("#images li:first img").click()
-
-  #   sleep(8)
-
-  #   original_h1 = find(".page-header h1").text()
-  #   expect(page).to_not have_content('My Image Details')
-
-  #   #img = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]/*[name()="image"]')
-
-  #   svg = find(:xpath, '//div[@id="crop-tool"]/*[name()="svg"]')
-
-  #   camera = ''
-
-  #   within(svg) do
-  #     all(:xpath, '*[name()="image"]').each do |el|
-  #       if el[:href] == "/assets/croptool/camera.png"
-  #         camera = el
-  #       end
-  #     end
-  #   end
-
-  #   sleep(8)
-  #   camera.click()
-
-  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-  #   sleep(8)
-
-  #   new_h1 = find(".page-header h1").text()
-
-  #   expect("#{original_h1} [DETAIL]").to eq(new_h1)
-  #   expect(page).to have_content('My Image Details')
-
-  #   #expect to see image on image details page, as well as test group page
-
-  #   click_link('My Image Details')
-  #   sleep(8)
-  #   expect(page).to have_content(new_h1)
-
-
-  #   click_link('Test Group')
-  #   sleep(8)
-  #   expect(page).to have_content(new_h1)
-
-
-  #   delete_test_group('Test Group')
-  #   sleep(8)
-
-
-  #   click_link('My Image Details')
-  #   sleep(8)
-
-  #   click_link('Delete')
-
-  #   sleep(8)
-  #   page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-
-  #   sleep(8)
-  # end
-
 end
 
-# steps "Logged out users can use Images too",  :js => true do
-#   it "lets you do a facets (narrowing) search" do
-#     #Dil-4093
-#     visit("http://localhost:3000")
-#     sleep(8)
-
-#     result_count = ''
-#     all('.facets-collapse div').each do |parent_el|
-#       h5 = parent_el.find('h5')
-#       if h5.text() == 'Work Type'
-#         h5.click()
-#         sleep(8)
-#         result_count = parent_el.find('ul li .count')
-#       end
-#     end
-
-#     sleep(8)
-
-#     expect(result_count.text()).to eq('3')
-#     sleep(8)
-#   end
-# end
-
+steps "Logged out users can use Images to",  :js => true do
+  it "lets you do a facets (narrowing) search" do
+    visit('http://localhost:3000')
+    find_link('Work Type').click
+    find_link('Prints').click
+    expect(page).to have_selector('.listing', count: 3)
+  end
+end
