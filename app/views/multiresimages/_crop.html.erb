@@ -1,5 +1,5 @@
 <% content_for :page_scripts do %>
-	<%= javascript_include_tag 'croptool/index.js' %>
+	<%#= javascript_include_tag 'croptool/index.js' %>
 <% end %>
 
 <!-- crop tool above -->
@@ -19,5 +19,5 @@
 
 	<script type="text/javascript">
 			// The last parameter hides the crop tool if the image is already a crop, or if the user is logged out
-			CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %>);
+			//CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %>);
 	</script>

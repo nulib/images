@@ -142,93 +142,105 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   #   sleep(8)
   # end
 
- it "lets a user export to PowerPoint" do
-   #DIL-4085
-   visit('http://localhost:3000')
-   sleep(8)
-   make_test_group('PPT Group')
+ # it "lets a user export to PowerPoint" do
+ #   #DIL-4085
+ #   visit('http://localhost:3000')
+ #   sleep(8)
+ #   make_test_group('PPT Group')
 
-   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
-   source_li = page.find("#images li", match: :first)
-   source = source_li.find("img")
+ #   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
+ #   source_li = page.find("#images li", match: :first)
+ #   source = source_li.find("img")
 
-   source_title_div = page.find("#documents div", match: :first)
-   source_title = source_title_div.find(".listing a", match: :first)
+ #   source_title_div = page.find("#documents div", match: :first)
+ #   source_title = source_title_div.find(".listing a", match: :first)
 
-   img_href = source_title[:href]
+ #   img_href = source_title[:href]
 
-   target_tag = page.find("h2.ui-droppable", match: :first)
-   target = target_tag.find("a")
-   target_text = target.text()
+ #   target_tag = page.find("h2.ui-droppable", match: :first)
+ #   target = target_tag.find("a")
+ #   target_text = target.text()
 
-   img_base_src = img_href.split("inu:")[1]
-   drag_n_drop(source, target)
-   sleep(8)
-   click_link(target_text)
+ #   img_base_src = img_href.split("inu:")[1]
+ #   drag_n_drop(source, target)
+ #   sleep(8)
+ #   click_link(target_text)
 
-   sleep(8)
-   click_link("Export to PowerPoint")
+ #   sleep(8)
+ #   click_link("Export to PowerPoint")
 
-   expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
+ #   expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
 
-   delete_test_group('PPT Group')
-   sleep(8)
- end
+ #   delete_test_group('PPT Group')
+ #   sleep(8)
+ # end
 
- #  it "lets a user search with a keyword" do
- #    # DIL-4069
- #    fill_in('q', with: 'every man')
- #    page.evaluate_script("document.forms[0].submit()")
- #    sleep(8)
+  # it "lets a user search with a keyword" do
+  #   # DIL-4069
+  #   fill_in('q', :with => 'every man')
+  #   find('#q').native.send_keys(:return)
 
- #    results = false
+  #   sleep(8)
+  #   results = false
 
- #    all('.listing a').each do |el|
+  #   all('.listing a').each do |el|
+  #     if el.text().include?('Every man')
+  #       results = true
+  #     end
+  #   end
+  #   expect(results).to be_truthy
 
- #      if el.text().include?('Every man')
- #        results = true
- #      end
- #    end
- #    expect(results).to be_truthy
+  # end
 
- #  end
+  it "lets a user add an image to a group from the image view page" do
 
- #  it "lets a user add an image to a group from the image view page" do
+    # this test adds an image, saving a reference to its href, then goes to the group's page
+    # and confirms an element with that href is on the page, then deletes the item from the test group
+    # DIL-4082
 
- #    # this test adds an image, saving a reference to its href, then goes to the group's page
- #    # and confirms an element with that href is on the page, then deletes the item from the test group
- #    # DIL-4082
+    visit('http://localhost:3000')
+    sleep(4)
+    make_test_group('Test Group')
+    sleep(4)
 
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
+    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
 
- #    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
- #    img = page.find("#documents div:first .listing a")
+    div_img = page.find("#documents div", match: :first)
+    img = div_img.find(".listing a", match: :first)
 
- #    img_caption = img[:href]
+    img_href = img[:href]
 
- #    page.find("#images li:first img").click()
+    li_img = page.find("#images li", match: :first)
+    li_img.find("img").click()
 
- #    sleep(8)
+    sleep(6)
 
- #    click_button('Add to Image Group')
- #    sleep(8)
- #    select('Test Group')
- #    click_button('Save')
- #    sleep(8)
+    click_button('Add to Image Group')
+    sleep(8)
+    select('Test Group', match: :first)
+    click_button('Save')
+    sleep(8)
 
- #    visit('http://localhost:3000/')
- #    sleep(8)
+    visit('http://localhost:3000/')
+    sleep(6)
 
- #    page.find('a', :text => 'Test Group').click()
- #    sleep(8)
+    page.find('a', :text => 'Test Group', match: :first).click()
+    sleep(6)
 
- #    expect(page).to have_selector('a', :href => img_caption)
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
+    our_image = false
+    all('a').each do |a|
+      puts "yo a href: #{a[:href]}"
+      puts "yo img href: #{img_href}"
+      if a[:href] == img_href
+        puts "san fran disco"
+        our_image = true
+      end
+    end
+
+    expect(our_image).to be_truthy
+
+    delete_test_group('Test Group')
+  end
 
 
  #  it "lets a user add a subgroup to a group" do
@@ -469,6 +481,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
  #    click_button('rename_image_group_link')
  #    fill_in('dil_collection_title', with: "New and Different Subgroup Name")
+ #    find('#q').native.send_keys(:return)
  #    page.evaluate_script("document.forms[2].submit()")
  #    sleep(8)
 
