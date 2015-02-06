@@ -4,7 +4,6 @@ require 'dil/pid_minter'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
   include DIL::PidMinter
-  #include Vrawork
   helper :permissions
 
   respond_to :html, :xml
@@ -46,16 +45,6 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
-  def edit
-    begin
-      LockedObject.obtain_lock(params[:id], "image - edit metadata", current_user.id)
-      @multiresimage = Multiresimage.find(params[:id])
-      authorize! :update, @multiresimage
-      #@policies = AdminPolicy.readable_by_user(current_user)
-    ensure
-      LockedObject.release_lock(params[:id])
-    end
-  end
 
   def show
     if !params[:pid].nil?
@@ -195,15 +184,6 @@ class MultiresimagesController < ApplicationController
     end
   end
 
-  # This will only be necessary when using ajax -- even then might not be necessary - MZ 06/18/2012
-  # routed to /files/:id/permissions (POST)
-  # def permissions
-  #   @multiresimage = Multiresimage.find(params[:id])
-  #   parse_permissions!(params[:multiresimage])
-  #   @multiresimage.update_attributes(params[:multiresimage].reject { |k,v| %w{ Filedata Filename revision}.include? k})
-  #   @multiresimage.save
-  #   redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/permissions_updated_flash', :locals => { :asset => @multiresimage }).html_safe
-  # end
 
   def updatecrop
     image_id = params[:id]
