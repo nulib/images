@@ -387,12 +387,6 @@ EOF
   end
 
 
-  # return a hash of values for jQuery upload
-  def to_jq_upload
-    {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
-  end
-
-
   # Moving file from temp location to config location.  Messing server will pull from here.
   def write_out_raw
     new_filepath = temp_filename(file_name, DIL::Application.config.processing_file_path)
