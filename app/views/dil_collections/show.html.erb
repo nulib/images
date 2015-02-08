@@ -8,7 +8,7 @@
 <div id="accordion" class="col-md-9">
 <% if can?(:edit, @collection) %>
   <span class="edit-browse">
-    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
+    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, data: { confirm: "Delete this group?" } %>
 	<% if @collection.members %>
 		| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
 		| <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
