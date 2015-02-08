@@ -316,7 +316,7 @@ $('input[id^="batch_select_"]').on("click", (function() {
   }));
   // This method is called when a user clicks the Save button to add an image to an image group from the image show view.
   // An API is called to add the image to the collection.
-$("#downloads").append("<br/><div id='submitCollectionDiv' class='hidden' style='position:relative;'><button class='btn btn-primary' id='submitCollectionBtn'>Save</button><span id='spinnerElement' style='position:absolute; top:12px; left:68px; background-color:red;'></span></div><br/><br/><br/>");
+$("#downloads").append("<div id='submitCollectionDiv' class='hidden' style='position:relative; padding-bottom: 5px;'><button class='btn btn-primary' id='submitCollectionBtn'>Save</button><span id='spinnerElement' style='position:absolute; top:15px; left:74px; background-color:red;'></span></div>");
 
 $("#submitCollectionBtn").on("click", (function() {
     //get the collection pid from the select list selected option
