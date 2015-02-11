@@ -147,14 +147,14 @@ EOF
     end
     it "should have read groups writer" do
       subject.read_groups = ['group-2', 'group-3']
-      expect( subject.rightsMetadata.groups ).to == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
-      expect( subject.rightsMetadata.individuals ).to == {"person1"=>"read","person2"=>"discover"}
+      expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'} )
+      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
     it "should only revoke eligible groups" do
       subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
       # 'group-7' is not eligible to be revoked
-      expect( subject.rightsMetadata.groups ).to == {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'}
-      expect( subject.rightsMetadata.individuals ).to == {"person1"=>"read","person2"=>"discover"}
+      expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'} )
+      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
   end
 
@@ -196,7 +196,7 @@ EOF
       expect( @img.preferred_related_work ).to eq @work1
     end
     it "other_related_works should be the others" do
-      expect( @img.other_related_works ).to eq [@work2, @work3]
+      expect( @img.other_related_works ).to eq( [@work2, @work3] )
     end
   end
 end
