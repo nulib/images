@@ -119,7 +119,7 @@ EOF
     img.save
 
     it "should have related_ids" do
-      img.related_ids.first.should eq img.vraworks.first.pid
+      img.related_ids.should eq img.vraworks.first.pid
     end
   end
 
