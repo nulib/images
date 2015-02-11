@@ -119,7 +119,7 @@ EOF
     img.save
 
     it "should have related_ids" do
-      img.related_ids.should eq img.vraworks.first.pid
+      expect( img.related_ids ).to eq img.vraworks.first.pid
     end
   end
 
@@ -131,7 +131,7 @@ EOF
     end
     subject { @img.to_solr }
     it "should have title_display" do
-      subject['title_display'].should == "Evanston Public Library. Exterior: facade"
+      expect(subject['title_display']).to eq "Evanston Public Library. Exterior: facade"
     end
   end
 
@@ -143,18 +143,18 @@ EOF
       m
     end
     it "should have read groups accessor" do
-      subject.read_groups.should == ['group-6', 'group-7']
+      expect( subject.read_groups ).to eq ['group-6', 'group-7']
     end
     it "should have read groups writer" do
       subject.read_groups = ['group-2', 'group-3']
-      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
-      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+      expect( subject.rightsMetadata.groups ).to == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
+      expect( subject.rightsMetadata.individuals ).to == {"person1"=>"read","person2"=>"discover"}
     end
     it "should only revoke eligible groups" do
       subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
       # 'group-7' is not eligible to be revoked
-      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'}
-      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+      expect( subject.rightsMetadata.groups ).to == {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'}
+      expect( subject.rightsMetadata.individuals ).to == {"person1"=>"read","person2"=>"discover"}
     end
   end
 
@@ -166,7 +166,7 @@ EOF
     end
     it "should update the work" do
       @img.update_attributes(:titleSet_display => "Woah cowboy")
-      @img.vraworks.first.titleSet_display_work.should == "Woah cowboy"
+      expect( @img.vraworks.first.titleSet_display_work ).to eq "Woah cowboy"
 
     end
   end
@@ -193,10 +193,10 @@ EOF
       @img.datastreams["VRA"] = VRADatastream.from_xml(vra_xml)
     end
     it "preferred_related_work should return the preferred work" do
-      @img.preferred_related_work.should == @work1
+      expect( @img.preferred_related_work ).to eq @work1
     end
     it "other_related_works should be the others" do
-      @img.other_related_works.should == [@work2, @work3]
+      expect( @img.other_related_works ).to eq [@work2, @work3]
     end
   end
 end
