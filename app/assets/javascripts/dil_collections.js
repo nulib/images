@@ -12,31 +12,31 @@ function dropMe(theObj) {
 	accept: ".accordion h2, div#images, #images li",//":not(.ui-sortable-helper)",
 	tolerance: "pointer",
 	drop: function( event, ui ) {
-    
+
 		$(this).find( ".placeholder" ).remove();
-		
+
 		//get id attribute for draggable <li> item (image)
 		var imageID = $(ui.draggable).attr("pid");
-		
+
 		//see if there are multiple images selected
 		var batch_select_count = $.trim($("#batch_select_count").text());
-		
-		//if it's an h2 (it's a collection) OR multiple images selected, will reload after it's added.        
+
+		//if it's an h2 (it's a collection) OR multiple images selected, will reload after it's added.
         var doReload = $(ui.draggable).is('h2') || batch_select_count > 0;
-        
+
 		//get title attribute for draggable <li> item (image)
 		var titleID = $(ui.draggable).attr("title");
-		
+
 		//get member_type attribute for draggable <li> item (image)
 		//var memberType = $(ui.draggable).attr("member_type");
 
 		//get id attribute for droppable <li> item (collection)
 		//var collectionID = $( this ).find("li").attr("pid");
 		var collectionID = $( this ).attr("pid");
-  
+
         var target = document.getElementById(collectionID).parentNode;
         var spinner;
-        
+
 		$.ajax({
 		type: "POST",
 		url: "/dil_collections/add/" + collectionID + "/" + imageID + "?member_title=" + titleID,
@@ -53,23 +53,23 @@ function dropMe(theObj) {
         };
       spinner = new Spinner(spinOpts).spin(target);
 		},
-		
+
 		success: function(msg){
-		 
+
 		 //hide the loading gif
 		 spinner.stop();
-		 
+
 		 //reload the page to refresh the collections
 		 if (doReload) {
 		   location.reload();
 		 }
 	    },
-		
-		 error: function(msg){ 
+
+		 error: function(msg){
 		 spinner.stop();
 		}
 		});//end ajax
-		
+
 	}//end droppable
 }).sortable({
 	items: "li:not(.placeholder)",
@@ -116,12 +116,12 @@ function dropMe(theObj) {
 				});//end ajax
 			}
 		});
-		
-		$('.accordion h2 img.collection_plus_minus').live("click", (function() {
+
+		$('.accordion h2 img.collection_plus_minus').on("click", (function() {
 		  var collection_id = $(this).closest('h2').attr('id');
 		  var theObj = $(this).closest('h2');
 		  var doAjax = false;
-		
+
 		//The plus/minus
 		if(theObj.attr('toggle') == 'plus') {
 			theObj.attr('toggle', 'minus');
@@ -192,7 +192,7 @@ function dropMe(theObj) {
 				$(this).remove();
 			});
 		}
-	
+
 	}));
 
 	$('a[data-method="delete"]').bind('confirm:complete', function(e, answer) {
@@ -203,7 +203,7 @@ function dropMe(theObj) {
 
 $(document).ready(function(){
     //store nodepath value to clipboard (copy to top of page)
-    $('#shareLink').live('click', function(){
+    $('#shareLink').on('click', function(){
         //console.log($('#pathtonode').html()+ " copied to window");
         var path = $('#copypath').html();
         path = path.replace(/ &amp;gt; /g,".");
@@ -225,5 +225,5 @@ $(document).ready(function(){
 			$("body").animate({
 			    scrollTop:0
 			});
-		});   
+		});
 });
