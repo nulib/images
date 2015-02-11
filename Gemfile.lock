@@ -199,9 +199,6 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (5.0.3)
       railties (>= 3.2.16)
-    jquery.fileupload-rails (1.11.0)
-      jquery-ui-rails (~> 5.0)
-      railties (>= 3.1)
     json (1.8.2)
     json-ld (1.1.7)
       rdf (~> 1.1, >= 1.1.4)
@@ -479,7 +476,6 @@ DEPENDENCIES
   jhove-service
   jquery-rails
   jquery-ui-rails
-  jquery.fileupload-rails
   launchy
   mini_exiftool
   mysql2

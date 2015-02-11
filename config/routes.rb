@@ -48,15 +48,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :uploads do
-    collection do
-      post :enqueue
-      post :create
-      post :update_status
-      post :notify
-    end
-  end
-
   resources :groups do
     resources :users, :only=>[:create, :edit, :destroy]
   end

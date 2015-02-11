@@ -13,7 +13,3 @@
 //= require_directory .
 //= require_directory ./listexpander
 
-// The Iframe Transport is required for browsers without support for XHR file uploads
-//= require jquery.iframe-transport
-//= require jquery.fileupload
-//= require jquery.fileupload-ui
