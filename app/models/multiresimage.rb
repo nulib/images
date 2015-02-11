@@ -90,32 +90,9 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
       work.apply_depositor_metadata(current_user.user_key)
     end
 
-
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-
-    ##############################
-    #vra_xml = self.datastreams[ "VRA" ].ng_xml
-    #image_pid = vra_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
-
-    # Change the image to a work
-    work.VRA.ng_xml.xpath( '/vra:vra/vra:image' )[ 0 ].name = 'work'
-    #vra_node[ 0 ].name = 'work'
-
-    # Change the work reference to an image reference^M
-    # Swap id and refid attributes in the new image reference
-    vra_work = work.VRA.ng_xml.xpath( '/vra:vra/vra:work' )
-    if vra_work[ 1 ]
-      vra_work[ 1 ].name = 'image'
-      vra_work[ 1 ][ 'id' ] = self.pid
-      vra_work[ 1 ][ 'refid' ] = self.pid
-    end
-
-    #####################################################
-    #work.add_relationship(:has_image, "info:fedora/#{self.pid}")
-
-    # validate the work xml before we save it
-    #MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
+    work.update_vra_work_tag
 
     work.save!
 
