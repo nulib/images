@@ -82,8 +82,6 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   def create_vra_work(vra, current_user=nil)
     work = Vrawork.new(pid: mint_pid("dil"))
 
-    work.save!
-
     work.edit_users = DIL_CONFIG['admin_staff']
     if current_user
       work.edit_users << current_user
