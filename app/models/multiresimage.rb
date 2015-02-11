@@ -90,9 +90,8 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
 
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-    work.update_vra_work_tag
 
-    work.save!
+    work.save
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
     work.add_relationship(:has_image, "info:fedora/#{self.pid}")
