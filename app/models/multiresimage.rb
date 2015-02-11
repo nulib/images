@@ -82,22 +82,45 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   def create_vra_work(vra, current_user=nil)
     work = Vrawork.new(pid: mint_pid("dil"))
 
+    work.save!
+
     work.edit_users = DIL_CONFIG['admin_staff']
     if current_user
       work.edit_users << current_user
       work.apply_depositor_metadata(current_user.user_key)
     end
 
+
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
+
+    ##############################
+    #vra_xml = self.datastreams[ "VRA" ].ng_xml
+    #image_pid = vra_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
+
+    # Change the image to a work
+    work.VRA.ng_xml.xpath( '/vra:vra/vra:image' )[ 0 ].name = 'work'
+    #vra_node[ 0 ].name = 'work'
+
+    # Change the work reference to an image reference^M
+    # Swap id and refid attributes in the new image reference
+    vra_work = work.VRA.ng_xml.xpath( '/vra:vra/vra:work' )
+    if vra_work[ 1 ]
+      vra_work[ 1 ].name = 'image'
+      vra_work[ 1 ][ 'id' ] = self.pid
+      vra_work[ 1 ][ 'refid' ] = self.pid
+    end
+
+    #####################################################
+    #work.add_relationship(:has_image, "info:fedora/#{self.pid}")
 
     # validate the work xml before we save it
-    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
+    #MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
+    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
     work.update_ref_id(work.pid)
     work.update_relation_set(self.pid)
 
@@ -124,11 +147,11 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #todo: make groups be a param to the API (maybe)
-        self.read_groups = ["registered"]
+        read_groups = ["registered"]
 
         #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(vra)
-        self.vraworks << work
+        work = create_vra_work(vra)
+        vraworks << work
 
         # Update work reference PID
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
@@ -142,7 +165,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
 
         #TODO: parse the vra record for the collection record
         collection = nil
