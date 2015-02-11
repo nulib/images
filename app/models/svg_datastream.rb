@@ -21,6 +21,13 @@ class SVGDatastream < ActiveFedora::OmDatastream
     }
   end
 
+  # DEPRECATION WARNING: In active-fedora 8 the solr fields created by SVGDatastream
+  # will be prefixed with "deliv_ops__".  If you want to maintain the existing behavior,
+  # you must override SVGDatastream.#prefix to return an empty string.
+  def prefix
+    ""
+  end
+
 
   # Update crop geometry
   def update_crop(x, y, width, height)
