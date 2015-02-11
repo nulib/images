@@ -103,7 +103,7 @@ clear:both;
 	position: relative;
 }
 
-a.member-remove { 
+a.member-remove {
 	top: 2px;
 	right: 18px;
 	width: 30px;
@@ -147,6 +147,9 @@ a.member-remove:active {
 	padding: 0 0 1em 0;
 }
 
+#main-container #downloads {
+  padding-bottom: 10px;
+}
 
 tr.even td, tr.odd td {
 	padding: .5em 1.5em;
@@ -255,9 +258,9 @@ div.batch_select_count_label {
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('ajax-loader.gif') 
-                50% 50% 
+    background: rgba( 255, 255, 255, .8 )
+                url('ajax-loader.gif')
+                50% 50%
                 no-repeat;
 }
 /** For photostream in Multiresimage **/
@@ -350,8 +353,8 @@ svg image {
 	padding: 1em;
 }
 
-.required:after { 
-	content:" *"; 
+.required:after {
+	content:" *";
 }
 
 .thumbnailSelected {
@@ -402,7 +405,7 @@ html, body {
     padding: 0 1em;
   }
 
-	.wrapper { 
+	.wrapper {
 		margin: 0 auto -280px;
   }
 	.push, #ft {
@@ -448,5 +451,5 @@ a:link.thumbnail, a:visited.thumbnail, a:active.thumbnail {border: 1px solid #dd
 }
 
 .edit_dil_collection {
-  display: none;  
+  display: none;
 }
