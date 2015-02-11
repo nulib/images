@@ -70,7 +70,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   has_attributes :file_name, datastream: :properties, multiple: false
   has_attributes :related_ids, datastream: :VRA, at: [:image, :relationSet, :imageOf, :relation_relids]
   has_attributes :preferred_related_work_pid, datastream: :VRA, at: [:image, :relationSet, :imageOf_preferred, :relation_relids], multiple: false
-  has_attributes :related_ids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids]
+  has_attributes :other_related_works_pids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids], multiple: true
 
   attr_accessor :vra_xml,
                 :from_menu
@@ -350,18 +350,14 @@ EOF
 		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
   end
 
-
-  # We can only have one related work as of right now, otherwise this function makes no sense
   def other_related_works
-    return [Vrawork.find(preferred_related_work_pid)]
-
-  #   return @other_related_works if @other_related_works
-  #   return nil unless other_related_works_pids
-		# @other_related_works = []
-  #   other_related_works_pids.each do |rel_pid|
-  #     @other_related_works << Vrawork.find(rel_pid)
-  #   end
-  #   @other_related_works
+    return @other_related_works if @other_related_works
+    return nil unless other_related_works_pids
+		@other_related_works = []
+    other_related_works_pids.each do |rel_pid|
+      @other_related_works << Vrawork.find(rel_pid)
+    end
+    @other_related_works
   end
 
 
