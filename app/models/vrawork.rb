@@ -3,7 +3,7 @@ class Vrawork  < ActiveFedora::Base
   #include ActiveFedora::Relationships
   include Hydra::AccessControls::Permissions
 
-  after_create :update_vra_work_tag
+  before_create :change_vra_image_to_vra_work
 
   has_and_belongs_to_many :multiresimages, :class_name => "Multiresimage", :property=> :has_image
 
@@ -32,7 +32,7 @@ class Vrawork  < ActiveFedora::Base
 
 
   # The xml_template uses the vra:image tags when creating the vra work
-  def update_vra_work_tag
+  def change_vra_image_to_vra_work
     vra_xml = self.datastreams[ "VRA" ].ng_xml
     image_pid = vra_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
 

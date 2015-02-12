@@ -144,6 +144,9 @@ a.member-remove:active {
 	padding: 0 0 1em 0;
 }
 
+#main-container #downloads {
+  padding-bottom: 10px;
+}
 
 tr.even td, tr.odd td {
 	padding: .5em 1.5em;

@@ -2,8 +2,7 @@
 	var initLayout = function() {
 		var hash = window.location.hash.replace('#', '');
 		var currentTab = $('ul.navigationTabs a')
-							.bind('click', showTab)
-							.filter('a[rel=' + hash + ']');
+							.bind('click', showTab);
 		if (currentTab.size() == 0) {
 			currentTab = $('ul.navigationTabs a:first');
 		}
@@ -49,7 +48,7 @@
 			}
 		});
 	};
-	
+
 	var showTab = function(e) {
 		var tabIndex = $('ul.navigationTabs a')
 							.removeClass('active')
@@ -62,6 +61,6 @@
 				.eq(tabIndex)
 				.show();
 	};
-	
+
 	EYE.register(initLayout, 'init');
 })(jQuery)

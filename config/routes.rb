@@ -18,7 +18,6 @@ Rails.application.routes.draw do
       post 'create_update_fedora_object'
       delete 'delete_fedora_object'
       post 'clone_work'
-      post 'create_crop'
       get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
       get 'get_number_of_objects', :defaults => { :format => 'xml' }
     end

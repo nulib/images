@@ -18,6 +18,6 @@
 	</div> <!-- end #crop-tool -->
 
 	<script type="text/javascript">
-			// The last parameter hides the crop tool if the image is already a crop, or if the user is logged out
-			CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %>);
+			// The last parameter hides the crop tool if the image is already a crop, or if the user is logged out. Added "|| true" to disable cropping.
+			CropTool.initialize("<%= params[:id] %>", true, $("#crop-tool"), <%= @multiresimage.is_crop? || !user_signed_in? %> || true);
 	</script>

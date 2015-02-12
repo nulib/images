@@ -82,7 +82,6 @@ class MultiresimagesController < ApplicationController
     end
   end
 
-
   # This method is called from multiresimage/_index.html.erb (image search results).
   # We don't want to show the Fedora URL to the user, so we call this action.
   # The permissions are checked and, if applicable, the image is retrieved and
