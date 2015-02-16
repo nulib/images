@@ -65,11 +65,7 @@ end
 def delete_test_group(name)
   # Delete test group
   visit('http://localhost:3000/')
-  sleep(5)
-  within('#imageCollection') do
-    click_link(name, match: :first)
-  end
-
+  click_link(name, match: :first)
   page.accept_confirm "Delete this group?" do
     click_link "Delete"
   end
@@ -173,7 +169,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     expect(find("#documents")).to have_content("Every man")
   end
 
-  xit "lets a user add an image to a group from the image view page" do
+  it "lets a user add an image to a group from the image view page" do
 
     # this test adds an image, saving a reference to its href, then goes to the group's page
     # and confirms an element with that href is on the page, then deletes the item from the test group
@@ -184,26 +180,22 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     find_link('Creator').click
     find_link('U.S. G.P.O.').click
 
-    img = page.find("#documents div:first .listing a")
-
-    img_caption = img[:href]
-
-    page.find("#images li:first img").click()
+    titles = page.all("#documents > div:nth-child(1) > div > a")
+    img_title = titles[0].text.split[0..3].join(" ")
+    puts "Image Title: #{img_title}"
+    
+    first('#documents > div:nth-child(1) > div > a').click
 
     click_button('Add to Image Group')
-    sleep(8)
     select('Test Group')
     click_button('Save')
-    sleep(8)
 
     visit('http://localhost:3000/')
+    click_link('Test Group')
 
-    page.find('a', :text => 'Test Group').click()
-    sleep(8)
+    expect(page).to have_link(img_title)
 
-    expect(page).to have_selector('a', :href => img_caption)
     delete_test_group('Test Group')
-    sleep(8)
   end
 
   it "lets a user add a subgroup to a group" do
@@ -271,95 +263,31 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     #DIL-4087
     visit('http://localhost:3000')
     make_test_group('Test Group')
-    sleep(8)
-
     click_link('Test Group')
-    sleep(8)
-
     click_link('Make this Group Private')
-    sleep(8)
+    expect(page).to_not have_link('Share this Group')
+    expect(page).to have_link('Make this Group Sharable')
 
-    expect(page).to_not have_selector('a', :text => 'Share this Group')
-    expect(page).to have_selector('a', :text => 'Make this Group Sharable')
-
-    #cleanup - make the group public again
+    #make the group public again
     click_link('Make this Group Sharable')
+    expect(page).to have_link('Make this Group Private')
     delete_test_group('Test Group')
-    sleep(8)
   end
 
-  xit "lets a user share a group" do
+  it "lets a user share a group" do
     #DIL-4087
     visit('http://localhost:3000')
     make_test_group('Test Group')
-
-    sleep(8)
-    group = find_link('Test Group')
-    group_url = group[:href]
-
     click_link('Test Group')
-    sleep(8)
+
     click_link('Share this Group')
-    sleep(8)
+
     #expect box with url in it to appear, also share this group copy
-    expect(page).to have_css('#copypath', :href => group_url)
-    share_box = find('#toppathwrap')
-    sleep(8)
-
-    expect(share_box.text.include?('Copy this link and share it!')).to be_truthy
+    expect(find('#toppathwrap')).to have_content(current_path)
+    expect(find('#toppathwrap')).to have_content('Copy this link and share it!')
 
     delete_test_group('Test Group')
-    sleep(8)
   end
-
-  xit "lets a user delete a subgroup" do
-    #DIL-4088
-    visit('http://localhost:3000')
-    sleep(8)
-    make_test_group('Test Group')
-    sleep(8)
-    make_test_group('Test Subgroup')
-
-    group = '', subgroup = ''
-
-    all('.accordion li').each do |el|
-      within(el) do
-        h2 = find('h2')
-        if h2[:title] == "Test Group"
-          sleep(8)
-          group = h2
-        end
-
-        if h2[:title] == "Test Subgroup"
-          sleep(8)
-          subgroup = h2
-        end
-      end
-    end
-
-    drag_n_drop(subgroup, group)
-
-    sleep(8)
-
-    click_link('Test Group')
-    sleep(8)
-
-    page.should have_selector('#images')
-    page.find('.member-remove').click()
-
-    sleep(8)
-    page.should_not have_selector('#images')
-
-    delete_test_group('Test Group')
-
-    sleep(8)
-    click_link('Test Subgroup')
-    sleep(8)
-    click_link('Delete')
-
-    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-    sleep(8)
-   end
 
   it "lets a user delete a group" do
     #DIL-4090
@@ -370,7 +298,6 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     delete_test_group('Test Group')
     expect(page).to_not have_content('Test Group')
-    #cleanup - each tests creates and deletes test group
   end
 
   it "lets a user rename a group" do
