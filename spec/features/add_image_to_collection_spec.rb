@@ -140,38 +140,38 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     sleep(8)
   end
 
- xit "lets a user export to PowerPoint" do
-   #DIL-4085
-   visit('http://localhost:3000')
-   sleep(8)
-   make_test_group('PPT Group')
+ # it "lets a user export to PowerPoint" do
+ #   #DIL-4085
+ #   visit('http://localhost:3000')
+ #   sleep(8)
+ #   make_test_group('PPT Group')
 
-   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
-   source_li = page.find("#images li", match: :first)
-   source = source_li.find("img")
+ #   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
+ #   source_li = page.find("#images li", match: :first)
+ #   source = source_li.find("img")
 
-   source_title_div = page.find("#documents div", match: :first)
-   source_title = source_title_div.find(".listing a", match: :first)
+ #   source_title_div = page.find("#documents div", match: :first)
+ #   source_title = source_title_div.find(".listing a", match: :first)
 
-   img_href = source_title[:href]
+ #   img_href = source_title[:href]
 
-   target_tag = page.find("h2.ui-droppable", match: :first)
-   target = target_tag.find("a")
-   target_text = target.text()
+ #   target_tag = page.find("h2.ui-droppable", match: :first)
+ #   target = target_tag.find("a")
+ #   target_text = target.text()
 
-   img_base_src = img_href.split("inu:")[1]
-   drag_n_drop(source, target)
-   sleep(8)
-   click_link(target_text)
+ #   img_base_src = img_href.split("inu:")[1]
+ #   drag_n_drop(source, target)
+ #   sleep(8)
+ #   click_link(target_text)
 
-   sleep(8)
-   click_link("Export to PowerPoint")
+ #   sleep(8)
+ #   click_link("Export to PowerPoint")
 
-   expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
+ #   expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
 
-   delete_test_group('PPT Group')
-   sleep(8)
- end
+ #   delete_test_group('PPT Group')
+ #   sleep(8)
+ # end
 
  #  it "lets a user search with a keyword" do
  #    # DIL-4069
@@ -310,6 +310,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     delete_test_group('Test Group')
     sleep(2)
   end
+
 
 
  #  it 'lets a user navigate to next and previous images in a group' do
