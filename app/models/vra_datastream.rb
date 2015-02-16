@@ -312,6 +312,12 @@ class VRADatastream < ActiveFedora::OmDatastream
     return nodeset
   end
 
+  # DEPRECATION WARNING: In active-fedora 8 the solr fields created by
+  # VRADatastream will be prefixed with "vra__".  If you want to maintain
+  # the existing behavior, you must override VRADatastream.#prefix to return an empty string.
+  def prefix
+    ""
+  end
 
   # Generates new VRA datastream
   def self.xml_template
