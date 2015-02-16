@@ -25,11 +25,3 @@ def login(user)
   expect(page).to have_content("Successfully authorized")
 
 end
-
-# def stub_groups_for_user(user)
-#   Group.any_instance.stub :persist_to_ldap
-#   user.group_codes.each do |code|
-#     Group.find_or_create_by_code_and_name!(code, 'Stub group')
-#   end
-#   Hydra::LDAP.stub(:groups_for_user).with(user.uid).and_return(user.group_codes)
-# end
