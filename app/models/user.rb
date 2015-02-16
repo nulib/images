@@ -1,8 +1,9 @@
 class User < ActiveRecord::Base
-# Connects this user object to Hydra behaviors.
- include Hydra::User
-# Connects this user object to Blacklights Bookmarks and Folders.
- include Blacklight::User
+  # Connects this user object to Hydra behaviors.
+  include Hydra::User
+  # Connects this user object to Blacklights Bookmarks and Folders.
+  include Blacklight::User
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -15,8 +16,6 @@ class User < ActiveRecord::Base
 
   # eduPersonAffiliation
   serialize :affiliations, Array
-
-  has_many :upload_files
 
   # Groups this user owns.
   def owned_groups
@@ -42,7 +41,6 @@ class User < ActiveRecord::Base
     if user = User.where(:email => info[:email].downcase).first
       user
     else # Create a user with a stub password.
-#puts "Info: #{info.inspect}"
       User.create!(:uid => info[:nickname], :email => info[:email].downcase, :password => Devise.friendly_token[0,20])
     end
   end
@@ -62,21 +60,13 @@ class User < ActiveRecord::Base
     return [] if uid.nil?
 
     codes = ["student"]
-    #codes = Hydra::LDAP.groups_for_user(uid)
-    #puts "codes for #{uid} are #{codes}"
-    #res = Group.find_all_by_code(codes)
     res = Group.where(code: codes)
-    #puts "res: #{res}"
     # add eduPersonAffiliation (e.g. student, faculty, staff) to groups that the user is a member of
     @groups = res + affiliations.map{ |code| Group.new(:code=>code) }
   end
 
-  def get_uploads_collection
-    query="edit_access_person_ssim:#{uid} AND title_ssim:\"#{DIL_CONFIG['dil_uploads_collection']}\" AND active_fedora_model_ssi:DILCollection"
-    ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim'})
-  end
 
-   def get_details_collection
+  def get_details_collection
     query="edit_access_person_ssim:#{uid} AND title_ssim:\"#{DIL_CONFIG['dil_details_collection']}\" AND active_fedora_model_ssi:DILCollection"
     ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim'})
   end
@@ -96,16 +86,10 @@ class User < ActiveRecord::Base
   end
 
   def admin?
-    # (User.admin_groups & groups.map(&:code)).length > 0
-
     # Load the 'config/dil-config.yml' file
     config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
     # If the current user's uid occurs in the 'admin_staff' list, they're admin
     config[ 'admin_staff' ].include? self.uid
   end
 
-  def uploader?
-    config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
-    config['uploaders'].include? self.uid
-  end
 end

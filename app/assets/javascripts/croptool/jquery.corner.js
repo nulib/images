@@ -1,7 +1,7 @@
 /*!
  * jQuery corner plugin: simple corner rounding
  * Examples and documentation at: http://jquery.malsup.com/corner/
- * version 2.11 (15-JUN-2010)
+ * version 2.13 (19-FEB-2013)
  * Requires jQuery v1.3.2 or later
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
@@ -12,21 +12,23 @@
 /**
  *  corner() takes a single string argument:  $('#myDiv').corner("effect corners width")
  *
- *  effect:  name of the effect to apply, such as round, bevel, notch, bite, etc (default is round). 
+ *  effect:  name of the effect to apply, such as round, bevel, notch, bite, etc (default is round).
  *  corners: one or more of: top, bottom, tr, tl, br, or bl.  (default is all corners)
- *  width:   width of the effect; in the case of rounded corners this is the radius. 
+ *  width:   width of the effect; in the case of rounded corners this is the radius.
  *           specify this value using the px suffix such as 10px (yes, it must be pixels).
  */
-;(function($) { 
+;(function($) {
+
+var msie = /MSIE/.test(navigator.userAgent);
 
 var style = document.createElement('div').style,
     moz = style['MozBorderRadius'] !== undefined,
     webkit = style['WebkitBorderRadius'] !== undefined,
     radius = style['borderRadius'] !== undefined || style['BorderRadius'] !== undefined,
     mode = document.documentMode || 0,
-    noBottomFold = $.browser.msie && (($.browser.version < 8 && !mode) || mode < 8),
+    noBottomFold = msie && (!mode || mode < 8),
 
-    expr = $.browser.msie && (function() {
+    expr = msie && (function() {
         var div = document.createElement('div');
         try { div.style.setExpression('width','0+0'); div.style.removeExpression('width'); }
         catch(e) { return false; }
@@ -36,19 +38,19 @@ var style = document.createElement('div').style,
 $.support = $.support || {};
 $.support.borderRadius = moz || webkit || radius; // so you can do:  if (!$.support.borderRadius) $('#myDiv').corner();
 
-function sz(el, p) { 
-    return parseInt($.css(el,p))||0; 
-};
+function sz(el, p) {
+    return parseInt($.css(el,p),10)||0;
+}
 function hex2(s) {
-    var s = parseInt(s).toString(16);
+    s = parseInt(s,10).toString(16);
     return ( s.length < 2 ) ? '0'+s : s;
-};
+}
 function gpc(node) {
     while(node) {
         var v = $.css(node,'backgroundColor'), rgb;
         if (v && v != 'transparent' && v != 'rgba(0, 0, 0, 0)') {
-            if (v.indexOf('rgb') >= 0) { 
-                rgb = v.match(/\d+/g); 
+            if (v.indexOf('rgb') >= 0) {
+                rgb = v.match(/\d+/g);
                 return '#'+ hex2(rgb[0]) + hex2(rgb[1]) + hex2(rgb[2]);
             }
             return v;
@@ -58,13 +60,13 @@ function gpc(node) {
         node = node.parentNode; // keep walking if transparent
     }
     return '#ffffff';
-};
+}
 
 function getWidth(fx, i, width) {
     switch(fx) {
     case 'round':  return Math.round(width*(1-Math.cos(Math.asin(i/width))));
     case 'cool':   return Math.round(width*(1+Math.cos(Math.asin(i/width))));
-    case 'sharp':  return Math.round(width*(1-Math.cos(Math.acos(i/width))));
+    case 'sharp':  return width-i;
     case 'bite':   return Math.round(width*(Math.cos(Math.asin((width-i-1)/width))));
     case 'slide':  return Math.round(width*(Math.atan2(i,width/i)));
     case 'jut':    return Math.round(width*(Math.atan2(width,(width-i-1))));
@@ -78,15 +80,17 @@ function getWidth(fx, i, width) {
     case 'dog2':   return (i&2) ? (i+1) : width;
     case 'dog3':   return (i&3) ? (i+1) : width;
     case 'fray':   return (i%2)*width;
-    case 'notch':  return width; 
+    case 'notch':  return width;
     case 'bevelfold':
     case 'bevel':  return i+1;
+    case 'steep':  return i/2 + 1;
+    case 'invsteep':return (width-i)/2+1;
     }
-};
+}
 
 $.fn.corner = function(options) {
     // in 1.3+ we can fix mistakes with the ready state
-    if (this.length == 0) {
+    if (this.length === 0) {
         if (!$.isReady && this.selector) {
             var s = this.selector, c = this.context;
             $(function() {
@@ -103,8 +107,8 @@ $.fn.corner = function(options) {
             keep = /keep/.test(o),                       // keep borders?
             cc = ((o.match(/cc:(#[0-9a-f]+)/)||[])[1]),  // corner color
             sc = ((o.match(/sc:(#[0-9a-f]+)/)||[])[1]),  // strip color
-            width = parseInt((o.match(/(\d+)px/)||[])[1]) || 10, // corner width
-            re = /round|bevelfold|bevel|notch|bite|cool|sharp|slide|jut|curl|tear|fray|wicked|sculpt|long|dog3|dog2|dogfold|dog/,
+            width = parseInt((o.match(/(\d+)px/)||[])[1],10) || 10, // corner width
+            re = /round|bevelfold|bevel|notch|bite|cool|sharp|slide|jut|curl|tear|fray|wicked|sculpt|long|dog3|dog2|dogfold|dog|invsteep|steep/,
             fx = ((o.match(re)||['round'])[0]),
             fold = /dogfold|bevelfold/.test(o),
             edges = { T:0, B:1 },
@@ -114,10 +118,10 @@ $.fn.corner = function(options) {
             },
             // vars used in func later
             strip, pad, cssHeight, j, bot, d, ds, bw, i, w, e, c, common, $horz;
-        
+
         if ( !opts.TL && !opts.TR && !opts.BL && !opts.BR )
             opts = { TL:1, TR:1, BL:1, BR:1 };
-            
+
         // support native rounding
         if ($.fn.corner.defaults.useNative && fx == 'round' && (radius || moz || webkit) && !cc && !sc) {
             if (opts.TL)
@@ -130,7 +134,7 @@ $.fn.corner = function(options) {
                 $this.css(radius ? 'border-bottom-right-radius' : moz ? '-moz-border-radius-bottomright' : '-webkit-border-bottom-right-radius', width + 'px');
             return;
         }
-            
+
         strip = document.createElement('div');
         $(strip).css({
             overflow: 'hidden',
@@ -140,13 +144,13 @@ $.fn.corner = function(options) {
             backgroundColor: sc || 'transparent',
             borderStyle: 'solid'
         });
-    
+
         pad = {
-            T: parseInt($.css(this,'paddingTop'))||0,     R: parseInt($.css(this,'paddingRight'))||0,
-            B: parseInt($.css(this,'paddingBottom'))||0,  L: parseInt($.css(this,'paddingLeft'))||0
+            T: parseInt($.css(this,'paddingTop'),10)||0,     R: parseInt($.css(this,'paddingRight'),10)||0,
+            B: parseInt($.css(this,'paddingBottom'),10)||0,  L: parseInt($.css(this,'paddingLeft'),10)||0
         };
 
-        if (typeof this.style.zoom != undefined) this.style.zoom = 1; // force 'hasLayout' in IE
+        if (typeof this.style.zoom !== undefined) this.style.zoom = 1; // force 'hasLayout' in IE
         if (!keep) this.style.border = 'none';
         strip.style.borderColor = cc || gpc(this.parentNode);
         cssHeight = $(this).outerHeight();
@@ -172,12 +176,12 @@ $.fn.corner = function(options) {
                     else
                         ds.width = '100%';
                 }
-                else if (!bot && $.browser.msie) {
+                else if (!bot && msie) {
                     if ($.css(this,'position') == 'static')
                         this.style.position = 'relative';
                     ds.position = 'absolute';
                     ds.top = ds.left = ds.right = ds.padding = ds.margin = '0';
-                    
+
                     // fix ie6 problem when blocked element has a border width
                     if (expr) {
                         bw = sz(this,'borderLeftWidth') + sz(this,'borderRightWidth');
@@ -188,8 +192,8 @@ $.fn.corner = function(options) {
                 }
                 else {
                     ds.position = 'relative';
-                    ds.margin = !bot ? '-'+pad.T+'px -'+pad.R+'px '+(pad.T-width)+'px -'+pad.L+'px' : 
-                                        (pad.B-width)+'px -'+pad.R+'px -'+pad.B+'px -'+pad.L+'px';                
+                    ds.margin = !bot ? '-'+pad.T+'px -'+pad.R+'px '+(pad.T-width)+'px -'+pad.L+'px' :
+                                        (pad.B-width)+'px -'+pad.R+'px -'+pad.B+'px -'+pad.L+'px';
                 }
 
                 for (i=0; i < width; i++) {
@@ -198,14 +202,14 @@ $.fn.corner = function(options) {
                     e.style.borderWidth = '0 '+(opts[j+'R']?w:0)+'px 0 '+(opts[j+'L']?w:0)+'px';
                     bot ? d.appendChild(e) : d.insertBefore(e, d.firstChild);
                 }
-                
+
                 if (fold && $.support.boxModel) {
                     if (bot && noBottomFold) continue;
                     for (c in opts) {
                         if (!opts[c]) continue;
                         if (bot && (c == 'TL' || c == 'TR')) continue;
                         if (!bot && (c == 'BL' || c == 'BR')) continue;
-                        
+
                         common = { position: 'absolute', border: 'none', margin: 0, padding: 0, overflow: 'hidden', backgroundColor: strip.style.borderColor };
                         $horz = $('<div/>').css(common).css({ width: width + 'px', height: '1px' });
                         switch(c) {
@@ -215,7 +219,7 @@ $.fn.corner = function(options) {
                         case 'BR': $horz.css({ top: 0, right: 0 }); break;
                         }
                         d.appendChild($horz[0]);
-                        
+
                         var $vert = $('<div/>').css(common).css({ top: 0, bottom: 0, width: '1px', height: width + 'px' });
                         switch(c) {
                         case 'TL': $vert.css({ left: width }); break;
@@ -231,7 +235,7 @@ $.fn.corner = function(options) {
     });
 };
 
-$.fn.uncorner = function() { 
+$.fn.uncorner = function() {
     if (radius || moz || webkit)
         this.css(radius ? 'border-radius' : moz ? '-moz-border-radius' : '-webkit-border-radius', 0);
     $('div.jquery-corner', this).remove();
@@ -243,5 +247,5 @@ $.fn.corner.defaults = {
     useNative: true, // true if plugin should attempt to use native browser support for border radius rounding
     metaAttr:  'data-corner' // name of meta attribute to use for options
 };
-    
+
 })(jQuery);

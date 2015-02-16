@@ -182,13 +182,13 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     titles = page.all("#documents > div:nth-child(1) > div > a")
     img_title = titles[0].text.split[0..3].join(" ")
-    puts "Image Title: #{img_title}"
     
     first('#documents > div:nth-child(1) > div > a').click
 
     click_button('Add to Image Group')
     select('Test Group')
     click_button('Save')
+    sleep(5)
 
     visit('http://localhost:3000/')
     click_link('Test Group')

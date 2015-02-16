@@ -8,8 +8,8 @@ class DilCollectionsController < ApplicationController
 
   def create
     authorize!(:create, DILCollection)
-	  #make sure collection's name isn't a reserved name for Uploads and Details collections
-	  if params[:dil_collection][:title].downcase == DIL_CONFIG['dil_uploads_collection'].downcase || params[:dil_collection][:title].downcase == DIL_CONFIG['dil_details_collection'].downcase
+	  #make sure collection's name isn't a reserved name for Details collections
+	  if params[:dil_collection][:title].downcase == DIL_CONFIG['dil_details_collection'].downcase
 	    flash[:alert] = "Cannot use that collection name. That name is reserved."
 	  else
 	    edit_users_array = DIL_CONFIG['admin_staff'] | Array.new([current_user.user_key])
@@ -34,7 +34,7 @@ class DilCollectionsController < ApplicationController
       eligible = current_user.owned_groups.map(&:code)
       @collection.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
     end
-    if params[:dil_collection][:title].downcase == DIL_CONFIG['dil_uploads_collection'].downcase || params[:dil_collection][:title].downcase == DIL_CONFIG['dil_details_collection'].downcase
+    if params[:dil_collection][:title].downcase == DIL_CONFIG['dil_details_collection'].downcase
       flash[:alert] = "Cannot use that collection name. That name is reserved."
     else
       @collection.update_attributes(params[:dil_collection])

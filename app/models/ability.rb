@@ -14,10 +14,6 @@ class Ability
   def custom_permissions
     can :manage, :all if @user.admin?
 
-    ### Sets up Uploads route with permission for admin and uploader
-    can :show, UploadFile if @user.uploader?
-    can :show, UploadFile if DIL_CONFIG['admin_staff'].include? @user.uid || @user.admin? || @user.uploader?
-
     can :create, DILCollection unless @user.new_record?
     can :update, DILCollection do |obj|
       test_edit(obj.pid)
@@ -51,25 +47,25 @@ class Ability
   # Extends Hydra::Ability.test_edit to try policy controls if object-level controls deny access
   def test_edit(pid)
     result = super
-    if result 
+    if result
       return result
     else
       return test_edit_from_policy(pid)
     end
   end
-  
+
   # Extends Hydra::Ability.test_read to try policy controls if object-level controls deny access
   def test_read(pid)
     result = super
-    if result 
+    if result
       return result
     else
       return test_read_from_policy(pid)
     end
   end
-  
 
-  
+
+
   private
   def can_edit_collection?(obj)
     pids = obj.collection_ids

@@ -24,7 +24,7 @@
 <% end %>
 
   <% if @collection.members %>
-    <h2><%=@collection.title %> <% unless @collection.title.downcase == DIL_CONFIG['dil_uploads_collection'].downcase || @collection.title.downcase == DIL_CONFIG['dil_details_collection'].downcase %><button id="rename_image_group_link" class="btn"><i class="icon-pencil"></i></button>
+    <h2><%=@collection.title %> <% unless @collection.title.downcase == DIL_CONFIG['dil_details_collection'].downcase %><button id="rename_image_group_link" class="btn"><i class="icon-pencil"></i></button>
       <%= form_for @collection do |f| %>
         <%= f.text_field :title, :placeholder => "New group name...", :id => 'dil_collection_title' %>
         <%= f.submit "Update", :class => "btn" %>
