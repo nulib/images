@@ -69,6 +69,7 @@ def delete_test_group(name)
   page.accept_confirm "Delete this group?" do
     click_link "Delete"
   end
+  expect(page).to have_content('Image Group deleted')
 end
 
 def remove_images_from_test_group(name)
@@ -92,39 +93,22 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     click_button('signIn')
   end
 
-
   it "lets a user add an image to a group" do
     #DIL-4095
     visit('http://localhost:3000')
     make_test_group('Test Group')
+    
     find_link('Work Type').click
     find_link('Prints').click
+    titles = page.all("#documents > div:nth-child(1) > div > a")
+    img_title = titles[0].text.split[0..3].join(" ")
+    puts "Image Title: #{img_title}"
 
-    source_li = page.find("#images li", match: :first)
-    source = source_li.find("img")
+    # drag the first image result to the Test Group
+    drag_n_drop(first("#images > ul > li > a > img"), find_link('Test Group'))
 
-    source_tag = page.find("#documents div", match: :first)
-    source_title = source_tag.find(".listing a", match: :first)
-    img_href = source_title[:href]
-
-    target_tag = page.find("h2.ui-droppable", match: :first)
-
-    target = target_tag.find("a")
-    target_text = target.text()
-
-    img_base_src = img_href.split("inu:")[1]
-    drag_n_drop(source, target)
-    click_link(target_text, match: :first)
-
-    image_present = false
-
-    all('img').each do |img|
-      if img[:src].include?(img_base_src)
-        image_present = true
-      end
-    end
-
-    expect(image_present).to be_truthy
+    click_link('Test Group')
+    expect(page).to have_content(img_title)
 
     delete_test_group('Test Group')
   end
