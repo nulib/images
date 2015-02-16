@@ -20,27 +20,29 @@ def drag_n_drop(source, target)
 end
 
 def make_test_group(name)
-  fill_in('new_dil_collection_title', :with => name)
-  page.evaluate_script("document.forms[1].submit()")
-  sleep(8)
+  within('#new_dil_collection') do
+    fill_in 'new_dil_collection_title', with: name
+    click_button('Create Group')
+  end
 end
 
 def add_images_to_test_group(name)
   #add images to name (test group)
-  fill_in('q', :with => "every man")
-  page.evaluate_script("document.forms[0].submit()")
-  sleep(8)
+  fill_in('q', with: "every man")
+  click_button('search')
 
   #you need unique images
   #this is the best way to reference the image element, because it doesn't contain a pid or url, and the link with caption is below it
   source_li = page.find("#images li", match: :first)
   source = source_li.find("img")
-  target = page.find('a', :text => name)
+  target = page.find('a', text: name)
 
   drag_n_drop(source, target)
 
-  visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-  sleep(8)
+  visit('http://localhost:3000/')
+
+  find_link('Creator').click
+  find_link('U.S. G.P.O.').click
 
   source_li2 = page.find("#images li", match: :first)
   source2 = source_li2.find("img")
@@ -48,25 +50,25 @@ def add_images_to_test_group(name)
 
   drag_n_drop(source2, target2)
 
-  visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
-  sleep(8)
+  visit('http://localhost:3000/')
+
+  find_link('Work Type').click
+  find_link('Prints').click
 
   source_li3 = page.find("#images li", match: :first)
   source3 = source_li3.find("img")
   target3 = page.find('a', :text => name)
 
   drag_n_drop(source3, target3)
-  sleep(8)
 end
 
 def delete_test_group(name)
   # Delete test group
   visit('http://localhost:3000/')
-  sleep(8)
+  sleep(5)
   within('#imageCollection') do
     click_link(name, match: :first)
   end
-  sleep(8)
 
   page.accept_confirm "Delete this group?" do
     click_link "Delete"
@@ -75,15 +77,9 @@ end
 
 def remove_images_from_test_group(name)
   visit('http://localhost:3000')
-  sleep(8)
-
   click_link(name)
-
-  sleep(8)
-
   all('.member-remove').each do |el|
-    el.click()
-    sleep(8)
+    click_link(el)
   end
 end
 
@@ -122,10 +118,8 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     img_base_src = img_href.split("inu:")[1]
     drag_n_drop(source, target)
-    sleep(8)
     click_link(target_text, match: :first)
 
-    sleep(8)
     image_present = false
 
     all('img').each do |img|
@@ -137,385 +131,290 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     expect(image_present).to be_truthy
 
     delete_test_group('Test Group')
+  end
+
+  xit "lets a user export to PowerPoint" do
+    #DIL-4085
+    visit('http://localhost:3000')
+    sleep(8)
+    make_test_group('PPT Group')
+
+    visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
+    source_li = page.find("#images li", match: :first)
+    source = source_li.find("img")
+
+    source_title_div = page.find("#documents div", match: :first)
+    source_title = source_title_div.find(".listing a", match: :first)
+
+    img_href = source_title[:href]
+
+    target_tag = page.find("h2.ui-droppable", match: :first)
+    target = target_tag.find("a")
+    target_text = target.text()
+
+    img_base_src = img_href.split("inu:")[1]
+    drag_n_drop(source, target)
+    sleep(8)
+    click_link(target_text)
+
+    sleep(8)
+    click_link("Export to PowerPoint")
+
+    expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
+
+    delete_test_group('PPT Group')
     sleep(8)
   end
 
- xit "lets a user export to PowerPoint" do
-   #DIL-4085
-   visit('http://localhost:3000')
-   sleep(8)
-   make_test_group('PPT Group')
+  it "lets a user search with a keyword" do
+    # DIL-4069
+    fill_in('q', with: 'every man')
+    click_button('search')
+    expect(find("#documents")).to have_content("Every man")
+  end
+
+  xit "lets a user add an image to a group from the image view page" do
 
-   visit('http://localhost:3000/catalog?f[worktype_facet][]=Prints')
-   source_li = page.find("#images li", match: :first)
-   source = source_li.find("img")
+    # this test adds an image, saving a reference to its href, then goes to the group's page
+    # and confirms an element with that href is on the page, then deletes the item from the test group
+    # DIL-4082
 
-   source_title_div = page.find("#documents div", match: :first)
-   source_title = source_title_div.find(".listing a", match: :first)
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    find_link('Creator').click
+    find_link('U.S. G.P.O.').click
 
-   img_href = source_title[:href]
+    img = page.find("#documents div:first .listing a")
 
-   target_tag = page.find("h2.ui-droppable", match: :first)
-   target = target_tag.find("a")
-   target_text = target.text()
-
-   img_base_src = img_href.split("inu:")[1]
-   drag_n_drop(source, target)
-   sleep(8)
-   click_link(target_text)
+    img_caption = img[:href]
+
+    page.find("#images li:first img").click()
 
-   sleep(8)
-   click_link("Export to PowerPoint")
+    click_button('Add to Image Group')
+    sleep(8)
+    select('Test Group')
+    click_button('Save')
+    sleep(8)
+
+    visit('http://localhost:3000/')
 
-   expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
-
-   delete_test_group('PPT Group')
-   sleep(8)
- end
-
- #  it "lets a user search with a keyword" do
- #    # DIL-4069
- #    fill_in('q', with: 'every man')
- #    page.evaluate_script("document.forms[0].submit()")
- #    sleep(8)
-
- #    results = false
-
- #    all('.listing a').each do |el|
-
- #      if el.text().include?('Every man')
- #        results = true
- #      end
- #    end
- #    expect(results).to be_truthy
-
- #  end
-
- #  it "lets a user add an image to a group from the image view page" do
-
- #    # this test adds an image, saving a reference to its href, then goes to the group's page
- #    # and confirms an element with that href is on the page, then deletes the item from the test group
- #    # DIL-4082
-
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
-
- #    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
- #    img = page.find("#documents div:first .listing a")
-
- #    img_caption = img[:href]
-
- #    page.find("#images li:first img").click()
-
- #    sleep(8)
-
- #    click_button('Add to Image Group')
- #    sleep(8)
- #    select('Test Group')
- #    click_button('Save')
- #    sleep(8)
-
- #    visit('http://localhost:3000/')
- #    sleep(8)
-
- #    page.find('a', :text => 'Test Group').click()
- #    sleep(8)
-
- #    expect(page).to have_selector('a', :href => img_caption)
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
-
-
- #  it "lets a user add a subgroup to a group" do
- #    # drag it onto the test group
- #    # test that if you click the subgroup it has the correct parent group in its page
- #    # and that if you click the expand button on the parent group you see the subgroup name
- #    # underneath it
- #    #DIL-4081
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
- #    make_test_group('Test Subgroup')
- #    sleep(8)
-
- #    group = '', subgroup = '', group_parent = false
-
- #    all('.accordion li').each do |el|
- #      within(el) do
- #        h2 = find(:css, 'h2')
- #        if h2[:title] == "Test Group"
- #          sleep(8)
- #          group = h2
- #        end
-
- #        if h2[:title] == "Test Subgroup"
- #          sleep(8)
- #          subgroup = h2
- #        end
- #      end
- #    end
-
- #    drag_n_drop(subgroup, group)
-
- #    sleep(8)
- #    page.should_not have_selector('a', :text => 'Test Subgroup')
-
- #    within(group) do
- #      icon = find('span')
- #      within(icon) do
- #        find('img').click()
- #      end
- #    end
-
- #    sleep(8)
- #    our_subgroup = false
- #    our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
- #    expect(our_subgroup).to be_truthy
-
- #    click_link('Test Subgroup')
- #    sleep(8)
-
- #    h4 = page.find('#sidebar div:first-child h4')
- #    sleep(8)
- #    a = page.find('#sidebar div:nth-child(2) a')
-
- #    if h4.text() == 'Parent Collections' and a[:text] == 'Test Group'
- #      group_parent = true
- #    end
-
- #    expect(group_parent).to be_truthy
- #    click_link('Delete')
-
- #    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
-
-
- #  it 'lets a user navigate to next and previous images in a group' do
- #    # these tests assume that the images in first, 6th and 8th place are different, will have different urls.
- #    # they are fixture data so should be consistent.
- #    #DIL-4084
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
-
- #    add_images_to_test_group('Test Group')
- #    sleep(8)
-
- #    visit('http://localhost:3000')
-
- #    sleep(8)
-
- #    click_link('Test Group')
-
- #    sleep(8)
-
- #    first_title = page.find("#gallery_container #images:first-child a")
- #    first_href = first_title[:href]
-
- #    second_title = page.find("#gallery_container #images:nth-child(2) a")
- #    second_href = second_title[:href]
-
- #    # click the first image, which should be first title. click next and the href on the
- #    # page should be the second title. on that page click previous, you should go back to page and see the first href there
-
- #    page.find("#images li:first-child img").click()
- #    sleep(8)
- #    click_link('Next')
-
- #    #the page's main image, the image available for download, is the second or first one
- #    expect(page).to have_selector('a', :href => second_href, :text => 'Small Image Download (JPG)')
-
- #    click_link('Previous')
- #    sleep(8)
-
- #    expect(page).to have_selector('a', :href => first_href, :text => 'Small Image Download (JPG)')
- #    sleep(8)
-
- #    #remove_images_from_test_group('Test Group')
- #    delete_test_group('Test Group')
- #  end
-
-
- #  it "lets a user make a group private" do
- #    #DIL-4087
- #    visit('http://localhost:3000')
- #    make_test_group('Test Group')
- #    sleep(8)
-
- #    click_link('Test Group')
- #    sleep(8)
-
- #    click_link('Make this Group Private')
- #    sleep(8)
-
- #    expect(page).to_not have_selector('a', :text => 'Share this Group')
- #    expect(page).to have_selector('a', :text => 'Make this Group Sharable')
-
- #    #cleanup - make the group public again
- #    click_link('Make this Group Sharable')
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
-
- #  it "lets a user share a group" do
- #    #DIL-4087
- #    visit('http://localhost:3000')
- #    make_test_group('Test Group')
-
- #    sleep(8)
- #    group = find('a', :text => 'Test Group')
- #    group_url = group[:href]
-
- #    click_link('Test Group')
- #    sleep(8)
- #    click_link('Share this Group')
- #    sleep(8)
- #    #expect box with url in it to appear, also share this group copy
- #    expect(page).to have_css('#copypath', :href => group_url)
- #    share_box = find('#toppathwrap')
- #    sleep(8)
-
- #    expect(share_box.text.include?('Copy this link and share it!')).to be_truthy
-
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
-
-
- #  it "lets a user delete a subgroup" do
- #    #DIL-4088
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
- #    make_test_group('Test Subgroup')
-
- #    group = '', subgroup = ''
-
- #    all('.accordion li').each do |el|
- #      within(el) do
- #        h2 = find('h2')
- #        if h2[:title] == "Test Group"
- #          sleep(8)
- #          group = h2
- #        end
-
- #        if h2[:title] == "Test Subgroup"
- #          sleep(8)
- #          subgroup = h2
- #        end
- #      end
- #    end
-
- #    drag_n_drop(subgroup, group)
-
- #    sleep(8)
-
- #    click_link('Test Group')
- #    sleep(8)
-
- #    page.should have_selector('#images')
- #    page.find('.member-remove').click()
-
- #    sleep(8)
- #    page.should_not have_selector('#images')
-
-
- #    delete_test_group('Test Group')
-
-
- #    sleep(8)
- #    click_link('Test Subgroup')
- #    sleep(8)
- #    click_link('Delete')
-
- #    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
- #    sleep(8)
- #   end
-
-
- #  it "lets a user delete a group" do
- #    #DIL-4090
- #    visit('http://localhost:3000')
-
- #    make_test_group('Test Group')
- #    sleep(8)
- #    expect(page).to have_content('Test Group')
-
- #    delete_test_group('Test Group')
- #    sleep(8)
- #    expect(page).to_not have_content('Test Group')
- #    #cleanup - each tests creates and deletes test group
- #  end
-
- #  it "lets a user rename a group" do
- #    visit('http://localhost:3000')
-
- #    make_test_group('Test Group')
- #    sleep(8)
-
- #    click_link("Test Group")
- #    sleep(8)
-
- #    click_button('rename_image_group_link')
- #    fill_in('dil_collection_title', with: "New and Different Subgroup Name")
- #    page.evaluate_script("document.forms[2].submit()")
- #    sleep(8)
-
- #    group_title = find('#accordion h2')
-
- #    expect(group_title.text()).to eq("New and Different Subgroup Name")
-
- #    #clean up by re-naming back to Test Group
- #    click_button('rename_image_group_link')
- #    fill_in('dil_collection_title', with: "Test Group")
- #    page.evaluate_script("document.forms[2].submit()")
- #    sleep(8)
-
- #    #cleanup - delete test group
- #    delete_test_group('Test Group')
- #  end
-
-
- #  it "lets a user save a TIFF or jpeg" do
- #    #DIL-4091
- #    # click the download original tiff or jpeg button
- #    # and test that you get a page with an image file on with the correct src - jpg or tiff
- #    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
- #    page.find(:css, "#images li:first img").click()
-
- #    sleep(8)
- #    img = page.find('a', :text => "Small Image Download (JPG)")
-
- #    pid = img[:href].split("inu:")[1]
-
- #    click_link('Small Image Download (JPG)')
-
- #    sleep(8)
-
- #    new_window = page.driver.browser.window_handles.last
-
- #    image_present = false
-
- #    page.within_window new_window do
-
- #      all('img').each do |img|
- #        if img[:src].include?(pid)
- #          image_present = true
- #        end
- #      end
- #    end
-
- #    image_present.should be_truthy
- #  end
+    page.find('a', :text => 'Test Group').click()
+    sleep(8)
+
+    expect(page).to have_selector('a', :href => img_caption)
+    delete_test_group('Test Group')
+    sleep(8)
+  end
+
+  it "lets a user add a subgroup to a group" do
+    # drag it onto the test group
+    # test that if you click the subgroup it has the correct parent group in its page
+    # and that if you click the expand button on the parent group you see the subgroup name
+    # underneath it
+    #DIL-4081
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    make_test_group('Test Subgroup')
+
+    drag_n_drop(find_link('Test Group'), find_link('Test Subgroup'))
+
+    expect(find('#sidebar')).to have_no_content('Test Group')
+
+    within('#sidebar') do
+      icon = find('span')
+      within(icon) do
+        find('img').click()
+      end
+    end
+
+    click_link('Test Group')
+    expect(find('#sidebar').find('h4')).to have_content('Parent Collections')
+  
+    page.accept_confirm "Delete this group?" do
+      click_link "Delete"
+    end
+
+    delete_test_group('Test Subgroup')
+  end
+
+  it 'lets a user navigate to next and previous images in a group' do
+    # these tests assume that the images in first, 6th and 8th place are different, will have different urls.
+    # they are fixture data so should be consistent.
+    #DIL-4084
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+
+    add_images_to_test_group('Test Group')
+
+    visit('http://localhost:3000')
+
+    click_link('Test Group')
+
+    #fix this:
+    titles = page.all("#images:first-child > a:nth-child(2)")
+    first_title = titles[0].text.split[0..3].join(" ")
+    second_title = titles[1].text.split[0..3].join(" ")
+
+    first('#images > a').click
+
+    click_link('Next')
+    expect(page).to have_content(second_title)
+
+    click_link('Previous')
+    expect(page).to have_content(first_title)
+
+    #remove_images_from_test_group('Test Group')
+    delete_test_group('Test Group')
+  end
+
+  it "lets a user make a group private" do
+    #DIL-4087
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    sleep(8)
+
+    click_link('Test Group')
+    sleep(8)
+
+    click_link('Make this Group Private')
+    sleep(8)
+
+    expect(page).to_not have_selector('a', :text => 'Share this Group')
+    expect(page).to have_selector('a', :text => 'Make this Group Sharable')
+
+    #cleanup - make the group public again
+    click_link('Make this Group Sharable')
+    delete_test_group('Test Group')
+    sleep(8)
+  end
+
+  xit "lets a user share a group" do
+    #DIL-4087
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+
+    sleep(8)
+    group = find_link('Test Group')
+    group_url = group[:href]
+
+    click_link('Test Group')
+    sleep(8)
+    click_link('Share this Group')
+    sleep(8)
+    #expect box with url in it to appear, also share this group copy
+    expect(page).to have_css('#copypath', :href => group_url)
+    share_box = find('#toppathwrap')
+    sleep(8)
+
+    expect(share_box.text.include?('Copy this link and share it!')).to be_truthy
+
+    delete_test_group('Test Group')
+    sleep(8)
+  end
+
+  xit "lets a user delete a subgroup" do
+    #DIL-4088
+    visit('http://localhost:3000')
+    sleep(8)
+    make_test_group('Test Group')
+    sleep(8)
+    make_test_group('Test Subgroup')
+
+    group = '', subgroup = ''
+
+    all('.accordion li').each do |el|
+      within(el) do
+        h2 = find('h2')
+        if h2[:title] == "Test Group"
+          sleep(8)
+          group = h2
+        end
+
+        if h2[:title] == "Test Subgroup"
+          sleep(8)
+          subgroup = h2
+        end
+      end
+    end
+
+    drag_n_drop(subgroup, group)
+
+    sleep(8)
+
+    click_link('Test Group')
+    sleep(8)
+
+    page.should have_selector('#images')
+    page.find('.member-remove').click()
+
+    sleep(8)
+    page.should_not have_selector('#images')
+
+    delete_test_group('Test Group')
+
+    sleep(8)
+    click_link('Test Subgroup')
+    sleep(8)
+    click_link('Delete')
+
+    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    sleep(8)
+   end
+
+  it "lets a user delete a group" do
+    #DIL-4090
+    visit('http://localhost:3000')
+
+    make_test_group('Test Group')
+    expect(page).to have_content('Test Group')
+
+    delete_test_group('Test Group')
+    expect(page).to_not have_content('Test Group')
+    #cleanup - each tests creates and deletes test group
+  end
+
+  it "lets a user rename a group" do
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    click_link('Test Group')
+    click_button('rename_image_group_link')
+    fill_in('dil_collection_title', with: "New and Different Subgroup Name")
+    click_button('Update')
+    expect(find('#accordion h2')).to have_content('New and Different Subgroup Name')
+    delete_test_group('New and Different Subgroup Name')
+  end
+
+  xit "lets a user save a TIFF or jpeg" do
+    #DIL-4091
+    # click the download original tiff or jpeg button
+    # and test that you get a page with an image file on with the correct src - jpg or tiff
+    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    page.find(:css, "#images li:first img").click()
+
+    sleep(8)
+    img = page.find('a', :text => "Small Image Download (JPG)")
+
+    pid = img[:href].split("inu:")[1]
+
+    click_link('Small Image Download (JPG)')
+
+    sleep(8)
+
+    new_window = page.driver.browser.window_handles.last
+
+    image_present = false
+
+    page.within_window new_window do
+
+      all('img').each do |img|
+        if img[:src].include?(pid)
+          image_present = true
+        end
+      end
+    end
+
+    image_present.should be_truthy
+  end
 
 end
 
