@@ -238,24 +238,17 @@ end
   def export
     @collection = DILCollection.find(params[:id])
     authorize! :update, @collection
-    #read_groups = params[:dil_collection].delete(:read_groups)
-    #if read_groups.present?
-      #eligible = current_user.owned_groups.map(&:code)
-      #@collection.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
-    #end
 
     export_xml = @collection.export_image_info_as_xml(current_user.email)
-    #export_xml << current_user.email
     logger.debug("export_xml: " + export_xml)
-	# response will be status of script that puts message in queue
-	logger.debug("Before CGI call for export")
-	post_args = {'xml' => export_xml}
-	cgi_response = Net::HTTP.post_form(URI.parse(DIL_CONFIG['dil_ppt_cgi_url']), 'collection_xml' => export_xml).body
-	logger.debug("After CGI call for export")
-	logger.debug("response:" + cgi_response)
+
+  	logger.debug("Before CGI call for export")
+  	post_args = {'xml' => export_xml}
+  	cgi_response = Net::HTTP.post_form(URI.parse(DIL_CONFIG['dil_ppt_cgi_url']), 'collection_xml' => export_xml).body
+  	logger.debug("After CGI call for export")
+  	logger.debug("response:" + cgi_response)
 
     flash[:notice] = "Image Group exported.  Please check your Northwestern University email account for a link to your presentation."
-
     redirect_to dil_collection_path(@collection)
   end
 
