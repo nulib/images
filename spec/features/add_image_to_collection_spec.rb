@@ -193,110 +193,125 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
  #  end
 
- #  it "lets a user add an image to a group from the image view page" do
+  it "lets a user add an image to a group from the image view page" do
 
- #    # this test adds an image, saving a reference to its href, then goes to the group's page
- #    # and confirms an element with that href is on the page, then deletes the item from the test group
- #    # DIL-4082
+    # this test adds an image, saving a reference to its href, then goes to the group's page
+    # and confirms an element with that href is on the page, then deletes the item from the test group
+    # DIL-4082
 
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
+    visit('http://localhost:3000')
+    sleep(8)
+    make_test_group('Test Group')
+    sleep(8)
 
- #    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
- #    img = page.find("#documents div:first .listing a")
+    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+    img_div = page.find("#documents div", match: :first )
+    img = img_div.find(".listing a", match: :first)
+    img_base_src = img[:href].split("inu:")[1]
 
- #    img_caption = img[:href]
+    img_div = page.find("#images li", match: :first)
+    img_div.find("img").click()
 
- #    page.find("#images li:first img").click()
+    sleep(8)
 
- #    sleep(8)
+    click_button('Add to Image Group')
+    sleep(8)
+    select('Test Group', match: :first)
+    click_button('Save')
+    sleep(8)
 
- #    click_button('Add to Image Group')
- #    sleep(8)
- #    select('Test Group')
- #    click_button('Save')
- #    sleep(8)
+    visit('http://localhost:3000/')
+    sleep(8)
 
- #    visit('http://localhost:3000/')
- #    sleep(8)
+    click_link('Test Group')
+    sleep(8)
 
- #    page.find('a', :text => 'Test Group').click()
- #    sleep(8)
+    image_present = false
 
- #    expect(page).to have_selector('a', :href => img_caption)
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
+    all('img').each do |img|
+      if img[:src].include?(img_base_src)
+        image_present = true
+      end
+    end
+
+    expect(image_present).to be_truthy
+
+    delete_test_group('Test Group')
+    sleep(8)
+  end
 
 
- #  it "lets a user add a subgroup to a group" do
- #    # drag it onto the test group
- #    # test that if you click the subgroup it has the correct parent group in its page
- #    # and that if you click the expand button on the parent group you see the subgroup name
- #    # underneath it
- #    #DIL-4081
- #    visit('http://localhost:3000')
- #    sleep(8)
- #    make_test_group('Test Group')
- #    sleep(8)
- #    make_test_group('Test Subgroup')
- #    sleep(8)
+  it "lets a user add a subgroup to a group" do
+    # drag it onto the test group
+    # test that if you click the subgroup it has the correct parent group in its page
+    # and that if you click the expand button on the parent group you see the subgroup name
+    # underneath it
+    #DIL-4081
+    visit('http://localhost:3000')
+    sleep(4)
+    make_test_group('Test Group')
+    sleep(4)
+    make_test_group('Test Subgroup')
+    sleep(4)
 
- #    group = '', subgroup = '', group_parent = false
+    group = '', subgroup = '', group_parent = false
 
- #    all('.accordion li').each do |el|
- #      within(el) do
- #        h2 = find(:css, 'h2')
- #        if h2[:title] == "Test Group"
- #          sleep(8)
- #          group = h2
- #        end
+    all('.accordion li').each do |el|
+      within(el) do
+        h2 = find(:css, 'h2')
+        if h2[:title] == "Test Group"
+          sleep(4)
+          group = h2
+        end
 
- #        if h2[:title] == "Test Subgroup"
- #          sleep(8)
- #          subgroup = h2
- #        end
- #      end
- #    end
+        if h2[:title] == "Test Subgroup"
+          sleep(4)
+          subgroup = h2
+        end
+      end
+    end
 
- #    drag_n_drop(subgroup, group)
+    drag_n_drop(subgroup, group)
 
- #    sleep(8)
- #    page.should_not have_selector('a', :text => 'Test Subgroup')
+    sleep(4)
+    expect(page).to_not have_selector('a', :text => 'Test Subgroup')
 
- #    within(group) do
- #      icon = find('span')
- #      within(icon) do
- #        find('img').click()
- #      end
- #    end
+    find('.collection_plus_minus').click()
 
- #    sleep(8)
- #    our_subgroup = false
- #    our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
- #    expect(our_subgroup).to be_truthy
 
- #    click_link('Test Subgroup')
- #    sleep(8)
+    sleep(4)
+    our_subgroup = false
+    our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
+    expect(our_subgroup).to be_truthy
 
- #    h4 = page.find('#sidebar div:first-child h4')
- #    sleep(8)
- #    a = page.find('#sidebar div:nth-child(2) a')
+    click_link('Test Subgroup')
+    sleep(4)
 
- #    if h4.text() == 'Parent Collections' and a[:text] == 'Test Group'
- #      group_parent = true
- #    end
+    h4_div = page.find('#sidebar div', match: :first)
+    h4 = h4_div.find("h4")
+    sleep(4)
 
- #    expect(group_parent).to be_truthy
- #    click_link('Delete')
+     our_test_group  = false
 
- #    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    within("#sidebar") do
+      if find("a", :text => "Test Group", match: :first)
+        our_test_group = true
+      end
+    end
 
- #    delete_test_group('Test Group')
- #    sleep(8)
- #  end
+    if h4.text() == 'Parent Collections' and our_test_group
+      group_parent = true
+    end
+
+    expect(group_parent).to be_truthy
+
+    page.accept_confirm "Delete this group?" do
+      click_link "Delete"
+    end
+
+    delete_test_group('Test Group')
+    sleep(2)
+  end
 
 
  #  it 'lets a user navigate to next and previous images in a group' do
