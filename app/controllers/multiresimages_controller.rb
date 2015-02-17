@@ -4,7 +4,6 @@ require 'dil/pid_minter'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
   include DIL::PidMinter
-  #include Vrawork
   helper :permissions
 
   respond_to :html, :xml
@@ -46,16 +45,6 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
-  def edit
-    begin
-      LockedObject.obtain_lock(params[:id], "image - edit metadata", current_user.id)
-      @multiresimage = Multiresimage.find(params[:id])
-      authorize! :update, @multiresimage
-      #@policies = AdminPolicy.readable_by_user(current_user)
-    ensure
-      LockedObject.release_lock(params[:id])
-    end
-  end
 
   def show
     if !params[:pid].nil?
@@ -91,25 +80,6 @@ class MultiresimagesController < ApplicationController
       end
       format.html { redirect_to edit_multiresimage_path(@multiresimage), :notice =>"Saved changes to #{@multiresimage.id}" }
     end
-  end
-
-  def updatecrop
-    image_id = params[:id]
-
-    # Get the new crop boundaries
-    x=params['rect']['x']
-    y=params['rect']['y']
-    width=params['rect']['width']
-    height=params['rect']['height']
-
-	  # Update the SVG Datastream
-    document_fedora = Multiresimage.find(image_id)
-	  svg_ds = document_fedora.DELIV_OPS
-    svg_ds.update_crop(x, y, width, height)
-
-	  # Save the updated dataastreams
-    document_fedora.save
-	  render :inline =>'<success pid="'+ image_id + '"/>'
   end
 
 
