@@ -4,7 +4,7 @@
   <div class="row">
     <%= form_for DILCollection.new, html: { class: "form-inline" } do |f| %>
       <%= f.text_field :title, placeholder: "New group name...", id: 'new_dil_collection_title' %>
-      <%= f.submit "Create Group", class: 'btn' %>
+      <%= f.submit "Create Group", class: 'btn btn-default' %>
     <% end %>
   </div>
   <br/>
