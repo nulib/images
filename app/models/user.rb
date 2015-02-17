@@ -81,10 +81,6 @@ class User < ActiveRecord::Base
     ActiveFedora::SolrService.query(query, {:fl=>'id title_tesim has_subcollection_ssim has_image_ssim owner_tesim', :rows=>'1000', :sort=>'system_create_dtsi desc'})
   end
 
-  def self.admin_groups
-     @admin_groups ||= YAML.load_file("config/admin_groups.yml")[Rails.env]
-  end
-
   def admin?
     # Load the 'config/dil-config.yml' file
     config = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
