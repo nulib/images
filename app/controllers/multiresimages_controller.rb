@@ -111,24 +111,28 @@ class MultiresimagesController < ApplicationController
 
     if can?(:read, multiresimage)
 
-      Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-        resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
-        #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
-          #new_file.write(resp.body)
-          #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
-          #send data uses server memory instead of storage.
-          if(resp.body.include? "error")
-            image = default_image
-          else
-            image = resp.body
-            filename = "#{params[:id]}.jpg"
-          end
-          send_data(image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
-        }
-      #}
-    else
-      send_data(default_image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
-    end
+      tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&zoom=1&x=0&y=0&rotation=0"
+      send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
+
+
+    #   Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
+    #     resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
+    #     #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
+    #       #new_file.write(resp.body)
+    #       #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
+    #       #send data uses server memory instead of storage.
+    #       if(resp.body.include? "error")
+    #         image = default_image
+    #       else
+    #         image = resp.body
+    #         filename = "#{params[:id]}.jpg"
+    #       end
+    #       send_data(image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
+    #     }
+    #   #}
+    # else
+    #   send_data(default_image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
+    # end
   end
 
   def archival_image_proxy
