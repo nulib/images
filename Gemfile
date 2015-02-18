@@ -20,9 +20,9 @@ source 'http://rubygems.org'
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
+  gem 'protected_attributes'
   gem 'delayed_job_active_record'
   gem 'daemons'
-  gem 'protected_attributes'
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.2'
