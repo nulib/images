@@ -114,6 +114,7 @@ class MultiresimagesController < ApplicationController
       tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&zoom=1&x=0&y=0&rotation=0"
       send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
 
+    end
 
     #   Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
     #     resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
