@@ -93,50 +93,18 @@ class MultiresimagesController < ApplicationController
 
   def proxy_image
     multiresimage = Multiresimage.find(params[:id])
-    img_length = params[:image_length].to_s
+    max_size = params[:image_length].to_i
 
-    tile_url = ""
-    if params[:image_length] == "thumb"
-      max_width = 120
-      max_height = 120
-      src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
-      src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
+    src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
+    src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
 
-      ratio = [ max_width / src_width , max_height / src_height ].min
-      puts "src_width: #{src_width}"
-      puts "src_height: #{src_height}"
-      puts "ratio: #{ratio}"
+    ratio = [ max_size / src_width , max_size / src_height ].min
 
+    dest_width = (src_width * ratio).to_f
+    dest_height = (src_height * ratio).to_f
 
-      dest_width = src_width * ratio
-      dest_height = src_height * ratio
-
-      puts "dest_width: #{dest_width}"
-      puts "dest_height: #{dest_height}"
-
-      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width.to_i}&destheight=#{dest_height.to_i}&padh=center&padv=center"
-      puts "Image thumbnail url: #{tile_url}"
-    elsif params[:image_length] == "dl"
-      max_width = 1600
-      max_height = 1600
-      src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
-      src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
-
-      ratio = [ max_width / src_width , max_height / src_height ].min
-      puts "src_width: #{src_width}"
-      puts "src_height: #{src_height}"
-      puts "ratio: #{ratio}"
-
-
-      dest_width = (src_width * ratio).to_i
-      dest_height = (src_height * ratio).to_i
-
-      puts "dest_width: #{dest_width}"
-      puts "dest_height: #{dest_height}"
-
-      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}"
-      puts "Image download url: #{tile_url}"
-    end
+    tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width.to_i}&destheight=#{dest_height.to_i}&padh=center&padv=center"
+    puts "Image url: #{tile_url}"
 
     # begin
     #   if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
