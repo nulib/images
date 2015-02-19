@@ -111,7 +111,7 @@ class MultiresimagesController < ApplicationController
 
     if can?(:read, multiresimage)
 
-      tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&zoom=1&x=0&y=0&rotation=0"
+      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
       send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
 
     end
