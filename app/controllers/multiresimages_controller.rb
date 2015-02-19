@@ -95,13 +95,20 @@ class MultiresimagesController < ApplicationController
     multiresimage = Multiresimage.find(params[:id])
     img_length = params[:image_length]
 
-    begin
-      if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
-        img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
-      end
-    rescue Exception
-      #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
+    tile_url = ""
+    if img_length = "thumb"
+      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
+    elsif img_length = "dl"
+      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}"
     end
+
+    # begin
+    #   if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
+    #     img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
+    #   end
+    # rescue Exception
+    #   #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
+    # end
 
     default_image = File.open("app/assets/images/site/missing2.png", 'rb') do |f|
       f.read
@@ -110,30 +117,9 @@ class MultiresimagesController < ApplicationController
     resp = ''
 
     if can?(:read, multiresimage)
-
-      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
+      #tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
       send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
-
     end
-
-    #   Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-    #     resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
-    #     #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
-    #       #new_file.write(resp.body)
-    #       #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
-    #       #send data uses server memory instead of storage.
-    #       if(resp.body.include? "error")
-    #         image = default_image
-    #       else
-    #         image = resp.body
-    #         filename = "#{params[:id]}.jpg"
-    #       end
-    #       send_data(image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
-    #     }
-    #   #}
-    # else
-    #   send_data(default_image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
-    # end
   end
 
   def archival_image_proxy
