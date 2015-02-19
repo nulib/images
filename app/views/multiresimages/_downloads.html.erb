@@ -2,8 +2,7 @@
   <% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
     <div id="downloads">
      <div>
-        <% image_max = @multiresimage.longside_max %>
-        <a target="_blank" class="btn" href="/multiresimages/get_image/<%= @multiresimage.pid%>/<%= 1600 < image_max ? 1600 : image_max %>">Small Image Download (JPG)</a>
+        <a target="_blank" class="btn" href="/multiresimages/get_image/<%= @multiresimage.pid%>/dl">Small Image Download (JPG)</a>
         <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] %>
           <a target="_blank" class="btn" href="/multiresimages/archival_image_proxy/<%= @multiresimage.pid%>">Original Image Download (TIFF)</a>
         <% end %> (Right-click and Save-As)
@@ -16,6 +15,6 @@
         </div>
       <% end %>
     </div>
-                    
+
   <% end %>
 <% end %>
