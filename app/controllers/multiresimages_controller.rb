@@ -101,7 +101,7 @@ class MultiresimagesController < ApplicationController
     elsif params[:image_length] == "dl"
       height = multiresimage.DELIV_OPS.svg_image.svg_height.first
       width = multiresimage.DELIV_OPS.svg_image.svg_width.first
-      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&width=#{width}&height=#{height}"
+      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{width}&destheight=#{height}"
       puts "Image download url: #{tile_url}"
     end
 
