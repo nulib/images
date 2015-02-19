@@ -93,13 +93,16 @@ class MultiresimagesController < ApplicationController
 
   def proxy_image
     multiresimage = Multiresimage.find(params[:id])
-    img_length = params[:image_length]
+    img_length = params[:image_length].to_s
 
     tile_url = ""
-    if img_length = "thumb"
+    if params[:image_length] == "thumb"
       tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
-    elsif img_length = "dl"
-      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}"
+    elsif params[:image_length] == "dl"
+      height = multiresimage.DELIV_OPS.svg_image.svg_height.first
+      width = multiresimage.DELIV_OPS.svg_image.svg_width.first
+      tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&width=#{width}&height=#{height}"
+      puts "Image download url: #{tile_url}"
     end
 
     # begin
