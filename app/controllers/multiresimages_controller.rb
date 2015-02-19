@@ -93,10 +93,12 @@ class MultiresimagesController < ApplicationController
 
   def proxy_image
     multiresimage = Multiresimage.find(params[:id])
-    max_size = params[:image_length].to_i
 
     src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
     src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
+
+    # Max size is 1600 pixels or less, because we can't give away higher quality versions I guess!
+    max_size = [ params[:image_length].to_i, 1600, src_width, src_height ].min
 
     ratio = [ max_size / src_width , max_size / src_height ].min
 
