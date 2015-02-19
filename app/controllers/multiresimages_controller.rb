@@ -100,19 +100,11 @@ class MultiresimagesController < ApplicationController
 
     ratio = [ max_size / src_width , max_size / src_height ].min
 
-    dest_width = (src_width * ratio).to_f
-    dest_height = (src_height * ratio).to_f
+    dest_width = (src_width * ratio).to_i
+    dest_height = (src_height * ratio).to_i
 
-    tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width.to_i}&destheight=#{dest_height.to_i}&padh=center&padv=center"
-    puts "Image url: #{tile_url}"
-
-    # begin
-    #   if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
-    #     img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
-    #   end
-    # rescue Exception
-    #   #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
-    # end
+    image_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
+    puts "Image url: #{image_url}"
 
     default_image = File.open("app/assets/images/site/missing2.png", 'rb') do |f|
       f.read
@@ -122,7 +114,7 @@ class MultiresimagesController < ApplicationController
 
     if can?(:read, multiresimage)
       #tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
-      send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
+      send_data Net::HTTP.get_response(URI.parse(image_url)).body, :type => 'image/jpeg', :disposition => 'inline'
     end
   end
 
