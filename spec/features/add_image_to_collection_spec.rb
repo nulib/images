@@ -149,7 +149,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     
     first('#documents > div:nth-child(1) > div > a').click
 
-    click_button('Add to Image Group')
+    click_link('Add to Image Group')
     select('Test Group')
     click_button('Save')
     sleep(5)

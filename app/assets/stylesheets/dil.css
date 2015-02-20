@@ -147,6 +147,13 @@ a.member-remove:active {
 #main-container #downloads {
   padding-bottom: 10px;
 }
+#main-container #downloads a:link.btn-primary, #main-container #downloads a:visited.btn-primary {
+  color: #fff;
+}
+
+#main-container #downloads a:link, #main-container #downloads a:visited, #main-container #downloads a:active {
+  color: #333;
+}
 
 tr.even td, tr.odd td {
 	padding: .5em 1.5em;
@@ -384,6 +391,9 @@ html, body {
 @media all and (max-width: 767px) {
   .container {
     padding: 0 1em;
+  }
+  .col-block.col-md-3 {
+    margin-top: 5px;
   }
 }
 

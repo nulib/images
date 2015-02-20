@@ -109,7 +109,7 @@ class MultiresimagesController < ApplicationController
 
     if can?(:read, multiresimage)
       begin
-        send_data( Net::HTTP.get_response(URI.parse(image_url)).body, disposition: 'inline', type: 'image/jpeg' )
+        send_data( Net::HTTP.get_response(URI.parse(image_url)).body, type: 'image/jpeg' )
       rescue
         default_image = File.open("app/assets/images/site/missing2.png", 'rb').read
         filename = "missing2.png"
@@ -122,7 +122,7 @@ class MultiresimagesController < ApplicationController
     multiresimage = Multiresimage.find(params[:id])
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]
       filename = "download.tif"
-      send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+      send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
     else
       render :nothing => true
     end
