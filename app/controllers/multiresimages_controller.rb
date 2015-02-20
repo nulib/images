@@ -93,41 +93,28 @@ class MultiresimagesController < ApplicationController
 
   def proxy_image
     multiresimage = Multiresimage.find(params[:id])
-    img_length = params[:image_length]
 
-    begin
-      if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
-        img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
-      end
-    rescue Exception
-      #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
-    end
+    src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
+    src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
 
-    default_image = File.open("app/assets/images/site/missing2.png", 'rb') do |f|
-      f.read
-    end
-    filename = "missing2.png"
-    resp = ''
+    # Max size is 1600 pixels or less, because we can't give away higher quality versions I guess!
+    max_size = [ params[:image_length].to_i, 1600, src_width, src_height ].min
+
+    ratio = [ max_size / src_width , max_size / src_height ].min
+
+    dest_width = (src_width * ratio).to_i
+    dest_height = (src_height * ratio).to_i
+
+    image_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
 
     if can?(:read, multiresimage)
-
-      Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-        resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
-        #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
-          #new_file.write(resp.body)
-          #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
-          #send data uses server memory instead of storage.
-          if(resp.body.include? "error")
-            image = default_image
-          else
-            image = resp.body
-            filename = "#{params[:id]}.jpg"
-          end
-          send_data(image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
-        }
-      #}
-    else
-      send_data(default_image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
+      begin
+        send_data( Net::HTTP.get_response(URI.parse(image_url)).body, disposition: 'inline', type: 'image/jpeg' )
+      rescue
+        default_image = File.open("app/assets/images/site/missing2.png", 'rb').read
+        filename = "missing2.png"
+        send_data( default_image, disposition: 'inline', type: 'image/jpeg', filename: filename )
+      end
     end
   end
 
