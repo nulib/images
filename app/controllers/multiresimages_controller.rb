@@ -106,17 +106,15 @@ class MultiresimagesController < ApplicationController
     dest_height = (src_height * ratio).to_i
 
     image_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
-    puts "Image url: #{image_url}"
-
-    default_image = File.open("app/assets/images/site/missing2.png", 'rb') do |f|
-      f.read
-    end
-    filename = "missing2.png"
-    resp = ''
 
     if can?(:read, multiresimage)
-      #tile_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=120&destheight=120&padcolor=%23ffffff&padh=center&padv=center"
-      send_data Net::HTTP.get_response(URI.parse(image_url)).body, :type => 'image/jpeg', :disposition => 'inline'
+      begin
+        send_data( Net::HTTP.get_response(URI.parse(image_url)).body, disposition: 'inline', type: 'image/jpeg' )
+      rescue
+        default_image = File.open("app/assets/images/site/missing2.png", 'rb').read
+        filename = "missing2.png"
+        send_data( default_image, disposition: 'inline', type: 'image/jpeg', filename: filename )
+      end
     end
   end
 
