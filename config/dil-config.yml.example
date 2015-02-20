@@ -5,7 +5,6 @@ defaults: &defaults
   dil_fedora_disseminator_thumbnail: /inu:sdef-image/getWithLongSide?length=100
   dil_fedora_disseminator_collection: /inu:sdef-image/getWithLongSide?length=120
   dil_fedora_disseminator_ppt: /inu:sdef-image/getWithLongSide?length=
-  dil_uploads_collection: My Uploads
   dil_details_collection: My Image Details
   record_lock_sleep_value: 0.5
   max_nbr_lock_attempts: 90
@@ -17,11 +16,8 @@ defaults: &defaults
   - user1
   - user2
 
-  uploaders:
-  - user3
-  - user4
 
-development:  
+development:
    <<: *defaults
    dil_fedora_base_ip: 127.0.0.1
    dil_fedora_port: 8983
@@ -41,7 +37,7 @@ development:
        image_url: /assets/cats_and_watermelons.jpg
        solr_url: /catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=LOL+Cats
 
-test:  
+test:
    <<: *defaults
    dil_fedora_base_ip: 127.0.0.1
    dil_fedora_port: 8983
@@ -50,7 +46,7 @@ test:
    dil_ppt_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-export-ppt-jms-test.cgi
    dil_upload_cgi_url: http://cgiserver/cgi-bin/hydra/hydra-upload-test.cgi
 
-staging:  
+staging:
    <<: *defaults
    dil_fedora_base_ip: 127.0.0.1
    dil_fedora_port: 8983
@@ -70,7 +66,7 @@ staging:
        image_url: /assets/wwii-posters-thumbnail.jpg
        solr_url: /catalog?f%5Binstitutional_collection_title_facet%5D%5B%5D=World+War+II+Poster+Collection+at+Northwestern+University+Library
 
-production: 
+production:
    <<: *defaults
    dil_fedora_base_ip: repository.library.northwestern.edu
    dil_fedora_port: 80

@@ -1,11 +1,11 @@
 class Vrawork  < ActiveFedora::Base
   include Hydra::ModelMethods
   #include ActiveFedora::Relationships
-  include Hydra::ModelMixins::RightsMetadata
+  include Hydra::AccessControls::Permissions
 
-  after_create :update_vra_work_tag
+  before_create :change_vra_image_to_vra_work
 
-  has_and_belongs_to_many :multiresimages, :class => "Multiresimage", :property=> :has_image
+  has_and_belongs_to_many :multiresimages, :class_name => "Multiresimage", :property=> :has_image
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
@@ -19,16 +19,20 @@ class Vrawork  < ActiveFedora::Base
   # External datastream
   has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
 
-  delegate :titleSet_display_work, :to=>:VRA, :unique=>true
-  delegate :agentSet_display_work, :to=>:VRA, :unique=>true
-  delegate :dateSet_display_work, :to=>:VRA, :unique=>true
-  delegate :descriptionSet_display_work, :to=>:VRA, :unique=>true
-  delegate :subjectSet_display_work, :to=>:VRA, :unique=>true
-  delegate :culturalContextSet_display_work, :to=>:VRA, :unique=>true
-  delegate :relationSet_display_work, :to=>:VRA, :unique=>true
+
+  attributes = [ :titleSet_display_work, :agentSet_display_work,
+                :dateSet_display_work, :descriptionSet_display_work,
+                :subjectSet_display_work, :culturalContextSet_display_work,
+                :relationSet_display_work ]
+
+  attributes.each do |att|
+    has_attributes att, datastream: :VRA, multiple: false
+  end
+
+
 
   # The xml_template uses the vra:image tags when creating the vra work
-  def update_vra_work_tag
+  def change_vra_image_to_vra_work
     vra_xml = self.datastreams[ "VRA" ].ng_xml
     image_pid = vra_xml.xpath( '/vra:vra/vra:image' )[ 0 ][ 'refid' ]
 

@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-layout "blacklight"
+layout "images"
 
   rescue_from CanCan::AccessDenied do |exception|
     # Store the url the user was trying to get to in the session. If they log in, they will get redirected to it.

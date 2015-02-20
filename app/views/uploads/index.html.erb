@@ -1,9 +1,0 @@
-<% sidebar_items << capture do %>
-  <%= render :partial=>'shared/back_to_previous' %>
-<% end %>
-
-<% if @authorized %>
-	<%= render :partial => 'index' %>
-<% else %>
-	<%= render :partial => 'access_denied' %>
-<% end %>

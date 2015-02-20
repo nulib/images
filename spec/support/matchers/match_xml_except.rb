@@ -15,11 +15,11 @@ RSpec::Matchers.define :match_xml_except do |*elements|
   end
 
     # Optional failure messages
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     "expected XML to match"
   end
 
-  failure_message_for_should_not do |actual|
+  failure_message_when_negated do |actual|
     "expected XML not to match"
   end
 

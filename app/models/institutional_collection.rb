@@ -5,21 +5,21 @@
 # are inherited by its collection members. The most permissive permissions win out.
 
 class InstitutionalCollection < Hydra::AdminPolicy
-  
+
   include Hydra::ModelMethods
-  include Hydra::ModelMixins::RightsMetadata
-  
+  include Hydra::AccessControls::Permissions
+
   has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_collection_member
-  
+
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
-  has_metadata :name => "defaultRights", :type => Hydra::Datastream::InheritableRightsMetadata 
-  
-  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata 
- 
+  has_metadata :name => "defaultRights", :type => Hydra::Datastream::InheritableRightsMetadata
+
+  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
+
   def to_solr(solr_doc=Hash.new)
     solr_doc = super(solr_doc)
     solr_doc
   end
 
- 
+
 end

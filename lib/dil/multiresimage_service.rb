@@ -1,3 +1,5 @@
+require 'dil/pid_minter'
+
 module DIL
   module MultiresimageService
     # include Hydra::AssetsControllerHelper

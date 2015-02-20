@@ -1,10 +1,12 @@
-@import 'jquery.ui.all';
-@import 'jquery.fileupload-ui.css';
-@import 'twitter/bootstrap';
-@import 'batch_edit';
+/*
+*
+*= require 'jquery-ui'
+*
+*/
+
+
 @import 'policies';
 @import 'dil';
 @import 'bootstrap';
-@import 'bootstrap-responsive';
-@import 'blacklight/blacklight'; 
+@import 'blacklight/blacklight';
 @import 'blacklight_overrides';

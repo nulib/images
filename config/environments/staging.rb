@@ -1,4 +1,4 @@
-DIL::Application.configure do
+Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
   # The test environment is used exclusively to run your application's
@@ -32,17 +32,17 @@ DIL::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
-  
+
   # Do not compress assets
   config.assets.compress = false
 
   # Expands the lines which load the assets
   config.assets.debug = true
-  
+
   # For emailing exceptions that occur in the app
   config.middleware.use ExceptionNotifier,
     :email_prefix => "[DIL-Exception STAGING] ",
     :sender_address => %{"notifier" <edgar-garcia@northwestern.edu>},
     :exception_recipients => %w{edgar-garcia@northwestern.edu, christopher.syversen@northwestern.edu, brendan-quinn@northwestern.edu, p-clough@northwestern.edu}
-    
+
 end

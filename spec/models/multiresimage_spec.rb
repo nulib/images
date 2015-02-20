@@ -1,11 +1,12 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Multiresimage do
 
-  describe "a new instance with a file name" do
-    subject { Multiresimage.new(:file_name=>'readme.txt') }
-    its(:file_name) { should  == 'readme.txt' }
-  end
+  # This isn't a valid test. We don't instantiate these objects with file names
+  # describe "a new instance with a file name" do
+  #   m = Multiresimage.new(:file_name=>'readme.txt')
+  #   expect(m.file_name).to eq('readme.txt')
+  # end
 
   pending("It doesn't look like we're using policies") do
     describe "should have an admin policy" do
@@ -106,42 +107,6 @@ EOF
     its(:collections) { should == [@collection1, @collection2] }
   end
 
-  describe "created with a file" do
-    before do
-      @file = File.open(Rails.root.join("spec/fixtures/images/The_Tilled_Field.jpg"), 'rb')
-      @file.stub(:original_filename => "The_Tilled_Field.jpg")
-      @file.stub(:content_type =>"image/jpeg")
-      @subject = Multiresimage.new
-      @subject.attach_file([@file])
-      @subject.save!
-      @file.rewind
-    end
-
-    it "should store the contents in the 'raw' datastream" do
-      @subject.raw.content.should == @file.read
-    end
-
-    it "should store the mimeType of the 'raw' datastream" do
-      @subject.raw.mimeType.should == 'image/jpeg'
-    end
-
-    it "should have to_jq_upload" do
-      @subject.stub(:pid =>'my:pid')
-      @subject.to_jq_upload.should == { :name=> "The_Tilled_Field.jpg", :size=>98982, :delete_url=>'/multiresimages/my:pid', :delete_type=>'DELETE', :url=>'/multiresimages/my:pid'}
-    end
-
-    describe "write_out_raw" do
-      before do
-        @subject.stub(:pid =>'my:pid')
-      end
-      subject {@subject.write_out_raw}
-      it { should match /\/tmp\/The_Tilled_Field.jpg#{$$}\.0/ }
-      after do
-        `rm #{subject}`
-      end
-
-    end
-  end
 
   context "with an associated work" do
     xml = File.read("#{Rails.root}/spec/fixtures/vra_minimal.xml")
@@ -154,7 +119,7 @@ EOF
     img.save
 
     it "should have related_ids" do
-      img.related_ids.first.should eq img.vraworks.first.pid
+      expect( img.related_ids ).to eq img.vraworks.first.pid
     end
   end
 
@@ -166,7 +131,7 @@ EOF
     end
     subject { @img.to_solr }
     it "should have title_display" do
-      subject['title_display'].should == "Evanston Public Library. Exterior: facade"
+      expect(subject['title_display']).to eq "Evanston Public Library. Exterior: facade"
     end
   end
 
@@ -178,18 +143,18 @@ EOF
       m
     end
     it "should have read groups accessor" do
-      subject.read_groups.should == ['group-6', 'group-7']
+      expect( subject.read_groups ).to eq ['group-6', 'group-7']
     end
     it "should have read groups writer" do
       subject.read_groups = ['group-2', 'group-3']
-      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'}
-      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+      expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'} )
+      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
     it "should only revoke eligible groups" do
       subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
       # 'group-7' is not eligible to be revoked
-      subject.rightsMetadata.groups.should == {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'}
-      subject.rightsMetadata.individuals.should == {"person1"=>"read","person2"=>"discover"}
+      expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'} )
+      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
   end
 
@@ -201,7 +166,7 @@ EOF
     end
     it "should update the work" do
       @img.update_attributes(:titleSet_display => "Woah cowboy")
-      @img.vraworks.first.titleSet_display_work.should == "Woah cowboy"
+      expect( @img.vraworks.first.titleSet_display_work ).to eq "Woah cowboy"
 
     end
   end
@@ -228,10 +193,10 @@ EOF
       @img.datastreams["VRA"] = VRADatastream.from_xml(vra_xml)
     end
     it "preferred_related_work should return the preferred work" do
-      @img.preferred_related_work.should == @work1
+      expect( @img.preferred_related_work ).to eq @work1
     end
     it "other_related_works should be the others" do
-      @img.other_related_works.should == [@work2, @work3]
+      expect( @img.other_related_works ).to eq( [@work2, @work3] )
     end
   end
 end

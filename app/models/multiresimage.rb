@@ -2,10 +2,11 @@
 # It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
 # The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
 # the institutional collection's permissions.
+require 'dil/pid_minter'
 
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
-  include Hydra::ModelMixins::RightsMetadata
+  include Hydra::AccessControls::Permissions
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
 
@@ -48,16 +49,28 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+ # delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+ #      :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
+ #      :techniqueSet_display, :locationSet_display, :materialSet_display,
+ #      :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
+ #      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
+
+
+attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
-      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
+      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display]
 
-  delegate :file_name, :to=>:properties, :unique=>true
-  delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
-  delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
-  delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
+
+  attributes.each do |att|
+    has_attributes att, datastream: :VRA, multiple: false
+  end
+
+  has_attributes :file_name, datastream: :properties, multiple: false
+  has_attributes :related_ids, datastream: :VRA, at: [:image, :relationSet, :imageOf, :relation_relids]
+  has_attributes :preferred_related_work_pid, datastream: :VRA, at: [:image, :relationSet, :imageOf_preferred, :relation_relids], multiple: false
+  has_attributes :other_related_works_pids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids], multiple: true
 
   attr_accessor :vra_xml,
                 :from_menu
@@ -77,14 +90,11 @@ class Multiresimage < ActiveFedora::Base
 
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
 
-    # validate the work xml before we save it
-    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
-
-    work.save!
+    work.save
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
+    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
     work.update_ref_id(work.pid)
     work.update_relation_set(self.pid)
 
@@ -111,11 +121,11 @@ class Multiresimage < ActiveFedora::Base
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #todo: make groups be a param to the API (maybe)
-        self.read_groups = ["registered"]
+        read_groups = ["registered"]
 
         #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(vra)
-        self.vraworks << work
+        work = create_vra_work(vra)
+        vraworks << work
 
         # Update work reference PID
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
@@ -129,7 +139,7 @@ class Multiresimage < ActiveFedora::Base
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
 
         #TODO: parse the vra record for the collection record
         collection = nil
@@ -337,7 +347,6 @@ EOF
 		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
   end
 
-
   def other_related_works
     return @other_related_works if @other_related_works
     return nil unless other_related_works_pids
@@ -368,12 +377,6 @@ EOF
       raw.mimeType = files.first.content_type
       self.file_name = files.first.original_filename
     end
-  end
-
-
-  # return a hash of values for jQuery upload
-  def to_jq_upload
-    {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
   end
 
 
@@ -463,7 +466,7 @@ EOF
 
   ## Checks if this image is a crop
   def is_crop?
-    self.RELS_EXT.content.include? "isCropOf"
+    self.rels_ext.content.include? "isCropOf"
   end
 
 

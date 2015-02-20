@@ -1,14 +1,14 @@
-<% sidebar_items << capture do %>
+<% @sidebar_items = capture do %>
   <%= render :partial=>'parent_collections' %>
   <%= render :partial=>'dil_collections/add' %>
 <% end %>
 
-<div id="sidebar" class="span3"><%= sidebar_items.join().html_safe %></div>
+<div id="sidebar" class="col-md-3"><%= @sidebar_items %></div>
 
-<div id="accordion" class="span9">
+<div id="accordion" class="col-md-9">
 <% if can?(:edit, @collection) %>
   <span class="edit-browse">
-    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
+    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, data: { confirm: "Delete this group?" } %>
 	<% if @collection.members %>
 		| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
 		| <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
@@ -24,7 +24,7 @@
 <% end %>
 
   <% if @collection.members %>
-    <h2><%=@collection.title %> <% unless @collection.title.downcase == DIL_CONFIG['dil_uploads_collection'].downcase || @collection.title.downcase == DIL_CONFIG['dil_details_collection'].downcase %><button id="rename_image_group_link" class="btn"><i class="icon-pencil"></i></button>
+    <h2><%=@collection.title %> <% unless @collection.title.downcase == DIL_CONFIG['dil_details_collection'].downcase %><button id="rename_image_group_link" class="btn"><i class="icon-pencil"></i></button>
       <%= form_for @collection do |f| %>
         <%= f.text_field :title, :placeholder => "New group name...", :id => 'dil_collection_title' %>
         <%= f.submit "Update", :class => "btn" %>

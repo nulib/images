@@ -1,42 +1,80 @@
 h2. Developer prereqs
 
-rvm 1.10 or later
-git 1.7 or later
+Ruby 2.x
+git
+java jre (at least 1.6, but 1.8 will be more future proof when we start to use fedora 4)
 
-h2. Installation
 
-h3. Clone & migrate
+h2. Installation and Configuration
 
 <pre>
-git clone --recursive <git repo URL>
+git clone https://github.com/nulib/images.git
 bundle install
 rake db:migrate
-</pre>
-
-h3. Configuration
-
 rake jetty:config
-
-h2. To run the application
-
-<pre>
-rake jetty:config
-rake jetty:start
 rake hydra:fixtures:refresh
-unicorn_rails
+rake db:test:prepare
 </pre>
 
-The server will be started on port 8080 by default.
+h3. Local development only
 
+You'll need to install imagemagick to handle the tiff to jp2 conversion on your local machine.
+<pre>
+brew install imagemagick --with-libtiff --with-jp2
+</pre>
 
-h2. testing the application
+h3. Install ClamAV
+
+On OSX, the easiest way to get clamav is through homebrew
+<pre>
+brew install clamav
+</pre>
+
+h2. Running the application
 
 <pre>
-rake hydra:fixtures:refresh RAILS_ENV=test
-rake spec
+rake jetty:start
+rails s
 </pre>
 
-h2. Local development only
+h2. Testing the application
 
-You'll need to install imagemagick to handle the tiff to jp2 conversion on your local machine. 
-brew install imagemagick --with-libtiff --with-jp2
+To test the multiresimage model, run: 
+<pre>
+rspec spec/models/multiresimage_spec.rb
+</pre>
+
+This section is a WIP:
+
+To run selenium tests, first install firefox 24 ( https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/24.0/mac/en-US/Firefox%2024.0.dmg )
+
+You'll need a .env file in the root of your applications directory that contains the user name and password of the user you'd like to use for testing.
+
+Also make sure the rails server is running before running these selenium tests.
+
+You'll need to be connected to the VPN.
+
+<pre>
+rspec spec/features/add_image_to_collection_spec.rb
+</pre>
+
+h2. Installing therubyracer
+
+Until we update all our gems, installing this older version of therubyracer can present problems.
+To install version 0.10.1, follow these steps:
+
+<pre>
+brew tap homebrew/dupes # Thanks Tom
+brew install apple-gcc42
+
+export CC=/usr/local/Cellar/apple-gcc42/4.2.1-5666.3/bin/gcc-4.2
+export CXX=/usr/local/Cellar/apple-gcc42/4.2.1-5666.3/bin/g++-4.2
+export CPP=/usr/local/Cellar/apple-gcc42/4.2.1-5666.3/bin/cpp-4.2
+
+brew uninstall v8
+
+gem uninstall libv8
+
+gem install therubyracer -v '0.10.1' # specify version
+</pre>
+(thanks Stackoverflow http://stackoverflow.com/questions/19630154/gem-install-therubyracer-v-0-10-2-on-osx-mavericks-not-installing)
