@@ -34,6 +34,7 @@ vendor/servlet/
 .ruby-version
 .rvmrc
 .env
+.capistrano/
 
 tags
 
