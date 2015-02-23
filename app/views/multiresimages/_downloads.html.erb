@@ -1,20 +1,29 @@
 <% if can?(:read, @multiresimage) %>
   <% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
     <div id="downloads">
-     <div>
-        <a target="_blank" class="btn" href="/multiresimages/get_image/<%= @multiresimage.pid%>/1600">Small Image Download (JPG)</a>
-        <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] %>
-          <a target="_blank" class="btn" href="/multiresimages/archival_image_proxy/<%= @multiresimage.pid%>">Original Image Download (TIFF)</a>
-        <% end %> (Right-click and Save-As)
-      </div>
-      <hr>
-      <!-- Hide the "Add to Image Group" button if the user is signed out -->
-      <% if user_signed_in? %>
-        <div id="addToImageGroup">
-          <button class="btn" id="addToImageGroupBtn">Add to Image Group</button>
+      <div class="row">
+        <div class="col-block col-md-3">
+          <!-- Hide the "Add to Image Group" button if the user is signed out -->
+          <% if user_signed_in? %>
+            <span id="addToImageGroup">
+              <a class="btn btn-primary btn-block" id="addToImageGroupBtn" href="#">Add to Image Group</a>
+            </span>
+          <% end %>
         </div>
-      <% end %>
+        <div class="col-block col-md-3">
+          <%= link_to "/multiresimages/get_image/#{@multiresimage.pid}/1600", method: :get, class: "btn btn-default btn-block" do %>
+            Download Small Image (JPG) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+          <% end %>
+        </div>
+        <div class="col-block col-md-3">
+          <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] %>
+            <%= link_to "/multiresimages/archival_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
+              Download Original Image (TIFF) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
-
+    <hr>
   <% end %>
 <% end %>
