@@ -8,15 +8,12 @@ source 'http://rubygems.org'
   gem 'jbuilder', '~> 2.0'
 
   gem 'hydra-head', '~> 7.2.2'
-  #gem 'bootstrap-sass', '~> 2'
-  #gem 'json', '1.7.7'
 
   gem 'rufus-scheduler'
-  gem 'devise' #, '2.1.3'
-  gem 'omniauth-ldap', '1.0.2' # TODO: see if we're using this
+  gem 'devise'
+  gem 'omniauth-ldap'
 
   gem 'clamav'
-  #gem 'rdf'
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
@@ -29,14 +26,13 @@ source 'http://rubygems.org'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
 
-  gem 'therubyracer', '0.10.1'
+  gem 'therubyracer'
   gem 'jquery-ui-rails'
 
-  gem "cancan", "1.6.7" # cancan 1.6.8 breaks PoliciesController.create method in a super strange way
+  gem "cancan"
 
   gem 'uuid'
-  gem 'hydra-ldap' #, '0.0.3'
-  #gem 'hydra-batch-edit' #, '~>0.0.6'
+  gem 'hydra-ldap'
   gem 'high_voltage'
 
 group :development, :test, :staging do
