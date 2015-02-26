@@ -12,6 +12,7 @@ require 'rake'
 
 
 Capybara.default_driver = :selenium
+Capybara.default_wait_time = 3
 
 # Utility functions
 
@@ -97,7 +98,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     #DIL-4095
     visit('http://localhost:3000')
     make_test_group('Test Group')
-    
+
     find_link('Work Type').click
     find_link('Prints').click
     titles = page.all("#documents > div:nth-child(1) > div > a")
@@ -146,7 +147,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     titles = page.all("#documents > div:nth-child(1) > div > a")
     img_title = titles[0].text.split[0..3].join(" ")
-    
+
     first('#documents > div:nth-child(1) > div > a').click
 
     click_link('Add to Image Group')
@@ -185,7 +186,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     click_link('Test Group')
     expect(find('#sidebar').find('h4')).to have_content('Parent Collections')
-  
+
     page.accept_confirm "Delete this group?" do
       click_link "Delete"
     end
@@ -314,6 +315,6 @@ steps "Logged out users can use Images to",  :js => true do
     visit('http://localhost:3000')
     find_link('Work Type').click
     find_link('Prints').click
-    expect(page).to have_selector('.listing', count: 3)
+    expect(page).to have_selector('.listing', count: 6)
   end
 end
