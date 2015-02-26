@@ -291,7 +291,7 @@ $('input[id^="batch_select_"]').on("click", (function() {
     item_id = $(this).attr("id").substring(13);
 
     //if checked, add to batch_select list
-    if ($(this).attr("checked")!=null && $(this).attr("checked")=="checked"){
+    if ($(this).is(':checked')){
       url="dil_collections/add_to_batch_select/" + item_id;
       $(this).parent().addClass("thumbnailSelected");
     } else {
