@@ -317,3 +317,21 @@ display: none;
 #facets {
   padding-bottom: 3px;
 }
+
+.facet-values .facet-label {
+  //override any blacklight hyphen definitions made at this (display:inline) level
+  word-break: inherit;
+  -webkit-hyphens: inherit;
+  -moz-hyphens: inherit;
+  -ms-hyphens: inherit;
+  -o-hyphens: inherit;
+  hyphens: inherit;
+  //for IE to correctly wrap long words, container must have fixed width
+  display: block;
+  @media (max-width: 600px) {
+    max-width: 250px;
+  }
+  @media (min-width: 600px) and (max-width: $screen-sm-min){
+    max-width: 550px;
+  }
+}
