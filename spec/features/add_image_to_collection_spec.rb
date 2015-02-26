@@ -12,7 +12,7 @@ require 'rake'
 
 
 Capybara.default_driver = :selenium
-Capybara.default_wait_time = 5
+Capybara.default_wait_time = 3
 
 # Utility functions
 
