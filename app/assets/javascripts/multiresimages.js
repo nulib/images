@@ -297,7 +297,7 @@ $('input[id^="batch_select_"]').on("click", (function() {
     } else {
       //if unchecked, remove from batch_select list
       url="dil_collections/remove_from_batch_select/" + item_id;
-      $(this).parent(   ).removeClass("thumbnailSelected");
+      $(this).parent().removeClass("thumbnailSelected");
     }
 
     $.ajax({
@@ -349,6 +349,11 @@ $("#submitCollectionBtn").on("click", (function() {
   }));
 
   $('input[checked="checked"]').closest('.listing').addClass("thumbnailSelected");
+
+  // Fix sort_and_per_page blacklight dropdown menu bug 
+  $('*[id*=dropdown]').on("click", function(){
+    $(this).toggleClass("open");
+  });
 
   // When a user wants to add an image to a collection from the image show view, they click a button.
   // This will get the collection titles and pids by calling an API and show a select list with the collections
