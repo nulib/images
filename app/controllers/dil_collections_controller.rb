@@ -89,7 +89,6 @@ class DilCollectionsController < ApplicationController
             LockedObject.release_lock(pid)
           end
         end
-
       else
         begin
           LockedObject.obtain_lock(params[:member_id], "image - add to collection", current_user.id)
@@ -102,11 +101,11 @@ class DilCollectionsController < ApplicationController
           LockedObject.release_lock(params[:member_id])
         end
       end
-  ensure
-    LockedObject.release_lock(params[:id])
+      ensure
+        LockedObject.release_lock(params[:id])
+      end
+    render :nothing => true
   end
-  render :nothing => true
-end
 
   #remove an image or subcollection from the collection
   def remove
@@ -206,34 +205,7 @@ end
   def show
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
-#    if can?(:edit, @collection)
-       #NEEDED FOR BATCH EDIT
-       #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view)
-       #@solr_docs = []
-       #@collection.members.find_by_terms(:mods).each_with_index do |mods|
-        # pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
-         #@solr_docs << get_solr_response_for_doc_id(pid)
-      #end
-
-#      render :action => 'edit', :id => params[:id]
-
-#    end
-
   end
-
-# Edit is now unecessary since both show and edit can be handled by the same partial
-#  def edit
-#    @collection = DILCollection.find(params[:id])
-#    authorize! :edit, @collection
-    #NEEDED FOR BATCH EDIT
-    #get all the solr docs to be used by batch-edit in the view (solr helper is in controller scope, but needed in view)
-    #@solr_docs = []
-    #@collection.members.find_by_terms(:mods).each_with_index do |mods|
-      #pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
-      #@solr_docs << get_solr_response_for_doc_id(pid)
-    #end
-
-#  end
 
   def export
     @collection = DILCollection.find(params[:id])
@@ -251,8 +223,6 @@ end
     flash[:notice] = "Image Group exported.  Please check your Northwestern University email account for a link to your presentation."
     redirect_to dil_collection_path(@collection)
   end
-
-
 
   # This will return a JSON string for all the subcollections of the collection
   def get_subcollections
@@ -292,9 +262,9 @@ end
     end
   end
 
-   #TODO: Move code to lib directory as this is an API
-   # API to return a user's collections' titles and pids as JSON
-   def get_collections
+  #TODO: Move code to lib directory as this is an API
+  # API to return a user's collections' titles and pids as JSON
+  def get_collections
     begin
       return_json = ""
       collection_json = current_user.collections.to_json
@@ -316,9 +286,7 @@ end
         #format.json { render :layout =>  false, :json => collection.to_json(:methods=>:get_subcollections) }
         format.json { render :layout =>  false, :json => return_json}
       end
-
     end
-
   end
 
   # This API is called when a user selects one image using the checkbox to add it to the batch selection list.
@@ -396,4 +364,10 @@ end
     end
     redirect_to dil_collection_path(c)
   end
+
+  # Catalog searching in dil_collections 
+  def search_action_url
+    url_for(controller: '/catalog', action: 'index', only_path: true)
+  end
+
 end
