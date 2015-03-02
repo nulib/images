@@ -16,7 +16,7 @@
 		|
 		<a href="#" id="shareLink">Share this Group</a>
 		<div id="toppathwrap">
-		    <textarea id="copypath" rows="2" cols="250" onclick="this.focus();this.select()" readonly="readonly"><%= DIL_CONFIG['dil_app_url'] + 'dil_collections/' + @collection.pid %></textarea><a href="#" onclick="$('#toppathwrap').hide(); return false;">X</a><br>Copy this link and share it!
+		    <textarea id="copypath" rows="2" cols="250" onclick="this.focus();this.select()" readonly="readonly"><%= dil_collection_url(@collection) %></textarea><a href="#" onclick="$('#toppathwrap').hide(); return false;">X</a><br>Copy this link and share it!
 		</div>
 		<% end %>
 	<% end %>
