@@ -46,7 +46,6 @@ group :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'rspec-steps'
-  gem 'dotenv-rails'
   gem 'selenium-webdriver'
   gem 'launchy'
   gem 'simplecov', :require => false
