@@ -31,6 +31,10 @@
 	text-decoration: none;
 }
 
+a.home-header {
+  margin-bottom: 0px;
+}
+
 #browselinks {
   float: right;
   width: 100px;
