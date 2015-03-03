@@ -1,10 +1,10 @@
 <div class="row">
   <% DIL_CONFIG["institutional_collection"].each do |key, inst_collection| %>
     <div class="col-md-4">
-      <a href="<%=inst_collection["solr_url"]%>" class="thumbnail">
-        <img src="<%=inst_collection["image_url"]%>"></img>
-        <h4><%=inst_collection["title"]%></h4>
+      <a href="<%=inst_collection["solr_url"]%>" class="thumbnail home-header">
+        <img src="<%=inst_collection["image_url"]%>" />
       </a>
+      <h4><%=inst_collection["title"]%></h4>
     </div>
   <% end %>
 </div>
