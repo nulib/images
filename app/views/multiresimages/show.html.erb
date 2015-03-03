@@ -1,10 +1,4 @@
 <%=render :partial=>'breadcrumb' %>
-<% if can?(:edit, @multiresimage) %>
-  <div id="browselinks">
-    <span class="inactive browse">Browse</span> |
-    <%= link_to "Edit", edit_multiresimage_path(@multiresimage), :class=>'active edit' %>
-  </div>
-<% end %>
 
 <%= render :partial=>'/shared/page_header' %>
 
