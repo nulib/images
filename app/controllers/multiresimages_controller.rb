@@ -64,23 +64,6 @@ class MultiresimagesController < ApplicationController
     gon.url = DIL_CONFIG['dil_js_url']
   end
 
-  def update
-    @multiresimage = Multiresimage.find(params[:id])
-    authorize! :update, @multiresimage
-    read_groups = params[:multiresimage].delete(:read_groups)
-    if read_groups.present?
-      eligible = current_user.owned_groups.map(&:code)
-      @multiresimage.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
-    end
-    parse_permissions!(params[:multiresimage])
-    @multiresimage.update_attributes(params[:multiresimage])
-    respond_to do |format|
-      format.json do
-        render :json=>{:values => params[:multiresimage][:permissions] }
-      end
-      format.html { redirect_to edit_multiresimage_path(@multiresimage), :notice =>"Saved changes to #{@multiresimage.id}" }
-    end
-  end
 
 
   # This method is called from multiresimage/_index.html.erb (image search results).
