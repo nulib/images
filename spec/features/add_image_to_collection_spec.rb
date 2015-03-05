@@ -317,4 +317,16 @@ steps "Logged out users can use Images to",  :js => true do
     find_link('Prints').click
     expect(page).to have_selector('.listing', count: 6)
   end
+
+  it "lets you choose how many images you see in search results" do
+    visit('http://localhost:3000/catalog?utf8=%E2%9C%93&q=*')
+    click_button('Sort by Relevance')
+    find('.dropdown-menu').visible?
+  end
+
+  it "lets you choose the sort method for search results" do
+    visit('http://localhost:3000/catalog?utf8=%E2%9C%93&q=*')
+    click_button('10 per page')
+    find('.dropdown-menu').visible?
+  end
 end
