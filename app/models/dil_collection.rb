@@ -149,12 +149,7 @@ class DILCollection < ActiveFedora::Base
 
         max_size = src_width > src_height ? src_width > 950 ? 950 : src_width : src_height > 700 ? 700 : src_height
 
-        ratio = [ max_size / src_width , max_size / src_height ].min
-
-        dest_width = (src_width * ratio).to_i
-        dest_height = (src_height * ratio).to_i
-
-        image_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}"
+        image_url = multiresimage.image_url(max_size)
 
         logger.debug("PID: #{pid}")
         export_xml << "<image><url>#{URI.parse(image_url)}</url><metadata></metadata></image>"

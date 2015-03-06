@@ -100,12 +100,7 @@ class MultiresimagesController < ApplicationController
     # Max size is 1600 pixels or less, because we can't give away higher quality versions I guess!
     max_size = [ params[:image_length].to_i, 1600, src_width, src_height ].min
 
-    ratio = [ max_size / src_width , max_size / src_height ].min
-
-    dest_width = (src_width * ratio).to_i
-    dest_height = (src_height * ratio).to_i
-
-    image_url = "#{DIL_CONFIG['aware_region_url']}#{multiresimage.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
+    image_url = multiresimage.image_url(max_size)
 
     if can?(:read, multiresimage)
       begin
