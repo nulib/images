@@ -141,11 +141,18 @@ class DILCollection < ActiveFedora::Base
        export_xml = get_collection_xml(fedora_object, export_xml)
       #if it's an image, build the xml
       elsif (fedora_object.instance_of?(Multiresimage))
-        img_width = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_width[0].to_i
-        img_height = Multiresimage.find(pid.text).DELIV_OPS.svg_image.svg_height[0].to_i
-        size = img_width > img_height ? img_width > 950 ? 950 : img_width : img_height > 700 ? 700 : img_height
+
+        multiresimage = Multiresimage.find(pid.text)
+
+        src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
+        src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
+
+        max_size = src_width > src_height ? src_width > 950 ? 950 : src_width : src_height > 700 ? 700 : src_height
+
+        image_url = multiresimage.image_url(max_size)
+
         logger.debug("PID: #{pid}")
-        export_xml << "<image><url>#{DIL_CONFIG['dil_fedora_url']}#{pid.text}#{DIL_CONFIG['dil_fedora_disseminator_ppt']}#{size}</url><metadata></metadata></image>"
+        export_xml << "<image><url>#{URI.parse(image_url)}</url><metadata></metadata></image>"
         logger.debug("export_xml debug:" << export_xml)
       end
     end
