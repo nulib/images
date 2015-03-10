@@ -20,7 +20,7 @@ server 'images-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db
 # rbenv setup
 # ==================
 set :rbenv_ruby, '2.1.5'
-
+set :rails_env, 'remote_dev'
 
 # Custom SSH Options
 # ==================
