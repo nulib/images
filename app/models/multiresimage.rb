@@ -211,6 +211,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
     return jp2_img_path if File.exist?( jp2_img_path )
 
     if Rails.env == "development"
+      logger.error('development, yo +++++++++++++++')
       create_jp2_local( img_location )
     else
       create_jp2_staging( img_location )
