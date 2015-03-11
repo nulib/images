@@ -15,8 +15,6 @@ role :db,  %w{deploy@images-d.library.northwestern.edu}
 # used to set extended properties on the server.
 
 server 'images-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
-set :stage, :remote_dev
-set :rails_env, :remote_dev
 
 
 # rbenv setup
