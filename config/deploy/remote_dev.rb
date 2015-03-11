@@ -14,9 +14,6 @@ role :db,  %w{deploy@images-d.library.northwestern.edu}
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-set :stage, :remote_dev
-set :rails_env, :remote_dev
-
 server 'images-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
 
 
