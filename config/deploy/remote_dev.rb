@@ -21,7 +21,6 @@ server 'images-d.library.northwestern.edu', user: 'deploy', roles: %w{web app db
 # ==================
 set :rbenv_ruby, '2.1.5'
 
-
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

@@ -210,10 +210,10 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   def create_jp2( img_location )
     return jp2_img_path if File.exist?( jp2_img_path )
 
-    if Rails.env == "staging"
-      create_jp2_staging( img_location )
-    else
+    if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
+    else
+      create_jp2_staging( img_location )
     end
 
     #sleep( 5 )
