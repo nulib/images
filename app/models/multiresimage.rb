@@ -136,6 +136,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
 
+        self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
