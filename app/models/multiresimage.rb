@@ -72,7 +72,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   has_attributes :preferred_related_work_pid, datastream: :VRA, at: [:image, :relationSet, :imageOf_preferred, :relation_relids], multiple: false
   has_attributes :other_related_works_pids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids], multiple: true
   has_attributes :pref_title, datastream: :VRA, at: [:image, :titleSet, :title_pref], multiple: false
-
+  has_attributes :pref_relation, datastream: :VRA, at: [:image, :relationSet, :relation_preferred], multiple: false
 
   attr_accessor :vra_xml,
                 :from_menu
@@ -84,6 +84,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
 
   def update_relation_set_titles
     self.relationSet_display = pref_title
+    self.pref_relation = pref_title
   end
 
   def create_vra_work(vra, current_user=nil)
