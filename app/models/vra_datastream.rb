@@ -215,6 +215,12 @@ class VRADatastream < ActiveFedora::OmDatastream
         t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
         #t.relation_href(:path=>{:attribute=>"href"})
       }
+
+      t.relation_preferred(:path=>"relation", :attritubes=>{:pref=>"true"}, :label=>"Pref Relation", :index_as=>[:searchable]) {
+        t.relation_type(:path=>{:attribute=>"type"}, :index_as=>[:searchable])
+        t.relation_relids(:path=>{:attribute=>"relids"}, :index_as=>[:searchable])
+        #t.relation_href(:path=>{:attribute=>"href"})
+      }
     }
 
     # VRA Image OM definition
