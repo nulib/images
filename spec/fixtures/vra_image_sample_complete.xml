@@ -4,12 +4,12 @@
         <vra:agentSet>
             <vra:display/>
             <vra:agent>
-                <vra:name type="corporate" vocab="lcnaf"/>
+                <vra:name type="corporate" vocab="lcnaf" />
                 <vra:attribution/>
-                <vra:role vocab="RDA"/>
+                <vra:role vocab="RDA" />
             </vra:agent>
             <vra:agent>
-                <vra:name type="corporate" vocab="lcnaf"/>
+                <vra:name type="corporate" vocab="lcnaf" />
             </vra:agent>
         </vra:agentSet>
         <!--Cultural Context-->
@@ -41,14 +41,14 @@
         <vra:locationSet>
             <vra:display/>
             <vra:location type="creation">
-                <vra:name type="geographic"/>
+                <vra:name type="geographic" />
             </vra:location>
             <vra:location type="repository">
-                <vra:name type="geographic"/>
+                <vra:name type="geographic" />
             </vra:location>
             <vra:location>
-                <vra:refid source="DIL"/>
-                <vra:refid source="Voyager"/>
+                <vra:refid source="DIL" />
+                <vra:refid source="Voyager" />
             </vra:location>
         </vra:locationSet>
         <!--Materials-->
@@ -64,7 +64,7 @@
         <!--Relation-->
         <vra:relationSet>
             <vra:display/>
-            <vra:relation pref="true" type="imageOf" relids="inu:dil-754753e1-5827-475f-b9af-cef682a200ee"/>
+            <vra:relation pref="true" type="imageOf" relids="inu:dil-754753e1-5827-475f-b9af-cef682a200ee" />
         </vra:relationSet>
         <!--Rights-->
         <vra:rightsSet>
@@ -83,19 +83,19 @@
         <vra:subjectSet>
             <vra:display/>
             <vra:subject>
-                <vra:term type="geographicPlace" vocab="lcnaf"/>
+                <vra:term type="geographicPlace" vocab="lcnaf" />
             </vra:subject>
             <vra:subject>
-                <vra:term type="personalName" vocab="lcnaf"/>
+                <vra:term type="personalName" vocab="lcnaf" />
             </vra:subject>
             <vra:subject>
-                <vra:term type="personalName" vocab="lcnaf"/>
+                <vra:term type="personalName" vocab="lcnaf" />
             </vra:subject>
             <vra:subject>
-                <vra:term type="otherTopic"/>
+                <vra:term type="otherTopic" />
             </vra:subject>
             <vra:subject>
-                <vra:term type="descriptiveTopic" vocab="lcsh"/>
+                <vra:term type="descriptiveTopic" vocab="lcsh" />
             </vra:subject>
         </vra:subjectSet>
         <!--Technique-->
@@ -119,5 +119,5 @@
             <vra:worktype/>
         </vra:worktypeSet>
     </vra:image>
-    <vra:work id="inu:dil-754753e1-5827-475f-b9af-cef682a200ee" refid="inu:dil-754753e1-5827-475f-b9af-cef682a200ee"/>
+    <vra:work id="inu:dil-754753e1-5827-475f-b9af-cef682a200ee" refid="inu:dil-754753e1-5827-475f-b9af-cef682a200ee" />
 </vra:vra>

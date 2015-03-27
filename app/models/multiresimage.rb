@@ -128,6 +128,12 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
         #set the refid attribute to the new pid
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
+        #add the pid to the locationset
+        vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
+
+        #add the pid to the locationset Display
+        vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
+
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
 
@@ -406,7 +412,6 @@ EOF
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
     node_set[0].set_attribute("refid", ref_id)
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
-    #self.datastreams["VRA"].dirty = true
   end
 
 

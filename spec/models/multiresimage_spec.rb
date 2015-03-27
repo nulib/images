@@ -27,8 +27,9 @@ describe Multiresimage do
       xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
       xml_from_rir  = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample_complete.xml" )
       m = Multiresimage.create( from_menu: true, vra_xml: xml_from_menu )
-      #expect( m.datastreams[ 'VRA' ].content ).to match_xml_except( xml_from_rir, 'refid', 'relids' )
-      expect( m.datastreams[ 'VRA' ].to_xml ).to be_equivalent_to( xml_from_rir ).ignoring_attr_values( 'relids', 'refid', 'id')
+      doc1 = Nokogiri::XML(m.datastreams['VRA'].to_xml)
+      doc2 = Nokogiri::XML(xml_from_rir)
+      expect(doc1).to be_equivalent_to(doc2).ignoring_content_of(["vra|locationSet"]).ignoring_attr_values( 'relids', 'refid', 'id' )
     end
   end
 
