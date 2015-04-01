@@ -57,24 +57,3 @@ You'll need to be connected to the VPN.
 <pre>
 rspec spec/features/add_image_to_collection_spec.rb
 </pre>
-
-h2. Installing therubyracer
-
-Until we update all our gems, installing this older version of therubyracer can present problems.
-To install version 0.10.1, follow these steps:
-
-<pre>
-brew tap homebrew/dupes # Thanks Tom
-brew install apple-gcc42
-
-export CC=/usr/local/Cellar/apple-gcc42/4.2.1-5666.3/bin/gcc-4.2
-export CXX=/usr/local/Cellar/apple-gcc42/4.2.1-5666.3/bin/g++-4.2
-export CPP=/usr/local/Cellar/apple-gcc42/4.2.1-5666.3/bin/cpp-4.2
-
-brew uninstall v8
-
-gem uninstall libv8
-
-gem install therubyracer -v '0.10.1' # specify version
-</pre>
-(thanks Stackoverflow http://stackoverflow.com/questions/19630154/gem-install-therubyracer-v-0-10-2-on-osx-mavericks-not-installing)
