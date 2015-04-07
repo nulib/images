@@ -60,6 +60,11 @@ class MultiresimagesController < ApplicationController
     end
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
+
+    @user_with_groups_is_signed_in = false
+    if user_signed_in? and !current_user.collections.empty?
+      @user_with_groups_is_signed_in = true
+    end
     @page_title = @multiresimage.titleSet_display
     gon.url = DIL_CONFIG['dil_js_url']
   end

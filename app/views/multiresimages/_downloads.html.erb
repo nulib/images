@@ -2,14 +2,15 @@
   <% unless @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
     <div id="downloads">
       <div class="row">
+
+      <!-- Don't show the "Add to Image Group" div unless the user is signed in and has at least one group (collection) -->
+      <% if @user_with_groups_is_signed_in %>
         <div class="col-block col-md-3">
-          <!-- Hide the "Add to Image Group" button if the user is signed out -->
-          <% if user_signed_in? %>
             <span id="addToImageGroup">
               <a class="btn btn-default btn-block" id="addToImageGroupBtn" href="#">Add to Image Group</a>
             </span>
-          <% end %>
         </div>
+      <% end %>
         <div class="col-block col-md-3">
           <%= link_to "/multiresimages/get_image/#{@multiresimage.pid}/1600", method: :get, class: "btn btn-default btn-block" do %>
             Download Small Image (JPG) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
