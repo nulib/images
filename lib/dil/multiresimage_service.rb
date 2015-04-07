@@ -43,6 +43,9 @@ module DIL
         rescue StandardError => msg
           returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
           # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
+          # Delete the work and image if creation fails
+          i.vraworks.first.delete if i.vraworks.first
+          i.delete
           logger.debug returnXml
         end
       else

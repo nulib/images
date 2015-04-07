@@ -633,9 +633,9 @@ class VRADatastream < ActiveFedora::OmDatastream
 
     solr_doc = add_vra_description_to_solrdoc(solr_doc) # Add description for this object
     solr_doc = solr_doc.merge(extract_work_image_relationships) # Add relationships for this object
-
+    
     # Is this an Image?
-    if self.node_exists?(:image) # Is this datastream for an Image object?
+    if !self.find_by_xpath("/vra:vra/vra:image").text.blank? # Is this datastream for an Image object?
       # Set its object_type_facet
       insert_solr_field_value(solr_doc, "object_type_facet", "Multiresimage")
 
@@ -651,7 +651,7 @@ class VRADatastream < ActiveFedora::OmDatastream
     end
 
     # Is this a Work?
-    if self.node_exists?(:work) # ... or is this datastream for a Work object?
+    if !self.find_by_xpath("/vra:vra/vra:work").text.blank? # ... or is this datastream for a Work object?
       # Set its object_type_facet
       insert_solr_field_value(solr_doc, "object_type_facet", "Vrawork")
 
