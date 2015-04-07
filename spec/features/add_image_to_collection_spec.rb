@@ -163,6 +163,14 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     delete_test_group('Test Group')
   end
 
+  it "won't display 'add an image to a group' unless user has groups" do
+    find_link('Creator').click
+    find_link('U.S. G.P.O.').click
+
+    expect(page).to_not have_content("Add to Image Group")
+  end
+
+
   it "lets a user add a subgroup to a group" do
     # drag it onto the test group
     # test that if you click the subgroup it has the correct parent group in its page
@@ -329,4 +337,11 @@ steps "Logged out users can use Images to",  :js => true do
     click_button('10 per page')
     find('.dropdown-menu').visible?
   end
+
+  it "won't display 'add an image to a group' unless user is signed in" do
+    visit("http://localhost:3000/multiresimages/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60")
+
+    expect(page).to_not have_content("Add to Image Group")
+  end
+
 end
