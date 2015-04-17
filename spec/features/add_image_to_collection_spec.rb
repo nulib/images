@@ -334,7 +334,6 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
     find_link('Subject').click
     find_link('more').click
 
-    display_only_terms = " work--United States--Posters ; War posters, "
     terms_not_in_facets = true
 
     next_link_exists = true 
