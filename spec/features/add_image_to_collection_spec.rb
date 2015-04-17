@@ -277,37 +277,37 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   end
 
 
-  it "lets a user save a TIFF or jpeg" do
-    #DIL-4091
-    # click the download original tiff or jpeg button
-    # and test that you get a page with an image file on with the correct src - jpg or tiff
-    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-    page.find(:css, "#images li:first img").click()
+  # it "lets a user save a TIFF or jpeg" do
+  #   #DIL-4091
+  #   # click the download original tiff or jpeg button
+  #   # and test that you get a page with an image file on with the correct src - jpg or tiff
+  #   visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+  #   page.find(:css, "#images li:first img").click()
 
-    sleep(8)
-    img = page.find('a', :text => "Small Image Download (JPG)")
+  #   sleep(8)
+  #   img = page.find('a', :text => "Small Image Download (JPG)")
 
-    pid = img[:href].split("inu:")[1]
+  #   pid = img[:href].split("inu:")[1]
 
-    click_link('Small Image Download (JPG)')
+  #   click_link('Small Image Download (JPG)')
 
-    sleep(8)
+  #   sleep(8)
 
-    new_window = page.driver.browser.window_handles.last
+  #   new_window = page.driver.browser.window_handles.last
 
-    image_present = false
+  #   image_present = false
 
-    page.within_window new_window do
+  #   page.within_window new_window do
 
-      all('img').each do |img|
-        if img[:src].include?(pid)
-          image_present = true
-        end
-      end
-    end
+  #     all('img').each do |img|
+  #       if img[:src].include?(pid)
+  #         image_present = true
+  #       end
+  #     end
+  #   end
 
-    image_present.should be_truthy
-  end
+  #   image_present.should be_truthy
+  # end
 
 end
 
