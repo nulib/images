@@ -276,7 +276,8 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     delete_test_group('New and Different Subgroup Name')
   end
 
-  xit "lets a user save a TIFF or jpeg" do
+
+  it "lets a user save a TIFF or jpeg" do
     #DIL-4091
     # click the download original tiff or jpeg button
     # and test that you get a page with an image file on with the correct src - jpg or tiff
@@ -306,6 +307,53 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     end
 
     image_present.should be_truthy
+  end
+
+end
+
+
+steps 'Logged-in Users can use Images to view Collections',  :js => true do
+  before :all do
+    @driver = Capybara.default_driver
+    visit('http://localhost:3000/users/sign_in')
+    within("#new_user") do
+      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
+      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
+    end
+    click_button('signIn')
+  end
+
+  it "does not create facets from subject display data" do 
+    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
+
+    #subject display fixture data - would be ideal to get this from fedora
+    expect(page).to have_content("World War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work ")
+
+
+    find('#logo a').click
+    find_link('Subject').click
+    find_link('more').click
+
+    display_only_terms = " work--United States--Posters ; War posters, "
+    terms_not_in_facets = true
+
+    next_link_exists = true 
+
+    while next_link_exists do 
+      begin
+        find_link('Next').click 
+      rescue Capybara::ElementNotFound
+        next_link_exists = false
+      end
+        all('a').each do |a| 
+          if a[:text].include?("War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work")
+            terms_not_in_facets = false
+          end
+        end
+    end
+
+    expect(terms_not_in_facets).to be_truthy
+   
   end
 
 end

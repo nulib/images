@@ -167,7 +167,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 
     # subjectSet OM definition
     t.subjectSet_ref(:path=>"subjectSet", :label=>"Subjects", :index_as=>[:searchable]) {
-      t.subjectSet_display(:path=>"display", :index_as=>[:searchable])
+      t.subjectSet_display(:path=>"display")
       t.subject {
         t.term {
           t.subject_term_content(:path=>'text()', :index_as=>[:searchable])
