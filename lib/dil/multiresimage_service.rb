@@ -18,9 +18,11 @@ module DIL
       logger.debug "menu_publish api was just called"
 
 
-      if params[:path] && params[:xml]
+      if params[:path] && params[:xml] && params[:accession_nbr]
 
         begin
+          puts existing_image?( params[:accession_nbr] )
+          raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
 
@@ -41,11 +43,15 @@ module DIL
 
           returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
         rescue StandardError => msg
+          # puts msg.backtrace.join("\n")
           returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
           # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
           # Delete the work and image if creation fails
-          i.vraworks.first.delete if i.vraworks.first
-          i.delete
+          if i
+            logger.debug "Deleting work and image..."
+            i.vraworks.first.delete if i.vraworks.first
+            i.delete
+          end
           logger.debug returnXml
         end
       else
@@ -499,6 +505,11 @@ module DIL
 
 
     private
+
+    def existing_image?(accession_nbr)
+      logger.info "Checking for existing image..."
+      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+    end
 
     def build_related_image_query(user_query)
       q = "#{user_query}"
