@@ -21,10 +21,8 @@ module DIL
       if params[:path] && params[:xml] && params[:accession_nbr]
 
         begin
-          logger.debug "params[:accession_nbr]: #{params[:accession_nbr]}"
           puts existing_image?( params[:accession_nbr] )
           raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
-          puts "This is dumb"
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
 
@@ -50,6 +48,7 @@ module DIL
           # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
           # Delete the work and image if creation fails
           if i
+            logger.debug "Deleting work and image..."
             i.vraworks.first.delete if i.vraworks.first
             i.delete
           end
@@ -509,7 +508,7 @@ module DIL
 
     def existing_image?(accession_nbr)
       logger.info "Checking for existing image..."
-      ActiveFedora::SolrService.query("object_type_facet:Multiresimage AND search_field_tesim:\"#{accession_nbr}\" OR search_field_tesim:\"Voyager:#{accession_nbr}\"").any?
+      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
     end
 
     def build_related_image_query(user_query)

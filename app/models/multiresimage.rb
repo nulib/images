@@ -122,14 +122,18 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
     #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
     if from_menu
       vra = Nokogiri::XML(vra_xml)
-
       if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #add the pid to the locationset
-        vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
+        if vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']").present?
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
+        else
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location").set_attribute('source', 'DIL')
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
+        end
 
         #add the pid to the locationset Display
         vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
@@ -437,7 +441,7 @@ EOF
       replace_locationset_display_pid(old_pid, new_pid)
       replace_locationset_location_pid(new_pid)
     rescue Exception => e
-      logger.error("Exception in replace_pid_in_vra:#{e.message}")
+x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     end
   end
 
