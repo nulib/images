@@ -21,7 +21,8 @@ module DIL
       if params[:path] && params[:xml] && params[:accession_nbr]
 
         begin
-          puts existing_image?( params[:accession_nbr] )
+          puts "Accession Number blank?: #{params[:accession_nbr].blank?}"
+          raise "An accession number is required" if params[:accession_nbr].blank?
           raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
           i.save
@@ -507,8 +508,10 @@ module DIL
     private
 
     def existing_image?(accession_nbr)
-      logger.info "Checking for existing image..."
-      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+      if accession_nbr.present?
+        logger.info "Checking for existing image..."
+        ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+      end
     end
 
     def build_related_image_query(user_query)
