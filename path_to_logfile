@@ -1,0 +1,2 @@
+# Logfile created on 2015-04-17 15:35:11 -0500 by logger.rb/1.2.8
+D, [2015-04-17T15:35:11.654957 #21824] DEBUG -- : StandardError: No such file or directory @ rb_sysopen - path_to_file
