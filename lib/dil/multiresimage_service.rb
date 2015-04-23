@@ -21,7 +21,6 @@ module DIL
       if params[:path] && params[:xml] && params[:accession_nbr]
 
         begin
-          puts "Accession Number blank?: #{params[:accession_nbr].blank?}"
           raise "An accession number is required" if params[:accession_nbr].blank?
           raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
           i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: true)
