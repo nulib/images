@@ -69,11 +69,10 @@ class MultiresimagesController < ApplicationController
     gon.url = DIL_CONFIG['dil_js_url']
   end
 
-  def get_vra
-   # fedora_object = ActiveFedora::Base.find(pid, :cast=>true)  
+  def get_vra  
     @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{params[:pid]}/datastreams/VRA/content"  
   #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
- #   http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
+  #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))
     render xml: @res
   end

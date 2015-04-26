@@ -4,9 +4,16 @@ Rails.application.routes.draw do
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
+
+  get "/multiresimages/get_vra/", to: "multiresimages#get_vra"
+
   devise_scope :user do
     root "catalog#index"
   end
+
+
+  #putting this in for testing menu vra edit == JL 
+ 
 
   resources :multiresimages do
     collection do
@@ -30,22 +37,22 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :dil_collections do
-    collection do
-      get "get_collections"
-    end
-    member do
-      get 'get_subcollections'
-      # post 'add'
-      # post 'remove'
-      # post 'move'
-      # post 'export'
-      # post 'add_to_batch_select'
-      # post 'remove_from_batch_select'
-      # post 'make_private'
-      # post 'make_public'
-    end
-  end
+  # resources :dil_collections do
+  #   collection do
+  #     get "get_collections"
+  #   end
+  #   member do
+  #     get 'get_subcollections'
+  #     # post 'add'
+  #     # post 'remove'
+  #     # post 'move'
+  #     # post 'export'
+  #     # post 'add_to_batch_select'
+  #     # post 'remove_from_batch_select'
+  #     # post 'make_private'
+  #     # post 'make_public'
+  #   end
+  # end
 
   resources :groups do
     resources :users, :only=>[:create, :edit, :destroy]
@@ -54,9 +61,6 @@ Rails.application.routes.draw do
   # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
   # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
   
-  #putting this in for testing menu vra edit == JL 
-  get "multiresimages/get_vra/:pid" => "multiresimages#get_vra", :constraints=> { pid: /inu.*/ }
-
   get "multiresimages/svg/:id" => "multiresimages#get_svg"
   get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
