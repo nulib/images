@@ -81,7 +81,6 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   before_create :vra_save
   after_create :update_relation_set_titles
 
-
   def update_relation_set_titles
     self.relationSet_display = pref_title
     self.pref_relation = pref_title

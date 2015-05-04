@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   #putting this in for testing menu vra edit == JL 
   get "/multiresimages/get_vra/", to: "multiresimages#get_vra"
-
+  put "/multiresimages/create_or_update_fedora_object", to: "multiresimages#create_or_update_fedora_object"
   devise_scope :user do
     root "catalog#index"
   end 
