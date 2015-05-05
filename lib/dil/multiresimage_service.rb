@@ -68,7 +68,7 @@ module DIL
       pid
     end
 
-    def create_or_update_fedora_object
+    def create_update_fedora_object
       #check for pid, call create if not, call update if so
       xml = params[:xml].present? ? params[:xml] : request.body.read 
 
