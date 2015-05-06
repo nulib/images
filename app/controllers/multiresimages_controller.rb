@@ -45,6 +45,51 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
+  def create
+    logger.debug "multiresimages/create was just called with this from_menu param: #{params[:from_menu]}"
+    if params[:path] && params[:xml] && params[:accession_nbr]
+      begin
+        raise "An accession number is required" if params[:accession_nbr].blank?
+        raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
+        i.save
+
+        i.create_archv_techmd_datastream( params[:path] )
+        i.create_archv_exif_datastream( params[:path] )
+        i.create_deliv_techmd_datastream( params[:path] )
+        ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
+        i.create_deliv_ops_datastream
+        i.create_deliv_img_datastream
+        i.create_archv_img_datastream
+        ImageMover.delay.move_tiff_to_repo( i.tiff_img_name, params[ :path ])
+        i.edit_groups = [ 'registered' ]
+        i.save!
+
+        j = Multiresimage.find( i.pid )
+        j.save!
+
+
+        returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+      rescue StandardError => msg
+        # puts msg.backtrace.join("\n")
+        returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+        # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
+        # Delete the work and image if creation fails
+        if i
+          logger.debug "Deleting work and image..."
+          i.vraworks.first.delete if i.vraworks.first
+          i.delete
+        end
+        logger.debug returnXml
+      end
+    else
+      returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image path and VRA xml.</description></response>"
+    end
+    respond_to do |format|
+      format.xml {render :layout => false, :xml => returnXml}
+    end  
+  end
+
 
   def show
     if !params[:pid].nil?
