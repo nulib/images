@@ -89,7 +89,7 @@ module DIL
       pid = find_pid(params, document, vra_type)
       if pid.nil? #will return nil if not found
         puts "hey, create! +++++++++++++++++                  " 
-        create_fedora_object(work_type, document, params[:collection])
+        create_fedora_object(vra_type, document, params[:collection])
       else 
         update_fedora(pid, xml, vra_type) 
         head 200   
