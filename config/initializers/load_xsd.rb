@@ -1,4 +1,4 @@
 require 'nokogiri'
 require 'open-uri'
 
-XSD = Nokogiri::XML::Schema(open("http://www.loc.gov/standards/vracore/vra-strict.xsd").read)
+XSD = Nokogiri::XML::Schema(File.open("#{Rails.root}/lib/xsd/vra-strict.xsd"))
