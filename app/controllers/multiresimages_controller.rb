@@ -46,6 +46,17 @@ class MultiresimagesController < ApplicationController
   end
 
   def update
+    image = Multiresimage.find(params[:pid])
+    image.update_associated_work()
+    #for each datasteream
+    image.datastreams.keys.each do |ds|
+      #update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
+      #update_fedora_object(pid, document, "VRA", "VRA", "text/xml")
+      update_fedora_object(params[:pid], params[:xml], ds, ds, "text/xml") 
+    end
+    
+    head 200 
+    #find all datastreams and update them
     # need a simple way to do this; need to update all datastreams, work, etc.
     #update attributes would be so divine here.
   end

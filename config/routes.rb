@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       post 'add_external_datastream'
       post 'menu_publish'
       post 'create'
+      post 'update'
       post 'create_update_fedora_object'
       delete 'delete_fedora_object'
       post 'clone_work'
