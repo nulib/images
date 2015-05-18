@@ -22,7 +22,6 @@ module MultiresimageHelper
 
   def self.valid_vra?( vra )
     doc = Nokogiri::XML( vra )
-
     XSD.valid?(doc)
   end
 

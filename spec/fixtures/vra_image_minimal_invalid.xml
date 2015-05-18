@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
-    xmlns:vra="http://www.vraweb.org/vracore4.htm"
+<vra:vra xmlns:madsrdf="http://www.loc.gov/mads/rdf/v1#"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim"
+    xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xsi:schemaLocation="lib/xsd/vra-strict.xsd">
    <vra:image>
@@ -131,7 +132,7 @@
       <!-- Titles -->
       <vra:titleSet>
          <vra:display></vra:display>
-         <vra:title pref="true"></vra:title>
+         <vra:title></vra:title>
       </vra:titleSet>
 
       <!--Work Type-->
@@ -139,7 +140,6 @@
          <vra:display></vra:display>
          <vra:worktype></vra:worktype>
       </vra:worktypeSet>
-   </vra:image>
-   <vra:work/>
+
 </vra:vra>
 

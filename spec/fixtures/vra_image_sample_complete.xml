@@ -1,4 +1,4 @@
-<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra.xsd">
+<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xsi:schemaLocation="lib/xsd/vra-strict.xsd">
     <vra:image refid="inu:dil-0f5613bf-306d-4311-8870-155eb55b875d">
         <!--Agents-->
         <vra:agentSet>

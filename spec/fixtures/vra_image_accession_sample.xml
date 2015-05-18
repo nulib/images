@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra.xsd">
+<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xsi:schemaLocation="lib/xsd/vra-strict.xsd">
     <vra:image>
         <!--Agents-->
         <vra:agentSet>
