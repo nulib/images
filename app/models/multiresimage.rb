@@ -87,6 +87,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   end
 
   def create_vra_work(vra, current_user=nil)
+  
     work = Vrawork.new(pid: mint_pid("dil"))
 
     work.edit_users = DIL_CONFIG['admin_staff']
@@ -139,7 +140,6 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
 
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
-
         #create the vrawork that is related to this vraimage/multiresimage
         work = create_vra_work(vra)
         vraworks << work

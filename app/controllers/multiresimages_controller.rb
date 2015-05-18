@@ -45,8 +45,13 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
+  def update
+    # need a simple way to do this; need to update all datastreams, work, etc.
+    #update attributes would be so divine here.
+  end
+
   def create
-    logger.debug "multiresimages/create was just called with this from_menu param: #{params[:from_menu]}"
+    logger.debug "multiresimages/create was just called with this from_menu param: #{params}"
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?

@@ -2,12 +2,10 @@ module MultiresimageHelper
 
   # returns nil is there weren't any validation errors
   def self.validate_vra( vra )
-    puts "vra  =======   #{vra}"
     doc = Nokogiri::XML( vra )
 
     invalid = []
     XSD.validate(doc).each do |error|
-      puts "you #{error}"
       invalid << "Validation error: #{error.message}\n"
     end
 
