@@ -5,20 +5,20 @@ Rails.application.configure do
   # test suite.  You never need to work with it otherwise.  Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs.  Don't rely on the data there!
-  config.cache_classes = true
+  config.cache_classes = false
 
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
   # Show full error reports and disable caching
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
   # Raise exceptions instead of rendering exception templates
   config.action_dispatch.show_exceptions = true
 
   # Disable request forgery protection in test environment
-  config.action_controller.allow_forgery_protection    = false
+  config.action_controller.allow_forgery_protection = false
 
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
@@ -33,6 +33,9 @@ Rails.application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
+  # Raise an error on page load if there are pending migrations
+  config.active_record.migration_error = :page_load
+
   # Do not compress assets
   config.assets.compress = false
 
@@ -40,9 +43,9 @@ Rails.application.configure do
   config.assets.debug = true
 
   # For emailing exceptions that occur in the app
-  config.middleware.use ExceptionNotifier,
-    :email_prefix => "[DIL-Exception STAGING] ",
-    :sender_address => %{"notifier" <edgar-garcia@northwestern.edu>},
-    :exception_recipients => %w{edgar-garcia@northwestern.edu, christopher.syversen@northwestern.edu, brendan-quinn@northwestern.edu, p-clough@northwestern.edu}
+  # config.middleware.use ExceptionNotifier,
+  #   :email_prefix => "[DIL-Exception STAGING] ",
+  #   :sender_address => %{"notifier" <edgar-garcia@northwestern.edu>},
+  #   :exception_recipients => %w{edgar-garcia@northwestern.edu, christopher.syversen@northwestern.edu, brendan-quinn@northwestern.edu, p-clough@northwestern.edu}
 
 end
