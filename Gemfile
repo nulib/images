@@ -23,7 +23,6 @@ source 'http://rubygems.org'
 
   # Use Capistrano for deployment
   gem 'capistrano', '~> 3.2'
-  gem 'capistrano-secrets-yml', '~> 1.0.0'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
 
