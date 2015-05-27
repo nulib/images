@@ -60,5 +60,5 @@ rspec spec/features/add_image_to_collection_spec.rb
 
 h2. Deploying
 
-We've got capistrano set up, so deploying *should* be as easy as 'cap <environment> deploy'. 
+We've got capistrano set up, so deploying *should* be as easy as 'cap environment deploy'. 
 Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or maybe try running cap deploy setup (i'm not sure if this works though)
