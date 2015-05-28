@@ -1,4 +1,4 @@
-A major release is underway on the development branch. 
+A major release is underway in this branch. 
 
 h2. Developer prereqs
 
