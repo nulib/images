@@ -1,3 +1,5 @@
+A major release is underway in the development branch.
+
 h2. Developer prereqs
 
 rvm 1.10 or later
