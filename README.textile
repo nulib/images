@@ -6,7 +6,6 @@ Ruby 2.x
 git
 java jre (at least 1.6, but 1.8 will be more future proof when we start to use fedora 4)
 
-
 h2. Installation and Configuration
 
 <pre>
@@ -39,9 +38,7 @@ rake jetty:start
 rails s
 </pre>
 
-h2. Testing the application
-
-In the development branch, you can run rspec spec to test the app.
+h2. Testing the application (Development)
 
 To test the main image model, run: 
 <pre>
@@ -49,15 +46,14 @@ rspec spec/models/multiresimage_spec.rb
 </pre>
 
 The selenium tests require firefox 24 ( https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/24.0/mac/en-US/Firefox%2024.0.dmg )
-
-Also make sure the rails server is running before running them.
-
-You'll need to be connected to the VPN.
+Also make sure the rails server is running before running them. You'll need to be connected to the VPN.
 
 To integration test the app, run:
 <pre>
 rspec spec/features
 </pre>
+
+You can run rspec spec to test the entire app.
 
 h2. Deploying
 
