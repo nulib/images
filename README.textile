@@ -38,7 +38,7 @@ rake jetty:start
 rails s
 </pre>
 
-h2. Testing the application (Development)
+h2. Testing the application
 
 To test the main image model, run: 
 <pre>
@@ -58,4 +58,4 @@ You can run rspec spec to test the entire app.
 h2. Deploying
 
 We've got capistrano set up, so deploying *should* be as easy as 'cap environment deploy'. 
-Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or maybe try running cap deploy setup.
+Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or run cap deploy setup.
