@@ -45,20 +45,35 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
-  def update
-    image = Multiresimage.find(params[:pid])
-    image.update_associated_work()
-    #for each datasteream
-    image.datastreams.keys.each do |ds|
-      #update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
-      #update_fedora_object(pid, document, "VRA", "VRA", "text/xml")
-      update_fedora_object(params[:pid], params[:xml], ds, ds, "text/xml") 
-    end
+  def update 
+    #this method updates both image and work vra. 
+    #it replaces the content of the work with the updated image xml,
+    #with two exceptions: the DIL refid node and the nodeSet for the relation set.
     
+    #it could use some try/rescues, and it needs to prevent the update to
+    #the work if the update to the image fails.
+
+    image = Multiresimage.find(params[:pid])
+    work_pid = image.preferred_related_work_pid
+    
+    work = get_vra(work_pid)
+
+    image_metadata = Nokogiri::XML(params[:xml])
+    work_metadata = Nokogiri::XML(work.first)
+    work_node = work_metadata.at_xpath("//vra:work")
+
+    image_metadata.at_xpath("//vra:refid[@source='DIL']").swap(work_metadata.at_xpath("//vra:refid[@source='DIL']"))
+    image_metadata.at_xpath("//vra:relationSet").swap(work_metadata.at_xpath("//vra:relationSet"))
+
+    work_metadata.xpath("//vra:work").children.remove
+    work_node.children = image_metadata.xpath("//vra:image").children
+
+    work_xml = work_metadata.to_xml
+
+    update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
+    update_fedora_object(work_pid, work_xml, "VRA", "VRA", "text/xml")
+
     head 200 
-    #find all datastreams and update them
-    # need a simple way to do this; need to update all datastreams, work, etc.
-    #update attributes would be so divine here.
   end
 
   def create
@@ -130,8 +145,8 @@ class MultiresimagesController < ApplicationController
     gon.url = DIL_CONFIG['dil_js_url']
   end
 
-  def get_vra  
-    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{params[:pid]}/datastreams/VRA/content"  
+  def get_vra(pid=params[:pid])
+    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{pid}/datastreams/VRA/content" 
   #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
   #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))
