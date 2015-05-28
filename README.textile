@@ -1,3 +1,5 @@
+A major release is underway on the development branch. 
+
 h2. Developer prereqs
 
 Ruby 2.x
@@ -39,26 +41,25 @@ rails s
 
 h2. Testing the application
 
-To test the multiresimage model, run: 
+In the development branch, you can run rspec spec to test the app.
+
+To test the main image model, run: 
 <pre>
 rspec spec/models/multiresimage_spec.rb
 </pre>
 
-This section is a WIP:
+The selenium tests require firefox 24 ( https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/24.0/mac/en-US/Firefox%2024.0.dmg )
 
-To run selenium tests, first install firefox 24 ( https://ftp.mozilla.org/pub/mozilla.org/firefox/releases/24.0/mac/en-US/Firefox%2024.0.dmg )
-
-You'll need a .env file in the root of your applications directory that contains the user name and password of the user you'd like to use for testing.
-
-Also make sure the rails server is running before running these selenium tests.
+Also make sure the rails server is running before running them.
 
 You'll need to be connected to the VPN.
 
+To integration test the app, run:
 <pre>
-rspec spec/features/add_image_to_collection_spec.rb
+rspec spec/features
 </pre>
 
 h2. Deploying
 
 We've got capistrano set up, so deploying *should* be as easy as 'cap environment deploy'. 
-Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or maybe try running cap deploy setup (i'm not sure if this works though)
+Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or maybe try running cap deploy setup.
