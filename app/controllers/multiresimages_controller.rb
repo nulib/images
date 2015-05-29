@@ -49,14 +49,13 @@ class MultiresimagesController < ApplicationController
     #this method updates both image and work vra. 
     #it replaces the content of the work with the updated image xml,
     #with two exceptions: the DIL refid node and the nodeSet for the relation set.
-    
-    #it could use some try/rescues, and it needs to prevent the update to
-    #the work if the update to the image fails.
 
     image = Multiresimage.find(params[:pid])
     work_pid = image.preferred_related_work_pid
     
     work = get_vra(work_pid)
+
+    image_xml = image.datastreams['VRA'].content
 
     image_metadata = Nokogiri::XML(params[:xml])
     work_metadata = Nokogiri::XML(work.first)
@@ -69,11 +68,23 @@ class MultiresimagesController < ApplicationController
     work_node.children = image_metadata.xpath("//vra:image").children
 
     work_xml = work_metadata.to_xml
+    status = 200
 
-    update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
-    update_fedora_object(work_pid, work_xml, "VRA", "VRA", "text/xml")
+    begin
+      update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
+    rescue StandardError => msg
+      logger.error "Error -- update_fedora_object image: #{msg}"
+      status = 500
+    end
 
-    head 200 
+    begin
+      update_fedora_object(work_pid, 6786777, "VRA", "VRA", "text/xml")
+    rescue StandardError => msg
+      logger.error "Error -- update_fedora_object work: #{msg}"
+      update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
+      status = 500
+    end
+    head status 
   end
 
   def create
