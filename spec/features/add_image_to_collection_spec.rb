@@ -284,36 +284,83 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     delete_test_group('New and Different Subgroup Name')
   end
 
-  xit "lets a user save a TIFF or jpeg" do
-    #DIL-4091
-    # click the download original tiff or jpeg button
-    # and test that you get a page with an image file on with the correct src - jpg or tiff
-    visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-    page.find(:css, "#images li:first img").click()
 
-    sleep(8)
-    img = page.find('a', :text => "Small Image Download (JPG)")
+  # it "lets a user save a TIFF or jpeg" do
+  #   #DIL-4091
+  #   # click the download original tiff or jpeg button
+  #   # and test that you get a page with an image file on with the correct src - jpg or tiff
+  #   visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+  #   page.find(:css, "#images li:first img").click()
 
-    pid = img[:href].split("inu:")[1]
+  #   sleep(8)
+  #   img = page.find('a', :text => "Small Image Download (JPG)")
 
-    click_link('Small Image Download (JPG)')
+  #   pid = img[:href].split("inu:")[1]
 
-    sleep(8)
+  #   click_link('Small Image Download (JPG)')
 
-    new_window = page.driver.browser.window_handles.last
+  #   sleep(8)
 
-    image_present = false
+  #   new_window = page.driver.browser.window_handles.last
 
-    page.within_window new_window do
+  #   image_present = false
 
-      all('img').each do |img|
-        if img[:src].include?(pid)
-          image_present = true
-        end
+  #   page.within_window new_window do
+
+  #     all('img').each do |img|
+  #       if img[:src].include?(pid)
+  #         image_present = true
+  #       end
+  #     end
+  #   end
+
+  #   image_present.should be_truthy
+  # end
+
+end
+
+
+steps 'Logged-in Users can use Images to view Collections',  :js => true do
+  before :all do
+    @driver = Capybara.default_driver
+    visit('http://localhost:3000/users/sign_in')
+    within("#new_user") do
+      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
+      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
+    end
+    click_button('signIn')
+  end
+
+  it "does not create facets from subject display data" do 
+    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
+
+    #subject display fixture data - would be ideal to get this from fedora
+    expect(page).to have_content("World War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work ")
+
+
+    find('#logo a').click
+    find_link('Subject').click
+    find_link('more').click
+
+    terms_not_in_facets = true
+
+    next_link_exists = true 
+
+    while next_link_exists do 
+      begin
+        find_link('Next').click 
+      rescue Capybara::ElementNotFound
+        next_link_exists = false
       end
+        all('a').each do |a| 
+          if a[:text].include?("War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work")
+            terms_not_in_facets = false
+          end
+        end
     end
 
-    image_present.should be_truthy
+    expect(terms_not_in_facets).to be_truthy
+   
   end
 
 end
