@@ -55,6 +55,7 @@ class MultiresimagesController < ApplicationController
     
     work = get_vra(work_pid)
 
+    #because u might need it in the rescue
     image_xml = image.datastreams['VRA'].content
 
     image_metadata = Nokogiri::XML(params[:xml])
@@ -69,7 +70,6 @@ class MultiresimagesController < ApplicationController
 
     work_xml = work_metadata.to_xml
     status = 200
-
     begin
       update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
     rescue StandardError => msg
@@ -78,7 +78,7 @@ class MultiresimagesController < ApplicationController
     end
 
     begin
-      update_fedora_object(work_pid, 6786777, "VRA", "VRA", "text/xml")
+      update_fedora_object(work_pid, work_xml, "VRA", "VRA", "text/xml")
     rescue StandardError => msg
       logger.error "Error -- update_fedora_object work: #{msg}"
       update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
