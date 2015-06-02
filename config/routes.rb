@@ -1,15 +1,16 @@
 Rails.application.routes.draw do
 
   blacklight_for :catalog
+  mount AboutPage::Engine => '/about(.:format)'
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
-  #putting this in for testing menu vra edit == JL 
+  #putting this in for testing menu vra edit == JL
   get "/multiresimages/get_vra/", to: "multiresimages#get_vra"
   put "/multiresimages/create_update_fedora_object", to: "multiresimages#create_update_fedora_object"
   devise_scope :user do
     root "catalog#index"
-  end 
+  end
 
   resources :multiresimages do
     collection do
@@ -57,7 +58,7 @@ Rails.application.routes.draw do
 
   # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
   # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
-  
+
   get "multiresimages/svg/:id" => "multiresimages#get_svg"
   get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"

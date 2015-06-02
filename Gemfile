@@ -34,6 +34,7 @@ source 'http://rubygems.org'
   gem 'uuid'
   gem 'hydra-ldap'
   gem 'high_voltage'
+  gem 'about_page', :git => 'git://github.com/sul-dlss/about_page.git'
 
 group :development, :test, :staging do
   gem 'jettywrapper'
