@@ -45,13 +45,57 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
-  def update
-    # need a simple way to do this; need to update all datastreams, work, etc.
-    #update attributes would be so divine here.
+  def update 
+    #this method updates both image and work vra. 
+    #it replaces the content of the work with the updated image xml,
+    #with two exceptions: the DIL refid node and the nodeSet for the relation set.
+    image = Multiresimage.find(params[:pid])
+    work_pid = image.preferred_related_work_pid
+
+    work = Multiresimage.find(work_pid)
+    work_xml = work.datastreams['VRA'].content
+
+    #because u might need it in the rescue
+    image_xml = image.datastreams['VRA'].content
+
+    image_metadata = Nokogiri::XML(params[:xml])
+    work_metadata = Nokogiri::XML(work_xml)
+    work_node = work_metadata.at_xpath("//vra:work")
+
+    image_metadata.at_xpath("//vra:refid[@source='DIL']").swap(work_metadata.at_xpath("//vra:refid[@source='DIL']"))
+    image_metadata.at_xpath("//vra:relationSet").swap(work_metadata.at_xpath("//vra:relationSet"))
+
+    work_metadata.xpath("//vra:work").children.remove
+    work_node.children = image_metadata.xpath("//vra:image").children
+
+    updated_work_xml = work_metadata.to_xml
+    status = 200
+    update_work = true
+
+    begin
+      update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
+    rescue StandardError => msg
+      puts "image is not happening"
+      puts "Error -- update_fedora_object image: #{msg}"
+      status = 500
+      update_work = false
+    end
+
+    if update_work
+      begin
+        update_fedora_object(work_pid, updated_work_xml, "VRA", "VRA", "text/xml")
+      rescue StandardError => msg
+        logger.error "Error -- update_fedora_object work: #{msg}"
+        update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
+        status = 500
+      end
+    end
+
+    head status 
   end
 
   def create
-    logger.debug "multiresimages/create was just called with this from_menu param: #{params}"
+    logger.debug "multiresimages/create was just called with this from_menu param: #{params[:xml]}"
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?
@@ -72,8 +116,7 @@ class MultiresimagesController < ApplicationController
 
         j = Multiresimage.find( i.pid )
         j.save!
-
-
+        
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         # puts msg.backtrace.join("\n")
@@ -119,8 +162,8 @@ class MultiresimagesController < ApplicationController
     gon.url = DIL_CONFIG['dil_js_url']
   end
 
-  def get_vra  
-    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{params[:pid]}/datastreams/VRA/content"  
+  def get_vra(pid=params[:pid])
+    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{pid}/datastreams/VRA/content" 
   #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
   #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))

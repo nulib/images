@@ -4,9 +4,8 @@ Rails.application.routes.draw do
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
-  #putting this in for testing menu vra edit == JL 
   get "/multiresimages/get_vra/", to: "multiresimages#get_vra"
-  put "/multiresimages/create_update_fedora_object", to: "multiresimages#create_update_fedora_object"
+
   devise_scope :user do
     root "catalog#index"
   end 
@@ -19,7 +18,7 @@ Rails.application.routes.draw do
       post 'add_external_datastream'
       post 'menu_publish'
       post 'create'
-      post 'create_update_fedora_object'
+      post 'update'
       delete 'delete_fedora_object'
       post 'clone_work'
       get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }

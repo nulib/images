@@ -7,57 +7,6 @@ module DIL
     include DIL::PidMinter
 
     # This method/web service is called from other applications (Orbeon VRA Editor, migration scripts).
-    # The URL to call this method/web service is http://localhost:3000/multiresimages/create_update_fedora_object.xml
-    # It's expecting a pid param in the URL (it will check the VRA xml in the xml), as well as VRA xml in the POST request.
-    # This method will create or update a Fedora object using the VRA xml that's included in the POST request
-
-    # def create
-    #   logger.debug "multiresimages/create was just called in the service file"
-    #   if params[:path] && params[:xml] && params[:accession_nbr]
-    #     begin
-    #       raise "An accession number is required" if params[:accession_nbr].blank?
-    #       raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
-    #       i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
-    #       i.save
-
-    #       i.create_archv_techmd_datastream( params[:path] )
-    #       i.create_archv_exif_datastream( params[:path] )
-    #       i.create_deliv_techmd_datastream( params[:path] )
-    #       ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
-    #       i.create_deliv_ops_datastream
-    #       i.create_deliv_img_datastream
-    #       i.create_archv_img_datastream
-    #       ImageMover.delay.move_tiff_to_repo( i.tiff_img_name, params[ :path ])
-    #       i.edit_groups = [ 'registered' ]
-    #       i.save!
-
-    #       j = Multiresimage.find( i.pid )
-    #       j.save!
-
-
-    #       returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
-    #     rescue StandardError => msg
-    #       # puts msg.backtrace.join("\n")
-    #       returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
-    #       # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
-    #       # Delete the work and image if creation fails
-    #       if i
-    #         logger.debug "Deleting work and image..."
-    #         i.vraworks.first.delete if i.vraworks.first
-    #         i.delete
-    #       end
-    #       logger.debug returnXml
-    #     end
-    #   else
-    #     returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image path and VRA xml.</description></response>"
-    #   end
-    #   respond_to do |format|
-    #     format.xml {render :layout => false, :xml => returnXml}
-    #   end  
-    # end
-
-
-
     def menu_publish
       logger.debug "menu_publish api was just called"
       if params[:path] && params[:xml] && params[:accession_nbr]
@@ -114,34 +63,6 @@ module DIL
       end
       pid
     end
-
-    def create_update_fedora_object
-      #check for pid, call create if not, call update if so
-      xml = params[:xml].present? ? params[:xml] : request.body.read 
-
-      vra_type = ""
-      #there must be a better way than assigning moronically
-      if xml.present?
-        #load xml into Nokogiri XML document
-        document = Nokogiri::XML(xml)
-        if document.xpath("/vra:vra/vra:work").present?
-          vra_type = "work"
-        elsif document.xpath("/vra:vra/vra:image").present?
-          vra_type = "image"
-        end
-      else
-        raise "No xml present." #error
-      end
-
-      pid = find_pid(params, document, vra_type)
-      if pid.nil? #will return nil if not found
-        puts "hey, create! +++++++++++++++++                  " 
-        create_fedora_object(vra_type, document, params[:collection])
-      else 
-        update_fedora(pid, xml, vra_type) 
-        head 200   
-      end
-    end 
 
     #just thinking, here. can you have a rel_pid without a pid?
     def create_fedora_object(vra_type, document, collection)
@@ -639,6 +560,7 @@ module DIL
 
       #save Fedora object
       fedora_object.save
+      puts "did we save?? #{pid}"
       logger.debug("created work")
 
       "<response><returnCode>Save successful</returnCode><pid>" + pid + "</pid></response>"
@@ -659,7 +581,10 @@ module DIL
       fedora_object.send(ds_name).content = xml
       fedora_object.send(ds_name).dsLabel = ds_label
       fedora_object.send(ds_name).mimeType = mime_type
-      fedora_object.save()
+      begin
+        fedora_object.save()
+      rescue StandardError => msg
+      end
       returnXml = "<response><returnCode>Update successful</returnCode><pid>" + pid + "</pid></response>"
 
       return returnXml

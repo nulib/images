@@ -49,14 +49,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
- # delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
- #      :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
- #      :techniqueSet_display, :locationSet_display, :materialSet_display,
- #      :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
- #      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
-
-
-attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+  attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
@@ -87,7 +80,6 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
   end
 
   def create_vra_work(vra, current_user=nil)
-  
     work = Vrawork.new(pid: mint_pid("dil"))
 
     work.edit_users = DIL_CONFIG['admin_staff']
@@ -98,7 +90,6 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
 
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-
     work.save
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
@@ -110,7 +101,7 @@ attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :date
     MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-
+    
     work #you'd better
   end
 

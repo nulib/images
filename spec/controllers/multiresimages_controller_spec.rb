@@ -50,4 +50,53 @@ describe MultiresimagesController, :type => :request do
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>An accession number is required</description></response>')
     end
   end
+
+  it "should update both image and work vra" do
+    @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" )
+  
+    create_params = {
+      'format' => 'xml',
+      'from_menu'=> true,
+      'xml' => "#{@xml_from_menu3}",
+      'path' => "lib/assets/dropbox/123/123_Rodinia.tiff",
+      'accession_nbr' => '128789',
+      'id' => 'create'
+    }
+
+    post multiresimages_path, create_params
+
+    content = response.body.to_s
+    pid_str = content.split("<pid>")[1]
+    pid = pid_str.split("</pid>")[0]
+
+    image = Multiresimage.find(pid)
+    image_xml = image.datastreams['VRA'].content
+
+    image_xml.gsub!('<vra:title pref="true">Your Title</vra:title>', '<vra:title pref="true">Title Bon Bon</vra:title>')
+    new_image_xml = image_xml.gsub('<vra:name type="personal" vocab="lcnaf">Your Name</vra:name>', '<vra:name type="corporate" vocab="lcnaf">Agent Bon Bon</vra:name>')
+
+    update_params = {
+      'format' => 'xml',
+      'pid' => pid,
+      'xml' => new_image_xml,
+      'id' => 'update'
+    }   
+
+    put multiresimages_path, update_params
+
+    @updated_image = Multiresimage.find(pid)
+    @updated_image_xml = @updated_image.datastreams['VRA'].content
+
+    expect(@updated_image_xml).to include("Title Bon Bon")
+    expect(@updated_image_xml).to include("Agent Bon Bon")  
+    
+    work_pid = @updated_image.preferred_related_work_pid
+
+    @updated_work = Multiresimage.find(work_pid)
+    @updated_work_xml = @updated_work.datastreams['VRA'].content
+
+    expect(@updated_work_xml).to include("Title Bon Bon")
+    expect(@updated_work_xml).to include("Agent Bon Bon")
+  end
+
 end
