@@ -52,8 +52,6 @@ class MultiresimagesController < ApplicationController
     image = Multiresimage.find(params[:pid])
     work_pid = image.preferred_related_work_pid
 
-    puts "image preferred work pid exists here: #{work_pid}"
-
     work = Multiresimage.find(work_pid)
     work_xml = work.datastreams['VRA'].content
 
@@ -75,7 +73,6 @@ class MultiresimagesController < ApplicationController
     update_work = true
 
     begin
-      #puts "wait what? an image was found with these params #{params}"
       update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
     rescue StandardError => msg
       puts "image is not happening"
@@ -119,10 +116,7 @@ class MultiresimagesController < ApplicationController
 
         j = Multiresimage.find( i.pid )
         j.save!
-
-
-        puts " what the h, j? #{j.inspect}"
-
+        
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         # puts msg.backtrace.join("\n")

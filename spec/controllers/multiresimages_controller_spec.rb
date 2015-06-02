@@ -52,16 +52,8 @@ describe MultiresimagesController, :type => :request do
   end
 
   it "should update both image and work vra" do
-    @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample_complete.xml" )
-    
-    #puts "hey xml are you wrong?? #{@xml_from_menu3}"
-    @new_xml = @xml_from_menu3.gsub(/<vra:title pref="true">Your Title<\/vra:title>/, '<vra:title pref="true">Title Bon Bon</vra:title>')
-    @new_xml = @new_xml.gsub(/<vra:name type="corporate" vocab="lcnaf">Your Name<\/vra:name>/, '<vra:name type="corporate" vocab="lcnaf">Agent Bon Bon</vra:name>')
-
-    #@m3 = Multiresimage.create( from_menu: true, vra_xml: @xml_from_menu3 )
-
-    #puts "you some thing m.pid #{@m3.pid}"
-
+    @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" )
+  
     create_params = {
       'format' => 'xml',
       'from_menu'=> true,
@@ -77,34 +69,34 @@ describe MultiresimagesController, :type => :request do
     pid_str = content.split("<pid>")[1]
     pid = pid_str.split("</pid>")[0]
 
+    image = Multiresimage.find(pid)
+    image_xml = image.datastreams['VRA'].content
+
+    image_xml.gsub!('<vra:title pref="true">Your Title</vra:title>', '<vra:title pref="true">Title Bon Bon</vra:title>')
+    new_image_xml = image_xml.gsub('<vra:name type="personal" vocab="lcnaf">Your Name</vra:name>', '<vra:name type="corporate" vocab="lcnaf">Agent Bon Bon</vra:name>')
+
     update_params = {
       'format' => 'xml',
       'pid' => pid,
-      'xml' => "#{@new_xml}",
+      'xml' => new_image_xml,
       'id' => 'update'
     }   
 
-    #puts "updated params #{update_params}"
-
     put multiresimages_path, update_params
 
-    @updated_image = ActiveFedora::Base.find(pid, :cast=>true)
-
-    puts @updated_image.inspect
+    @updated_image = Multiresimage.find(pid)
     @updated_image_xml = @updated_image.datastreams['VRA'].content
 
     expect(@updated_image_xml).to include("Title Bon Bon")
-
-
-
+    expect(@updated_image_xml).to include("Agent Bon Bon")  
+    
     work_pid = @updated_image.preferred_related_work_pid
-
-    puts "i am work pid #{@updated_image.preferred_related_work_pid}"
 
     @updated_work = Multiresimage.find(work_pid)
     @updated_work_xml = @updated_work.datastreams['VRA'].content
 
     expect(@updated_work_xml).to include("Title Bon Bon")
+    expect(@updated_work_xml).to include("Agent Bon Bon")
   end
 
 end

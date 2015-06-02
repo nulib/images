@@ -80,7 +80,6 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_vra_work(vra, current_user=nil)
-    puts "create work called"
     work = Vrawork.new(pid: mint_pid("dil"))
 
     work.edit_users = DIL_CONFIG['admin_staff']
@@ -102,7 +101,7 @@ class Multiresimage < ActiveFedora::Base
     MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-    #puts "hey work vra #{work.datastreams["VRA"].content}"
+    
     work #you'd better
   end
 
@@ -110,7 +109,6 @@ class Multiresimage < ActiveFedora::Base
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
-    puts "vra save called"
     #This check will probably go away when we get rid of the synchronizer.
     #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
     if from_menu
@@ -134,25 +132,17 @@ class Multiresimage < ActiveFedora::Base
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
         #create the vrawork that is related to this vraimage/multiresimage
-        puts "we r going to create the work"
         work = create_vra_work(vra)
         vraworks << work
-
-        puts "ok i am vraworks #{vraworks.inspect}"
 
         # Update work reference PID
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = work.pid
 
-        puts "work pid #{work.pid}"
-
         #update vra xml to point to the new, associated work
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'pref' ]   = 'true'
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
-
-
-        puts "hey relationSet #{vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ]}"
 
         self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
@@ -177,7 +167,6 @@ class Multiresimage < ActiveFedora::Base
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
         MultiresimageHelper.validate_vra( vra.to_xml )
-        puts "does this validated vra contain the relationSet? work pid, preferred_related_work_pid?  #{vra.to_xml}"
         self.datastreams[ 'VRA' ].content = vra.to_xml
       else
         raise "not an image type"

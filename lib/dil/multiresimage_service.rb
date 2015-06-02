@@ -7,10 +7,6 @@ module DIL
     include DIL::PidMinter
 
     # This method/web service is called from other applications (Orbeon VRA Editor, migration scripts).
-    # The URL to call this method/web service is http://localhost:3000/multiresimages/create_update_fedora_object.xml
-    # It's expecting a pid param in the URL (it will check the VRA xml in the xml), as well as VRA xml in the POST request.
-    # This method will create or update a Fedora object using the VRA xml that's included in the POST request
-
     def menu_publish
       logger.debug "menu_publish api was just called"
       if params[:path] && params[:xml] && params[:accession_nbr]
@@ -67,34 +63,6 @@ module DIL
       end
       pid
     end
-
-    def create_update_fedora_object
-
-      #check for pid, call create if not, call update if so
-      xml = params[:xml].present? ? params[:xml] : request.body.read 
-
-      vra_type = ""
-      #there must be a better way than assigning moronically
-      if xml.present?
-        #load xml into Nokogiri XML document
-        document = Nokogiri::XML(xml)
-        if document.xpath("/vra:vra/vra:work").present?
-          vra_type = "work"
-        elsif document.xpath("/vra:vra/vra:image").present?
-          vra_type = "image"
-        end
-      else
-        raise "No xml present." #error
-      end
-
-      pid = find_pid(params, document, vra_type)
-      if pid.nil? #will return nil if not found                " 
-        create_fedora_object(vra_type, document, params[:collection])
-      else 
-        update_fedora(pid, xml, vra_type) 
-        head 200   
-      end
-    end 
 
     #just thinking, here. can you have a rel_pid without a pid?
     def create_fedora_object(vra_type, document, collection)
@@ -610,18 +578,14 @@ module DIL
     def update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
 
       fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
-      puts "ok fedora obj #{fedora_object}"
       fedora_object.send(ds_name).content = xml
       fedora_object.send(ds_name).dsLabel = ds_label
       fedora_object.send(ds_name).mimeType = mime_type
       begin
         fedora_object.save()
       rescue StandardError => msg
-        puts "Wronged! #{msg}"
       end
       returnXml = "<response><returnCode>Update successful</returnCode><pid>" + pid + "</pid></response>"
-
-      puts "hello???? #{returnXml}"
 
       return returnXml
 
