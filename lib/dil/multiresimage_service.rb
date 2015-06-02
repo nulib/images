@@ -592,6 +592,7 @@ module DIL
 
       #save Fedora object
       fedora_object.save
+      puts "did we save?? #{pid}"
       logger.debug("created work")
 
       "<response><returnCode>Save successful</returnCode><pid>" + pid + "</pid></response>"
@@ -609,11 +610,18 @@ module DIL
     def update_fedora_object(pid, xml, ds_name, ds_label, mime_type)
 
       fedora_object = ActiveFedora::Base.find(pid, :cast=>true)
+      puts "ok fedora obj #{fedora_object}"
       fedora_object.send(ds_name).content = xml
       fedora_object.send(ds_name).dsLabel = ds_label
       fedora_object.send(ds_name).mimeType = mime_type
-      fedora_object.save()
+      begin
+        fedora_object.save()
+      rescue StandardError => msg
+        puts "Wronged! #{msg}"
+      end
       returnXml = "<response><returnCode>Update successful</returnCode><pid>" + pid + "</pid></response>"
+
+      puts "hello???? #{returnXml}"
 
       return returnXml
 

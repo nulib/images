@@ -15,7 +15,7 @@ module MultiresimageHelper
       next if err =~ /is not a valid value of the atomic type 'xs:ID'/
       raise
     end
-
+    puts "yes we validate ok"
     true
   end
 

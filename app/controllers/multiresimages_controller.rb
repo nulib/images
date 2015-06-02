@@ -49,9 +49,10 @@ class MultiresimagesController < ApplicationController
     #this method updates both image and work vra. 
     #it replaces the content of the work with the updated image xml,
     #with two exceptions: the DIL refid node and the nodeSet for the relation set.
-    puts "hey girl #{params[:xml]}"
     image = Multiresimage.find(params[:pid])
     work_pid = image.preferred_related_work_pid
+
+    puts "image preferred work pid exists here: #{work_pid}"
 
     work = Multiresimage.find(work_pid)
     work_xml = work.datastreams['VRA'].content
@@ -74,9 +75,11 @@ class MultiresimagesController < ApplicationController
     update_work = true
 
     begin
+      #puts "wait what? an image was found with these params #{params}"
       update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
     rescue StandardError => msg
-      logger.error "Error -- update_fedora_object image: #{msg}"
+      puts "image is not happening"
+      puts "Error -- update_fedora_object image: #{msg}"
       status = 500
       update_work = false
     end
@@ -95,7 +98,7 @@ class MultiresimagesController < ApplicationController
   end
 
   def create
-    logger.debug "multiresimages/create was just called with this from_menu param: #{params}"
+    logger.debug "multiresimages/create was just called with this from_menu param: #{params[:xml]}"
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?
@@ -117,6 +120,8 @@ class MultiresimagesController < ApplicationController
         j = Multiresimage.find( i.pid )
         j.save!
 
+
+        puts " what the h, j? #{j.inspect}"
 
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
