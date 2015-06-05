@@ -491,3 +491,6 @@ DEPENDENCIES
   therubyracer
   uglifier (>= 1.0.3)
   uuid
+
+BUNDLED WITH
+   1.10.3
