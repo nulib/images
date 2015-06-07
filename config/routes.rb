@@ -18,8 +18,8 @@ Rails.application.routes.draw do
       post 'add_datastream'
       post 'add_external_datastream'
       post 'menu_publish'
+      put 'update_vra'
       post 'create'
-      post 'update'
       delete 'delete_fedora_object'
       post 'clone_work'
       get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }

@@ -82,7 +82,7 @@ describe MultiresimagesController, :type => :request do
       'id' => 'update'
     }   
 
-    put multiresimages_path, update_params
+    put update_vra_multiresimages_path, update_params
 
     @updated_image = Multiresimage.find(pid)
     @updated_image_xml = @updated_image.datastreams['VRA'].content
