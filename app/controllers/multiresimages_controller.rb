@@ -45,7 +45,7 @@ class MultiresimagesController < ApplicationController
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
 
-  def update 
+  def update_vra
     #this method updates both image and work vra. 
     #it replaces the content of the work with the updated image xml,
     #with two exceptions: the DIL refid node and the nodeSet for the relation set.
