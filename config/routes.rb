@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
 
   blacklight_for :catalog
-  mount AboutPage::Engine => '/about(.:format)'
+
+  if not Rails.env.production? do
+    mount AboutPage::Engine => '/about(.:format)'
+  end
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
