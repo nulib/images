@@ -114,7 +114,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     delete_test_group('Test Group')
   end
 
-  it "lets a user export to PowerPoint" do
+  pending "lets a user export to PowerPoint" do
     #DIL-4085
     visit('http://localhost:3000')
     make_test_group('PPT Group')
@@ -331,7 +331,7 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
     click_button('signIn')
   end
 
-  it "does not create facets from subject display data" do 
+  it "does not create facets from subject display data" do
     visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
 
     #subject display fixture data - would be ideal to get this from fedora
@@ -344,15 +344,15 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
 
     terms_not_in_facets = true
 
-    next_link_exists = true 
+    next_link_exists = true
 
-    while next_link_exists do 
+    while next_link_exists do
       begin
-        find_link('Next').click 
+        find_link('Next').click
       rescue Capybara::ElementNotFound
         next_link_exists = false
       end
-        all('a').each do |a| 
+        all('a').each do |a|
           if a[:text].include?("War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work")
             terms_not_in_facets = false
           end
@@ -360,7 +360,7 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
     end
 
     expect(terms_not_in_facets).to be_truthy
-   
+
   end
 
 end
