@@ -1,5 +1,5 @@
 module ApplicationHelper
   def application_name
-    'Images|Repository'
+    'Images | Repository'
   end
 end
