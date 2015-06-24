@@ -99,8 +99,12 @@ label.batch_toggle {
 .listing img { background-color: #FFFFFF;}
 
 .gallery_container {
-clear:both;
-/** margin: 20px 20px 20px 275px; **/
+  clear:both;
+  /** margin: 20px 20px 20px 275px; **/
+}
+
+.gallery_container .thumbnail {
+  min-height:190px;
 }
 
 .listing-collection ul li {

@@ -1,3 +1,5 @@
+<% collection_size = @collection.members.find_by_terms(:mods).count %>
+
 <% @sidebar_items = capture do %>
   <%= render :partial=>'parent_collections' %>
   <%= render :partial=>'dil_collections/add' %>
@@ -10,9 +12,13 @@
   <span class="edit-browse">
     <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, data: { confirm: "Delete this group?" } %>
 	<% if @collection.members %>
-		| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
-		| <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
-		<% if @collection.read_groups.include? "registered" %>
+    <% if collection_size < 26 %>
+      | <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
+    <% else %>
+      | Export to PowerPoint disabled
+    <% end %>
+    | <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
+    <% if @collection.read_groups.include? "registered" %>
 		|
 		<a href="#" id="shareLink">Share this Group</a>
 		<div id="toppathwrap">
@@ -30,7 +36,7 @@
         <%= f.submit "Update", :class => "btn" %>
       <% end %>
     <% end %></h2>
-    <p>Number of images in collection: <%= @collection.members.find_by_terms(:mods).count %></p>
+    <p>Number of images in collection: <%= collection_size %> / 25</p>
     <%= render :partial => 'dil_collections/members' %>
     <% end %>
 </div>
