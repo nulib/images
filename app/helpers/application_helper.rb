@@ -1,5 +1,5 @@
 module ApplicationHelper
   def application_name
-    'DIL'
+    'Images | Repository'
   end
 end
