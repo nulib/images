@@ -17,6 +17,11 @@ role :db,  %w{deploy@images-s.library.northwestern.edu}
 server 'images-s.library.northwestern.edu', user: 'deploy', roles: %w{web app db}, my_property: :my_value
 
 
+# rbenv setup
+# ==================
+set :rbenv_ruby, '2.1.5'
+
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

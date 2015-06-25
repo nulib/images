@@ -20,6 +20,9 @@ rails_best_practices_output.html
 
 config/hydra-ldap.yml
 config/fedora.yml
+config/database.yml
+config/dil-config.yml
+config/secrets.yml
 *.swp
 *.swo
 *.swn
@@ -30,17 +33,13 @@ vendor/servlet/
 
 .ruby-version
 .rvmrc
-.secret
 .env
-
-config/database.yml
-config/dil-config.yml
-config/unicorn.rb
+.capistrano/
 
 tags
 
 spec/fixtures/images/jhove_output.xml
 dropbox/123/jhove_output.xml
+lib/assets/dropbox/123/jhove_output.xml
 config/projections.json
 notes.md
-

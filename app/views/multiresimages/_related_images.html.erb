@@ -3,7 +3,7 @@
                     <ul>
                       <div class="gallery_container">
                         <% @multiresimage.related_ids.each do |work_pid| %>
-                            <div class="listing"><a href="/catalog/<%= work_pid %>"><img src="<%= DIL_CONFIG['dil_app_url']%><%= work_pid %><%= DIL_CONFIG['dil_fedora_disseminator_thumbnail']%>"></a></div>
+                            <div class="listing"><a href="/catalog/<%= work_pid %>"><img src="/multiresimages/get_image/<%= work_pid %>/120"></a></div>
                         <% end %>
                       </div>
                     </ul>

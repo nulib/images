@@ -15,14 +15,12 @@ module MultiresimageHelper
       next if err =~ /is not a valid value of the atomic type 'xs:ID'/
       raise
     end
-
     true
   end
 
 
   def self.valid_vra?( vra )
     doc = Nokogiri::XML( vra )
-
     XSD.valid?(doc)
   end
 

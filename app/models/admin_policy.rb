@@ -11,13 +11,19 @@ class AdminPolicy < ActiveFedora::Base
     ds.field :license_url
   end
 
-  delegate_to :descMetadata, [:title, :description], :unique=>true
+  #delegate_to :descMetadata, [:title, :description], :unique=>true
+
+  has_attributes :title, datastream: :VRA, :unique=>true
+  has_attributes :description, datastream: :VRA, :unique=>true
+
   delegate :license_title, :to=>'rightsMetadata', :at=>[:license, :title], :unique=>true
   delegate :license_description, :to=>'rightsMetadata', :at=>[:license, :description], :unique=>true
   delegate :license_url, :to=>'rightsMetadata', :at=>[:license, :url], :unique=>true
 
   # easy access to edit_groups, etc
-  include Hydra::ModelMixins::RightsMetadata 
+  #1/22/15 - jen - the rightsmetadata mixin is deprecated, bc permissions has changed permissions_attributes= is the new method
+  #http://irc.projecthydra.org/2013-10-03.html
+  #include Hydra::ModelMixins::RightsMetadata 
 
   def self.readable_by_user(user)
     where_user_has_permissions(user, [:read, :edit])

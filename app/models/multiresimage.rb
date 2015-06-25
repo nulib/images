@@ -2,10 +2,11 @@
 # It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
 # The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
 # the institutional collection's permissions.
+require 'dil/pid_minter'
 
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
-  include Hydra::ModelMixins::RightsMetadata
+  include Hydra::AccessControls::Permissions
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
 
@@ -48,23 +49,35 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-  delegate_to :VRA, [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
+  attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
-      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display], :unique=>true
+      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display]
 
-  delegate :file_name, :to=>:properties, :unique=>true
-  delegate :related_ids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf, :relation_relids]
-  delegate :preferred_related_work_pid, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_preferred, :relation_relids], :unique=>true
-  delegate :other_related_works_pids, :to=>:VRA, :at=>[:image, :relationSet, :imageOf_others, :relation_relids]
+
+  attributes.each do |att|
+    has_attributes att, datastream: :VRA, multiple: false
+  end
+
+  has_attributes :file_name, datastream: :properties, multiple: false
+  has_attributes :related_ids, datastream: :VRA, at: [:image, :relationSet, :imageOf, :relation_relids]
+  has_attributes :preferred_related_work_pid, datastream: :VRA, at: [:image, :relationSet, :imageOf_preferred, :relation_relids], multiple: false
+  has_attributes :other_related_works_pids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids], multiple: true
+  has_attributes :pref_title, datastream: :VRA, at: [:image, :titleSet, :title_pref], multiple: false
+  has_attributes :pref_relation, datastream: :VRA, at: [:image, :relationSet, :relation_preferred], multiple: false
 
   attr_accessor :vra_xml,
                 :from_menu
 
   before_save :update_associated_work
   before_create :vra_save
+  after_create :update_relation_set_titles
 
+  def update_relation_set_titles
+    self.relationSet_display = pref_title
+    self.pref_relation = pref_title
+  end
 
   def create_vra_work(vra, current_user=nil)
     work = Vrawork.new(pid: mint_pid("dil"))
@@ -77,14 +90,10 @@ class Multiresimage < ActiveFedora::Base
 
     work.datastreams["properties"].delete
     work.datastreams["VRA"].content = vra.to_s
-    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
-
-    # validate the work xml before we save it
-    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
-
-    work.save!
+    work.save
 
     #These have to be called after a save otherwise they'll try to reference a bunch of null objects
+    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
     work.update_ref_id(work.pid)
     work.update_relation_set(self.pid)
 
@@ -92,7 +101,7 @@ class Multiresimage < ActiveFedora::Base
     MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-
+    
     work #you'd better
   end
 
@@ -104,18 +113,27 @@ class Multiresimage < ActiveFedora::Base
     #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
     if from_menu
       vra = Nokogiri::XML(vra_xml)
-
       if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
-        #todo: make groups be a param to the API (maybe)
-        self.read_groups = ["registered"]
+        #add the pid to the locationset
+        if vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']").present?
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
+        else
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location").set_attribute('source', 'DIL')
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
+        end
 
+        #add the pid to the locationset Display
+        vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
+
+        #todo: make groups be a param to the API (maybe)
+        read_groups = ["registered"]
         #create the vrawork that is related to this vraimage/multiresimage
-        work = self.create_vra_work(vra)
-        self.vraworks << work
+        work = create_vra_work(vra)
+        vraworks << work
 
         # Update work reference PID
         vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
@@ -126,10 +144,11 @@ class Multiresimage < ActiveFedora::Base
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
 
+        self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        #self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
 
         #TODO: parse the vra record for the collection record
         collection = nil
@@ -200,10 +219,10 @@ class Multiresimage < ActiveFedora::Base
   def create_jp2( img_location )
     return jp2_img_path if File.exist?( jp2_img_path )
 
-    if Rails.env == "staging"
-      create_jp2_staging( img_location )
-    else
+    if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
+    else
+      create_jp2_staging( img_location )
     end
 
     #sleep( 5 )
@@ -337,7 +356,6 @@ EOF
 		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
   end
 
-
   def other_related_works
     return @other_related_works if @other_related_works
     return nil unless other_related_works_pids
@@ -371,12 +389,6 @@ EOF
   end
 
 
-  # return a hash of values for jQuery upload
-  def to_jq_upload
-    {:size => self.raw.size, :name=>file_name, :url=>multiresimage_path(self), :delete_url=>multiresimage_path(self), :delete_type=>'DELETE' }
-  end
-
-
   # Moving file from temp location to config location.  Messing server will pull from here.
   def write_out_raw
     new_filepath = temp_filename(file_name, DIL::Application.config.processing_file_path)
@@ -394,7 +406,6 @@ EOF
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
     node_set[0].set_attribute("refid", ref_id)
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
-    #self.datastreams["VRA"].dirty = true
   end
 
 
@@ -420,7 +431,7 @@ EOF
       replace_locationset_display_pid(old_pid, new_pid)
       replace_locationset_location_pid(new_pid)
     rescue Exception => e
-      logger.error("Exception in replace_pid_in_vra:#{e.message}")
+x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     end
   end
 
@@ -463,10 +474,21 @@ EOF
 
   ## Checks if this image is a crop
   def is_crop?
-    self.RELS_EXT.content.include? "isCropOf"
+    self.rels_ext.content.include? "isCropOf"
   end
 
+  def image_url(max_size=1600)
 
+    src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f
+    src_height = self.DELIV_OPS.svg_image.svg_height.first.to_f
+
+    ratio = [ max_size / src_width , max_size / src_height ].min
+
+    dest_width = (src_width * ratio).to_i
+    dest_height = (src_height * ratio).to_i
+
+    "#{DIL_CONFIG['aware_region_url']}#{self.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
+  end
 
   private
 

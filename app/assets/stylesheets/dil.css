@@ -31,6 +31,10 @@
 	text-decoration: none;
 }
 
+a.home-header {
+  margin-bottom: 0px;
+}
+
 #browselinks {
   float: right;
   width: 100px;
@@ -45,10 +49,11 @@ label.batch_toggle {
         padding: 12px;
         border: 3px solid white;
 		word-wrap: break-word;
-        width: 160px;
+        width: 210px;
         height: 200px;
 		text-align: left;
 		background-color: #efefef;
+    font-size: 13px;
 }
 
 .listing #images, .listing-collection {
@@ -60,6 +65,8 @@ label.batch_toggle {
     vertical-align: middle;
     position: relative;
 }
+
+#images ul {padding:0;margin:0}
 
 .listing #images img, .listing-collection #images img {
 	position: absolute;
@@ -92,17 +99,21 @@ label.batch_toggle {
 .listing img { background-color: #FFFFFF;}
 
 .gallery_container {
-clear:both;
-/** margin: 20px 20px 20px 275px; **/
+  clear:both;
+  /** margin: 20px 20px 20px 275px; **/
+}
+
+.gallery_container .thumbnail {
+  min-height:190px;
 }
 
 .listing-collection ul li {
 	position: relative;
 }
 
-a.member-remove { 
-	top: -24px;
-	right: -38px;
+a.member-remove {
+	top: 2px;
+	right: 18px;
 	width: 30px;
 	height: 30px;
 	border-radius: 50%;
@@ -134,9 +145,6 @@ a.member-remove:active {
 #imageCollection ul { margin: 0; width: 80%; }/* padding: .25em 0 .25em .5em; } */
 #imageCollection li ul { margin: 0px;} /* padding: .25em 0 .25em .5em; } */
 
-#uploadCollection { width: 174px; float: left; }
-#uploadCollection ul { margin: 0; padding: .5em 0 .5em 1.5em; }
-
 #detailCollection { width: 174px; float: left; }
 #detailCollection ul { margin: 0; padding: .5em 0 .5em 1.5em; }
 
@@ -144,6 +152,16 @@ a.member-remove:active {
 	padding: 0 0 1em 0;
 }
 
+#main-container #downloads {
+  padding-bottom: 10px;
+}
+#main-container #downloads a:link.btn-primary, #main-container #downloads a:visited.btn-primary {
+  color: #fff;
+}
+
+#main-container #downloads a:link, #main-container #downloads a:visited, #main-container #downloads a:active {
+  color: #333;
+}
 
 tr.even td, tr.odd td {
 	padding: .5em 1.5em;
@@ -252,9 +270,9 @@ div.batch_select_count_label {
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
-                url('ajax-loader.gif') 
-                50% 50% 
+    background: rgba( 255, 255, 255, .8 )
+                url('ajax-loader.gif')
+                50% 50%
                 no-repeat;
 }
 /** For photostream in Multiresimage **/
@@ -312,9 +330,8 @@ svg image {
 	font-size: 13px;
 }
 .signin-box input[type=text], .signin-box input[type=password], .signin-box textarea {
-	width: 18em;
+	width: 14em;
 }
-
 
 .signin-box label.remember {
 	display: inline-table;
@@ -348,21 +365,12 @@ svg image {
 	padding: 1em;
 }
 
-.required:after { 
-	content:" *"; 
+.required:after {
+	content:" *";
 }
 
 .thumbnailSelected {
 	border: 3px solid #666 !important;
-}
-
-#new_dil_collection input {
-	width: 80%;
-	height: 2em;
-
-	-webkit-box-sizing: border-box; /* For legacy WebKit based browsers */
-	    -moz-box-sizing: border-box; /* For all Gecko based browsers */
-	         box-sizing: border-box;
 }
 
 #dialog li {
@@ -392,6 +400,9 @@ html, body {
   .container {
     padding: 0 1em;
   }
+  .col-block.col-md-3 {
+    margin-top: 5px;
+  }
 }
 
 @media all and (max-width: 709px) {
@@ -400,7 +411,7 @@ html, body {
     padding: 0 1em;
   }
 
-	.wrapper { 
+	.wrapper {
 		margin: 0 auto -280px;
   }
 	.push, #ft {
@@ -435,17 +446,7 @@ html, body {
   border: none;
 }
 
-/* Twitter bootstrap thumbnails class margin fix */
-.row-fluid {
-  ul.thumbnails {
-    li.span12 + li { margin-left : 0px; }
-    li.span6:nth-child(2n + 3) { margin-left : 0px; }
-    li.span4:nth-child(3n + 4) { margin-left : 0px; }
-    li.span3:nth-child(4n + 5) { margin-left : 0px; }
-    li.span2:nth-child(6n + 7) { margin-left : 0px; }
-    li.span1:nth-child(12n + 13) { margin-left : 0px; }
-  }
-}
+a:link.thumbnail, a:visited.thumbnail, a:active.thumbnail {border: 1px solid #ddd}
 
 #accordion button, p, form {
   padding: 0.5em;
@@ -456,5 +457,5 @@ html, body {
 }
 
 .edit_dil_collection {
-  display: none;  
+  display: none;
 }

@@ -1,189 +1,394 @@
 require 'capybara/rspec'
-require 'spec_helper'
+require 'rails_helper'
 require 'rake'
 
-# README: This test requires a collection to exist prior to running it. For the time being, whoever
-# runs it locally needs to create a collection through the web interface (and add an image to that collection). And I needed to run
-# the rake hydra:fixtures:refresh command besdies the db:test:prepare commands in order to have images present.
-# Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
+# README: Run the rake hydra:fixtures:refresh command besides the db:test:prepare commands in order to have
+# images present. Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
 
 # You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
-# need a teardown that removes each image from collection after each test 
+# need a teardown that removes each image from collection after each test
 # 12/19 - using fixture data like "Marche" for search term; new gem for maintaining session among specific tests
+# you need a .env file with the credentials in it, in your root directory, also.
+
 
 Capybara.default_driver = :selenium
+Capybara.default_wait_time = 5
 
+# Utility functions
 
 def drag_n_drop(source, target)
   source.drag_to(target)
 end
 
-def cleanup
-  # Delete test group 
-  visit('https://localhost:3000/')
-  sleep(2)
-  within('#imageCollection') do
-    click_link('Test Group')
-  end
-  sleep(2)
-  click_link('Delete')
-
-  page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
-end
-
-
 def make_test_group(name)
-  fill_in('new_dil_collection_title', with: name)
-  page.evaluate_script("document.forms[1].submit()")
-  sleep(2)
+  within('#new_dil_collection') do
+    fill_in 'new_dil_collection_title', with: name
+    click_button('Create Group')
+  end
 end
 
+def add_images_to_test_group(name)
+  #add images to name (test group)
+  fill_in('q', with: "every man")
+  click_button('search')
 
-steps 'Users can Manage their Groups of Images',  :js => true do
+  #you need unique images
+  #this is the best way to reference the image element, because it doesn't contain a pid or url, and the link with caption is below it
+  source_li = page.find("#images li", match: :first)
+  source = source_li.find("img")
+  target = page.find('a', text: name)
+
+  drag_n_drop(source, target)
+
+  visit('http://localhost:3000/')
+
+  find_link('Creator').click
+  find_link('U.S. G.P.O.').click
+
+  source_li2 = page.find("#images li", match: :first)
+  source2 = source_li2.find("img")
+  target2 = page.find('a', :text => name)
+
+  drag_n_drop(source2, target2)
+
+  visit('http://localhost:3000/')
+
+  find_link('Work Type').click
+  find_link('Prints').click
+
+  source_li3 = page.find("#images li", match: :first)
+  source3 = source_li3.find("img")
+  target3 = page.find('a', :text => name)
+
+  drag_n_drop(source3, target3)
+end
+
+def delete_test_group(name)
+  # Delete test group
+  visit('http://localhost:3000/')
+  click_link(name, match: :first)
+  page.accept_confirm "Delete this group?" do
+    click_link "Delete"
+  end
+  expect(page).to have_content('Image Group deleted')
+end
+
+def remove_images_from_test_group(name)
+  visit('http://localhost:3000')
+  click_link(name)
+  all('.member-remove').each do |el|
+    click_link(el)
+  end
+end
+
+#Tests
+
+steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   before :all do
     @driver = Capybara.default_driver
-    visit('https://localhost:3000/users/sign_in')
-
-    fill_in 'username', :with => ENV["TEST_USER_ID"]
-    fill_in 'password', :with => ENV["TEST_USER_PASSWORD"]
-    click_button('signIn')
-    sleep(2)
-    make_test_group('Test Group')
-  end
-  
-  it "lets a user add an image to a group" do
-    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-    source = page.find(:css, "#images li:first img")  
-    source_title = page.find(:css, "#documents div:first .listing a")
-    img_href = source_title[:href]
-
-    target = page.find(:css, "h2.ui-droppable:first a")
-    target_text = target.text()
-    
-    img_base_src = img_href.split("inu:")[1]
-    drag_n_drop(source, target)
-    sleep(4)
-    click_link(target_text)
-    
-    sleep(5)
-    image_present = false
-    
-    all('img').each do |img| 
-      if img[:src].include?(img_base_src) 
-        image_present = true 
-      end
+    visit('http://localhost:3000/users/sign_in')
+    within("#new_user") do
+      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
+      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
     end
-    image_present.should be_true
+    click_button('signIn')
+  end
+
+  it "lets a user add an image to a group" do
+    #DIL-4095
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+
+    find_link('Work Type').click
+    find_link('Prints').click
+    titles = page.all("#documents > div:nth-child(1) > div > a")
+    img_title = titles[0].text.split[0..3].join(" ")
+    puts "Image Title: #{img_title}"
+
+    # drag the first image result to the Test Group
+    drag_n_drop(first("#images > ul > li > a > img"), find_link('Test Group'))
+
+    click_link('Test Group')
+    expect(page).to have_content(img_title)
+
+    delete_test_group('Test Group')
+  end
+
+  pending "lets a user export to PowerPoint" do
+    #DIL-4085
+    visit('http://localhost:3000')
+    make_test_group('PPT Group')
+    add_images_to_test_group('PPT Group')
+    click_link('PPT Group')
+    click_link('Export to PowerPoint')
+
+    expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
+
+    delete_test_group('PPT Group')
   end
 
   it "lets a user search with a keyword" do
-    fill_in('q', with: 'Party time')
-    page.evaluate_script("document.forms[0].submit()")
-    sleep(5)
-
-    expect(page).to have_css("a", :text => "Party time")
+    # DIL-4069
+    fill_in('q', with: 'every man')
+    click_button('search')
+    expect(find("#documents")).to have_content("Every man")
   end
 
   it "lets a user add an image to a group from the image view page" do
 
-    #this test adds an image, saving a reference to its href, then goes to the group's page
+    # this test adds an image, saving a reference to its href, then goes to the group's page
     # and confirms an element with that href is on the page, then deletes the item from the test group
+    # DIL-4082
 
-    visit('https://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
-    img = page.find(:css, "#documents div:first .listing a")
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    find_link('Creator').click
+    find_link('U.S. G.P.O.').click
 
-    img_caption = img[:href]
+    titles = page.all("#documents > div:nth-child(1) > div > a")
+    img_title = titles[0].text.split[0..3].join(" ")
 
-    page.find(:css, "#images li:first img").click()
+    first('#documents > div:nth-child(1) > div > a').click
 
-    sleep(2)
-
-    click_button('Add to Image Group')
-    sleep(2)
+    click_link('Add to Image Group')
     select('Test Group')
     click_button('Save')
-    sleep(2)
+    sleep(5)
 
-    visit('https://localhost:3000/')
-    sleep(2)
+    visit('http://localhost:3000/')
+    click_link('Test Group')
 
-    page.find('a', :text => 'Test Group').click()
-    sleep(2)
+    expect(page).to have_link(img_title)
 
-    expect(page).to have_selector('a', :href => img_caption)
-    page.find(:css, '.member-remove').click()
+    delete_test_group('Test Group')
+  end
 
-    sleep(2)
+  it "won't display 'add an image to a group' unless user has groups" do
+    find_link('Creator').click
+    find_link('U.S. G.P.O.').click
+
+    expect(page).to_not have_content("Add to Image Group")
   end
 
 
-  it "lets a user add a subgroup to a group" do 
+  it "lets a user add a subgroup to a group" do
     # drag it onto the test group
     # test that if you click the subgroup it has the correct parent group in its page
-    # and that if you click the expand button on the parent group you see the subgroup name 
+    # and that if you click the expand button on the parent group you see the subgroup name
     # underneath it
-    visit('https://localhost:3000')
-    sleep(2)
+    #DIL-4081
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
     make_test_group('Test Subgroup')
 
-    group = '', subgroup = '', group_parent = false
+    drag_n_drop(find_link('Test Group'), find_link('Test Subgroup'))
 
-    all('.accordion li').each do |el|
-      within(el) do 
-        h2 = find(:css, 'h2')
-        if h2[:title] == "Test Group"
-          sleep(2)
-          group = h2
-        end 
- 
-        if h2[:title] == "Test Subgroup"
-          sleep(2)
-          subgroup = h2
-        end 
+    expect(find('#sidebar')).to have_no_content('Test Group')
+
+    within('#sidebar') do
+      icon = find('span')
+      within(icon) do
+        find('img').click()
       end
     end
 
-    drag_n_drop(subgroup, group)
+    click_link('Test Group')
+    expect(find('#sidebar').find('h4')).to have_content('Parent Collections')
 
-    sleep(2)
-    page.should_not have_selector('a', :text => 'Test Subgroup')
-    
-    within(group) do
-      icon = find(:css, 'span')    
-      within(icon) do  
-        img = find(:css, 'img')        
-        find(:css, 'img').click()       
-      end
-    end  
-
-    sleep(2)
-    our_subgroup = false
-    our_subgroup = all('a').select{|a| a[:text] == 'Test Subgroup' }
-    expect(our_subgroup).to be_true
-
-    click_link('Test Subgroup')
-    sleep(2)
-
-    h4 = page.find('#sidebar div:first-child h4')
-    sleep(2)
-    a = page.find('#sidebar div:nth-child(2) a')
-
-    if h4.text() == 'Parent Collections' and a[:text] == 'Test Group'
-      group_parent = true
+    page.accept_confirm "Delete this group?" do
+      click_link "Delete"
     end
 
-    expect(group_parent).to be_true 
-
-    #delete the subgroup
-    sleep(2)
-    click_link('Delete')
-
-    page.driver.wait_until(page.driver.browser.switch_to.alert.accept)
+    delete_test_group('Test Subgroup')
   end
 
-  it "cleans up after itself" do
-    cleanup
+  it 'lets a user navigate to next and previous images in a group' do
+    # these tests assume that the images in first, 6th and 8th place are different, will have different urls.
+    # they are fixture data so should be consistent.
+    #DIL-4084
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+
+    add_images_to_test_group('Test Group')
+
+    visit('http://localhost:3000')
+
+    click_link('Test Group')
+
+    #fix this:
+    titles = page.all("#images:first-child > a:nth-child(2)")
+    first_title = titles[0].text.split[0..3].join(" ")
+    second_title = titles[1].text.split[0..3].join(" ")
+
+    first('#images > a').click
+
+    click_link('Next')
+    expect(page).to have_content(second_title)
+
+    click_link('Previous')
+    expect(page).to have_content(first_title)
+
+    #remove_images_from_test_group('Test Group')
+    delete_test_group('Test Group')
   end
 
+  it "lets a user make a group private" do
+    #DIL-4087
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    click_link('Test Group')
+    click_link('Make this Group Private')
+    expect(page).to_not have_link('Share this Group')
+    expect(page).to have_link('Make this Group Sharable')
+
+    #make the group public again
+    click_link('Make this Group Sharable')
+    expect(page).to have_link('Make this Group Private')
+    delete_test_group('Test Group')
+  end
+
+  it "lets a user share a group" do
+    #DIL-4087
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    click_link('Test Group')
+
+    click_link('Share this Group')
+
+    #expect box with url in it to appear, also share this group copy
+    expect(find('#toppathwrap')).to have_content(current_path)
+    expect(find('#toppathwrap')).to have_content('Copy this link and share it!')
+
+    delete_test_group('Test Group')
+  end
+
+  it "lets a user delete a group" do
+    #DIL-4090
+    visit('http://localhost:3000')
+
+    make_test_group('Test Group')
+    expect(page).to have_content('Test Group')
+
+    delete_test_group('Test Group')
+    expect(page).to_not have_content('Test Group')
+  end
+
+  it "lets a user rename a group" do
+    visit('http://localhost:3000')
+    make_test_group('Test Group')
+    click_link('Test Group')
+    click_button('rename_image_group_link')
+    fill_in('dil_collection_title', with: "New and Different Subgroup Name")
+    click_button('Update')
+    expect(find('#accordion h2')).to have_content('New and Different Subgroup Name')
+    delete_test_group('New and Different Subgroup Name')
+  end
+
+
+  # it "lets a user save a TIFF or jpeg" do
+  #   #DIL-4091
+  #   # click the download original tiff or jpeg button
+  #   # and test that you get a page with an image file on with the correct src - jpg or tiff
+  #   visit('http://localhost:3000/catalog?f%5Bagent_name_facet%5D%5B%5D=U.S.+G.P.O.')
+  #   page.find(:css, "#images li:first img").click()
+
+  #   sleep(8)
+  #   img = page.find('a', :text => "Small Image Download (JPG)")
+
+  #   pid = img[:href].split("inu:")[1]
+
+  #   click_link('Small Image Download (JPG)')
+
+  #   sleep(8)
+
+  #   new_window = page.driver.browser.window_handles.last
+
+  #   image_present = false
+
+  #   page.within_window new_window do
+
+  #     all('img').each do |img|
+  #       if img[:src].include?(pid)
+  #         image_present = true
+  #       end
+  #     end
+  #   end
+
+  #   image_present.should be_truthy
+  # end
+
+end
+
+
+steps 'Logged-in Users can use Images to view Collections',  :js => true do
+  before :all do
+    @driver = Capybara.default_driver
+    visit('http://localhost:3000/users/sign_in')
+    within("#new_user") do
+      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
+      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
+    end
+    click_button('signIn')
+  end
+
+  it "does not create facets from subject display data" do
+    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
+
+    #subject display fixture data - would be ideal to get this from fedora
+    expect(page).to have_content("World War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work ")
+
+
+    find('#logo a').click
+    find_link('Subject').click
+    find_link('more').click
+
+    terms_not_in_facets = true
+
+    next_link_exists = true
+
+    while next_link_exists do
+      begin
+        find_link('Next').click
+      rescue Capybara::ElementNotFound
+        next_link_exists = false
+      end
+        all('a').each do |a|
+          if a[:text].include?("War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work")
+            terms_not_in_facets = false
+          end
+        end
+    end
+
+    expect(terms_not_in_facets).to be_truthy
+
+  end
+
+end
+
+steps "Logged out users can use Images to",  :js => true do
+  it "lets you do a facets (narrowing) search" do
+    visit('http://localhost:3000')
+    find_link('Work Type').click
+    find_link('Prints').click
+    expect(page).to have_selector('.listing', count: 6)
+  end
+
+  it "lets you choose how many images you see in search results" do
+    visit('http://localhost:3000/catalog?utf8=%E2%9C%93&q=*')
+    click_button('Sort by Relevance')
+    find('.dropdown-menu').visible?
+  end
+
+  it "lets you choose the sort method for search results" do
+    visit('http://localhost:3000/catalog?utf8=%E2%9C%93&q=*')
+    click_button('10 per page')
+    find('.dropdown-menu').visible?
+  end
+
+  it "won't display 'add an image to a group' unless user is signed in" do
+    visit("http://localhost:3000/multiresimages/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60")
+
+    expect(page).to_not have_content("Add to Image Group")
+  end
 
 end

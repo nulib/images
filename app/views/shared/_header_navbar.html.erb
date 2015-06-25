@@ -1,22 +1,16 @@
-<%
-the_logo = "repository-images.png"
-%>
 
 <div id="hd">
   <div id="top-menu"><%= render :partial => '/user_util_links' %></div>
-  
+
   <div class="container logo-search">
     <div class="row">
 
-    <div class="span6" id="logo"><%= link_to(image_tag('site/' + the_logo, :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
-    
-    <div class="span6" id="searchbar">         
-      <%= render_search_bar  %>
-    </div>
+      <div class="col-md-6" id="logo"><%= link_to(image_tag('site/repository-images.png', :alt => "Northwestern University Library logo"), "/", :title=>"Return Home", :class=>"logo") %></div>
 
-  </div> <!-- end row -->
-</div>
+      <div class="col-md-6" id="searchbar">
+        <%= render_search_bar  %>
+      </div>
 
-<%= render :partial=>'shared/menu' %>
-  <!-- <%= (params[:controller] == "catalog" and !params[:id]) ? "<span id='results_text'>Search Results</span>".html_safe : "" %> -->
+    </div> <!-- end row -->
+  </div>
 </div>

@@ -1,16 +1,21 @@
-<div class="row-fluid">
-    <ul class="thumbnails">
-      <% DIL_CONFIG["institutional_collection"].each do |key, inst_collection| %>
-        <li class="span4">
-        <a href="<%=inst_collection["solr_url"]%>" class="thumbnail"><img src="<%=inst_collection["image_url"]%>"></img></a><h4><%=inst_collection["title"]%></h4>
-        </li>
-      <% end %>
-    </ul>
-  <h3>Finding Images</h3>
-
-  <p>Use the search box, or browse using the terms on the left side or clicking on the representative thumbnails to discover images.</p>
-
-  <% unless current_user %>
-    <p>Some images are only available to Northwestern faculty, students and staff. Login with your Northwestern NetID and password to search and browse through both publicly available and NU only content. Collections marked with an asterisk (*) are only available when you <%= link_to 'sign in', new_user_session_path %> with your Northwestern NetID and password.</p>
+<div class="row">
+  <% DIL_CONFIG["institutional_collection"].each do |key, inst_collection| %>
+    <div class="col-md-4">
+      <a href="<%=inst_collection["solr_url"]%>" class="thumbnail home-header">
+        <img src="<%=inst_collection["image_url"]%>" />
+      </a>
+      <h4><%=inst_collection["title"]%></h4>
+    </div>
   <% end %>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <h3>Finding Images</h3>
+
+    <p>Use the search box, or browse using the terms on the left side or clicking on the representative thumbnails to discover images.</p>
+
+    <% unless current_user %>
+      <p>Some images are only available to Northwestern faculty, students and staff. Login with your Northwestern NetID and password to search and browse through both publicly available and NU only content. Collections marked with an asterisk (*) are only available when you <%= link_to 'sign in', new_user_session_path %> with your Northwestern NetID and password.</p>
+    <% end %>
+  </div>
 </div>
