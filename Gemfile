@@ -62,5 +62,6 @@ end
 
 group :production do
   gem 'pg'
+  gem 'rb-readline'
   gem 'google-analytics-rails'
 end
