@@ -2,12 +2,15 @@
 *
 *= require_self
 *= require 'jquery-ui'
-*= require_tree .
 */
 
 @import 'bootstrap-sprockets';
 @import 'bootstrap';
+@import 'policies';
+@import 'dil';
 @import 'blacklight/blacklight';
+@import 'blacklight_overrides';
+
 <% unless Rails.env.production? %>
 @import 'about_page';
 <% end %>
