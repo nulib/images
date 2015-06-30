@@ -10,7 +10,7 @@
     <link href="<%= opensearch_catalog_path(:format => 'xml', :only_path => false) %>" title="<%= application_name%>" type="application/opensearchdescription+xml" rel="search"/>
     <%= favicon_link_tag ('favicon.ico') %>
     <%= include_gon %>
-    <%= stylesheet_link_tag    "application" %>
+    <%= stylesheet_link_tag  "application", media: "all", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "application" %>
 	<%= yield :page_scripts %>
     <%= csrf_meta_tags %>
@@ -28,9 +28,9 @@
       <div id="main-container" class="container">
 
         <%= render 'layouts/messages' %>
-        
+
         <%= yield %>
-        
+
       </div>
       <div class="push"></div>
     </div><!-- end .wrapper -->
