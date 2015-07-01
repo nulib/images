@@ -8,6 +8,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require bootstrap
+
 //= require blacklight/blacklight
 
 //= require_directory .
