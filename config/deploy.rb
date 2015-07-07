@@ -31,6 +31,8 @@ set :linked_dirs, %w{jetty tmp/pids log} #bin log tmp/pids tmp/cache tmp/sockets
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
+set :bundle_flags, "--deployment"
+
 # rbenv setup
 set :rbenv_type, :user
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
