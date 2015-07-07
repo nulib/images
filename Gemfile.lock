@@ -1,18 +1,18 @@
 GIT
-  remote: git@github.com:panter/delayed_job_active_record.git
-  revision: 111a122cdc4d5cdae027691ef7c68c5a76470df7
-  specs:
-    delayed_job_active_record (4.0.0)
-      activerecord (>= 3.0)
-      delayed_job (>= 3.0)
-
-GIT
   remote: http://github.com/sul-dlss/about_page.git
   revision: 0bed296d6ad2666b364594b7da7f2922b1f874a2
   specs:
     about_page (0.3.1)
       rails (>= 3.2)
       rugged
+
+GIT
+  remote: https://github.com/collectiveidea/delayed_job_active_record
+  revision: 270b06eef0879a7ea167eb41182336aa14fb762e
+  specs:
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
 
 GIT
   remote: https://github.com/mbklein/equivalent-xml.git

@@ -64,5 +64,5 @@ group :production do
   gem 'pg'
   gem 'rb-readline'
   gem 'google-analytics-rails'
-  gem 'delayed_job_active_record', :git => 'git@github.com:panter/delayed_job_active_record.git'
+  gem 'delayed_job_active_record', :git => 'https://github.com/collectiveidea/delayed_job_active_record'
 end
