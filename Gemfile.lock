@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/collectiveidea/delayed_job_active_record.git
+  revision: 270b06eef0879a7ea167eb41182336aa14fb762e
+  specs:
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
+
+GIT
   remote: https://github.com/mbklein/equivalent-xml.git
   revision: 1d1dc4919e120db599164fc81351913e2c62d11e
   specs:
@@ -127,9 +135,6 @@ GEM
     debugger-linecache (1.2.0)
     delayed_job (4.0.6)
       activesupport (>= 3.0, < 5.0)
-    delayed_job_active_record (4.0.3)
-      activerecord (>= 3.0, < 5.0)
-      delayed_job (>= 3.0, < 4.1)
     deprecation (0.1.0)
       activesupport
     devise (3.4.1)
@@ -471,7 +476,7 @@ DEPENDENCIES
   coffee-rails (>= 4)
   daemons
   database_cleaner
-  delayed_job_active_record
+  delayed_job_active_record!
   devise
   equivalent-xml!
   factory_girl_rails
