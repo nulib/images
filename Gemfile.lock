@@ -1,12 +1,4 @@
 GIT
-  remote: http://github.com/sul-dlss/about_page.git
-  revision: 0bed296d6ad2666b364594b7da7f2922b1f874a2
-  specs:
-    about_page (0.3.1)
-      rails (>= 3.2)
-      rugged
-
-GIT
   remote: https://github.com/collectiveidea/delayed_job_active_record
   revision: 270b06eef0879a7ea167eb41182336aa14fb762e
   specs:
@@ -383,7 +375,6 @@ GEM
     rubyzip (1.1.7)
     rufus-scheduler (3.0.9)
       tzinfo
-    rugged (0.22.2)
     sass (3.4.10)
     sass-rails (5.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -463,7 +454,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  about_page!
   better_errors
   binding_of_caller
   byebug

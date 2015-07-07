@@ -19,6 +19,8 @@ source 'http://rubygems.org'
   gem 'jhove-service'
   gem 'protected_attributes'
   #gem 'delayed_job_active_record'
+  gem 'delayed_job_active_record', :git => 'https://github.com/collectiveidea/delayed_job_active_record'
+
   gem 'daemons'
 
   # Use Capistrano for deployment
@@ -38,7 +40,7 @@ source 'http://rubygems.org'
 group :development, :test, :staging do
   gem 'jettywrapper'
   gem 'sqlite3'
-  gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
+  #gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
 end
 
 group :test do
@@ -64,5 +66,4 @@ group :production do
   gem 'pg'
   gem 'rb-readline'
   gem 'google-analytics-rails'
-  gem 'delayed_job_active_record', :git => 'https://github.com/collectiveidea/delayed_job_active_record'
 end
