@@ -271,7 +271,7 @@ div.batch_select_count_label {
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .8 )
-                url('ajax-loader.gif')
+                asset-url('ajax-loader.gif')
                 50% 50%
                 no-repeat;
 }
