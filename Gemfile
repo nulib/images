@@ -18,7 +18,7 @@ source 'http://rubygems.org'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'protected_attributes'
-  gem 'delayed_job_active_record'
+  #gem 'delayed_job_active_record'
   gem 'daemons'
 
   # Use Capistrano for deployment
