@@ -116,7 +116,7 @@ ControlManager.showCropControls = function(crop)
 		frame.attr("stroke", ControlManager.STROKE);
 		controls.frame = frame;
 
-		var frameIcon = CropTool.paper.image(<%= asset_path("ruler-24.png") %>, 8, 8, 24, 24);
+		var frameIcon = CropTool.paper.image( "<%= asset_path("ruler-24.png") %>", 8, 8, 24, 24);
 		frameIcon.click(frameInfo);
 		controls.frameIcon = frameIcon;
 
@@ -127,7 +127,7 @@ ControlManager.showCropControls = function(crop)
 			rotation.attr("stroke", ControlManager.STROKE);
 			controls.rotation = rotation;
 
-			var clockIcon = CropTool.paper.image( <%= asset_path("clock-16.png") %>, (base * 6) + 8, (base * 6) + 9, 16, 16);
+			var clockIcon = CropTool.paper.image( "<%= asset_path("clock-16.png") %>", (base * 6) + 8, (base * 6) + 9, 16, 16);
 			clockIcon.click(function(event)
 			{
 				var rotation = CropManager.selectedCrop.rotation;
@@ -145,7 +145,7 @@ ControlManager.showCropControls = function(crop)
 			});
 			controls.clockIcon = clockIcon;
 
-			var counterIcon = CropTool.paper.image( <%= asset_path("counter-16.png") %>, base + 8, (base * 6) + 9, 16, 16);
+			var counterIcon = CropTool.paper.image( "<%= asset_path("counter-16.png") %>", base + 8, (base * 6) + 9, 16, 16);
 			counterIcon.click(function(event)
 			{
 				var rotation = CropManager.selectedCrop.rotation;
@@ -345,7 +345,7 @@ ControlManager.showCropControls = function(crop)
 			color.click(colorClick);
 			controls.color = color;
 
-			var colorIcon = CropTool.paper.image( <%= asset_path("color-24.png") %>, base, base, 24, 24);
+			var colorIcon = CropTool.paper.image( "<%= asset_path("color-24.png") %>", base, base, 24, 24);
 			colorIcon.click(colorClick);
 			controls.colorIcon = colorIcon;
 
@@ -360,7 +360,7 @@ ControlManager.showCropControls = function(crop)
 			save.click(saveClick);
 			controls.save = save;
 
-			var saveIcon = CropTool.paper.image( <%= asset_path("save-24.png") %>, base, base, 24, 24);
+			var saveIcon = CropTool.paper.image( "<%= asset_path("save-24.png") %>", base, base, 24, 24);
 			saveIcon.click(saveClick);
 			controls.saveIcon = saveIcon;
 		}
@@ -469,7 +469,7 @@ ControlManager.initialize = function ()
 
 		if (currentMode === "move")
 		{
-			modeIcon = CropTool.paper.image( <%= asset_path("edit-24.png") %>, icon.attr("x"), icon.attr("y"), 24, 24);
+			modeIcon = CropTool.paper.image( "<%= asset_path("edit-24.png") %>", icon.attr("x"), icon.attr("y"), 24, 24);
 
 			CropManager.setEditable(true);
 			CropManager.setDrawable(false);
@@ -481,7 +481,7 @@ ControlManager.initialize = function ()
 		}
 		else
 		{
-			modeIcon = CropTool.paper.image( <%= asset_path("move-24.png") %>, icon.attr("x"), icon.attr("y"), 24, 24);
+			modeIcon = CropTool.paper.image( "<%= asset_path("move-24.png") %>", icon.attr("x"), icon.attr("y"), 24, 24);
 
 			MetadataManager.hideCropDetails();
 			CropManager.setEditable(false);
@@ -522,7 +522,7 @@ ControlManager.initialize = function ()
 
 		controls.create = create;
 
-		var createIcon = CropTool.paper.image( <%= asset_path("camera.png") %>, width - base + 6, 7, 20, 20);
+		var createIcon = CropTool.paper.image( "<%= asset_path("camera.png") %>", width - base + 6, 7, 20, 20);
 		createIcon.click(createFunction);
 		controls.createIcon = createIcon;
 	}
@@ -532,7 +532,7 @@ ControlManager.initialize = function ()
 	rotation.attr("stroke", ControlManager.STROKE);
 	controls.rotation = rotation;
 
-	var clockIcon = CropTool.paper.image( <%= asset_path("clock-16.png") %>, width - (base * 3) + 8, 9, 16, 16);
+	var clockIcon = CropTool.paper.image( "<%= asset_path("croptool/clock-16.png") %>", width - (base * 3) + 8, 9, 16, 16);
 	clockIcon.click(function(event)
 	{
 		var rotation = CoordinateManager.currentRotation();
@@ -546,7 +546,7 @@ ControlManager.initialize = function ()
 	});
 	controls.clockIcon = clockIcon;
 
-	var counterIcon = CropTool.paper.image(<%= asset_path("counter-16.png") %>, width - (base * 8) + 8, 9, 16, 16);
+	var counterIcon = CropTool.paper.image( "<%= asset_path("croptool/counter-16.png") %>", width - (base * 8) + 8, 9, 16, 16);
 	counterIcon.click(function(event)
 	{
 		var rotation = CoordinateManager.currentRotation();
@@ -607,14 +607,14 @@ ControlManager.initialize = function ()
 	zoom.attr("stroke", ControlManager.STROKE);
 	controls.zoom = zoom;
 
-	var zoomInIcon = CropTool.paper.image( <%= asset_path("out-16.png") %>, width - base + 8.5, (base * 2) + 8, 16, 16);
+	var zoomInIcon = CropTool.paper.image( "<%= asset_path("croptool/in-16.png") %>", width - base + 8.5, (base * 2) + 8, 16, 16);
 	zoomInIcon.click(function(event)
 	{
 		CoordinateManager.zoomIn();
 	});
 	controls.zoomInIcon = zoomInIcon;
 
-	var zoomOutIcon = CropTool.paper.image( <%= asset_path("out-16.png") %>, width - base + 8.5, (base * 8) - 24, 16, 16);
+	var zoomOutIcon = CropTool.paper.image( "<%= asset_path("croptool/out-16.png") %>", width - base + 8.5, (base * 8) - 24, 16, 16);
 	zoomOutIcon.click(function(event)
 	{
 		CoordinateManager.zoomOut();
