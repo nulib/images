@@ -22,6 +22,11 @@ server 'images-p.library.northwestern.edu', user: 'deploy', roles: %w{web app db
 # ==================
 set :rbenv_ruby, '2.2.2'
 
+
+
+#bundle install only production gems
+set :bundle_with, %w{default production}.join(' ')
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

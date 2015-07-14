@@ -22,6 +22,9 @@ server 'images-s.library.northwestern.edu', user: 'deploy', roles: %w{web app db
 set :rbenv_ruby, '2.2.2'
 
 
+#bundle install only staging gems
+set :bundle_with, %w{default staging}.join(' ')
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
