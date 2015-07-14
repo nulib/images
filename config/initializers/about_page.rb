@@ -1,4 +1,4 @@
-unless Rails.env.production?
+unless Rails.env.production? or Rails.env.test?
   AboutPage.configure do |config|
     config.app           = { :name => DIL.name, :version => DIL::VERSION }
     config.environment   = AboutPage::Environment.new({
