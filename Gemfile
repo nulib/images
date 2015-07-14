@@ -59,7 +59,7 @@ group :development do
   gem 'byebug'
 end
 
-group :staging_and_remote_dev do
+group :staging do
   gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
   gem 'pg'
 end
