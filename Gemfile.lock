@@ -1,17 +1,17 @@
 GIT
-  remote: https://github.com/mbklein/equivalent-xml.git
-  revision: 1d1dc4919e120db599164fc81351913e2c62d11e
-  specs:
-    equivalent-xml (0.5.1)
-      nokogiri (>= 1.4.3)
-
-GIT
-  remote: https://github.com/sul-dlss/about_page.git
+  remote: http://github.com/sul-dlss/about_page.git
   revision: 0bed296d6ad2666b364594b7da7f2922b1f874a2
   specs:
     about_page (0.3.1)
       rails (>= 3.2)
       rugged
+
+GIT
+  remote: https://github.com/mbklein/equivalent-xml.git
+  revision: 1d1dc4919e120db599164fc81351913e2c62d11e
+  specs:
+    equivalent-xml (0.5.1)
+      nokogiri (>= 1.4.3)
 
 GEM
   remote: http://rubygems.org/
