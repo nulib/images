@@ -1,4 +1,4 @@
-/*global Image, $, CropTool, window, ImageServer, CoordinateManager, CropManager, alert, 
+/*global Image, $, CropTool, window, ImageServer, CoordinateManager, CropManager, alert,
 	PersistenceManager, TileManager */
 
 /**
@@ -21,7 +21,7 @@ ControlManager.hideCropControls = function()
 	{
 		ControlManager.cropControls.frame.remove();
 		ControlManager.cropControls.frameIcon.remove();
-		
+
 		if (CropTool.editable)
 		{
 			ControlManager.cropControls.rotation.remove();
@@ -55,7 +55,7 @@ ControlManager.hideCropControls = function()
 			ControlManager.cropControls.yellow.remove();
 			ControlManager.cropControls.white.remove();
 		}
-		
+
 		delete ControlManager.cropControls;
 	}
 };
@@ -65,7 +65,7 @@ ControlManager.showCropControls = function(crop)
 	if (ControlManager.cropControls === undefined)
 	{
 		var controls = {};
-		
+
 		var base = ControlManager.BASE_SIDE;
 
 		var frameInfo = function(event)
@@ -88,14 +88,14 @@ ControlManager.showCropControls = function(crop)
 			pathString += "L 10 " + (y + 40);
 			pathString += "L 10 " + (y + 10);
 			pathString += "C 10 " + (y + 10) + " 10 " + y + " 20 " + y;
-			
+
 			var dimInfo = CropTool.paper.path(pathString);
 			dimInfo.attr("fill", "#444");
 			dimInfo.attr("stroke", "none");
 			dimInfo.attr("fill-opacity", 0.75);
-			ControlManager.cropControls.dimInfo = dimInfo;	
+			ControlManager.cropControls.dimInfo = dimInfo;
 			ControlManager.cropControls.dimInfo.toFront();
-			
+
 			var crop = CropManager.selectedCrop;
 
 			var dimString = Math.floor(ImageServer.details.width * crop.width) + "x";
@@ -106,34 +106,34 @@ ControlManager.showCropControls = function(crop)
 			var dimText = CropTool.paper.text(50, y + 15, dimString);
 			dimText.attr("fill", "#fff");
 			dimText.attr("stroke", "none");
-			ControlManager.cropControls.dimText = dimText;	
+			ControlManager.cropControls.dimText = dimText;
 			ControlManager.cropControls.dimText.toFront();
 		};
-		
+
 		var frame = CropTool.paper.rect(0, base, base, base);
 		frame.click(frameInfo);
 		frame.attr("fill", ControlManager.FILL);
 		frame.attr("stroke", ControlManager.STROKE);
-		controls.frame = frame; 
-		
-		var frameIcon = CropTool.paper.image(Site.iconPath() + "ruler-24.png", 8, 8, 24, 24);
+		controls.frame = frame;
+
+		var frameIcon = CropTool.paper.image( "<%= asset_path("ruler-24.png") %>", 8, 8, 24, 24);
 		frameIcon.click(frameInfo);
-		controls.frameIcon = frameIcon; 
+		controls.frameIcon = frameIcon;
 
 		if (CropTool.editable)
 		{
 			var rotation = CropTool.paper.rect(base, base, base * 6, base);
 			rotation.attr("fill", ControlManager.FILL);
 			rotation.attr("stroke", ControlManager.STROKE);
-			controls.rotation = rotation;	
+			controls.rotation = rotation;
 
-			var clockIcon = CropTool.paper.image(Site.iconPath() + "clock-16.png", (base * 6) + 8, (base * 6) + 9, 16, 16);
+			var clockIcon = CropTool.paper.image( "<%= asset_path("clock-16.png") %>", (base * 6) + 8, (base * 6) + 9, 16, 16);
 			clockIcon.click(function(event)
 			{
 				var rotation = CropManager.selectedCrop.rotation;
 
 				rotation = Math.floor(rotation + 1);
-			
+
 				if (rotation >= 0 && rotation < 360)
 				{
 					CropManager.selectedCrop.rotation = rotation;
@@ -143,15 +143,15 @@ ControlManager.showCropControls = function(crop)
 				else
 					alert("Cannot rotate further.");
 			});
-			controls.clockIcon = clockIcon; 
+			controls.clockIcon = clockIcon;
 
-			var counterIcon = CropTool.paper.image(Site.iconPath() + "counter-16.png", base + 8, (base * 6) + 9, 16, 16);
+			var counterIcon = CropTool.paper.image( "<%= asset_path("counter-16.png") %>", base + 8, (base * 6) + 9, 16, 16);
 			counterIcon.click(function(event)
 			{
 				var rotation = CropManager.selectedCrop.rotation;
 
 				rotation = Math.floor(rotation - 1);
-			
+
 				if (rotation >= 0 && rotation < 360)
 				{
 					CropManager.selectedCrop.rotation = rotation;
@@ -161,12 +161,12 @@ ControlManager.showCropControls = function(crop)
 				else
 					alert("Cannot rotate further.");
 			});
-			controls.counterIcon = counterIcon; 
+			controls.counterIcon = counterIcon;
 
 			var rotationBar = CropTool.paper.rect(2 * base, 0, (base * 4), 20, 5);
 			rotationBar.attr("fill", "#222");
 			rotationBar.attr("stroke", ControlManager.STROKE);
-			controls.rotationBar = rotationBar; 
+			controls.rotationBar = rotationBar;
 
 			var rotationSlider = CropTool.paper.rect((2 * base) + 1, 0, 10, 18, 4);
 			rotationSlider.attr("fill", "#800");
@@ -177,49 +177,49 @@ ControlManager.showCropControls = function(crop)
 				var x = rotationBar.attr("x") + 1;
 				var ratio = degrees / 360;
 				var width = rotationBar.attr("width") - rotationSlider.attr("width") - 1;
-		
+
 				rotationSlider.attr("x", x + Math.floor(ratio * width));
-			
+
 				TileManager.updatePosition();
-				CropManager.updatePosition();		
+				CropManager.updatePosition();
 				ControlManager.toFront();
 			}
 
-			var start = function() 
+			var start = function()
 			{
 				rotationSlider.ox = rotationSlider.attr("x");
 			};
 
-			var move = function(dx, dy) 
+			var move = function(dx, dy)
 			{
 				var x = Math.floor(rotationSlider.ox + dx);
-		
+
 				if (x > rotationBar.attr("x") && x + rotationSlider.attr("width") < rotationBar.attr("x") + rotationBar.attr("width") - 1)
 				{
 					rotationSlider.attr("x", x);
-			
+
 					var delta = Math.floor(x - rotationBar.attr("x"));
 					var width = Math.floor(rotationBar.attr("width") - rotationSlider.attr("width") - 1);
 					var degrees = Math.round((delta / width) * 360);
-				
+
 					if (degrees > 359 || degrees < 0)
 						degrees = 0;
 
 					CropManager.selectedCrop.rotation = degrees;
 					TileManager.updatePosition();
-					CropManager.updatePosition();		
+					CropManager.updatePosition();
 					ControlManager.toFront();
 				}
 			};
 
-			var up = function () 
+			var up = function ()
 			{
 
 			};
-	
+
 			rotationSlider.drag(move, start, up);
 
-			controls.rotationSlider = rotationSlider;	
+			controls.rotationSlider = rotationSlider;
 
 			var colorClick = function(event)
 			{
@@ -231,11 +231,11 @@ ControlManager.showCropControls = function(crop)
 				var setCropColor = function(color)
 				{
 					CropManager.selectedCrop.color = color;
-						
+
 					CropManager.updatePosition();
 					ControlManager.toFront();
 				};
-					
+
 				var x = base * 7.5;
 				var y = $(CropTool.rootDiv).height() - base - 100;
 
@@ -245,16 +245,16 @@ ControlManager.showCropControls = function(crop)
 				pathString += "L " + (x + 90) + " " + (y + 80);
 				pathString += "C " + (x + 90) + " " + (y + 80) + " " + (x + 90) + " " + (y + 90) + " " + (x + 80) + " " + (y + 90);
 				pathString += "L " + (x + 10) + " " + (y + 90);
-				
+
 				pathString += "L " + x + " " + (y + 100);
 				pathString += "L " + x + " " + (y + 10);
 				pathString += "C " + x + " " + (y + 10) + " " + x + " " + y + " " + (x + 10) + " " + y;
-			
+
 				var colorInfo = CropTool.paper.path(pathString);
 				colorInfo.attr("fill", "#444");
 				colorInfo.attr("stroke", "none");
 				colorInfo.attr("fill-opacity", 0.75);
-				ControlManager.cropControls.colorInfo = colorInfo;	
+				ControlManager.cropControls.colorInfo = colorInfo;
 				ControlManager.cropControls.colorInfo.toFront();
 
 				controls.black = CropTool.paper.rect(x + 10, y + 10, 20, 20);
@@ -265,7 +265,7 @@ ControlManager.showCropControls = function(crop)
 					setCropColor("#000000");
 				});
 				controls.black.toFront();
-					
+
 				controls.blue = CropTool.paper.rect(x + 35, y + 10, 20, 20);
 				controls.blue.attr("fill", "#1F75FE");
 				controls.blue.attr("stroke", "none");
@@ -338,16 +338,16 @@ ControlManager.showCropControls = function(crop)
 				});
 				controls.white.toFront();
 			};
-		
+
 			var color = CropTool.paper.rect(base * 7, base, base, base);
 			color.attr("fill", ControlManager.FILL);
 			color.attr("stroke", ControlManager.STROKE);
 			color.click(colorClick);
-			controls.color = color; 
-		
-			var colorIcon = CropTool.paper.image(Site.iconPath() + "color-24.png", base, base, 24, 24);
+			controls.color = color;
+
+			var colorIcon = CropTool.paper.image( "<%= asset_path("color-24.png") %>", base, base, 24, 24);
 			colorIcon.click(colorClick);
-			controls.colorIcon = colorIcon; 
+			controls.colorIcon = colorIcon;
 
 			var saveClick = function(event)
 			{
@@ -358,13 +358,13 @@ ControlManager.showCropControls = function(crop)
 			save.attr("fill", ControlManager.FILL);
 			save.attr("stroke", ControlManager.STROKE);
 			save.click(saveClick);
-			controls.save = save;	
+			controls.save = save;
 
-			var saveIcon = CropTool.paper.image(Site.iconPath() + "save-24.png", base, base, 24, 24);
+			var saveIcon = CropTool.paper.image( "<%= asset_path("save-24.png") %>", base, base, 24, 24);
 			saveIcon.click(saveClick);
-			controls.saveIcon = saveIcon;	
+			controls.saveIcon = saveIcon;
 		}
-		
+
 		ControlManager.cropControls = controls;
 	}
 
@@ -383,7 +383,7 @@ ControlManager.showCropControls = function(crop)
 		var rotation = ControlManager.cropControls.rotation;
 		rotation.attr("y", height - ControlManager.BASE_SIDE);
 		rotation.toFront();
-	
+
 		ControlManager.cropControls.clockIcon.attr("y", rotation.attr("y") + 8);
 		ControlManager.cropControls.counterIcon.attr("y", rotation.attr("y") + 8);
 
@@ -393,11 +393,11 @@ ControlManager.showCropControls = function(crop)
 		var color = ControlManager.cropControls.color;
 		color.attr("y", height - ControlManager.BASE_SIDE);
 		color.toFront();
-	
+
 		ControlManager.cropControls.colorIcon.attr("y", color.attr("y") + 4);
 		ControlManager.cropControls.colorIcon.attr("x", color.attr("x") + 4);
 		ControlManager.cropControls.colorIcon.toFront();
-	
+
 		var save = ControlManager.cropControls.save;
 		save.attr("y", height - ControlManager.BASE_SIDE);
 		save.toFront();
@@ -407,7 +407,7 @@ ControlManager.showCropControls = function(crop)
 		ControlManager.cropControls.saveIcon.toFront();
 
 		TileManager.updatePosition();
-		CropManager.updatePosition();		
+		CropManager.updatePosition();
 		ControlManager.toFront();
 	}
 };
@@ -419,7 +419,7 @@ ControlManager.updateRotation = function(degrees)
 		var x = ControlManager.controls.rotationBar.attr("x") + 1;
 		var ratio = degrees / 360;
 		var width = ControlManager.controls.rotationBar.attr("width") - ControlManager.controls.rotationSlider.attr("width") - 1;
-		
+
 		ControlManager.controls.rotationSlider.attr("x", x + Math.floor(ratio * width));
 	}
 };
@@ -430,7 +430,7 @@ ControlManager.updateZoom = function(zoomLevel)
 	{
 		var top = CoordinateManager.level_count - CoordinateManager.base_level;
 		zoomLevel = zoomLevel - CoordinateManager.base_level;
-		
+
 		var y = ControlManager.controls.zoomBar.attr("y") + 1;
 		var ratio = 1 - (zoomLevel / top);
 		var height = ControlManager.controls.zoomBar.attr("height") - ControlManager.controls.zoomSlider.attr("height") - 2;
@@ -440,7 +440,7 @@ ControlManager.updateZoom = function(zoomLevel)
 	}
 };
 
-/** 
+/**
  * Creates the control panel and binds the actions to the approriate widgets.
  */
 
@@ -450,9 +450,9 @@ ControlManager.initialize = function ()
 	var width = $(CropTool.rootDiv).width() - 1;
 
 	var controls = {};
-		
+
 	var base = ControlManager.BASE_SIDE;
-    
+
     var mode = CropTool.paper.rect();
 	// Draw the area for the move tool
 	//var mode = CropTool.paper.rect(width - base, height - base, base, base);
@@ -463,17 +463,17 @@ ControlManager.initialize = function ()
 	{
 		var currentMode = ControlManager.mode;
 
-		var icon = ControlManager.controls.modeIcon;	
-		
+		var icon = ControlManager.controls.modeIcon;
+
 		var modeIcon = null;
 
 		if (currentMode === "move")
 		{
-			modeIcon = CropTool.paper.image(Site.iconPath() + "edit-24.png", icon.attr("x"), icon.attr("y"), 24, 24);
+			modeIcon = CropTool.paper.image( "<%= asset_path("edit-24.png") %>", icon.attr("x"), icon.attr("y"), 24, 24);
 
 			CropManager.setEditable(true);
 			CropManager.setDrawable(false);
-		
+
 			if (CropManager.selectedCrop !== null)
 				MetadataManager.showCropDetails(CropManager.selectedCrop);
 
@@ -481,12 +481,12 @@ ControlManager.initialize = function ()
 		}
 		else
 		{
-			modeIcon = CropTool.paper.image(Site.iconPath() + "move-24.png", icon.attr("x"), icon.attr("y"), 24, 24);
+			modeIcon = CropTool.paper.image( "<%= asset_path("move-24.png") %>", icon.attr("x"), icon.attr("y"), 24, 24);
 
 			MetadataManager.hideCropDetails();
 			CropManager.setEditable(false);
 			CropManager.setDrawable(false);
-			
+
 			ControlManager.mode = "move";
 		}
 
@@ -499,13 +499,13 @@ ControlManager.initialize = function ()
 
 	mode.click(toggleFunction);
 
-	controls.mode = mode;	
-	
+	controls.mode = mode;
+
 	//Add the move icon
 	var modeIcon = CropTool.paper.image();
 	modeIcon.click(toggleFunction);
-	controls.modeIcon = modeIcon;	
-	
+	controls.modeIcon = modeIcon;
+
 	if (CropTool.editable && !CropTool.isCrop)
 	{
 		var create = CropTool.paper.rect(width - base, 0, base, base);
@@ -517,145 +517,145 @@ ControlManager.initialize = function ()
 			if (confirm("Create a new image detail using the current viewport?\n\nAll image details will be placed in 'My Image Details'.\nIf the image was opened from an Image Group the detail will also be placed there."))
 				PersistenceManager.requestNewCrop();
 		};
-	
+
 		create.click(createFunction);
 
-		controls.create = create;	
+		controls.create = create;
 
-		var createIcon = CropTool.paper.image(Site.iconPath() + "camera.png", width - base + 6, 7, 20, 20);
+		var createIcon = CropTool.paper.image( "<%= asset_path("camera.png") %>", width - base + 6, 7, 20, 20);
 		createIcon.click(createFunction);
-		controls.createIcon = createIcon;	
+		controls.createIcon = createIcon;
 	}
 
 	var rotation = CropTool.paper.rect(width - (base * 8), 0, (base * 6), base);
 	rotation.attr("fill", ControlManager.FILL);
 	rotation.attr("stroke", ControlManager.STROKE);
-	controls.rotation = rotation;	
+	controls.rotation = rotation;
 
-	var clockIcon = CropTool.paper.image(Site.iconPath() + "clock-16.png", width - (base * 3) + 8, 9, 16, 16);
+	var clockIcon = CropTool.paper.image( "<%= asset_path("croptool/clock-16.png") %>", width - (base * 3) + 8, 9, 16, 16);
 	clockIcon.click(function(event)
 	{
 		var rotation = CoordinateManager.currentRotation();
-		
+
 		var newRotation = Math.floor(rotation + 1);
-		
+
 		if (newRotation < 360)
 			CoordinateManager.setRotation(newRotation);
 		else
 			alert("Cannot rotate clockwise further.");
 	});
-	controls.clockIcon = clockIcon; 
+	controls.clockIcon = clockIcon;
 
-	var counterIcon = CropTool.paper.image(Site.iconPath() + "counter-16.png", width - (base * 8) + 8, 9, 16, 16);
+	var counterIcon = CropTool.paper.image( "<%= asset_path("croptool/counter-16.png") %>", width - (base * 8) + 8, 9, 16, 16);
 	counterIcon.click(function(event)
 	{
 		var rotation = CoordinateManager.currentRotation();
-		
+
 		var newRotation = Math.floor(rotation - 1);
-		
+
 		if (newRotation > 0)
 			CoordinateManager.setRotation(newRotation);
 		else
 			alert("Cannot rotate counter-clockwise further.");
 	});
-	controls.counterIcon = counterIcon; 
+	controls.counterIcon = counterIcon;
 
 	var rotationBar = CropTool.paper.rect(counterIcon.attr("x") + counterIcon.attr("width") + 8, 6, (base * 4), 20, 5);
 	rotationBar.attr("fill", "#222");
 	rotationBar.attr("stroke", ControlManager.STROKE);
-	controls.rotationBar = rotationBar; 
+	controls.rotationBar = rotationBar;
 
 	var rotationSlider = CropTool.paper.rect(rotationBar.attr("x") + 1, 7, 10, 18, 4);
 	rotationSlider.attr("fill", "#800");
 	rotationSlider.attr("stroke", "none");
 
-	var start = function() 
+	var start = function()
 	{
 		rotationSlider.ox = rotationSlider.attr("x");
 	};
 
-	var move = function(dx, dy) 
+	var move = function(dx, dy)
 	{
 		var x = Math.floor(rotationSlider.ox + dx);
-		
+
 		if (x > rotationBar.attr("x") && x + rotationSlider.attr("width") < rotationBar.attr("x") + rotationBar.attr("width") - 1)
 		{
 			rotationSlider.attr("x", x);
-			
+
 			var delta = Math.floor(x - rotationBar.attr("x"));
 			var width = Math.floor(rotationBar.attr("width") - rotationSlider.attr("width") - 1);
 			var degrees = Math.round((delta / width) * 360);
-			
+
 			if (degrees > 359 || degrees < 0)
 				degrees = 0;
-				
+
 			CoordinateManager.setRotation(Math.floor(degrees));
 		}
 	};
 
-	var up = function () 
+	var up = function ()
 	{
 
 	};
-	
+
 	rotationSlider.drag(move, start, up);
 
-	controls.rotationSlider = rotationSlider;	
+	controls.rotationSlider = rotationSlider;
 
 	var zoom = CropTool.paper.rect(width - base, base * 2, base, base * 6);
 	zoom.attr("fill", ControlManager.FILL);
 	zoom.attr("stroke", ControlManager.STROKE);
-	controls.zoom = zoom;	
+	controls.zoom = zoom;
 
-	var zoomInIcon = CropTool.paper.image(Site.iconPath() + "in-16.png", width - base + 8.5, (base * 2) + 8, 16, 16);
+	var zoomInIcon = CropTool.paper.image( "<%= asset_path("croptool/in-16.png") %>", width - base + 8.5, (base * 2) + 8, 16, 16);
 	zoomInIcon.click(function(event)
 	{
 		CoordinateManager.zoomIn();
 	});
-	controls.zoomInIcon = zoomInIcon;	
+	controls.zoomInIcon = zoomInIcon;
 
-	var zoomOutIcon = CropTool.paper.image(Site.iconPath() + "out-16.png", width - base + 8.5, (base * 8) - 24, 16, 16);
+	var zoomOutIcon = CropTool.paper.image( "<%= asset_path("croptool/out-16.png") %>", width - base + 8.5, (base * 8) - 24, 16, 16);
 	zoomOutIcon.click(function(event)
 	{
 		CoordinateManager.zoomOut();
 	});
-	controls.zoomOutIcon = zoomOutIcon; 
+	controls.zoomOutIcon = zoomOutIcon;
 
 	var zoomBar = CropTool.paper.rect(width - base + 6, (base * 3), 20, base * 4, 5);
 	zoomBar.attr("fill", "#222");
 	zoomBar.attr("stroke", ControlManager.STROKE);
-	controls.zoomBar = zoomBar; 
+	controls.zoomBar = zoomBar;
 
 	var zoomSlider = CropTool.paper.rect(zoomBar.attr("x") + 1, zoomBar.attr("y") + 1, 18, 10, 4);
 	zoomSlider.attr("fill", "#080");
 	zoomSlider.attr("stroke", "none");
 
-	var zoomStart = function() 
+	var zoomStart = function()
 	{
 		zoomSlider.oy = zoomSlider.attr("y");
 	};
 
-	var zoomMove = function(dx, dy) 
+	var zoomMove = function(dx, dy)
 	{
 		var y = Math.floor(zoomSlider.oy + dy);
-		
+
 		if (y > zoomBar.attr("y") && y + zoomSlider.attr("height") < zoomBar.attr("y") + zoomBar.attr("height") - 1)
 		{
 			zoomSlider.attr("y", y);
-			
+
 			var ratio = (zoomSlider.attr("y") + 1 - zoomBar.attr("y")) / (zoomBar.attr("height") - zoomSlider.attr("height"))
 
 			zoomSlider.ratio = 1 - ratio;
 		}
 	};
-	
+
 	var zoomUp = function()
 	{
 		if (zoomSlider.ratio < 0)
 			zoomSlider.ratio = 0;
 		else if (zoomSlider.ratio > 1)
 			zoomSlider.ratio = 1;
-			
+
 		var offset = Math.round((CoordinateManager.level_count - CoordinateManager.base_level) * zoomSlider.ratio);
 
 		CoordinateManager.setZoomRatio(zoomSlider.ratio);
@@ -663,10 +663,10 @@ ControlManager.initialize = function ()
 
 	zoomSlider.drag(zoomMove, zoomStart, zoomUp);
 
-	controls.zoomSlider = zoomSlider;	
-		
+	controls.zoomSlider = zoomSlider;
+
 	ControlManager.controls = controls;
-	
+
 	ControlManager.resize(width, height);
 	MetadataManager.initializeDetails();
 };
@@ -677,7 +677,7 @@ ControlManager.toFront = function()
 	{
 		ControlManager.cropControls.frame.toFront();
 		ControlManager.cropControls.frameIcon.toFront();
-		
+
 		if (CropTool.editable)
 		{
 			ControlManager.cropControls.rotation.toFront();
@@ -690,7 +690,7 @@ ControlManager.toFront = function()
 			ControlManager.cropControls.save.toFront();
 			ControlManager.cropControls.saveIcon.toFront();
 		}
-		
+
 		if (ControlManager.cropControls.dimInfo !== undefined)
 		{
 			ControlManager.cropControls.dimInfo.remove();
@@ -714,25 +714,25 @@ ControlManager.toFront = function()
 
 	if (ControlManager.controls !== undefined)
 	{
-		ControlManager.controls.mode.toFront(); 
-		ControlManager.controls.modeIcon.toFront(); 
+		ControlManager.controls.mode.toFront();
+		ControlManager.controls.modeIcon.toFront();
 
 		if (ControlManager.controls.create !== undefined)
 		{
-			ControlManager.controls.create.toFront();	
-			ControlManager.controls.createIcon.toFront();	
+			ControlManager.controls.create.toFront();
+			ControlManager.controls.createIcon.toFront();
 		}
 
-		ControlManager.controls.rotation.toFront(); 
-		ControlManager.controls.clockIcon.toFront();	
-		ControlManager.controls.counterIcon.toFront();	
-		ControlManager.controls.rotationBar.toFront();	
-		ControlManager.controls.rotationSlider.toFront();	
-		ControlManager.controls.zoom.toFront(); 
-		ControlManager.controls.zoomInIcon.toFront();	
-		ControlManager.controls.zoomOutIcon.toFront();	
-		ControlManager.controls.zoomBar.toFront();	
-		ControlManager.controls.zoomSlider.toFront();	
+		ControlManager.controls.rotation.toFront();
+		ControlManager.controls.clockIcon.toFront();
+		ControlManager.controls.counterIcon.toFront();
+		ControlManager.controls.rotationBar.toFront();
+		ControlManager.controls.rotationSlider.toFront();
+		ControlManager.controls.zoom.toFront();
+		ControlManager.controls.zoomInIcon.toFront();
+		ControlManager.controls.zoomOutIcon.toFront();
+		ControlManager.controls.zoomBar.toFront();
+		ControlManager.controls.zoomSlider.toFront();
 	}
 };
 
@@ -744,7 +744,7 @@ ControlManager.viewportUpdated = function(left, top, level)
 /**
  * Update the position and display of the contrl panel in light of resize events?
  */
- 
+
 ControlManager.resize = function (width, height)
 {
 	var base = ControlManager.BASE_SIDE;

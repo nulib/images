@@ -1,10 +1,10 @@
 GIT
-  remote: https://github.com/collectiveidea/delayed_job_active_record
-  revision: 270b06eef0879a7ea167eb41182336aa14fb762e
+  remote: http://github.com/sul-dlss/about_page.git
+  revision: 0bed296d6ad2666b364594b7da7f2922b1f874a2
   specs:
-    delayed_job_active_record (4.0.3)
-      activerecord (>= 3.0, < 5.0)
-      delayed_job (>= 3.0, < 4.1)
+    about_page (0.3.1)
+      rails (>= 3.2)
+      rugged
 
 GIT
   remote: https://github.com/mbklein/equivalent-xml.git
@@ -127,6 +127,9 @@ GEM
     debugger-linecache (1.2.0)
     delayed_job (4.0.6)
       activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
     deprecation (0.1.0)
       activesupport
     devise (3.4.1)
@@ -375,6 +378,7 @@ GEM
     rubyzip (1.1.7)
     rufus-scheduler (3.0.9)
       tzinfo
+    rugged (0.22.2)
     sass (3.4.10)
     sass-rails (5.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -454,6 +458,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  about_page!
   better_errors
   binding_of_caller
   byebug
@@ -466,7 +471,7 @@ DEPENDENCIES
   coffee-rails (>= 4)
   daemons
   database_cleaner
-  delayed_job_active_record!
+  delayed_job_active_record
   devise
   equivalent-xml!
   factory_girl_rails
@@ -500,4 +505,4 @@ DEPENDENCIES
   uuid
 
 BUNDLED WITH
-   1.10.3
+   1.10.5
