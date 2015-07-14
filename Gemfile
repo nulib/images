@@ -60,7 +60,7 @@ group :development do
 end
 
 group :staging_and_remote_dev do
-  gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
   gem 'pg'
 end
 
