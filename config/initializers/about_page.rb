@@ -1,4 +1,4 @@
-if Rails.env.staging?
+if Rails.env.staging? or Rails.env.remote_dev?
   AboutPage.configure do |config|
     config.app           = { :name => DIL.name, :version => DIL::VERSION }
     config.environment   = AboutPage::Environment.new({
