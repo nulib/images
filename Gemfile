@@ -61,7 +61,7 @@ end
 
 group :staging_and_remote_dev do
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
-  gem 'pg' '--with-pg-config=/usr/pgsql-9.4/bin/pg_config'
+  gem 'pg'
 end
 
 group :production do
