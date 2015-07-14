@@ -18,8 +18,8 @@ source 'http://rubygems.org'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'protected_attributes'
-  #gem 'delayed_job_active_record'
-  gem 'delayed_job_active_record', :git => 'https://github.com/collectiveidea/delayed_job_active_record'
+  gem 'delayed_job_active_record'
+  #gem 'delayed_job_active_record', :git => 'https://github.com/collectiveidea/delayed_job_active_record'
 
   gem 'daemons'
 
@@ -37,11 +37,6 @@ source 'http://rubygems.org'
   gem 'hydra-ldap'
   gem 'high_voltage'
 
-group :development, :test, :staging do
-  gem 'jettywrapper'
-  gem 'sqlite3'
-  #gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
-end
 
 group :test do
   gem 'rspec-rails'
@@ -56,10 +51,17 @@ group :test do
 end
 
 group :development do
+  gem 'jettywrapper'
+  gem 'sqlite3'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'byebug'
+end
+
+group :staging do
+  gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
+  gem 'pg'
 end
 
 group :production do
