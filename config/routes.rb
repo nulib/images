@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   blacklight_for :catalog
 
-  unless Rails.env.production?
+  unless Rails.env.production? or Rails.env.test?
     mount AboutPage::Engine => '/about(.:format)'
   end
 
