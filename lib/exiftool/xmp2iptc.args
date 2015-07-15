@@ -1,0 +1,38 @@
+#
+# File:         xmp2iptc.args
+#
+# Description:  Tag name translations for converting from XMP to IPTC
+#
+# Usage:        exiftool -tagsFromFile src.jpg -@ xmp2iptc.args dst.jpg
+#
+# Revisions:    2005/05/14 - P. Harvey Created
+#				2008/03/04 - PH Changed Location translation and added
+#							 IntellectualGenre and SubjectCode
+#
+# References:   http://www.iptc.org/IPTC4XMP/
+#               http://www.iptc.org/IIM/
+#               http://www.adobe.com/products/xmp/pdfs/xmpspec.pdf
+#
+# Notes:        The following tags have the same names in both IPTC and XMP,
+#               so they are covered by the first argument:  Category, City,
+#               Credit, DateCreated, Headline, Source, SupplementalCategories
+#               and Urgency.
+#
+-XMP:* > IPTC:*
+-XMP-dc:Title > IPTC:ObjectName
+-XMP-dc:Subject > IPTC:Keywords
+-XMP-photoshop:Instructions > IPTC:SpecialInstructions
+-XMP-dc:Creator > IPTC:By-line
+-XMP-photoshop:AuthorsPosition > IPTC:By-lineTitle
+-XMP-photoshop:State > IPTC:Province-State
+-XMP-photoshop:Country > IPTC:Country-PrimaryLocationName
+-XMP-photoshop:TransmissionReference > IPTC:OriginalTransmissionReference
+-XMP-dc:Rights > IPTC:CopyrightNotice
+-XMP-dc:Description > IPTC:Caption-Abstract
+-XMP-photoshop:CaptionWriter > IPTC:Writer-Editor
+-XMP-iptcCore:CountryCode > IPTC:Country-PrimaryLocationCode
+-XMP-iptcCore:Location > IPTC:Sub-location
+# these tags are not free-form text, and may need special handling:
+#-XMP-iptcCore:IntellectualGenre > IPTC:ObjectAttributeReference
+#-XMP-iptcCore:SubjectCode > IPTC:SubjectReference
+# end

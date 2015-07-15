@@ -1,0 +1,1767 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>CanonCustom Tags</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h2 class=top><a name='Functions1D'>CanonCustom Functions1D Tags</a></h2>
+<p>These custom functions are used by all 1D models up to but not including the
+Mark III.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>FocusingScreen</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Ec-N, R
+  <br>1 = Ec-A,B,C,CII,CIII,D,H,I,L</span></td></tr>
+<tr class=b>
+<td class=r>1</td>
+<td>FinderDisplayDuringExposure</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td class=r>2</td>
+<td>ShutterReleaseNoCFCard</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Yes
+  <br>1 = No</span></td></tr>
+<tr class=b>
+<td class=r>3</td>
+<td>ISOSpeedExpansion</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = No
+  <br>1 = Yes</span></td></tr>
+<tr>
+<td class=r>4</td>
+<td>ShutterAELButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock stop
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr class=b>
+<td class=r>5</td>
+<td>ManualTv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Tv=Main/Av=Control
+  <br>1 = Tv=Control/Av=Main
+  <br>2 = Tv=Main/Av=Main w/o lens
+  <br>3 = Tv=Control/Av=Main w/o lens</span></td></tr>
+<tr>
+<td class=r>6</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/3-stop set, 1/3-stop comp.
+  <br>1 = 1-stop set, 1/3-stop comp.
+  <br>2 = 1/2-stop set, 1/2-stop comp.</span></td></tr>
+<tr class=b>
+<td class=r>7</td>
+<td>USMLensElectronicMF</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Turns on after one-shot AF
+  <br>1 = Turns off after one-shot AF
+  <br>2 = Always turned off</span></td></tr>
+<tr>
+<td class=r>8</td>
+<td>LCDPanels</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Remain. shots/File no.
+  <br>1 = ISO/Remain. shots
+  <br>2 = ISO/File no.
+  <br>3 = Shots in folder/Remain. shots</span></td></tr>
+<tr class=b>
+<td class=r>9</td>
+<td>AEBSequence</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 0,-,+/Enabled
+  <br>1 = 0,-,+/Disabled
+  <br>2 = -,0,+/Enabled
+  <br>3 = -,0,+/Disabled</span></td></tr>
+<tr>
+<td class=r>10</td>
+<td>AFPointIllumination</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = On
+  <br>1 = Off
+  <br>2 = On without dimming
+  <br>3 = Brighter</span></td></tr>
+<tr class=b>
+<td class=r>11</td>
+<td>AFPointSelection</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = H=AF+Main/V=AF+Command
+  <br>1 = H=Comp+Main/V=Comp+Command
+  <br>2 = H=Command only/V=Assist+Main
+  <br>3 = H=FEL+Main/V=FEL+Command</span></td></tr>
+<tr>
+<td class=r>12</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>13</td>
+<td>AFPointSpotMetering</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 45/Center AF point
+  <br>1 = 11/Active AF point
+  <br>2 = 11/Center AF point
+  <br>3 = 9/Active AF point</span></td></tr>
+<tr>
+<td class=r>14</td>
+<td>FillFlashAutoReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Enable
+  <br>1 = Disable</span></td></tr>
+<tr class=b>
+<td class=r>15</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr>
+<td class=r>16</td>
+<td>SafetyShiftInAvOrTv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>17</td>
+<td>AFPointActivationArea</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Single AF point
+  <br>1 = Expanded (TTL. of 7 AF points)
+  <br>2 = Automatic expanded (max. 13)</span></td></tr>
+<tr>
+<td class=r>18</td>
+<td>SwitchToRegisteredAFPoint</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Assist + AF
+  <br>1 = Assist
+  <br>2 = Only while pressing assist</span></td></tr>
+<tr class=b>
+<td class=r>19</td>
+<td>LensAFStopButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF stop
+  <br>1 = AF start
+  <br>2 = AE lock while metering
+  <br>3 = AF point: M -&gt; Auto / Auto -&gt; Ctr.
+  <br>4 = AF mode: ONE SHOT &lt;-&gt; AI SERVO
+  <br>5 = IS start</span></td></tr>
+<tr>
+<td class=r>20</td>
+<td>AIServoTrackingSensitivity</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Standard
+  <br>1 = Slow
+  <br>2 = Moderately slow
+  <br>3 = Moderately fast
+  <br>4 = Fast</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions5D'>CanonCustom Functions5D Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>FocusingScreen</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Ee-A
+  <br>1 = Ee-D
+  <br>2 = Ee-S</span></td></tr>
+<tr class=b>
+<td class=r>1</td>
+<td>SetFunctionWhenShooting</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Default (no function)
+  <br>1 = Change quality
+  <br>2 = Change Parameters
+  <br>3 = Menu display
+  <br>4 = Image replay</span></td></tr>
+<tr>
+<td class=r>2</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = Auto
+  <br>2 = On</span></td></tr>
+<tr class=b>
+<td class=r>3</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/200 Fixed</span></td></tr>
+<tr>
+<td class=r>4</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr class=b>
+<td class=r>5</td>
+<td>AFAssistBeam</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits
+  <br>1 = Does not emit</span></td></tr>
+<tr>
+<td class=r>6</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/3 Stop
+  <br>1 = 1/2 Stop</span></td></tr>
+<tr class=b>
+<td class=r>7</td>
+<td>FlashFiring</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Fires
+  <br>1 = Does not fire</span></td></tr>
+<tr>
+<td class=r>8</td>
+<td>ISOExpansion</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr class=b>
+<td class=r>9</td>
+<td>AEBSequence</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 0,-,+/Enabled
+  <br>1 = 0,-,+/Disabled
+  <br>2 = -,0,+/Enabled
+  <br>3 = -,0,+/Disabled</span></td></tr>
+<tr>
+<td class=r>10</td>
+<td>SuperimposedDisplay</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr class=b>
+<td class=r>11</td>
+<td>MenuButtonDisplayPosition</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Previous (top if power off)
+  <br>1 = Previous
+  <br>2 = Top</span></td></tr>
+<tr>
+<td class=r>12</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>13</td>
+<td>AFPointSelectionMethod</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Normal
+  <br>1 = Multi-controller direct
+  <br>2 = Quick Control Dial direct</span></td></tr>
+<tr>
+<td class=r>14</td>
+<td>ETTLII</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Evaluative
+  <br>1 = Average</span></td></tr>
+<tr class=b>
+<td class=r>15</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr>
+<td class=r>16</td>
+<td>SafetyShiftInAvOrTv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>17</td>
+<td>AFPointActivationArea</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Standard
+  <br>1 = Expanded</span></td></tr>
+<tr>
+<td class=r>18</td>
+<td>LCDDisplayReturnToShoot</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = With Shutter Button only
+  <br>1 = Also with * etc.</span></td></tr>
+<tr class=b>
+<td class=r>19</td>
+<td>LensAFStopButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF stop
+  <br>1 = AF start
+  <br>2 = AE lock while metering
+  <br>3 = AF point: M -&gt; Auto / Auto -&gt; Ctr.
+  <br>4 = ONE SHOT &lt;-&gt; AI SERVO
+  <br>5 = IS start</span></td></tr>
+<tr>
+<td class=r>20</td>
+<td>AddOriginalDecisionData</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions10D'>CanonCustom Functions10D Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>1</td>
+<td>SetButtonFunction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Not assigned
+  <br>1 = Change quality
+  <br>2 = Change parameters
+  <br>3 = Menu display
+  <br>4 = Image replay</span></td></tr>
+<tr class=b>
+<td class=r>2</td>
+<td>ShutterReleaseNoCFCard</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Yes
+  <br>1 = No</span></td></tr>
+<tr>
+<td class=r>3</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/200 Fixed</span></td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr>
+<td class=r>5</td>
+<td>AFAssist</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits/Fires
+  <br>1 = Does not emit/Fires
+  <br>2 = Only ext. flash emits/Fires
+  <br>3 = Emits/Does not fire</span></td></tr>
+<tr class=b>
+<td class=r>6</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/2 Stop
+  <br>1 = 1/3 Stop</span></td></tr>
+<tr>
+<td class=r>7</td>
+<td>AFPointRegistration</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Center
+  <br>1 = Bottom
+  <br>2 = Right
+  <br>3 = Extreme Right
+  <br>4 = Automatic
+  <br>5 = Extreme Left
+  <br>6 = Left
+  <br>7 = Top</span></td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>RawAndJpgRecording</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = RAW+Small/Normal
+  <br>1 = RAW+Small/Fine
+  <br>2 = RAW+Medium/Normal
+  <br>3 = RAW+Medium/Fine
+  <br>4 = RAW+Large/Normal
+  <br>5 = RAW+Large/Fine</span></td></tr>
+<tr>
+<td class=r>9</td>
+<td>AEBSequence</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 0,-,+/Enabled
+  <br>1 = 0,-,+/Disabled
+  <br>2 = -,0,+/Enabled
+  <br>3 = -,0,+/Disabled</span></td></tr>
+<tr class=b>
+<td class=r>10</td>
+<td>SuperimposedDisplay</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr>
+<td class=r>11</td>
+<td>MenuButtonDisplayPosition</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Previous (top if power off)
+  <br>1 = Previous
+  <br>2 = Top</span></td></tr>
+<tr class=b>
+<td class=r>12</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td class=r>13</td>
+<td>AssistButtonFunction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Normal
+  <br>1 = Select Home Position
+  <br>2 = Select HP (while pressing)
+  <br>3 = Av+/- (AF point by QCD)
+  <br>4 = FE lock</span></td></tr>
+<tr class=b>
+<td class=r>14</td>
+<td>FillFlashAutoReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Enable
+  <br>1 = Disable</span></td></tr>
+<tr>
+<td class=r>15</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr class=b>
+<td class=r>16</td>
+<td>SafetyShiftInAvOrTv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td class=r>17</td>
+<td>LensAFStopButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF Stop
+  <br>1 = Operate AF
+  <br>2 = Lock AE and start timer</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions20D'>CanonCustom Functions20D Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>SetFunctionWhenShooting</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Default (no function)
+  <br>1 = Change quality
+  <br>2 = Change Parameters
+  <br>3 = Menu display
+  <br>4 = Image replay</span></td></tr>
+<tr class=b>
+<td class=r>1</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td class=r>2</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/250 Fixed</span></td></tr>
+<tr class=b>
+<td class=r>3</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr>
+<td class=r>4</td>
+<td>AFAssistBeam</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits
+  <br>1 = Does not emit
+  <br>2 = Only ext. flash emits</span></td></tr>
+<tr class=b>
+<td class=r>5</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/3 Stop
+  <br>1 = 1/2 Stop</span></td></tr>
+<tr>
+<td class=r>6</td>
+<td>FlashFiring</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Fires
+  <br>1 = Does not fire</span></td></tr>
+<tr class=b>
+<td class=r>7</td>
+<td>ISOExpansion</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td class=r>8</td>
+<td>AEBSequence</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 0,-,+/Enabled
+  <br>1 = 0,-,+/Disabled
+  <br>2 = -,0,+/Enabled
+  <br>3 = -,0,+/Disabled</span></td></tr>
+<tr class=b>
+<td class=r>9</td>
+<td>SuperimposedDisplay</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr>
+<td class=r>10</td>
+<td>MenuButtonDisplayPosition</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Previous (top if power off)
+  <br>1 = Previous
+  <br>2 = Top</span></td></tr>
+<tr class=b>
+<td class=r>11</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td class=r>12</td>
+<td>AFPointSelectionMethod</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Normal
+  <br>1 = Multi-controller direct
+  <br>2 = Quick Control Dial direct</span></td></tr>
+<tr class=b>
+<td class=r>13</td>
+<td>ETTLII</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Evaluative
+  <br>1 = Average</span></td></tr>
+<tr>
+<td class=r>14</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr class=b>
+<td class=r>15</td>
+<td>SafetyShiftInAvOrTv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td class=r>16</td>
+<td>LensAFStopButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF stop
+  <br>1 = AF start
+  <br>2 = AE lock while metering
+  <br>3 = AF point: M -&gt; Auto / Auto -&gt; Ctr.
+  <br>4 = ONE SHOT &lt;-&gt; AI SERVO
+  <br>5 = IS start</span></td></tr>
+<tr class=b>
+<td class=r>17</td>
+<td>AddOriginalDecisionData</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions30D'>CanonCustom Functions30D Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>1</td>
+<td>SetFunctionWhenShooting</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Default (no function)
+  <br>1 = Change quality
+  <br>2 = Change Picture Style
+  <br>3 = Menu display
+  <br>4 = Image replay</span></td></tr>
+<tr class=b>
+<td class=r>2</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = Auto
+  <br>2 = On</span></td></tr>
+<tr>
+<td class=r>3</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/250 Fixed</span></td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr>
+<td class=r>5</td>
+<td>AFAssistBeam</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits
+  <br>1 = Does not emit
+  <br>2 = Only ext. flash emits</span></td></tr>
+<tr class=b>
+<td class=r>6</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/3 Stop
+  <br>1 = 1/2 Stop</span></td></tr>
+<tr>
+<td class=r>7</td>
+<td>FlashFiring</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Fires
+  <br>1 = Does not fire</span></td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>ISOExpansion</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td class=r>9</td>
+<td>AEBSequence</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 0,-,+/Enabled
+  <br>1 = 0,-,+/Disabled
+  <br>2 = -,0,+/Enabled
+  <br>3 = -,0,+/Disabled</span></td></tr>
+<tr class=b>
+<td class=r>10</td>
+<td>SuperimposedDisplay</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr>
+<td class=r>11</td>
+<td>MenuButtonDisplayPosition</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Previous (top if power off)
+  <br>1 = Previous
+  <br>2 = Top</span></td></tr>
+<tr class=b>
+<td class=r>12</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td class=r>13</td>
+<td>AFPointSelectionMethod</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Normal
+  <br>1 = Multi-controller direct
+  <br>2 = Quick Control Dial direct</span></td></tr>
+<tr class=b>
+<td class=r>14</td>
+<td>ETTLII</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Evaluative
+  <br>1 = Average</span></td></tr>
+<tr>
+<td class=r>15</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr class=b>
+<td class=r>16</td>
+<td>SafetyShiftInAvOrTv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td class=r>17</td>
+<td>MagnifiedView</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Image playback only
+  <br>1 = Image review and playback</span></td></tr>
+<tr class=b>
+<td class=r>18</td>
+<td>LensAFStopButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF stop
+  <br>1 = AF start
+  <br>2 = AE lock while metering
+  <br>3 = AF point: M -&gt; Auto / Auto -&gt; Ctr.
+  <br>4 = ONE SHOT &lt;-&gt; AI SERVO
+  <br>5 = IS start</span></td></tr>
+<tr>
+<td class=r>19</td>
+<td>AddOriginalDecisionData</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions350D'>CanonCustom Functions350D Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>SetButtonCrossKeysFunc</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Normal
+  <br>1 = Set: Quality
+  <br>2 = Set: Parameter
+  <br>3 = Set: Playback
+  <br>4 = Cross keys: AF point select</span></td></tr>
+<tr class=b>
+<td class=r>1</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td class=r>2</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/200 Fixed</span></td></tr>
+<tr class=b>
+<td class=r>3</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr>
+<td class=r>4</td>
+<td>AFAssistBeam</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits
+  <br>1 = Does not emit
+  <br>2 = Only ext. flash emits</span></td></tr>
+<tr class=b>
+<td class=r>5</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/3 Stop
+  <br>1 = 1/2 Stop</span></td></tr>
+<tr>
+<td class=r>6</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>7</td>
+<td>ETTLII</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Evaluative
+  <br>1 = Average</span></td></tr>
+<tr>
+<td class=r>8</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions400D'>CanonCustom Functions400D Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>SetButtonCrossKeysFunc</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Set: Picture Style
+  <br>1 = Set: Quality
+  <br>2 = Set: Flash Exposure Comp
+  <br>3 = Set: Playback
+  <br>4 = Cross keys: AF point select</span></td></tr>
+<tr class=b>
+<td class=r>1</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = Auto
+  <br>2 = On</span></td></tr>
+<tr>
+<td class=r>2</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/200 Fixed</span></td></tr>
+<tr class=b>
+<td class=r>3</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock, No AE lock
+  <br>3 = AE/AF, No AE lock</span></td></tr>
+<tr>
+<td class=r>4</td>
+<td>AFAssistBeam</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits
+  <br>1 = Does not emit
+  <br>2 = Only ext. flash emits</span></td></tr>
+<tr class=b>
+<td class=r>5</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/3 Stop
+  <br>1 = 1/2 Stop</span></td></tr>
+<tr>
+<td class=r>6</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>7</td>
+<td>ETTLII</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Evaluative
+  <br>1 = Average</span></td></tr>
+<tr>
+<td class=r>8</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr class=b>
+<td class=r>9</td>
+<td>MagnifiedView</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Image playback only
+  <br>1 = Image review and playback</span></td></tr>
+<tr>
+<td class=r>10</td>
+<td>LCDDisplayAtPowerOn</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Display
+  <br>1 = Retain power off status</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='FunctionsD30'>CanonCustom FunctionsD30 Tags</a></h2>
+<p>Custom functions for the EOS-D30 and D60.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>1</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr class=b>
+<td class=r>2</td>
+<td>Shutter-AELock</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF/AE lock
+  <br>1 = AE lock/AF
+  <br>2 = AF/AF lock
+  <br>3 = AE+release/AE+AF</span></td></tr>
+<tr>
+<td class=r>3</td>
+<td>MirrorLockup</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1/2 Stop
+  <br>1 = 1/3 Stop</span></td></tr>
+<tr>
+<td class=r>5</td>
+<td>AFAssist</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Emits/Fires
+  <br>1 = Does not emit/Fires
+  <br>2 = Only ext. flash emits/Fires
+  <br>3 = Emits/Does not fire</span></td></tr>
+<tr class=b>
+<td class=r>6</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Auto
+  <br>1 = 1/200 Fixed</span></td></tr>
+<tr>
+<td class=r>7</td>
+<td>AEBSequence</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 0,-,+/Enabled
+  <br>1 = 0,-,+/Disabled
+  <br>2 = -,0,+/Enabled
+  <br>3 = -,0,+/Disabled</span></td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr>
+<td class=r>9</td>
+<td>LensAFStopButton</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = AF Stop
+  <br>1 = Operate AF
+  <br>2 = Lock AE and start timer</span></td></tr>
+<tr class=b>
+<td class=r>10</td>
+<td>FillFlashAutoReduction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Enable
+  <br>1 = Disable</span></td></tr>
+<tr>
+<td class=r>11</td>
+<td>MenuButtonReturn</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Top
+  <br>1 = Previous (volatile)
+  <br>2 = Previous</span></td></tr>
+<tr class=b>
+<td class=r>12</td>
+<td>SetButtonFunction</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Not assigned
+  <br>1 = Change quality
+  <br>2 = Change ISO speed
+  <br>3 = Select parameters</span></td></tr>
+<tr>
+<td class=r>13</td>
+<td>SensorCleaning</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td class=r>14</td>
+<td>SuperimposedDisplay</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr>
+<td class=r>15</td>
+<td>ShutterReleaseNoCFCard</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = Yes
+  <br>1 = No</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='FuncsUnknown'>CanonCustom FuncsUnknown Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr><td colspan=4 class=c>[no tags known]</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='PersonalFuncs'>CanonCustom PersonalFuncs Tags</a></h2>
+<p>Personal function settings for the EOS-1D.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>1</td>
+<td>PF0CustomFuncRegistration</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>2</td>
+<td>PF1DisableShootingModes</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>3</td>
+<td>PF2DisableMeteringModes</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>PF3ManualExposureMetering</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>5</td>
+<td>PF4ExposureTimeLimits</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>6</td>
+<td>PF5ApertureLimits</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>7</td>
+<td>PF6PresetShootingModes</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>PF7BracketContinuousShoot</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>9</td>
+<td>PF8SetBracketShots</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>10</td>
+<td>PF9ChangeBracketSequence</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>11</td>
+<td>PF10RetainProgramShift</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>14</td>
+<td>PF13DrivePriority</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>15</td>
+<td>PF14DisableFocusSearch</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>16</td>
+<td>PF15DisableAFAssistBeam</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>17</td>
+<td>PF16AutoFocusPointShoot</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>18</td>
+<td>PF17DisableAFPointSel</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>19</td>
+<td>PF18EnableAutoAFPointSel</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>20</td>
+<td>PF19ContinuousShootSpeed</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>21</td>
+<td>PF20LimitContinousShots</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>22</td>
+<td>PF21EnableQuietOperation</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>24</td>
+<td>PF23SetTimerLengths</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>25</td>
+<td>PF24LightLCDDuringBulb</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>26</td>
+<td>PF25DefaultClearSettings</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>27</td>
+<td>PF26ShortenReleaseLag</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>28</td>
+<td>PF27ReverseDialRotation</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>29</td>
+<td>PF28NoQuickDialExpComp</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>30</td>
+<td>PF29QuickDialSwitchOff</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>31</td>
+<td>PF30EnlargementMode</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>32</td>
+<td>PF31OriginalDecisionData</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='PersonalFuncValues'>CanonCustom PersonalFuncValues Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>1</td>
+<td>PF1Value</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>2</td>
+<td>PF2Value</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>3</td>
+<td>PF3Value</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>PF4ExposureTimeMin</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>5</td>
+<td>PF4ExposureTimeMax</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>6</td>
+<td>PF5ApertureMin</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>7</td>
+<td>PF5ApertureMax</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>PF8BracketShots</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>9</td>
+<td>PF19ShootingSpeedLow</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>10</td>
+<td>PF19ShootingSpeedHigh</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>11</td>
+<td>PF20MaxContinousShots</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>12</td>
+<td>PF23ShutterButtonTime</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>13</td>
+<td>PF23FELockTime</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>14</td>
+<td>PF23PostReleaseTime</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>15</td>
+<td>PF25AEMode</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>16</td>
+<td>PF25MeteringMode</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>17</td>
+<td>PF25DriveMode</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>18</td>
+<td>PF25AFMode</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>19</td>
+<td>PF25AFPointSel</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>20</td>
+<td>PF25ImageSize</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>21</td>
+<td>PF25WBMode</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>22</td>
+<td>PF25Parameters</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>23</td>
+<td>PF25ColorMatrix</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>24</td>
+<td>PF27Value</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Functions2'>CanonCustom Functions2 Tags</a></h2>
+<p>Beginning with the EOS 1D Mark III, Canon finally created a set of custom
+function tags which are consistent across models.  The EOS 1D Mark III has
+57 custom function tags divided into four main groups: 1. Exposure
+(0x0101-0x010f), 2. Image (0x0201-0x0203), Flash Exposure (0x0304-0x0306)
+and Display (0x0407-0x0409), 3. Auto Focus (0x0501-0x050e) and Drive
+(0x060f-0x0611), and 4. Operation (0x0701-0x070a) and Others
+(0x080b-0x0810).  The table below lists tags used by the EOS 1D Mark III, as
+well as newer values and tags used by the EOS 40D.  It is expected that
+future models will re-use some of these tags (possibly with minor value
+changes), as well as defining additional new tags of their own.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>0x0101</td>
+<td>ExposureLevelIncrements</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(40D and 450D)</span>
+  <br>0 = 1/3 Stop
+  <br>1 = 1/2 Stop
+  <br><span class=n>(1D Mark III)</span>
+  <br>0 = 1/3-stop set, 1/3-stop comp.
+  <br>1 = 1-stop set, 1/3-stop comp.
+  <br>2 = 1/2-stop set, 1/2-stop comp.</span></td></tr>
+<tr class=b>
+<td>0x0102</td>
+<td>ISOSpeedIncrements</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = 1/3-stop
+  <br>1 = 1-stop</span></td></tr>
+<tr>
+<td>0x0103</td>
+<td>ISOExpansion
+  <br>ISOSpeedRange</td>
+<td class=c>int32s<br>int32s[3]</td>
+<td><span class=s><span class=n>(40D)</span>
+  <br>0 = Off
+  <br>1 = On
+  <br><span class=n>(1D Mark III)</span>
+  <br>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x0104</td>
+<td>AEBAutoCancel</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr>
+<td>0x0105</td>
+<td>AEBSequence</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(value of 2 not used by 40D)</span>
+  <br>0 = 0,-,+
+  <br>1 = -,0,+
+  <br>2 = +,0,-</span></td></tr>
+<tr class=b>
+<td>0x0106</td>
+<td>AEBShotCount</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = 3
+  <br>1 = 2
+  <br>2 = 5
+  <br>3 = 7</span></td></tr>
+<tr>
+<td>0x0107</td>
+<td>SpotMeterLinkToAFPoint</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable (use center AF point)
+  <br>1 = Enable (use active AF point)</span></td></tr>
+<tr class=b>
+<td>0x0108</td>
+<td>SafetyShift</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(value of 2 not used by 40D)</span>
+  <br>0 = Disable
+  <br>1 = Enable (Tv/Av)
+  <br>2 = Enable (ISO speed)</span></td></tr>
+<tr>
+<td>0x0109</td>
+<td>UsableShootingModes</td>
+<td class=c>int32s[2]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x010a</td>
+<td>UsableMeteringModes</td>
+<td class=c>int32s[2]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x010b</td>
+<td>ExposureModeInManual</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Specified metering mode
+  <br>1 = Evaluative metering
+  <br>2 = Partial metering
+  <br>3 = Spot metering
+  <br>4 = Center-weighted average</span></td></tr>
+<tr class=b>
+<td>0x010c</td>
+<td>ShutterSpeedRange</td>
+<td class=c>int32s[3]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x010d</td>
+<td>ApertureRange</td>
+<td class=c>int32s[3]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x010e</td>
+<td>ApplyShootingMeteringMode</td>
+<td class=c>int32s[8]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x010f</td>
+<td>FlashSyncSpeedAv</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(40D)</span>
+  <br>0 = Auto
+  <br>1 = 1/250 Fixed
+  <br><span class=n>(450D)</span>
+  <br>0 = Auto
+  <br>1 = 1/200 Fixed
+  <br><span class=n>(1D Mark III)</span>
+  <br>0 = Auto
+  <br>1 = 1/300 Fixed</span></td></tr>
+<tr class=b>
+<td>0x0201</td>
+<td>LongExposureNoiseReduction</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Off
+  <br>1 = Auto
+  <br>2 = On</span></td></tr>
+<tr>
+<td>0x0202</td>
+<td>HighISONoiseReduction</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr class=b>
+<td>0x0203</td>
+<td>HighlightTonePriority</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x0204</td>
+<td>AutoLightingOptimizer</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Enable
+  <br>1 = Disable</span></td></tr>
+<tr class=b>
+<td>0x0304</td>
+<td>ETTLII</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Evaluative
+  <br>1 = Average</span></td></tr>
+<tr>
+<td>0x0305</td>
+<td>ShutterCurtainSync</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = 1st-curtain sync
+  <br>1 = 2nd-curtain sync</span></td></tr>
+<tr class=b>
+<td>0x0306</td>
+<td>FlashFiring</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Fires
+  <br>1 = Does not fire</span></td></tr>
+<tr>
+<td>0x0407</td>
+<td>ViewInfoDuringExposure</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x0408</td>
+<td>LCDIlluminationDuringBulb</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td>0x0409</td>
+<td>InfoButtonWhenShooting</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Displays camera settings
+  <br>1 = Displays shooting functions</span></td></tr>
+<tr class=b>
+<td>0x0501</td>
+<td>USMLensElectronicMF</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Enable after one-shot AF
+  <br>1 = Disable after one-shot AF
+  <br>2 = Disable in AF mode</span></td></tr>
+<tr>
+<td>0x0502</td>
+<td>AIServoTrackingSensitivity</td>
+<td class=c>int32s</td>
+<td><span class=s>-2 = Slow
+  <br>-1 = Medium Slow
+  <br>0 = Standard
+  <br>1 = Medium Fast
+  <br>2 = Fast</span></td></tr>
+<tr class=b>
+<td>0x0503</td>
+<td>AIServoImagePriority</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = 1: AF, 2: Tracking
+  <br>1 = 1: AF, 2: Drive speed
+  <br>2 = 1: Release, 2: Drive speed</span></td></tr>
+<tr>
+<td>0x0504</td>
+<td>AIServoTrackingMethod</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Main focus point priority
+  <br>1 = Continuous AF track priority</span></td></tr>
+<tr class=b>
+<td>0x0505</td>
+<td>LensDriveNoAF</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Focus search on
+  <br>1 = Focus search off</span></td></tr>
+<tr>
+<td>0x0506</td>
+<td>LensAFStopButton</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(value of 6 not used by 40D)</span>
+  <br>0 = AF stop
+  <br>1 = AF start
+  <br>2 = AE lock
+  <br>3 = AF point: M-&gt;Auto/Auto-&gt;ctr
+  <br>4 = One Shot &lt;-&gt; AI servo
+  <br>5 = IS start
+  <br>6 = Switch to registered AF point</span></td></tr>
+<tr class=b>
+<td>0x0507</td>
+<td>AFMicroadjustment</td>
+<td class=c>int32s[5]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Adjust all by same amount
+  <br>2 = Adjust by lens</span></td></tr>
+<tr>
+<td>0x0508</td>
+<td>AFExpansionWithSelectedPoint</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable (left/right assist points)
+  <br>2 = Enable (surrounding assist points)</span></td></tr>
+<tr class=b>
+<td>0x0509</td>
+<td>SelectableAFPoint</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = 19 points
+  <br>1 = Inner 9 points
+  <br>2 = Outer 9 points
+  <br>3 = 19 Points, Multi-controller selectable
+  <br>4 = Inner 9 Points, Multi-controller selectable
+  <br>5 = Outer 9 Points, Multi-controller selectable</span></td></tr>
+<tr>
+<td>0x050a</td>
+<td>SwitchToRegisteredAFPoint</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x050b</td>
+<td>AFPointAutoSelection</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Control-direct:disable/Main:enable
+  <br>1 = Control-direct:disable/Main:disable
+  <br>2 = Control-direct:enable/Main:enable</span></td></tr>
+<tr>
+<td>0x050c</td>
+<td>AFPointDisplayDuringFocus</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = On
+  <br>1 = Off
+  <br>2 = On (when focus achieved)</span></td></tr>
+<tr class=b>
+<td>0x050d</td>
+<td>AFPointBrightness</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Normal
+  <br>1 = Brighter</span></td></tr>
+<tr>
+<td>0x050e</td>
+<td>AFAssistBeam</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(value of 2 not used by 1D Mark III)</span>
+  <br>0 = Emits
+  <br>1 = Does not emit
+  <br>2 = Only ext. flash emits</span></td></tr>
+<tr class=b>
+<td>0x050f</td>
+<td>AFPointSelectionMethod</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Normal
+  <br>1 = Multi-controller direct
+  <br>2 = Quick Control Dial direct</span></td></tr>
+<tr>
+<td>0x0510</td>
+<td>SuperimposedDisplay</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = On
+  <br>1 = Off</span></td></tr>
+<tr class=b>
+<td>0x0511</td>
+<td>AFDuringLiveView</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(40D)</span>
+  <br>0 = Disable
+  <br>1 = Enable
+  <br><span class=n>(450D)</span>
+  <br>0 = Disable
+  <br>1 = Quick mode
+  <br>2 = Live mode</span></td></tr>
+<tr>
+<td>0x060f</td>
+<td>MirrorLockup</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(value of 2 not used by 40D or 450D)</span>
+  <br>0 = Disable
+  <br>1 = Enable
+  <br>2 = Enable: Down with Set</span></td></tr>
+<tr class=b>
+<td>0x0610</td>
+<td>ContinuousShootingSpeed</td>
+<td class=c>int32s[3]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x0611</td>
+<td>ContinuousShotLimit</td>
+<td class=c>int32s[2]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x0701</td>
+<td>ShutterButtonAFOnButton</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Metering + AF start
+  <br>1 = Metering + AF start/AF stop
+  <br>2 = Metering start/Meter + AF start
+  <br>3 = AE lock/Metering + AF start
+  <br>4 = Metering + AF start / disable</span></td></tr>
+<tr>
+<td>0x0702</td>
+<td>AFOnAELockButtonSwitch</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x0703</td>
+<td>QuickControlDialInMeter</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Exposure comp/Aperture
+  <br>1 = AF point selection
+  <br>2 = ISO speed
+  <br>3 = AF point selection swapped with Exposure comp
+  <br>4 = ISO speed swapped with Exposure comp</span></td></tr>
+<tr>
+<td>0x0704</td>
+<td>SetButtonWhenShooting</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(40D)</span>
+  <br>0 = Normal (disabled)
+  <br>1 = Image quality
+  <br>2 = Picture style
+  <br>3 = Menu display
+  <br>4 = Image playback
+  <br><span class=n>(450D)</span>
+  <br>0 = Normal (disabled)
+  <br>1 = Image quality
+  <br>2 = Flash exposure compensation
+  <br>3 = LCD Monitor On/Off
+  <br>4 = Menu display
+  <br><span class=n>(1D Mark III)</span>
+  <br>0 = Normal (disabled)
+  <br>1 = White balance
+  <br>2 = Image size
+  <br>3 = ISO speed
+  <br>4 = Picture style
+  <br>5 = Record func. + media/folder
+  <br>6 = Menu display
+  <br>7 = Image playback</span></td></tr>
+<tr class=b>
+<td>0x0705</td>
+<td>ManualTv</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Tv=Main/Av=Control
+  <br>1 = Tv=Control/Av=Main</span></td></tr>
+<tr>
+<td>0x0706</td>
+<td>DialDirectionTvAv</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Normal
+  <br>1 = Reversed</span></td></tr>
+<tr class=b>
+<td>0x0707</td>
+<td>AvSettingWithoutLens</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x0708</td>
+<td>WBMediaImageSizeSetting</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Rear LCD panel
+  <br>1 = LCD monitor</span></td></tr>
+<tr class=b>
+<td>0x0709</td>
+<td>LockMicrophoneButton</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Protect (holding:sound rec.)
+  <br>1 = Sound rec. (protect:disable)</span></td></tr>
+<tr>
+<td>0x070a</td>
+<td>ButtonFunctionControlOff</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Normal (enable)
+  <br>1 = Disable main, Control, Multi-control</span></td></tr>
+<tr class=b>
+<td>0x080b</td>
+<td>FocusingScreen</td>
+<td class=c>int32s</td>
+<td><span class=s><span class=n>(40D)</span>
+  <br>0 = Ef-A
+  <br>1 = Ef-D
+  <br>2 = Ef-S
+  <br><span class=n>(1D Mark III)</span>
+  <br>0 = Ec-CIV
+  <br>1 = Ec-A,B,C,CII,CIII,D,H,I,L
+  <br>2 = Ec-S
+  <br>3 = Ec-N,R</span></td></tr>
+<tr>
+<td>0x080c</td>
+<td>TimerLength</td>
+<td class=c>int32s[4]</td>
+<td><span class=s>[Value 0]
+  <br>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr class=b>
+<td>0x080d</td>
+<td>ShortReleaseTimeLag</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable
+  <br>1 = Enable</span></td></tr>
+<tr>
+<td>0x080e</td>
+<td>AddAspectRatioInfo</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Off
+  <br>1 = 6:6
+  <br>2 = 3:4
+  <br>3 = 4:5
+  <br>4 = 6:7
+  <br>5 = 10:12
+  <br>6 = 5:7</span></td></tr>
+<tr class=b>
+<td>0x080f</td>
+<td>AddOriginalDecisionData</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Off
+  <br>1 = On</span></td></tr>
+<tr>
+<td>0x0810</td>
+<td>LiveViewExposureSimulation</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Disable (LCD auto adjust)
+  <br>1 = Enable (simulates exposure)</span></td></tr>
+<tr class=b>
+<td>0x0811</td>
+<td>LCDDisplayAtPowerOn</td>
+<td class=c>int32s</td>
+<td><span class=s>0 = Display
+  <br>1 = Retain power off status</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<hr>
+(This document generated automatically by Image::ExifTool::BuildTagLookup)
+<br><i>Last revised Jul 28, 2008</i>
+<p class=lf><a href='index.html'>&lt;-- ExifTool Tag Names</a></p>
+</body>
+</html>

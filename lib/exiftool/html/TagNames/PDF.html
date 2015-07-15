@@ -1,0 +1,289 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>PDF Tags</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h2 class=top>PDF Tags</h2>
+<p>
+The tags listed in the PDF tables below are those which are used by ExifTool
+to extract meta information, but they are only a small fraction of the total
+number of available PDF tags.</p>
+
+<p>When writing PDF files, ExifTool uses an increment update.  This has an
+advantage that the original PDF can be easily recovered by deleting the
+<code>PDF-update</code> pseudo-group (with <code>-PDF-update:all=</code> on the command line).
+</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'Info'</td>
+<td>Info</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Info'>PDF Info Tags</a></td></tr>
+<tr class=b>
+<td>'Root'</td>
+<td>Root</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Root'>PDF Root Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Info'>PDF Info Tags</a></h2>
+<p>As well as the tags listed below, the PDF specification allows for
+user-defined tags to exist in the Info dictionary.  These tags, which should
+have corresponding XMP-pdfx entries in the XMP of the PDF XML Metadata
+object, are also extracted by ExifTool.</p>
+
+<p><b>Writable</b> specifies the value format, and may be <code>string</code>, <code>date</code>,
+<code>integer</code>, <code>real</code>, <code>boolean</code> or <code>name</code> for PDF tags.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'AAPL:Keywords'</td>
+<td>AppleKeywords</td>
+<td class=c>string+</td>
+<td><span class=s><span class=n>(keywords written by Apple utilities, although they seem to use PDF:Keywords
+when reading)</span></span></td></tr>
+<tr class=b>
+<td>'Author'</td>
+<td>Author</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>'CreationDate'</td>
+<td>CreateDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>'Creator'</td>
+<td>Creator</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>'Keywords'</td>
+<td>Keywords</td>
+<td class=c>string+</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>'ModDate'</td>
+<td>ModifyDate</td>
+<td class=c>date</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>'Producer'</td>
+<td>Producer</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>'Subject'</td>
+<td>Subject</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td>'Title'</td>
+<td>Title</td>
+<td class=c>string</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>'Trapped'</td>
+<td>Trapped</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Root'>PDF Root Tags</a></h2>
+<p>This is the PDF document catalog.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'Metadata'</td>
+<td>Metadata</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Metadata'>PDF Metadata Tags</a></td></tr>
+<tr class=b>
+<td>'Pages'</td>
+<td>Pages</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Pages'>PDF Pages Tags</a></td></tr>
+<tr>
+<td>'Version'</td>
+<td>PDFVersion</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Metadata'>PDF Metadata Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'XML_stream'</td>
+<td>XMP</td>
+<td class=c>-</td>
+<td>--&gt; <a href='XMP.html'>XMP Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Pages'>PDF Pages Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'Count'</td>
+<td>PageCount</td>
+<td class=c>N</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td>'Kids'</td>
+<td>Kids</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Kids'>PDF Kids Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Kids'>PDF Kids Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'Metadata'</td>
+<td>Metadata</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Metadata'>PDF Metadata Tags</a></td></tr>
+<tr class=b>
+<td>'PieceInfo'</td>
+<td>PieceInfo</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#PieceInfo'>PDF PieceInfo Tags</a></td></tr>
+<tr>
+<td>'Resources'</td>
+<td>Resources</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Resources'>PDF Resources Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='PieceInfo'>PDF PieceInfo Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'AdobePhotoshop'</td>
+<td>AdobePhotoshop</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#AdobePhotoshop'>PDF AdobePhotoshop Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='AdobePhotoshop'>PDF AdobePhotoshop Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'Private'</td>
+<td>Private</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#Private'>PDF Private Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Private'>PDF Private Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'ImageResources'</td>
+<td>ImageResources</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#ImageResources'>PDF ImageResources Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='ImageResources'>PDF ImageResources Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'_stream'</td>
+<td>_stream</td>
+<td class=c>-</td>
+<td>--&gt; <a href='Photoshop.html'>Photoshop Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='Resources'>PDF Resources Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'ColorSpace'</td>
+<td>ColorSpace</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#ColorSpace'>PDF ColorSpace Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='ColorSpace'>PDF ColorSpace Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'DefaultRGB'</td>
+<td>DefaultRGB</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#DefaultRGB'>PDF DefaultRGB Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='DefaultRGB'>PDF DefaultRGB Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'ICCBased'</td>
+<td>ICCBased</td>
+<td class=c>-</td>
+<td>--&gt; <a href='PDF.html#ICCBased'>PDF ICCBased Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='ICCBased'>PDF ICCBased Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>'_stream'</td>
+<td>_stream</td>
+<td class=c>-</td>
+<td>--&gt; <a href='ICC_Profile.html'>ICC_Profile Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<hr>
+(This document generated automatically by Image::ExifTool::BuildTagLookup)
+<br><i>Last revised Dec 17, 2007</i>
+<p class=lf><a href='index.html'>&lt;-- ExifTool Tag Names</a></p>
+</body>
+</html>

@@ -1,0 +1,466 @@
+@namespace vra "http://www.vraweb.org/vracore4.htm";
+
+
+vra {
+  display : block;
+  font-family: "Arial";
+  font-size: 12pt;
+  margin-top: 15px;
+  margin-left: 5px;
+}
+
+
+agentSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Creator: ";
+}
+
+agentSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+agentSet > agent
+	{display: none;}
+
+
+culturalContextSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Cultural context: ";
+}
+
+culturalContextSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+culturalContextSet  > culturalContext
+	{display: none;}
+
+
+dateSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Date: ";
+}
+
+dateSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+dateSet  > date
+	{display: none;}
+
+
+descriptionSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Description: ";
+}
+
+descriptionSet> display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ descriptionSet > description
+	{display: none;}
+
+descriptionSet > notes
+	{display: none;}
+
+
+inscriptionSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Inscription: ";
+}
+
+inscriptionSet> display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ inscriptionSet > inscription
+	{display: none;}
+
+
+ locationSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Location: ";
+}
+
+locationSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ locationSet > location
+	{display: none;}
+
+
+materialSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Material: ";
+}
+
+materialSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ materialSet > material
+	{display: none;}
+
+
+measurementsSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Measurements: ";
+}
+
+measurementsSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ measurementsSet > measurements
+	{display: none;}
+
+
+relationSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Relation: ";
+}
+
+relationSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+relationSet > relation
+	{display: none;}
+
+
+rightsSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Rights: ";
+}
+
+rightsSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ rightsSet > rights
+	{display: none;}
+
+
+stateEditionSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+	content:  "Edition: ";
+}
+
+stateEditionSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+}
+
+ stateEditionSet > stateEdition > description
+	{display: none;}
+
+ stateEditionSet > stateEdition >name
+	{display: none;}
+
+
+sourceSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Source: ";
+}
+
+sourceSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ sourceSet > source
+	{display: none;}
+
+
+stylePeriodSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Style period: ";
+}
+
+stylePeriodSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ stylePeriodSet > stylePeriod
+	{display: none;}
+
+
+subjectSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Subject: ";
+}
+
+subjectSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ subjectSet > subject
+	{display: none;}
+
+
+techniqueSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Technique: ";
+}
+
+techniqueSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ techniqueSet > technique
+	{display: none;}
+
+
+titleSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+	content:  "Title: ";
+}
+
+titleSet > display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+ titleSet > title[pref="true"]
+	{display: none;}
+
+
+ titleSet > title[pref="false"]:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Alternate title: ";
+}
+
+titleSet > title[pref="false"]
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+
+worktypeSet > display:before
+{
+	font-weight: bold;
+	color: black;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 5px;
+	margin-left: 5px;
+	content:  "Work type: ";
+}
+
+worktypeSet> display
+{ display : block;
+	font-weight: bold;
+	color: purple;
+	font-family: "Arial";
+	font-size: 12pt;
+	margin-top: 15px;
+	margin-left: 5px;
+}
+
+worktypeSet > worktype
+	{display: none;}
+
+
+

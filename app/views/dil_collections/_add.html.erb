@@ -1,43 +1,33 @@
 <% if current_user %>
-
-  <div>
-    <hr/>
-    <h3>Image Groups</h3>
-    <%= form_for DILCollection.new do |f| %>
-      <%= f.label "Create new image group:"%>
-      <%= f.text_field :title, :placeholder => "New group name...", :id => 'new_dil_collection_title' %>
+  <hr/>
+  <h3>Image Groups</h3>
+  <div class="row">
+    <%= form_for DILCollection.new, html: { class: "form-inline" } do |f| %>
+      <%= f.text_field :title, placeholder: "New group name...", id: 'new_dil_collection_title', required: true %>
+      <%= f.submit "Create Group", class: 'btn btn-default' %>
     <% end %>
-    <br/>
-    <!-- Each collection row is a JQuery UI droppable -->
-    </div>
-    <div id="imageCollection">
-  		<div>
-    		<ul class="accordion"> <!-- ui-widget-content -->
-    		 <% current_user.top_level_collections.each do |collection| %>
-
-    		  <li class="collection">
-            <h2 id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_tesim'].first%>" toggle="plus">
-              <% if collection["has_subcollection_ssim"].present? %>
-
-                <span>
-                  <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus", :class=>"collection_plus_minus") %>
-                </span>
-              <% end %>
-
-              <!-- Call helper to generate a link for the current collection -->
-              <%= link_to_collection( collection ) %>
-
-            </h2>
-    		    <div class="outer"><div class="inner"></div>
-            </div>
-          </li>
-
-
-
-    		<% end %>
-  		  </ul>
-  		</div>
-    </div>
+  </div>
+  <br/>
+  <!-- Each collection row is a JQuery UI droppable -->
+  <div id="imageCollection">
+		<ul class="accordion"> <!-- ui-widget-content -->
+		<% current_user.top_level_collections.each do |collection| %>
+		  <li class="collection">
+        <h2 id="<%=collection['id']%>" pid="<%=collection['id']%>" title="<%=collection['title_tesim'].first%>" toggle="plus">
+          <% if collection["has_subcollection_ssim"].present? %>
+            <span>
+              <%= image_tag('listexpander/collapsed.gif', :alt => "Plus or Minus", :class=>"collection_plus_minus") %>
+            </span>
+          <% end %>
+          <!-- Call helper to generate a link for the current collection -->
+          <%= link_to_collection( collection ) %>
+        </h2>
+		    <div class="outer"><div class="inner"></div>
+        </div>
+      </li>
+		<% end %>
+	  </ul>
+  </div>
   <div class="modal-collection"></div>
 <% end %>
 

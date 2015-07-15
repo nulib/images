@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <title><%= h(@page_title || application_name) %></title>
+    <link href="<%= opensearch_catalog_path(:format => 'xml', :only_path => false) %>" title="<%= application_name%>" type="application/opensearchdescription+xml" rel="search"/>
+    <%= favicon_link_tag ('favicon.ico') %>
+    <%= include_gon %>
+    <%= stylesheet_link_tag  "application" %>
+    <%= javascript_include_tag "application" %>
+	<%= yield :page_scripts %>
+    <%= csrf_meta_tags %>
+    <%= analytics_init if Rails.env.production? %>
+  </head>
+
+  <body class="<%= render_body_class %>">
+
+    <div class="wrapper">
+
+      <%= render :partial => 'shared/header_navbar' %>
+
+      <%= render partial: 'shared/ajax_modal' %>
+
+      <div id="main-container" class="container">
+
+        <%= render 'layouts/messages' %>
+
+        <%= yield %>
+
+      </div>
+      <div class="push"></div>
+    </div><!-- end .wrapper -->
+
+    <%= render :partial => 'shared/footer' %>
+
+  </body>
+</html>

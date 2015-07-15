@@ -1,10 +1,9 @@
 require 'dil/multiresimage_service'
-#require 'dil/pid_minter'
+require 'dil/pid_minter'
 
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
-  #include DIL::PidMinter
-  #include Vrawork
+  include DIL::PidMinter
   helper :permissions
 
   respond_to :html, :xml
@@ -19,8 +18,8 @@ class MultiresimagesController < ApplicationController
     selected_files.delete(params[:id])
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
-  
-  
+
+
   # Get SVG for id
   def get_svg
 	  expires_in(1.hours, :private => false, :public => true)
@@ -32,7 +31,7 @@ class MultiresimagesController < ApplicationController
        wants.xml  { render :xml => @svg }
     end
   end
- 
+
    # Get Aware's HTML view of the image for screen scraping geometry
   def aware_details
     @aware_details_url = "#{DIL_CONFIG['dil_aware_detail_url']}#{params[:file_path]}"
@@ -40,23 +39,106 @@ class MultiresimagesController < ApplicationController
 
   # Get tile from Aware
   def aware_tile
-    tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{params[:file_path]}&zoom=#{params[:level]}&x=#{params[:x]}&y=#{params[:y]}&rotation=0"  
+    tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{params[:file_path]}&zoom=#{params[:level]}&x=#{params[:x]}&y=#{params[:y]}&rotation=0"
     #logger.debug("tile_url:#{tile_url}")
     expires_in(1.hours, :private => false, :public => true)
     send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
   end
-   
-  def edit
+
+  def update_vra
+    #this method updates both image and work vra. 
+    #it replaces the content of the work with the updated image xml,
+    #with two exceptions: the DIL refid node and the nodeSet for the relation set.
+    image = Multiresimage.find(params[:pid])
+    work_pid = image.preferred_related_work_pid
+
+    work = Multiresimage.find(work_pid)
+    work_xml = work.datastreams['VRA'].content
+
+    #because u might need it in the rescue
+    image_xml = image.datastreams['VRA'].content
+
+    image_metadata = Nokogiri::XML(params[:xml])
+    work_metadata = Nokogiri::XML(work_xml)
+    work_node = work_metadata.at_xpath("//vra:work")
+
+    image_metadata.at_xpath("//vra:refid[@source='DIL']").swap(work_metadata.at_xpath("//vra:refid[@source='DIL']"))
+    image_metadata.at_xpath("//vra:relationSet").swap(work_metadata.at_xpath("//vra:relationSet"))
+
+    work_metadata.xpath("//vra:work").children.remove
+    work_node.children = image_metadata.xpath("//vra:image").children
+
+    updated_work_xml = work_metadata.to_xml
+    status = 200
+    update_work = true
+
     begin
-      LockedObject.obtain_lock(params[:id], "image - edit metadata", current_user.id)
-      @multiresimage = Multiresimage.find(params[:id])
-      authorize! :update, @multiresimage
-      #@policies = AdminPolicy.readable_by_user(current_user)
-    ensure
-      LockedObject.release_lock(params[:id])
+      update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
+    rescue StandardError => msg
+      puts "image is not happening"
+      puts "Error -- update_fedora_object image: #{msg}"
+      status = 500
+      update_work = false
     end
+
+    if update_work
+      begin
+        update_fedora_object(work_pid, updated_work_xml, "VRA", "VRA", "text/xml")
+      rescue StandardError => msg
+        logger.error "Error -- update_fedora_object work: #{msg}"
+        update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
+        status = 500
+      end
+    end
+
+    head status 
   end
-   
+
+  def create
+    logger.debug "multiresimages/create was just called with this from_menu param: #{params[:xml]}"
+    if params[:path] && params[:xml] && params[:accession_nbr]
+      begin
+        raise "An accession number is required" if params[:accession_nbr].blank?
+        raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+        i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
+        i.save
+
+        i.create_archv_techmd_datastream( params[:path] )
+        i.create_archv_exif_datastream( params[:path] )
+        i.create_deliv_techmd_datastream( params[:path] )
+        ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
+        i.create_deliv_ops_datastream
+        i.create_deliv_img_datastream
+        i.create_archv_img_datastream
+        ImageMover.delay.move_tiff_to_repo( i.tiff_img_name, params[ :path ])
+        i.edit_groups = [ 'registered' ]
+        i.save!
+
+        j = Multiresimage.find( i.pid )
+        j.save!
+        
+        returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+      rescue StandardError => msg
+        # puts msg.backtrace.join("\n")
+        returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
+        # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
+        # Delete the work and image if creation fails
+        if i
+          logger.debug "Deleting work and image..."
+          i.vraworks.first.delete if i.vraworks.first
+          i.delete
+        end
+        logger.debug returnXml
+      end
+    else
+      returnXml = "<response><returnCode>Error</returnCode><description>menu_publish requires both image path and VRA xml.</description></response>"
+    end
+    respond_to do |format|
+      format.xml {render :layout => false, :xml => returnXml}
+    end  
+  end
+
+
   def show
     if !params[:pid].nil?
       @collection = DILCollection.find(params[:pid])
@@ -71,160 +153,23 @@ class MultiresimagesController < ApplicationController
     end
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
+
+    @user_with_groups_is_signed_in = false
+    if user_signed_in? and !current_user.collections.empty?
+      @user_with_groups_is_signed_in = true
+    end
     @page_title = @multiresimage.titleSet_display
     gon.url = DIL_CONFIG['dil_js_url']
   end
-   
-  def update
-    @multiresimage = Multiresimage.find(params[:id])
-    authorize! :update, @multiresimage
-    read_groups = params[:multiresimage].delete(:read_groups)
-    if read_groups.present?
-      eligible = current_user.owned_groups.map(&:code)
-      @multiresimage.set_read_groups(read_groups, current_user.owned_groups.map(&:code))
-    end
-    parse_permissions!(params[:multiresimage])
-    @multiresimage.update_attributes(params[:multiresimage])
-    respond_to do |format|
-      format.json do
-        render :json=>{:values => params[:multiresimage][:permissions] }
-      end
-      format.html { redirect_to edit_multiresimage_path(@multiresimage), :notice =>"Saved changes to #{@multiresimage.id}" }
-    end
+
+  def get_vra(pid=params[:pid])
+    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{pid}/datastreams/VRA/content" 
+  #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
+  #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
+    @res = Net::HTTP.get(URI(@vra_url))
+    render xml: @res
   end
-   
-  # Create new crop
-  # Todo: Refactor a bunch of this into the model
-  def create_crop
-        
-    # Get source Fedora object
-    begin
-      image_id = params[:pid]
-      LockedObject.obtain_lock(params[:pid], "image - generate detail", current_user.id) 
-      source_fedora_object = Multiresimage.find(image_id)
-    
-      authorize! :show, source_fedora_object
-    
-      # Get the new crop boundaries
-      x=params[:x]
-      y=params[:y]
-      width=params[:width]
-      height=params[:height]
-    
-      new_image = Multiresimage.new(:pid=>mint_pid("dil-local"))
-      #puts "\nNEW IMAGE: x:" + x  + "y:" + y  + "width:" + width  + "height:" + height  + "\n"
-	  #@dil_collection.set_collection_type('Multiresimage')
 
-      # Get source SVG datastream
-      source_svg_ds = source_fedora_object.DELIV_OPS   
-    
-      # Get new SVG datastream
-      new_svg_ds = new_image.DELIV_OPS 
-
-      # Get source <image> for copying
-      image_node = source_svg_ds.find_by_terms(:svg_image)
-    
-      # Add the <image> object
-      new_svg_ds.add_image(image_node)
-
-	  # Update SVG
-      new_svg_ds.add_rect(x, y, width, height)
-    
-      #Add properties datastream with depositor (user) info
-      new_image.apply_depositor_metadata(current_user.user_key)
-    
-      #new_svg_ds.dirty = true
-      new_image.save!
-
-      # Get source VRA datastream
-      source_vra_ds = source_fedora_object.datastreams["VRA"]
-      #source_vra_image=source_vra_ds.find_by_terms(:vra) 
-      #vra_ds = new_image.VRA
-      #vra_ds.add_image(source_vra_image)
-    
-      #copy VRA ds from source image object
-      new_image.VRA.content = source_vra_ds.content
-    
-      #replace pid in VRA with crop's pid 
-      new_image.replace_pid_in_vra(image_id, new_image.pid)
-	
-	  # Add [DETAIL] to title in VRA
-	  new_image.titleSet_display = new_image.titleSet_display << " [DETAIL]"
-	
-  	  # Add image and VRA behavior via their cmodels
-      new_image.add_relationship(:has_model, "info:fedora/inu:VRACModel")
-      new_image.add_relationship(:has_model, "info:fedora/inu:imageCModel")
-    
-      #Add isCropOf relationship to crop
-      new_image.add_relationship(:is_crop_of, "info:fedora/#{source_fedora_object.pid}")
-    
-      #Add hasCrop relationship to image
-      source_fedora_object.add_relationship(:has_crop, "info:fedora/#{new_image.pid}")
-      source_fedora_object.save
-    
-      #Edit rightsMetadata datastream
-      new_image.edit_users=[current_user.user_key]
-    
-      new_image.save
-    
-      #add the detail to the detail collection
-      personal_collection_search_result = current_user.get_details_collection
-      DILCollection.add_image_to_personal_collection(personal_collection_search_result, DIL_CONFIG['dil_details_collection'], new_image, current_user.user_key)
-
-      # get the dil_collection pid from the referer
-      if request.referer =~ /dil_collections/
-        url_array = request.referer.split( '/' )
-        dil_collections_index = url_array.find_index( 'dil_collections' )
-
-        # get the dil_collection
-        dil_collection = DILCollection.find( url_array[ dil_collections_index + 1 ] )
-        # insert the detail if the current user is the collection owner
-        dil_collection.insert_member( new_image ) if dil_collection.owner == current_user.uid
-        dil_collection_url = "/dil_collections/#{ dil_collection.pid }/#{ new_image.pid }"
-      end
-
-    ensure
-      LockedObject.release_lock(params[:pid])
-    end
-
-    destination_url = dil_collection_url || "/multiresimages/" + new_image.pid
-
-    respond_to do |wants|
-      wants.html { redirect_to url_for(:action=>"show", :controller=>"multiresimages", :id=>new_image.pid) }
-      wants.xml  { render :inline =>'<success pid="'+ destination_url + '"/>' }
-    end
-  end
-  
-  # This will only be necessary when using ajax -- even then might not be necessary - MZ 06/18/2012
-  # routed to /files/:id/permissions (POST)
-  # def permissions
-  #   @multiresimage = Multiresimage.find(params[:id])
-  #   parse_permissions!(params[:multiresimage])
-  #   @multiresimage.update_attributes(params[:multiresimage].reject { |k,v| %w{ Filedata Filename revision}.include? k})
-  #   @multiresimage.save
-  #   redirect_to edit_multiresimage_path, :notice => render_to_string(:partial=>'multiresimages/permissions_updated_flash', :locals => { :asset => @multiresimage }).html_safe
-  # end
-
-  def updatecrop
-    image_id = params[:id]
-    
-    # Get the new crop boundaries
-    x=params['rect']['x']
-    y=params['rect']['y']
-    width=params['rect']['width']
-    height=params['rect']['height']
-
-	  # Update the SVG Datastream
-    document_fedora = Multiresimage.find(image_id)
-	  svg_ds = document_fedora.DELIV_OPS   
-    svg_ds.update_crop(x, y, width, height)
-
-	  # Save the updated dataastreams
-    document_fedora.save
-	  render :inline =>'<success pid="'+ image_id + '"/>'	
-  end
-  
-  
   # This method is called from multiresimage/_index.html.erb (image search results).
   # We don't want to show the Fedora URL to the user, so we call this action.
   # The permissions are checked and, if applicable, the image is retrieved and
@@ -232,44 +177,26 @@ class MultiresimagesController < ApplicationController
   # (and not the user's browser) so the Fedora XACML policy won't reject the request. If an unauthorized
   # user requests the image from Fedora directly, the XACML policy will block them.  If they request it from
   # this action, the permissions check will deny access.
-  
+
   def proxy_image
     multiresimage = Multiresimage.find(params[:id])
-    img_length = params[:image_length]
 
-    begin
-      if multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i <= params[:image_length].to_i
-        img_length = multiresimage.DELIV_OPS.svg_image.svg_width[0].to_i-1
-      end
-    rescue Exception
-      #this is a fix so that smaller images get shown. Currently, they break since larger versions do not exist.
-    end
+    src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
+    src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
 
-    default_image = File.open("app/assets/images/site/missing2.png", 'rb') do |f|
-      f.read
-    end
-    filename = "missing2.png"
-    resp = ''
+    # Max size is 1600 pixels or less, because we can't give away higher quality versions I guess!
+    max_size = [ params[:image_length].to_i, 1600, src_width, src_height ].min
+
+    image_url = multiresimage.image_url(max_size)
 
     if can?(:read, multiresimage)
-
-      Net::HTTP.start(DIL_CONFIG['dil_fedora_base_ip'], DIL_CONFIG['dil_fedora_port']) { |http|
-        resp = http.get("#{DIL_CONFIG['dil_fedora_url']}#{params[:id]}#{DIL_CONFIG['dil_fedora_disseminator']}#{img_length}")
-        #open("/usr/local/proxy_images/#{params[:id]}.jpg" ,"wb") { |new_file|
-          #new_file.write(resp.body)
-          #send_file(new_file, :type => "image/jpeg", :disposition=>"inline")
-          #send data uses server memory instead of storage.
-          if(resp.body.include? "error")
-            image = default_image
-          else
-            image = resp.body
-            filename = "#{params[:id]}.jpg"
-          end
-          send_data(image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
-        }
-      #}
-    else
-      send_data(default_image, :disposition=>'inline', :type=>'image/jpeg', :filename=>filename)
+      begin
+        send_data( Net::HTTP.get_response(URI.parse(image_url)).body, type: 'image/jpeg' )
+      rescue
+        default_image = File.open("app/assets/images/site/missing2.png", 'rb').read
+        filename = "missing2.png"
+        send_data( default_image, disposition: 'inline', type: 'image/jpeg', filename: filename )
+      end
     end
   end
 
@@ -277,10 +204,10 @@ class MultiresimagesController < ApplicationController
     multiresimage = Multiresimage.find(params[:id])
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]
       filename = "download.tif"
-      send_data(multiresimage.ARCHV_IMG.content, :disposition=>'inline', :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+      send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
     else
       render :nothing => true
     end
   end
-  
+
 end

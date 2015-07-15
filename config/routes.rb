@@ -1,83 +1,88 @@
-DIL::Application.routes.draw do
-  Blacklight.add_routes(self)
-  HydraHead.add_routes(self)
-  Hydra::BatchEdit.add_routes(self)
+Rails.application.routes.draw do
 
-  authenticated :user do
-    root :to => "catalog#index"
+  blacklight_for :catalog
+
+  unless Rails.env.production? or Rails.env.test?
+    mount AboutPage::Engine => '/about(.:format)'
   end
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
+  get "/multiresimages/get_vra/", to: "multiresimages#get_vra"
+
   devise_scope :user do
-    root :to => "catalog#index"
+    root "catalog#index"
   end
-  
-  #NEED TO REFACTOR THESE ROUTES - RAILS 2 and RAILS 3 routes
-  
+
   resources :multiresimages do
     collection do
       get 'aware_tile'
+      get 'aware_details'
       post 'add_datastream'
       post 'add_external_datastream'
-      #TODO change to post or delete
-      get 'delete_fedora_object'
-      get 'clone_work'
-      get 'create_crop'
+      post 'menu_publish'
+      put 'update_vra'
+      post 'create'
+      delete 'delete_fedora_object'
+      post 'clone_work'
       get 'get_pids_from_accession_number', :defaults => { :format => 'xml' }
       get 'get_number_of_objects', :defaults => { :format => 'xml' }
     end
     member do
       post 'permissions'
+      # get 'svg'
+      # get 'get_image'
+      # get 'archival_image_proxy'
+      # patch 'updatecrop'
     end
   end
-  
+
   resources :dil_collections do
     collection do
-      get "get_collections"=>"dil_collections#get_collections"
+      get "get_collections"
+    end
+    member do
+      get 'get_subcollections'
+      # post 'add'
+      # post 'remove'
+      # post 'move'
+      # post 'export'
+      # post 'add_to_batch_select'
+      # post 'remove_from_batch_select'
+      # post 'make_private'
+      # post 'make_public'
     end
   end
-  
-  match "dil_collections/:pid/:id/:index" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
-  match "dil_collections/:pid/:id" => "multiresimages#show", :via => :get, :constraints=> { pid: /inu.*/ }
-  match "multiresimages/create_update_fedora_object" => "multiresimages#create_update_fedora_object", :via => :post
-  #match "multiresimages/create_crop/:id" => "multiresimages#create_crop", :via => :get
-  match "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
-  match "multiresimages/svg/:id" => "multiresimages#get_svg"
-  match "multiresimages/aware_details" => "multiresimages#aware_details"
-  match "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
-  match "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy", :via => :get
-  match "external_search/search_hydra" => "external_search#index"
-  match "dil_collections/add/:id/:member_id" => "dil_collections#add", :via => :post
-  match "dil_collections/remove/:id/:pid" => "dil_collections#remove"#, :via => :post
-  match "dil_collections/new" => "dil_collections#new", :via => :post
-  match "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move", :via => :post
-  match "dil_collections/export/:id" => "dil_collections#export", :via => :post
-  match "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
-  match "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }, :via => :post
-  match "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }, :via => :post
-  match "uploads/notify" => "uploads#notify", :via => :post
-  match "dil_collections/make_private/:id" => "dil_collections#make_private" , :via => :post
-  match "dil_collections/make_public/:id" => "dil_collections#make_public" , :via => :post
-  
-  resources :uploads, :only => [:index] do
-    collection do
-      post :enqueue
-    end
-  end
-  match "uploads/create" => "uploads#create"
-  match "uploads/update_status" => "uploads#update_status"
 
   resources :groups do
     resources :users, :only=>[:create, :edit, :destroy]
   end
-  match "groups/edit/:id" => "groups#edit", :via => :get
 
-#  resources :policies
+  # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
+  # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
 
-  resources :technical_metadata, :only=>:index
+  get "multiresimages/svg/:id" => "multiresimages#get_svg"
+  get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
+  get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
+  patch "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
 
-  match 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
+  get "dil_collections/:pid/:id/:index" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
+  get "dil_collections/:pid/:id" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
 
-  
+  get "dil_collections/get_subcollections/:id" => "dil_collections#get_subcollections" , :defaults => { :format => 'json' }
+  post "dil_collections/add/:id/:member_id" => "dil_collections#add"
+  delete "dil_collections/remove/:id/:pid" => "dil_collections#remove"
+  post "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
+  post "dil_collections/export/:id" => "dil_collections#export"
+  post "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }
+  post "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }
+  post "dil_collections/make_private/:id" => "dil_collections#make_private"
+  post "dil_collections/make_public/:id" => "dil_collections#make_public"
+
+  get "groups/edit/:id" => "groups#edit"
+
+  get "external_search/search_hydra" => "external_search#index"
+
+  get 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
+
 end

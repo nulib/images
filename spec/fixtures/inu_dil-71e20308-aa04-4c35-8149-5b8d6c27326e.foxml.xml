@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<foxml:digitalObject VERSION="1.1" PID="inu:dil-71e20308-aa04-4c35-8149-5b8d6c27326e"
+xmlns:foxml="info:fedora/fedora-system:def/foxml#"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="info:fedora/fedora-system:def/foxml# http://www.fedora.info/definitions/1/0/foxml1-1.xsd">
+<foxml:objectProperties>
+<foxml:property NAME="info:fedora/fedora-system:def/model#state" VALUE="Active"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#label" VALUE=""/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#ownerId" VALUE="fedoraAdmin"/>
+<foxml:property NAME="info:fedora/fedora-system:def/model#createdDate" VALUE="2014-11-22T09:24:17.037Z"/>
+<foxml:property NAME="info:fedora/fedora-system:def/view#lastModifiedDate" VALUE="2014-11-22T09:24:17.217Z"/>
+</foxml:objectProperties>
+<foxml:datastream ID="AUDIT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="false">
+<foxml:datastreamVersion ID="AUDIT.0" LABEL="Audit Trail for this object" CREATED="2014-11-22T09:24:17.037Z" MIMETYPE="text/xml" FORMAT_URI="info:fedora/fedora-system:format/xml.fedora.audit">
+<foxml:xmlContent>
+<audit:auditTrail xmlns:audit="info:fedora/fedora-system:def/audit#">
+<audit:record ID="AUDREC1">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>RELS-EXT</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-11-22T09:24:17.103Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC2">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>rightsMetadata</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-11-22T09:24:17.157Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+<audit:record ID="AUDREC3">
+<audit:process type="Fedora API-M"/>
+<audit:action>addDatastream</audit:action>
+<audit:componentID>VRA</audit:componentID>
+<audit:responsibility>fedoraAdmin</audit:responsibility>
+<audit:date>2014-11-22T09:24:17.217Z</audit:date>
+<audit:justification></audit:justification>
+</audit:record>
+</audit:auditTrail>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="DC" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="DC1.0" LABEL="Dublin Core Record for this object" CREATED="2014-11-22T09:24:17.037Z" MIMETYPE="text/xml" FORMAT_URI="http://www.openarchives.org/OAI/2.0/oai_dc/" SIZE="373">
+<foxml:xmlContent>
+<oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+  <dc:identifier>inu:dil-71e20308-aa04-4c35-8149-5b8d6c27326e</dc:identifier>
+</oai_dc:dc>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="RELS-EXT" STATE="A" CONTROL_GROUP="X" VERSIONABLE="true">
+<foxml:datastreamVersion ID="RELS-EXT.0" LABEL="Fedora Object-to-Object Relationship Metadata" CREATED="2014-11-22T09:24:17.103Z" MIMETYPE="application/rdf+xml" SIZE="515">
+<foxml:xmlContent>
+<rdf:RDF xmlns:fedora-model="info:fedora/fedora-system:def/model#" xmlns:nulib-rel="http://projecthydra.org/ns/relations#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="info:fedora/inu:dil-71e20308-aa04-4c35-8149-5b8d6c27326e">
+    <nulib-rel:hasImage rdf:resource="info:fedora/inu:dil-c417c5aa-af70-4cf7-8b40-efbd08a5f70f"></nulib-rel:hasImage>
+    <fedora-model:hasModel rdf:resource="info:fedora/afmodel:Vrawork"></fedora-model:hasModel>
+  </rdf:Description>
+</rdf:RDF>
+</foxml:xmlContent>
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="rightsMetadata" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="rightsMetadata.0" LABEL="" CREATED="2014-11-22T09:24:17.157Z" MIMETYPE="text/xml" SIZE="520">
+<foxml:binaryContent> 
+              PHJpZ2h0c01ldGFkYXRhIHhtbG5zPSJodHRwOi8vaHlkcmEtY29sbGFiLnN0YW5mb3JkLmVkdS9zY2hl
+              bWFzL3JpZ2h0c01ldGFkYXRhL3YxIiB2ZXJzaW9uPSIwLjEiPgogIDxjb3B5cmlnaHQ+CiAgICA8aHVt
+              YW4gdHlwZT0idGl0bGUiLz4KICAgIDxodW1hbiB0eXBlPSJkZXNjcmlwdGlvbiIvPgogICAgPG1hY2hp
+              bmUgdHlwZT0idXJpIi8+CiAgPC9jb3B5cmlnaHQ+CiAgPGFjY2VzcyB0eXBlPSJkaXNjb3ZlciI+CiAg
+              ICA8aHVtYW4vPgogICAgPG1hY2hpbmUvPgogIDwvYWNjZXNzPgogIDxhY2Nlc3MgdHlwZT0icmVhZCI+
+              CiAgICA8aHVtYW4vPgogICAgPG1hY2hpbmU+CiAgICAgIDxncm91cD5yZWdpc3RlcmVkPC9ncm91cD4K
+              ICAgIDwvbWFjaGluZT4KICA8L2FjY2Vzcz4KICA8YWNjZXNzIHR5cGU9ImVkaXQiPgogICAgPGh1bWFu
+              Lz4KICAgIDxtYWNoaW5lLz4KICA8L2FjY2Vzcz4KICA8ZW1iYXJnbz4KICAgIDxodW1hbi8+CiAgICA8
+              bWFjaGluZS8+CiAgPC9lbWJhcmdvPgo8L3JpZ2h0c01ldGFkYXRhPg==
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+<foxml:datastream ID="VRA" STATE="A" CONTROL_GROUP="M" VERSIONABLE="true">
+<foxml:datastreamVersion ID="VRA.0" LABEL="" CREATED="2014-11-22T09:24:17.217Z" MIMETYPE="text/xml" SIZE="4301">
+<foxml:binaryContent> 
+              PHZyYTp2cmEgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5j
+              ZSIgeG1sbnM6Zm49Imh0dHA6Ly93d3cudzMub3JnLzIwMDUveHBhdGgtZnVuY3Rpb25zIiB4bWxuczpt
+              YXJjPSJodHRwOi8vd3d3LmxvYy5nb3YvTUFSQzIxL3NsaW0iIHhtbG5zOm1vZHM9Imh0dHA6Ly93d3cu
+              bG9jLmdvdi9tb2RzL3YzIiB4bWxuczp2cmE9Imh0dHA6Ly93d3cudnJhd2ViLm9yZy92cmFjb3JlNC5o
+              dG0iIHhzaTpzY2hlbWFMb2NhdGlvbj0iaHR0cDovL3d3dy52cmF3ZWIub3JnL3ZyYWNvcmU0Lmh0bSBo
+              dHRwOi8vd3d3LmxvYy5nb3Yvc3RhbmRhcmRzL3ZyYWNvcmUvdnJhLXN0cmljdC54c2QiPiAgIDx2cmE6
+              d29yayBpZD0iaW51LWRpbC0yNjI3ODBfdyIgcmVmaWQ9ImludTpkaWwtNzFlMjAzMDgtYWEwNC00YzM1
+              LTgxNDktNWI4ZDZjMjczMjZlIj48IS0tQWdlbnRzLS0+ICAgICAgPHZyYTphZ2VudFNldD4gICAgICAg
+              ICA8dnJhOmRpc3BsYXk+SGVzc2UsIEV2YSAoQW1lcmljYW4gc2N1bHB0b3IsIGJvcm4gaW4gR2VybWFu
+              eSwgMTkzNi0xOTcwKTwvdnJhOmRpc3BsYXk+ICAgICAgICAgPHZyYTphZ2VudD4gICAgICAgICAgICA8
+              dnJhOm5hbWUgdHlwZT0icGVyc29uYWwiIHZvY2FiPSJ1bGFuIiByZWZpZD0iNTAwMDI2NTI4Ij5IZXNz
+              ZSwgRXZhIChBbWVyaWNhbiBzY3VscHRvciwgYm9ybiBpbiBHZXJtYW55LCAxOTM2LTE5NzApPC92cmE6
+              bmFtZT4gICAgICAgICAgICA8dnJhOmF0dHJpYnV0aW9uLz4gICAgICAgICA8L3ZyYTphZ2VudD4gICAg
+              ICA8L3ZyYTphZ2VudFNldD4gICAgICA8IS0tQ3VsdHVyYWwgQ29udGV4dC0tPiAgICAgIDx2cmE6Y3Vs
+              dHVyYWxDb250ZXh0U2V0PiAgICAgICAgIDx2cmE6ZGlzcGxheS8+ICAgICAgICAgPHZyYTpjdWx0dXJh
+              bENvbnRleHQvPiAgICAgIDwvdnJhOmN1bHR1cmFsQ29udGV4dFNldD4gICAgICA8IS0tRGF0ZXMtLT4g
+              ICAgICA8dnJhOmRhdGVTZXQ+ICAgICAgICAgPHZyYTpkaXNwbGF5PjE5Njc8L3ZyYTpkaXNwbGF5PiAg
+              ICAgICAgIDx2cmE6ZGF0ZSB0eXBlPSJjcmVhdGlvbiI+ICAgICAgICAgICAgPHZyYTplYXJsaWVzdERh
+              dGU+MTk2NzwvdnJhOmVhcmxpZXN0RGF0ZT4gICAgICAgICA8L3ZyYTpkYXRlPiAgICAgIDwvdnJhOmRh
+              dGVTZXQ+ICAgICAgPCEtLURlc2NyaXB0aW9uLS0+ICAgICAgPHZyYTpkZXNjcmlwdGlvblNldD4gICAg
+              ICAgICA8dnJhOmRpc3BsYXk+UGhvdG9ncmFwaCB0YWtlbiBkdXJpbmcgYW4gZXhoaWJpdGlvbiBhdCBQ
+              b3J0bGFuZCBNb2Rlcm4gTXVzZXVtIG9mIEFydC4gQXQgdGhlIHRpbWUgdGhlIHBpZWNlIHdhcyBpbiB0
+              aGUgY29sbGVjdGlvbiBvZiBGb3VyY2FkZSwgRHJvbGwsIEluYy4gSm9iOjExMzg0PC92cmE6ZGlzcGxh
+              eT4gICAgICAgICA8dnJhOmRlc2NyaXB0aW9uPlBob3RvZ3JhcGggdGFrZW4gZHVyaW5nIGFuIGV4aGli
+              aXRpb24gYXQgUG9ydGxhbmQgTW9kZXJuIE11c2V1bSBvZiBBcnQuIEF0IHRoZSB0aW1lIHRoZSBwaWVj
+              ZSB3YXMgaW4gdGhlIGNvbGxlY3Rpb24gb2YgRm91cmNhZGUsIERyb2xsLCBJbmMuIEpvYjoxMTM4NDwv
+              dnJhOmRlc2NyaXB0aW9uPiAgICAgIDwvdnJhOmRlc2NyaXB0aW9uU2V0PiAgICAgIDwhLS1JbnNjcmlw
+              dGlvbi0tPiAgICAgIDx2cmE6aW5zY3JpcHRpb25TZXQ+ICAgICAgICAgPHZyYTpkaXNwbGF5Lz4gICAg
+              ICAgICA8dnJhOmluc2NyaXB0aW9uPiAgICAgICAgICAgIDx2cmE6dGV4dC8+ICAgICAgICAgPC92cmE6
+              aW5zY3JpcHRpb24+ICAgICAgPC92cmE6aW5zY3JpcHRpb25TZXQ+ICAgICAgPCEtLUxvY2F0aW9uLS0+
+              ICAgICAgPHZyYTpsb2NhdGlvblNldD4gICAgICAgICA8dnJhOmRpc3BsYXk+TXV6Zcq8b24gWWlzzIFy
+              Ycq8ZWwgOyBKZXJ1c2FsZW0sIElzcmFlbCA7IERJTDppbnU6ZGlsLTcxZTIwMzA4LWFhMDQtNGMzNS04
+              MTQ5LTViOGQ2YzI3MzI2ZSA7IFZveWFnZXI6MzEyOTQ1IDsgRGlnaXRhbCBJbWFnZSBMaWJyYXJ5PC92
+              cmE6ZGlzcGxheT4gICAgICAgICA8dnJhOmxvY2F0aW9uIHR5cGU9InJlcG9zaXRvcnkiPiAgICAgICAg
+              ICAgIDx2cmE6bmFtZSB0eXBlPSJjb3Jwb3JhdGUiPk11emXKvG9uIFlpc8yBcmHKvGVsPC92cmE6bmFt
+              ZT4gICAgICAgICAgICA8dnJhOm5hbWUgdHlwZT0iZ2VvZ3JhcGhpYyI+SmVydXNhbGVtLCBJc3JhZWw8
+              L3ZyYTpuYW1lPiAgICAgICAgIDwvdnJhOmxvY2F0aW9uPiAgICAgICAgIDx2cmE6bG9jYXRpb24+ICAg
+              ICAgICAgICAgPHZyYTpyZWZpZCBzb3VyY2U9IkRJTCI+aW51OmRpbC03MWUyMDMwOC1hYTA0LTRjMzUt
+              ODE0OS01YjhkNmMyNzMyNmU8L3ZyYTpyZWZpZD4gICAgICAgICAgICA8dnJhOnJlZmlkIHNvdXJjZT0i
+              Vm95YWdlciI+MzEyOTQ1PC92cmE6cmVmaWQ+ICAgICAgICAgPC92cmE6bG9jYXRpb24+ICAgICAgPC92
+              cmE6bG9jYXRpb25TZXQ+ICAgICAgPCEtLU1hdGVyaWFscy0tPiAgICAgIDx2cmE6bWF0ZXJpYWxTZXQ+
+              ICAgICAgICAgPHZyYTpkaXNwbGF5PnBlcmZvcmF0ZWQgYWx1bWludW0gYW5kIHJ1YmJlciB0dWJpbmc8
+              L3ZyYTpkaXNwbGF5PiAgICAgICAgIDx2cmE6bWF0ZXJpYWw+cGVyZm9yYXRlZCBhbHVtaW51bSBhbmQg
+              cnViYmVyIHR1YmluZzwvdnJhOm1hdGVyaWFsPiAgICAgIDwvdnJhOm1hdGVyaWFsU2V0PiAgICAgIDwh
+              LS1NZWFzdXJlbWVudHMtLT4gICAgICA8dnJhOm1lYXN1cmVtZW50c1NldD4gICAgICAgICA8dnJhOmRp
+              c3BsYXk+MzYuNSBjbSB4IDM2IGNtIHggMjMgY208L3ZyYTpkaXNwbGF5PiAgICAgICAgIDx2cmE6bWVh
+              c3VyZW1lbnRzPjM2LjUgY20geCAzNiBjbSB4IDIzIGNtPC92cmE6bWVhc3VyZW1lbnRzPiAgICAgIDwv
+              dnJhOm1lYXN1cmVtZW50c1NldD4gICAgICA8IS0tUmVsYXRpb24tLT4gICAgICA8dnJhOnJlbGF0aW9u
+              U2V0PiAgICAgICAgIDx2cmE6ZGlzcGxheT5BY2Nlc3Npb24sPC92cmE6ZGlzcGxheT4gICAgICAgICA8
+              dnJhOnJlbGF0aW9uIHByZWY9InRydWUiIHR5cGU9ImltYWdlSXMiIHJlbGlkcz0iaW51OmRpbC1jNDE3
+              YzVhYS1hZjcwLTRjZjctOGI0MC1lZmJkMDhhNWY3MGYiPkFjY2Vzc2lvbiw8L3ZyYTpyZWxhdGlvbj4g
+              ICAgICA8L3ZyYTpyZWxhdGlvblNldD4gICAgICA8IS0tUmlnaHRzLS0+ICAgICAgPHZyYTpyaWdodHNT
+              ZXQ+ICAgICAgICAgPHZyYTpkaXNwbGF5Lz4gICAgICAgICA8dnJhOnJpZ2h0cz4gICAgICAgICAgICA8
+              dnJhOnRleHQvPiAgICAgICAgIDwvdnJhOnJpZ2h0cz4gICAgICA8L3ZyYTpyaWdodHNTZXQ+ICAgICAg
+              PCEtLVNvdXJjZS0tPiAgICAgIDx2cmE6c291cmNlU2V0PiAgICAgICAgIDx2cmE6ZGlzcGxheT5Ib2xs
+              eSBDbGF5c29uIFNsaWRlIENvbGxlY3Rpb24gPC92cmE6ZGlzcGxheT4gICAgICAgICA8dnJhOnNvdXJj
+              ZT4gICAgICAgICAgICA8dnJhOm5hbWU+SG9sbHkgQ2xheXNvbiBTbGlkZSBDb2xsZWN0aW9uPC92cmE6
+              bmFtZT4gICAgICAgICA8L3ZyYTpzb3VyY2U+ICAgICAgPC92cmE6c291cmNlU2V0PiAgICAgIDwhLS1T
+              dGF0ZSBFZGl0aW9uLS0+ICAgICAgPHZyYTpzdGF0ZUVkaXRpb25TZXQ+ICAgICAgICAgPHZyYTpkaXNw
+              bGF5Lz4gICAgICAgICA8dnJhOnN0YXRlRWRpdGlvbi8+ICAgICAgPC92cmE6c3RhdGVFZGl0aW9uU2V0
+              PiAgICAgIDwhLS1UZWNobmlxdWUtLT4gICAgICA8dnJhOnRlY2huaXF1ZVNldD4gICAgICAgICA8dnJh
+              OmRpc3BsYXkvPiAgICAgICAgIDx2cmE6dGVjaG5pcXVlLz4gICAgICA8L3ZyYTp0ZWNobmlxdWVTZXQ+
+              ICAgICAgPCEtLVRleHRyZWYtLT4gICAgICA8dnJhOnRleHRyZWZTZXQ+ICAgICAgICAgPHZyYTpkaXNw
+              bGF5Lz4gICAgICAgICA8dnJhOnRleHRyZWYvPiAgICAgIDwvdnJhOnRleHRyZWZTZXQ+ICAgICAgPCEt
+              LSBUaXRsZXMgLS0+ICAgICAgPHZyYTp0aXRsZVNldD4gICAgICAgICA8dnJhOmRpc3BsYXk+QWNjZXNz
+              aW9uLCAxOTY3PC92cmE6ZGlzcGxheT4gICAgICAgICA8dnJhOnRpdGxlIHByZWY9InRydWUiPkFjY2Vz
+              c2lvbiwgMTk2NzwvdnJhOnRpdGxlPiAgICAgICAgIDx2cmE6dGl0bGUgcHJlZj0iZmFsc2UiPkFjY2Vz
+              c2lvbiBJPC92cmE6dGl0bGU+ICAgICAgICAgPHZyYTp0aXRsZSBwcmVmPSJmYWxzZSI+QWNjZXNzaW9u
+              IG9uZTwvdnJhOnRpdGxlPiAgICAgIDwvdnJhOnRpdGxlU2V0PiAgICAgIDwhLS1Xb3JrVHlwZS0tPiAg
+              ICAgIDx2cmE6d29ya3R5cGVTZXQ+ICAgICAgICAgPHZyYTpkaXNwbGF5PlNjdWxwdHVyZTwvdnJhOmRp
+              c3BsYXk+ICAgICAgICAgPHZyYTp3b3JrdHlwZT5TY3VscHR1cmU8L3ZyYTp3b3JrdHlwZT4gICAgICA8
+              L3ZyYTp3b3JrdHlwZVNldD4gICA8L3ZyYTp3b3JrPjwvdnJhOnZyYT4=
+</foxml:binaryContent> 
+</foxml:datastreamVersion>
+</foxml:datastream>
+</foxml:digitalObject>

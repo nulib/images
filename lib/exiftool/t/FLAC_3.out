@@ -1,0 +1,16 @@
+[ExifTool, ExifTool, ExifTool]  - ExifTool Version Number: 6.58
+[File, File, Image]  - File Name: FLAC.ogg
+[File, File, Image]  - Directory: t/images
+[File, File, Image]  - File Size: 151 bytes
+[File, File, Time]  - File Modification Date/Time: 2006:11:13 16:02:06
+[File, File, Image]  - File Type: OGG
+[File, File, Image]  - MIME Type: audio/x-ogg
+[FLAC, FLAC, Audio] Bit000-015 - Block Size Min: 4608
+[FLAC, FLAC, Audio] Bit016-031 - Block Size Max: 4608
+[FLAC, FLAC, Audio] Bit032-055 - Frame Size Min: 0
+[FLAC, FLAC, Audio] Bit056-079 - Frame Size Max: 0
+[FLAC, FLAC, Audio] Bit080-099 - Sample Rate: 8000
+[FLAC, FLAC, Audio] Bit100-102 - Channels: 2
+[FLAC, FLAC, Audio] Bit103-107 - Bits Per Sample: 8
+[FLAC, FLAC, Audio] Bit108-143 - Total Samples: 0
+[Vorbis, Vorbis, Audio] vendor - Vendor: reference libFLAC 1.1.2 20050205

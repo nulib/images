@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>MinoltaRaw Tags</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h2 class=top>MinoltaRaw Tags</h2>
+<p>These tags are used in Minolta RAW format (MRW) images.</p>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Tag&nbsp;ID</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td>"\0PRD"</td>
+<td>MinoltaPRD</td>
+<td class=c>-</td>
+<td>--&gt; <a href='MinoltaRaw.html#PRD'>MinoltaRaw PRD Tags</a></td></tr>
+<tr class=b>
+<td>"\0RIF"</td>
+<td>MinoltaRIF</td>
+<td class=c>-</td>
+<td>--&gt; <a href='MinoltaRaw.html#RIF'>MinoltaRaw RIF Tags</a></td></tr>
+<tr>
+<td>"\0TTW"</td>
+<td>MinoltaTTW</td>
+<td class=c>-</td>
+<td>--&gt; <a href='EXIF.html'>EXIF Tags</a></td></tr>
+<tr class=b>
+<td>"\0WBG"</td>
+<td>MinoltaWBG</td>
+<td class=c>-</td>
+<td>--&gt; <a href='MinoltaRaw.html#WBG'>MinoltaRaw WBG Tags</a></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='PRD'>MinoltaRaw PRD Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>FirmwareID</td>
+<td class=c>string[8]</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>8</td>
+<td>SensorHeight</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>10</td>
+<td>SensorWidth</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>12</td>
+<td>ImageHeight</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>14</td>
+<td>ImageWidth</td>
+<td class=c>int16u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>16</td>
+<td>RawDepth</td>
+<td class=c>int8u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>17</td>
+<td>BitDepth</td>
+<td class=c>int8u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>18</td>
+<td>StorageMethod</td>
+<td class=c>int8u</td>
+<td><span class=s>82 = Padded
+  <br>89 = Linear</span></td></tr>
+<tr>
+<td class=r>23</td>
+<td>BayerPattern</td>
+<td class=c>int8u</td>
+<td><span class=s>1 = RGGB
+  <br>4 = GBRG</span></td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='RIF'>MinoltaRaw RIF Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>1</td>
+<td>Saturation</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>2</td>
+<td>Contrast</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>3</td>
+<td>Sharpness</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>WBMode</td>
+<td class=c>int8u~</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>5</td>
+<td>ProgramMode</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = None
+  <br>1 = Portrait
+  <br>2 = Text
+  <br>3 = Night Portrait
+  <br>4 = Sunset
+  <br>5 = Sports</span></td></tr>
+<tr class=b>
+<td class=r>6</td>
+<td>ISOSetting</td>
+<td class=c>int8u</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>7</td>
+<td>ColorMode</td>
+<td class=c>int8u</td>
+<td><span class=s>0x0 = Normal
+  <br>0x1 = Black &amp; White
+  <br>0x2 = Vivid color
+  <br>0x3 = Solarization
+  <br>0x4 = Adobe RGB
+  <br>0xd = Natural sRGB
+  <br>0xe = Natural+ sRGB
+  <br>0x84 = Adobe RGB</span></td></tr>
+<tr class=b>
+<td class=r>56</td>
+<td>ColorFilter</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr>
+<td class=r>57</td>
+<td>BWFilter</td>
+<td class=c>int8u</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>58</td>
+<td>ZoneMatching</td>
+<td class=c>int8u</td>
+<td><span class=s>0 = ISO Setting Used
+  <br>1 = High Key
+  <br>2 = Low Key</span></td></tr>
+<tr>
+<td class=r>59</td>
+<td>Hue</td>
+<td class=c>int8s</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>60</td>
+<td>ColorTemperature</td>
+<td class=c>int8u</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<h2><a name='WBG'>MinoltaRaw WBG Tags</a></h2>
+<blockquote>
+<table class=frame><tr><td>
+<table class=inner cellspacing=1>
+<tr class=h><th>Index</th><th>Tag Name</th>
+<th>Writable</th><th>Values / <span class=n>Notes</span></th></tr>
+<tr>
+<td class=r>0</td>
+<td>WBScale</td>
+<td class=c>int8u[4]</td>
+<td>&nbsp;</td></tr>
+<tr class=b>
+<td class=r>4</td>
+<td>WBLevels</td>
+<td class=c>int16u[4]</td>
+<td>&nbsp;</td></tr>
+</table></td></tr></table></blockquote>
+
+<hr>
+(This document generated automatically by Image::ExifTool::BuildTagLookup)
+<br><i>Last revised Mar 11, 2006</i>
+<p class=lf><a href='index.html'>&lt;-- ExifTool Tag Names</a></p>
+</body>
+</html>

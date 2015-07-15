@@ -1,0 +1,47 @@
+#
+# File:         iptc2xmp.args
+#
+# Description:  Tag name translations for converting from IPTC to XMP
+#
+# Usage:        exiftool -tagsFromFile src.jpg -@ iptc2xmp.args dst.jpg
+#
+# Revisions:    2005/05/14 - P. Harvey Created
+#				2008/03/04 - PH Changed Location translation and added
+#							 IntellectualGenre and SubjectCode
+#
+# References:   http://www.iptc.org/IPTC4XMP/
+#               http://www.iptc.org/IIM/
+#               http://www.adobe.com/products/xmp/pdfs/xmpspec.pdf
+#
+# Notes:        The following tags have the same names in both IPTC and XMP,
+#               so they are covered by the first argument:  Category, City,
+#               Credit, DateCreated, Headline, SupplementalCategories and
+#               Urgency.
+#
+#               'Source' exists in both XMP-dc and XMP-photoshop but we want
+#               to only write it to XMP-photoshop, and 'Keywords' exists in
+#               XMP-pdf but we want to write it to XMP-dc:Subject, so we
+#               exclude these tags from the mass copy and handle them
+#               separately.
+#
+-IPTC:* > XMP:*
+--IPTC:Source
+--IPTC:Keywords
+-IPTC:Source > XMP-photoshop:Source
+-IPTC:Keywords > XMP-dc:Subject
+-IPTC:ObjectName > XMP-dc:Title
+-IPTC:SpecialInstructions > XMP-photoshop:Instructions
+-IPTC:By-line > XMP-dc:Creator
+-IPTC:By-lineTitle > XMP-photoshop:AuthorsPosition
+-IPTC:Province-State > XMP-photoshop:State
+-IPTC:Country-PrimaryLocationName > XMP-photoshop:Country
+-IPTC:OriginalTransmissionReference > XMP-photoshop:TransmissionReference
+-IPTC:CopyrightNotice > XMP-dc:Rights
+-IPTC:Caption-Abstract > XMP-dc:Description
+-IPTC:Writer-Editor > XMP-photoshop:CaptionWriter
+-IPTC:Country-PrimaryLocationCode > XMP-iptcCore:CountryCode
+-IPTC:Sub-location > XMP-iptcCore:Location
+# these tags are not free-form text, and may need special handling:
+#-IPTC:ObjectAttributeReference > XMP-iptcCore:IntellectualGenre
+#-IPTC:SubjectReference > XMP-iptcCore:SubjectCode
+# end

@@ -1,0 +1,149 @@
+<exif>
+  <raw>
+---- ExifTool ----
+ExifTool Version Number         : 7.39
+---- File ----
+File Name                       : internet.tiff
+Directory                       : ../spec/fixtures/images
+File Size                       : 774 kB
+File Modification Date/Time     : 2014:07:25 15:38:47
+File Type                       : TIFF
+MIME Type                       : image/tiff
+Exif Byte Order                 : Big-endian (Motorola, MM)
+---- IFD0 ----
+Image Width                     : 600
+Image Height                    : 664
+Bits Per Sample                 : 8 8 8
+Compression                     : LZW
+Photometric Interpretation      : RGB
+Strip Offsets                   : (Binary data 63 bytes, use -b option to extract)
+Orientation                     : Horizontal (normal)
+Samples Per Pixel               : 3
+Rows Per Strip                  : 72
+Strip Byte Counts               : (Binary data 62 bytes, use -b option to extract)
+X Resolution                    : 72
+Y Resolution                    : 72
+Planar Configuration            : Chunky
+Resolution Unit                 : inches
+Predictor                       : Horizontal differencing
+Sample Format                   : Unsigned integer; Unsigned integer; Unsigned integer
+---- ICC-header ----
+Profile CMM Type                : Lino
+Profile Version                 : 2.1.0
+Profile Class                   : Display Device Profile
+Color Space Data                : RGB
+Profile Connection Space        : XYZ
+Profile Date Time               : 1998:02:09 06:49:00
+Profile File Signature          : acsp
+Primary Platform                : Microsoft Corporation
+CMM Flags                       : Not Embedded, Independent
+Device Manufacturer             : IEC
+Device Model                    : sRGB
+Device Attributes               : Reflective, Glossy, Positive, Color
+Rendering Intent                : Perceptual
+Connection Space Illuminant     : 0.9642 1 0.82491
+Profile Creator                 : HP
+Profile ID                      : 0
+---- ICC_Profile ----
+Profile Copyright               : Copyright (c) 1998 Hewlett-Packard Company
+Profile Description             : sRGB IEC61966-2.1
+Media White Point               : 0.95045 1 1.08905
+Media Black Point               : 0 0 0
+Red Matrix Column               : 0.43607 0.22249 0.01392
+Green Matrix Column             : 0.38515 0.71687 0.09708
+Blue Matrix Column              : 0.14307 0.06061 0.7141
+Device Mfg Desc                 : IEC http://www.iec.ch
+Device Model Desc               : IEC 61966-2.1 Default RGB colour space - sRGB
+Viewing Cond Desc               : Reference Viewing Condition in IEC61966-2.1
+Luminance                       : 76.03647 80 87.12462
+Technology                      : Cathode Ray Tube Display
+Red Tone Reproduction Curve     : (Binary data 2060 bytes, use -b option to extract)
+Green Tone Reproduction Curve   : (Binary data 2060 bytes, use -b option to extract)
+Blue Tone Reproduction Curve    : (Binary data 2060 bytes, use -b option to extract)
+---- ICC-view ----
+Viewing Cond Illuminant         : 19.6445 20.3718 16.8089
+Viewing Cond Surround           : 3.92889 4.07439 3.36179
+Viewing Cond Illuminant Type    : D50
+---- ICC-meas ----
+Measurement Observer            : CIE 1931
+Measurement Backing             : 0 0 0
+Measurement Geometry            : Unknown (0)
+Measurement Flare               : 0.999%
+Measurement Illuminant          : D65
+---- Composite ----
+Image Size                      : 600x664
+
+  </raw>
+  <item field="----_ExifTool_----" value="" />
+  <item field="ExifTool_Version_Number" value="7.39" />
+  <item field="----_File_----" value="" />
+  <item field="File_Name" value="internet.tiff" />
+  <item field="Directory" value="../spec/fixtures/images" />
+  <item field="File_Size" value="774 kB" />
+  <item field="File_Modification_Date_Time" value="2014:07:25 15:38:47" />
+  <item field="File_Type" value="TIFF" />
+  <item field="MIME_Type" value="image/tiff" />
+  <item field="Exif_Byte_Order" value="Big-endian (Motorola, MM)" />
+  <item field="----_IFD0_----" value="" />
+  <item field="Image_Width" value="600" />
+  <item field="Image_Height" value="664" />
+  <item field="Bits_Per_Sample" value="8 8 8" />
+  <item field="Compression" value="LZW" />
+  <item field="Photometric_Interpretation" value="RGB" />
+  <item field="Strip_Offsets" value="(Binary data 63 bytes, use -b option to extract)" />
+  <item field="Orientation" value="Horizontal (normal)" />
+  <item field="Samples_Per_Pixel" value="3" />
+  <item field="Rows_Per_Strip" value="72" />
+  <item field="Strip_Byte_Counts" value="(Binary data 62 bytes, use -b option to extract)" />
+  <item field="X_Resolution" value="72" />
+  <item field="Y_Resolution" value="72" />
+  <item field="Planar_Configuration" value="Chunky" />
+  <item field="Resolution_Unit" value="inches" />
+  <item field="Predictor" value="Horizontal differencing" />
+  <item field="Sample_Format" value="Unsigned integer; Unsigned integer; Unsigned integer" />
+  <item field="----_ICC-header_----" value="" />
+  <item field="Profile_CMM_Type" value="Lino" />
+  <item field="Profile_Version" value="2.1.0" />
+  <item field="Profile_Class" value="Display Device Profile" />
+  <item field="Color_Space_Data" value="RGB" />
+  <item field="Profile_Connection_Space" value="XYZ" />
+  <item field="Profile_Date_Time" value="1998:02:09 06:49:00" />
+  <item field="Profile_File_Signature" value="acsp" />
+  <item field="Primary_Platform" value="Microsoft Corporation" />
+  <item field="CMM_Flags" value="Not Embedded, Independent" />
+  <item field="Device_Manufacturer" value="IEC" />
+  <item field="Device_Model" value="sRGB" />
+  <item field="Device_Attributes" value="Reflective, Glossy, Positive, Color" />
+  <item field="Rendering_Intent" value="Perceptual" />
+  <item field="Connection_Space_Illuminant" value="0.9642 1 0.82491" />
+  <item field="Profile_Creator" value="HP" />
+  <item field="Profile_ID" value="0" />
+  <item field="----_ICC_Profile_----" value="" />
+  <item field="Profile_Copyright" value="Copyright (c) 1998 Hewlett-Packard Company" />
+  <item field="Profile_Description" value="sRGB IEC61966-2.1" />
+  <item field="Media_White_Point" value="0.95045 1 1.08905" />
+  <item field="Media_Black_Point" value="0 0 0" />
+  <item field="Red_Matrix_Column" value="0.43607 0.22249 0.01392" />
+  <item field="Green_Matrix_Column" value="0.38515 0.71687 0.09708" />
+  <item field="Blue_Matrix_Column" value="0.14307 0.06061 0.7141" />
+  <item field="Device_Mfg_Desc" value="IEC http://www.iec.ch" />
+  <item field="Device_Model_Desc" value="IEC 61966-2.1 Default RGB colour space - sRGB" />
+  <item field="Viewing_Cond_Desc" value="Reference Viewing Condition in IEC61966-2.1" />
+  <item field="Luminance" value="76.03647 80 87.12462" />
+  <item field="Technology" value="Cathode Ray Tube Display" />
+  <item field="Red_Tone_Reproduction_Curve" value="(Binary data 2060 bytes, use -b option to extract)" />
+  <item field="Green_Tone_Reproduction_Curve" value="(Binary data 2060 bytes, use -b option to extract)" />
+  <item field="Blue_Tone_Reproduction_Curve" value="(Binary data 2060 bytes, use -b option to extract)" />
+  <item field="----_ICC-view_----" value="" />
+  <item field="Viewing_Cond_Illuminant" value="19.6445 20.3718 16.8089" />
+  <item field="Viewing_Cond_Surround" value="3.92889 4.07439 3.36179" />
+  <item field="Viewing_Cond_Illuminant_Type" value="D50" />
+  <item field="----_ICC-meas_----" value="" />
+  <item field="Measurement_Observer" value="CIE 1931" />
+  <item field="Measurement_Backing" value="0 0 0" />
+  <item field="Measurement_Geometry" value="Unknown (0)" />
+  <item field="Measurement_Flare" value="0.999%" />
+  <item field="Measurement_Illuminant" value="D65" />
+  <item field="----_Composite_----" value="" />
+  <item field="Image_Size" value="600x664" />
+</exif>

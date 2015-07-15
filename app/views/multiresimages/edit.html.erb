@@ -1,9 +1,0 @@
-<%=render :partial=>'breadcrumb' %>
-<% if can?(:read, @multiresimage) %>
-  <div id="browselinks">
-    <%= link_to "Browse", multiresimage_path(@multiresimage), :class=>'active browse' %> |
-    <span class="inactive edit">Edit</span>
-  </div>
-<% end %>
-
-<%=render :partial=>'edit_description' %>

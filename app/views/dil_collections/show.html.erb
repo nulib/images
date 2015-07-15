@@ -1,22 +1,31 @@
-<% sidebar_items << capture do %>
+<% collection_size = @collection.members.find_by_terms(:mods).count %>
+
+<% @sidebar_items = capture do %>
   <%= render :partial=>'parent_collections' %>
   <%= render :partial=>'dil_collections/add' %>
 <% end %>
 
-<div id="sidebar" class="span3"><%= sidebar_items.join().html_safe %></div>
+<div id="sidebar" class="col-md-3"><%= @sidebar_items %></div>
 
-<div id="accordion" class="span9">
+<div id="accordion" class="col-md-9">
 <% if can?(:edit, @collection) %>
   <span class="edit-browse">
-    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, :confirm=>"Delete this group?" %>
+    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, data: { confirm: "Delete this group?" } %>
 	<% if @collection.members %>
-		| <%= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
-		| <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
-		<% if @collection.read_groups.include? "registered" %>
+
+    <% # We're disabling ppt export for right now %>
+    <% #if collection_size < 26 %>
+     <%#= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
+    <% #else %>
+      <% #| Export to PowerPoint disabled %>
+    <% # end %>
+
+    | <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
+    <% if @collection.read_groups.include? "registered" %>
 		|
 		<a href="#" id="shareLink">Share this Group</a>
 		<div id="toppathwrap">
-		    <textarea id="copypath" rows="2" cols="250" onclick="this.focus();this.select()" readonly="readonly"><%= DIL_CONFIG['dil_app_url'] + 'dil_collections/' + @collection.pid %></textarea><a href="#" onclick="$('#toppathwrap').hide(); return false;">X</a><br>Copy this link and share it!
+		    <textarea id="copypath" rows="2" cols="250" onclick="this.focus();this.select()" readonly="readonly"><%= dil_collection_url(@collection) %></textarea><a href="#" onclick="$('#toppathwrap').hide(); return false;">X</a><br>Copy this link and share it!
 		</div>
 		<% end %>
 	<% end %>
@@ -24,13 +33,13 @@
 <% end %>
 
   <% if @collection.members %>
-    <h2><%=@collection.title %> <% unless @collection.title.downcase == DIL_CONFIG['dil_uploads_collection'].downcase || @collection.title.downcase == DIL_CONFIG['dil_details_collection'].downcase %><button id="rename_image_group_link" class="btn"><i class="icon-pencil"></i></button>
+    <h2><%=@collection.title %> <% unless @collection.title.downcase == DIL_CONFIG['dil_details_collection'].downcase %><button id="rename_image_group_link" class="btn btn-default"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>
       <%= form_for @collection do |f| %>
         <%= f.text_field :title, :placeholder => "New group name...", :id => 'dil_collection_title' %>
         <%= f.submit "Update", :class => "btn" %>
       <% end %>
     <% end %></h2>
-    <p>Number of images in collection: <%= @collection.members.find_by_terms(:mods).count %></p>
+    <p>Number of images in collection: <%= collection_size %> / 25</p>
     <%= render :partial => 'dil_collections/members' %>
     <% end %>
 </div>

@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>Maker Note Idiosyncracies</title>
+<link rel=stylesheet type='text/css' href='style.css' title='Style'>
+</head>
+<body>
+<h1 class='up'>Maker Note Idiosyncracies</h1>
+
+<p>It really is surprising how stupid some (...many, ...most?) manufacturers
+seem to be when it comes to writing what should be a fairly simple file
+format.</p>
+
+<p>One positive thing is that most manufacturers seem to have adopted the use of
+an EXIF-like IFD (Image File Directory) structure for their maker notes.  But
+many problems arise because of a fundamental design flaw in the EXIF/TIFF
+format.  Values longer than 4 bytes are stored at a location referenced by an
+offset from an absolute position in the file (where offset 0 is the start of the
+EXIF/TIFF information).</p>
+
+<p>The difficulty is that these offsets must be recalculated when a file is
+rewritten, but in general this is not possible (particularly for the maker
+notes) because the format of not all information is known.  Some manufacturers
+have attempted to avoid this problem using offsets which are relative to the
+start of the maker note IFD instead of the usual start of EXIF.  This is a good
+idea if implemented properly, but this is not done consistently.  (And some
+manufacturers are not even consistent about how the offsets are calculated from
+one camera model to the next!)</p>
+
+<blockquote><font size='-1'><b>Technical aside:</b>
+<br>If EXIF were designed properly, all offsets would
+be relative to 4 bytes after the end of the IFD, which is the normal position
+for values to be stored, and all value data for the IFD would be stored in a
+block at this location.  If this was done, an entire IFD could be relocated
+easily without causing problems.</font></blockquote>
+
+<p>Below is a list of idiosyncracies in files written by the digital cameras or
+software from various manufacturers.  Many of these quirks relate to the offset
+problem mentioned above.</p>
+
+<hr>
+
+<p><b>Canon:</b> The 350D (firmware 1.0.1) gets the size of the thumbnail image
+wrong and reports it to be 10 bytes too long.  This can cause the reported
+thumbnail image data to run off the end of the APP1 segment.  A bug in version
+1.0.4 of the 40D firmware causes it to write a maker note entry count that is
+one greater than it should be.</p>
+
+<p><b>Casio:</b> The preview image is referenced by two different offsets (the
+PreviewImage tag plus a PreviewImageStart/PreviewImageLength pair).  Also, the
+offset for the PrintIM information is relative to the start of the IFD entry
+even though other offsets aren't.</p>
+
+<p><b>Concord:</b> Some models write PrintIM information with an entry-based
+offset like Casio.</p>
+
+<p><b>Hewlett-Packard:</b> The PhotoSmart 720 (one of the few HP models to use
+EXIF-format maker notes) uses a format code of 5 (rational64u) for tag 0x0204,
+but stores a rational32u value.  Other models show about as much standardization
+as the Kodak point-and-shoot lineup.</p>
+
+<p><b>Kodak:</b> Professional DCS Photo Desk software writes a cyclical EXIF
+directory such that the InteropIFD pointer points back to IFD0.
+Point-and-shoot models show little standardization in maker note format.</p>
+
+<p><b>Konica:</b> The KD-300Z writes all maker notes offsets relative to the
+start of the individual IFD entry.</p>
+
+<p><b>Minolta:</b> An obvious bug in the firmware of the Z2 writes an incorrect
+offset for the 'MinoltaCameraSettings2' information -- it writes the offset of
+the offset itself instead of the offset of the value (hahaha!).  Other
+offsets are correct.</p>
+
+<p><b>Kyocera:</b> A number of models write all maker notes offsets relative
+to the start of the individual IFD entry.</p>
+
+<p><b>Nikon:</b> D2H NEF files have huge blocks with all zero data (3.7 MB in
+my test file!).</p>
+
+<p><b>Olympus:</b> The E-1 and E-300 have subdirectories in the maker notes,
+but not only does the data size of these subdirectories exclude the subdirectory
+value data, but also it is 2 bytes too small for the directory information
+itself (doh! -- they forgot to include the entry count).</p>
+
+<p><b>Pentax:</b> The Optio 330 uses an offset for the PrintIM information which
+is relative to the start of the IFD entry (hmmm, like some Casio models...). 
+Also, preview image offsets in the maker notes are given relative to the EXIF
+base rather than the maker note base (like all other maker notes offsets).</p>
+
+<p>The Optio 550, 555, 33WR and 43WR all specify a PrintIM directory at a the
+same offset of 0x29a with length 40 bytes, but the only PrintIM information in
+the file is nowhere near that offset and is 128 bytes long.  Also for these
+models, tag 0x002e has a constant value of 0x6a6 even though its position
+changes.  Finally, all of these models plus the Optio WP waste many kilobytes of
+space in each image with large unused data blocks in the EXIF information.</p>
+
+<p>The Optio 330RS and 430RS double reference the preview image information.</p>
+
+<p>Note that the worst problems are with the Optio 230, 330, and 430, which
+carry the Asahi brand name.</p>
+
+<p><b>Photoshop and Nikon Capture:</b> Both of these packages write TIFF IPTC
+information as 'int32u' (or 'LONG').  This is wrong
+(<a href="http://www.awaresystems.be/imaging/tiff/tifftags/iptc.html">see
+reference</a>).  Nikon Capture goes one step further and simply ignores IPTC
+that is written correctly as 'undef' or 'int8u'.  (So for compatibility,
+ExifTool also writes this incorrectly as 'int32u'.)</p>
+
+<p><b>Ricoh:</b> An IFD subdirectory in the Ricoh maker notes of both the
+Caplio RR30 and RR1.  The RR30 uses standard EXIF offsets (relative to the start
+of the EXIF data), but for the RR1 the offsets are relative to the start of the
+subdirectory.</p>
+
+<p><b>Rollei:</b> The DK4010 writes all maker notes offsets relative to the
+start of the individual IFD entry.</p>
+
+<p><b>Sanyo:</b> The offsets written in the maker notes of the J1, J2, J3, S1,
+S3 and S4 have very little to do with reality.  Apparently the Sanyo
+programmers have no understanding of the concept of an IFD offset.</p>
+
+<p><b>Skanhex:</b> With some Skanhex models (SX-210Z3, SX-330Z3, SX3300,
+SX410Z3), the 264-byte makernotes block contains no useful information, and
+overlaps values from the ExifIFD.  For these models there is also a large block
+(typically 1195 bytes) of unreferenced information in the EXIF data immediately
+following the IteropIFD.  This block begins with the character sequence
+"SKANH\0", and contains exactly the same information in all 20 of my sample
+images that contain this block (except for a variable amount of padding at the
+end with 0xff bytes).  These quirks also affect some Gateway, Jenoptik, Medion,
+Samsung and Yakumo models built by Skanhex.</p>
+
+<p><b>Toshiba:</b> The PDR-3310 writes all maker notes offsets relative to the
+start of the individual IFD entry.  (very similar to Konica KD-300Z)</p>
+
+<hr>
+<i>Created Mar. 25, 2005</i>
+<br><i>Last revised Dec. 19, 2007</i>
+<p class='lf'><a href="index.html">&lt;-- Back to ExifTool home page</a></p>
+</body>
+</html>
