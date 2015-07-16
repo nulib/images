@@ -31,6 +31,8 @@ module DIL
 
     config.assets.paths << "#{Rails}/vendor/assets/fonts"
 
+    config.assets.initialize_on_precompile = true
+
     # Location where dil puts files to be processed
      config.processing_file_path = "/tmp"
 

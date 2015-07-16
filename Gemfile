@@ -26,7 +26,7 @@ source 'http://rubygems.org'
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
-
+  gem 'capistrano-bundler'
   gem 'therubyracer'
   gem 'jquery-ui-rails'
 
@@ -36,11 +36,6 @@ source 'http://rubygems.org'
   gem 'hydra-ldap'
   gem 'high_voltage'
 
-group :development, :test, :staging do
-  gem 'jettywrapper'
-  gem 'sqlite3'
-  gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
-end
 
 group :test do
   gem 'rspec-rails'
@@ -55,10 +50,17 @@ group :test do
 end
 
 group :development do
+  gem 'jettywrapper'
+  gem 'sqlite3'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'byebug'
+end
+
+group :staging do
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
+  gem 'pg'
 end
 
 group :production do
