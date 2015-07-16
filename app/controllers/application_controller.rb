@@ -5,12 +5,14 @@ layout "images"
     # Store the url the user was trying to get to in the session. If they log in, they will get redirected to it.
     # If they are logged in but trying to see a collection that doesn't belong to them, show an error and redirect to home.
     session[:previous_url] = request.fullpath unless request.xhr?
+
     if request.params[:controller] == "dil_collections" and request.params[:action] == "show"
        flash[:error] = "You are not authorized to view this collection."
        redirect_to  "/"
     else
       redirect_to  "/users/sign_in"
     end
+
   end
 
   rescue_from ActiveRecord::RecordNotFound do |exception|

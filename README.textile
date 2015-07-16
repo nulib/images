@@ -1,5 +1,3 @@
-A major release is underway in this branch. 
-
 h2. Developer prereqs
 
 Ruby 2.x
@@ -40,7 +38,7 @@ rails s
 
 h2. Testing the application
 
-To test the main image model, run: 
+To test the main image model, run:
 <pre>
 rspec spec/models/multiresimage_spec.rb
 </pre>
@@ -57,5 +55,5 @@ You can run rspec spec to test the entire app.
 
 h2. Deploying
 
-We've got capistrano set up, so deploying *should* be as easy as 'cap environment deploy'. 
+We've got capistrano set up, so deploying *should* be as easy as 'cap environment deploy'.
 Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or run cap deploy setup.

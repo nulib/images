@@ -19,7 +19,6 @@ source 'http://rubygems.org'
   gem 'jhove-service'
   gem 'protected_attributes'
   gem 'delayed_job_active_record'
-  #gem 'delayed_job_active_record', :git => 'https://github.com/collectiveidea/delayed_job_active_record'
 
   gem 'daemons'
 
