@@ -26,7 +26,7 @@ source 'http://rubygems.org'
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
-
+  gem 'capistrano-bundler'
   gem 'therubyracer'
   gem 'jquery-ui-rails'
 
