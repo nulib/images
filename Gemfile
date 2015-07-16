@@ -59,7 +59,7 @@ group :development do
 end
 
 group :staging do
-  gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
   gem 'pg'
 end
 
