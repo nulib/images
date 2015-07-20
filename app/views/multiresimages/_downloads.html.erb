@@ -23,6 +23,9 @@
             <% end %>
           <% end %>
         </div>
+        <% if user_signed_in? && current_user.admin? %>
+          <%= link_to( "Delete image!!!", multiresimage_path(@multiresimage), { method: :delete, class: "btn btn-default btn-danger" } ) %>
+        <% end %>
       </div>
     </div>
     <hr>
