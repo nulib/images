@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe MultiresimagesController, :type => :request do
-  
+
   describe "existing image with Voyager number" do
     it "raises an error if accession number matches Voyager number" do
       @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
@@ -53,7 +53,7 @@ describe MultiresimagesController, :type => :request do
 
   it "should update both image and work vra" do
     @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" )
-  
+
     create_params = {
       'format' => 'xml',
       'from_menu'=> true,
@@ -80,7 +80,7 @@ describe MultiresimagesController, :type => :request do
       'pid' => pid,
       'xml' => new_image_xml,
       'id' => 'update'
-    }   
+    }
 
     put update_vra_multiresimages_path, update_params
 
@@ -88,8 +88,8 @@ describe MultiresimagesController, :type => :request do
     @updated_image_xml = @updated_image.datastreams['VRA'].content
 
     expect(@updated_image_xml).to include("Title Bon Bon")
-    expect(@updated_image_xml).to include("Agent Bon Bon")  
-    
+    expect(@updated_image_xml).to include("Agent Bon Bon")
+
     work_pid = @updated_image.preferred_related_work_pid
 
     @updated_work = Multiresimage.find(work_pid)
@@ -97,6 +97,15 @@ describe MultiresimagesController, :type => :request do
 
     expect(@updated_work_xml).to include("Title Bon Bon")
     expect(@updated_work_xml).to include("Agent Bon Bon")
+  end
+
+  it "should allow an admin to delete a Multiresimage record" do
+
+
+  end
+
+  it "should deny an anonymous user from deleting a Multiresimage record" do |variable|
+
   end
 
 end
