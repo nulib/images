@@ -94,6 +94,7 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     click_button('signIn')
   end
 
+
   it "lets a user add an image to a group" do
     #DIL-4095
     visit('http://localhost:3000')
@@ -331,6 +332,12 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
     click_button('signIn')
   end
 
+  it "shows a user with admin rights the delete button" do
+    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
+
+    expect(page).to have_content("Delete Image")
+  end
+
   it "does not create facets from subject display data" do
     visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
 
@@ -389,6 +396,11 @@ steps "Logged out users can use Images to",  :js => true do
     visit("http://localhost:3000/multiresimages/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60")
 
     expect(page).to_not have_content("Add to Image Group")
+  end
+
+  it "does not show the delete button to a non-admin" do
+    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
+    expect(page).to_not have_content("Delete Image")
   end
 
 end
