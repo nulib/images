@@ -14,6 +14,8 @@ class MultiresimagesController < ApplicationController
     if obj.vraworks[0].present?
       obj.vraworks[0].delete
     end
+    # look for any dil_collections that it belongs to and remove those first
+    obj.remove_from_all_dil_collections
     obj.delete
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
