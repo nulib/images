@@ -101,10 +101,19 @@ class Multiresimage < ActiveFedora::Base
     MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-    
+
     work #you'd better
   end
 
+
+  # This function removes the image from a dil_collection object, NOT an institutional collection
+  def remove_from_all_dil_collections
+    self.collections.each do |collection|
+      collection.members.remove_member_by_pid( self.pid )
+      collection.save
+      self.collections.delete(collection)
+    end
+  end
 
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
