@@ -49,7 +49,7 @@ group :test do
   gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
 
-group :development do
+group :development, :remote_dev do
   gem 'jettywrapper'
   gem 'sqlite3'
   gem 'better_errors'
