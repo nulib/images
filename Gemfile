@@ -36,7 +36,7 @@ source 'http://rubygems.org'
   gem 'hydra-ldap'
   gem 'high_voltage'
 
-group :development, :test, :staging do
+group :development_test_staging do
   gem 'jettywrapper'
   gem 'sqlite3'
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
