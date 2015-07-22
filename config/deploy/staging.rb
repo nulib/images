@@ -23,7 +23,8 @@ set :rbenv_ruby, '2.2.2'
 
 
 #bundle install only staging gems
-set :bundle_without, ["development", "test", "production"]
+set :bundle_without, %w{development test production}.join(' ')
+set :bundle_with, %w{remote_dev staging}.join(' ')
 
 # Custom SSH Options
 # ==================
