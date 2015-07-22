@@ -39,7 +39,7 @@ source 'http://rubygems.org'
 group :development, :test, :staging do
   gem 'jettywrapper'
   gem 'sqlite3'
-  gem 'about_page', :git => 'http://github.com/sul-dlss/about_page.git'
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
 end
 
 group :test do
