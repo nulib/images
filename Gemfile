@@ -50,6 +50,7 @@ group :test do
 end
 
 group :development, :remote_dev do
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
   gem 'jettywrapper'
   gem 'sqlite3'
   gem 'better_errors'
@@ -58,12 +59,9 @@ group :development, :remote_dev do
   gem 'byebug'
 end
 
-group :remote_dev, :staging do
-  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
-end
-
 group :staging do
   gem 'pg'
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
 end
 
 group :production do
