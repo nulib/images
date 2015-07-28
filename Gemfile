@@ -37,11 +37,6 @@ source 'http://rubygems.org'
   gem 'hydra-ldap'
   gem 'high_voltage'
 
-group :development_test_staging do
-  gem 'jettywrapper'
-  gem 'sqlite3'
-  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
-end
 
 group :test do
   gem 'rspec-rails'
@@ -55,11 +50,19 @@ group :test do
   gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
 
-group :development do
+group :development, :remote_dev do
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
+  gem 'jettywrapper'
+  gem 'sqlite3'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'byebug'
+end
+
+group :staging do
+  gem 'pg'
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
 end
 
 group :production do

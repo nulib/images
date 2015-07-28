@@ -2,9 +2,10 @@ require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
 
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
-Bundler.require(*Rails.groups)
+# Require the default gems listed in Gemfile, including only gems
+# required for each environment.
+
+Bundler.require(:default, Rails.env)
 
 module DIL
 
@@ -30,6 +31,8 @@ module DIL
     # config.i18n.default_locale = :de
 
     config.assets.paths << "#{Rails}/vendor/assets/fonts"
+
+    config.assets.initialize_on_precompile = true
 
     # Location where dil puts files to be processed
      config.processing_file_path = "/tmp"
