@@ -11,11 +11,14 @@ class MultiresimagesController < ApplicationController
   def destroy
     obj = Multiresimage.find(params[:id])
     authorize! :destroy, obj
+    # First remove from all dil collections
+    obj.remove_from_all_dil_collections
+    # Clean up any associated VRAWork objects
     if obj.vraworks[0].present?
       obj.vraworks[0].delete
     end
+    # Delete the Multiresimage itself finally
     obj.delete
-    selected_files.delete(params[:id])
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
 
@@ -46,7 +49,7 @@ class MultiresimagesController < ApplicationController
   end
 
   def update_vra
-    #this method updates both image and work vra. 
+    #this method updates both image and work vra.
     #it replaces the content of the work with the updated image xml,
     #with two exceptions: the DIL refid node and the nodeSet for the relation set.
     image = Multiresimage.find(params[:pid])
@@ -91,7 +94,7 @@ class MultiresimagesController < ApplicationController
       end
     end
 
-    head status 
+    head status
   end
 
   def create
@@ -116,7 +119,7 @@ class MultiresimagesController < ApplicationController
 
         j = Multiresimage.find( i.pid )
         j.save!
-        
+
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         # puts msg.backtrace.join("\n")
@@ -135,7 +138,7 @@ class MultiresimagesController < ApplicationController
     end
     respond_to do |format|
       format.xml {render :layout => false, :xml => returnXml}
-    end  
+    end
   end
 
 
@@ -163,7 +166,7 @@ class MultiresimagesController < ApplicationController
   end
 
   def get_vra(pid=params[:pid])
-    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{pid}/datastreams/VRA/content" 
+    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{pid}/datastreams/VRA/content"
   #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
   #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))
