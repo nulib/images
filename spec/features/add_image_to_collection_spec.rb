@@ -338,6 +338,14 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
     expect(page).to have_content("Delete Image")
   end
 
+  it "shows the delete button even if the svg_datasteam is empty" do
+    visit('http://localhost:3000/multiresimages/inu:dil-142f8a4d-0c42-4da5-b17d-662db3283d74')
+
+    expect(page).to have_content("Delete Image")
+  end
+
+
+
   it "does not create facets from subject display data" do
     visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
 
