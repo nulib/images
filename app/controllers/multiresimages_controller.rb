@@ -143,17 +143,15 @@ class MultiresimagesController < ApplicationController
 
 
   def show
-    if !params[:pid].nil?
+    unless params[:pid].nil?
       @collection = DILCollection.find(params[:pid])
-      if !params[:index].nil?
-        @index = params[:index]
-      else
-        @index = nil
-      end
-    else
-      @collection = nil
-      @index = nil
     end
+    unless params[:index].nil?
+      @index = params[:index]
+    end
+
+    @display_content_nav_elements = @collection.show_navigation_elements? && @index.present? && @collection.present?
+
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
 
