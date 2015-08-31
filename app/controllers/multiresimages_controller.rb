@@ -150,7 +150,7 @@ class MultiresimagesController < ApplicationController
       @index = params[:index]
     end
 
-    @display_content_nav_elements = @collection.show_navigation_elements? && @index.present? && @collection.present?
+    @display_content_nav_elements = @collection.present? && @collection.show_navigation_elements? && @index.present?
 
     @multiresimage = Multiresimage.find(params[:id])
     authorize! :read, @multiresimage
