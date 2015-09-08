@@ -10,16 +10,8 @@
 <div id="accordion" class="col-md-9">
 <% if can?(:edit, @collection) %>
   <span class="edit-browse">
-    <%= link_to "Delete", dil_collection_path(@collection), :method=>:delete, data: { confirm: "Delete this group?" } %>
+    <%= link_to "Delete Group", dil_collection_path(@collection), :method=>:delete, data: { confirm: "Delete this group?" } %>
 	<% if @collection.members %>
-
-    <% # We're disabling ppt export for right now %>
-    <% #if collection_size < 26 %>
-     <%#= link_to "Export to PowerPoint", url_options = {:controller=>"dil_collections", :action=> "export", :id=> @collection}, :method=>:post %>
-    <% #else %>
-      <% #| Export to PowerPoint disabled %>
-    <% # end %>
-
     | <% if @collection.read_groups.include? "registered" %> <%= link_to "Make this Group Private", url_options = {:controller=>"dil_collections", :action=> "make_private", :id=> @collection}, :method=>:post %> <% else %> <%= link_to "Make this Group Sharable", url_options = {:controller=>"dil_collections", :action=> "make_public", :id=> @collection}, :method=>:post %> <% end %>
     <% if @collection.read_groups.include? "registered" %>
 		|
@@ -40,6 +32,28 @@
       <% end %>
     <% end %></h2>
     <p>Number of images in collection: <%= collection_size %> / 25</p>
+    
+    <p>
+      <div class="row">
+        <div class="col-block col-md-6">
+        <% if collection_size < 26 %>
+          <%= link_to "/dil_collections/generate_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block", data: { disable_with: "Generating PowerPoint File... <span class='glyphicon glyphicon-cog' aria-hidden='true'></span>" } do %>
+            Generate PowerPoint File <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+          <% end %>
+        <% else %>
+          <%= link_to "/dil_collections/generate_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block", disabled: true do %>
+            Export to PowerPoint disbled <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+          <% end %>
+        <%  end %>
+        </div>
+        <div class="col-block col-md-6">
+          <%= link_to dil_collection_path(format: :pptx), class: "btn btn-default btn-block", disabled: true do %>
+            Download PowerPoint <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+          <% end %>
+        </div>
+      </div>
+    </p>
+
     <%= render :partial => 'dil_collections/members' %>
     <% end %>
 </div>

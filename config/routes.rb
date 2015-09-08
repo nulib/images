@@ -73,7 +73,7 @@ Rails.application.routes.draw do
   post "dil_collections/add/:id/:member_id" => "dil_collections#add"
   delete "dil_collections/remove/:id/:pid" => "dil_collections#remove"
   post "dil_collections/move/:id/:from_index/:to_index" => "dil_collections#move"
-  post "dil_collections/export/:id" => "dil_collections#export"
+  get "dil_collections/generate_powerpoint/:id" => "dil_collections#generate_powerpoint"
   post "dil_collections/add_to_batch_select/:id" => "dil_collections#add_to_batch_select" , :defaults => { :format => 'json' }
   post "dil_collections/remove_from_batch_select/:id" => "dil_collections#remove_from_batch_select" , :defaults => { :format => 'json' }
   post "dil_collections/make_private/:id" => "dil_collections#make_private"

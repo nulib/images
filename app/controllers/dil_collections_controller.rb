@@ -1,4 +1,5 @@
 require 'dil/pid_minter'
+require 'pry'
 
 class DilCollectionsController < ApplicationController
 
@@ -205,23 +206,25 @@ class DilCollectionsController < ApplicationController
   def show
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
+
+    respond_to do |format|
+      format.html
+    end
   end
 
-  def export
+  def generate_powerpoint
     @collection = DILCollection.find(params[:id])
     authorize! :update, @collection
 
-    export_xml = @collection.export_image_info_as_xml(current_user.email)
-    logger.debug("export_xml: " + export_xml)
-
-  	logger.debug("Before CGI call for export")
-  	post_args = {'xml' => export_xml}
-  	cgi_response = Net::HTTP.post_form(URI.parse(DIL_CONFIG['dil_ppt_cgi_url']), 'collection_xml' => export_xml).body
-  	logger.debug("After CGI call for export")
-  	logger.debug("response:" + cgi_response)
-
-    flash[:notice] = "Image Group exported.  Please check your Northwestern University email account for a link to your presentation."
+    @collection.delay.generate_powerpoint
+    
     redirect_to dil_collection_path(@collection)
+  end
+
+  def download_ppt
+    @collection = DILCollection.find(params[:id])
+
+    send_file(@collection.powerpoint)
   end
 
   # This will return a JSON string for all the subcollections of the collection
