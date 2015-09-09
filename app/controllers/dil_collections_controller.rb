@@ -7,6 +7,8 @@ class DilCollectionsController < ApplicationController
   include Blacklight::SolrHelper
   include DIL::PidMinter
 
+  after_action :delete_powerpoint, only: [:update, :add, :remove, :move]
+
   def create
     authorize!(:create, DILCollection)
 	  #make sure collection's name isn't a reserved name for Details collections
@@ -206,10 +208,6 @@ class DilCollectionsController < ApplicationController
   def show
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
-
-    respond_to do |format|
-      format.html
-    end
   end
 
   def generate_powerpoint
@@ -223,6 +221,7 @@ class DilCollectionsController < ApplicationController
 
   def download_powerpoint
     @collection = DILCollection.find(params[:id])
+    authorize! :show, @collection
 
     send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"
   end
@@ -371,6 +370,13 @@ class DilCollectionsController < ApplicationController
   # Catalog searching in dil_collections 
   def search_action_url
     url_for(controller: '/catalog', action: 'index', only_path: true)
+  end
+
+  private
+
+  def delete_powerpoint
+    @collection = DILCollection.find(params[:id])
+    @collection.powerpoint.delete if @collection.powerpoint.content.present?
   end
 
 end
