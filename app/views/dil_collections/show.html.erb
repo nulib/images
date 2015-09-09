@@ -47,7 +47,7 @@
         <%  end %>
         </div>
         <div class="col-block col-md-6">
-          <%= link_to dil_collection_path(format: :pptx), class: "btn btn-default btn-block", disabled: true do %>
+          <%= link_to "/dil_collections/download_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block" do %>
             Download PowerPoint <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
           <% end %>
         </div>

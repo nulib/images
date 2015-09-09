@@ -221,10 +221,10 @@ class DilCollectionsController < ApplicationController
     redirect_to dil_collection_path(@collection)
   end
 
-  def download_ppt
+  def download_powerpoint
     @collection = DILCollection.find(params[:id])
 
-    send_file(@collection.powerpoint)
+    send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"
   end
 
   # This will return a JSON string for all the subcollections of the collection
