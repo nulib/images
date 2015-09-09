@@ -274,4 +274,9 @@ class DILCollection < ActiveFedora::Base
       xml.text()
     end
   end
+
+  def show_navigation_elements?
+    self.members.find_by_terms(:mods, :type => "image").size > 1
+  end
+
 end

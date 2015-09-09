@@ -1,6 +1,9 @@
-<% if !@collection.nil? && @collection.multiresimages.size > 1 && !@index.nil? %>
+<% if @display_content_nav_elements  %>
+
 	<% prev_img = @collection.get_prev_img(@index) %>
 	<% next_img = @collection.get_next_img(@index) %>
+
+
 	<div id="photostream" class="photostream">
 	    <ul>
 	       <li pid="<%=prev_img[:pid]%>" title="<%=prev_img[:titleSet_display]%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=prev_img[:pid]%>/<%=prev_img[:index]%>"><img src="/multiresimages/get_image/<%= prev_img[:pid]%>/120" alt><br /> Previous</a></p>
