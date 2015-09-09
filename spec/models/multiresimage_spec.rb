@@ -96,7 +96,7 @@ EOF
 
     describe "#create_deliv_img_datastream" do
       it "populates the DELIV-IMG datastream" do
-        public_jp2 = "http://rs16.loc.gov/service/afc/afc1982009/afc1982009_br8-te45-10.jp2"
+        public_jp2 = "http://memory.loc.gov/service/gmd/gmd4/g4974/g4974s/ct001338.jp2"
         @m.create_deliv_img_datastream( public_jp2 )
         @m.save!
         expect( @m.datastreams[ "DELIV-IMG" ].content ).to_not be_nil
