@@ -63,7 +63,7 @@ function dropMe(theObj) {
 		 if (doReload) {
 		   location.reload();
 		 }
-	    },
+	  },
 
 		 error: function(msg){
 		 spinner.stop();
@@ -112,6 +112,10 @@ function dropMe(theObj) {
 				url: url,
 				async: false,
 				success: function(msg){
+					$('#download_powerpoint').hide();
+					$('#download_powerpoint').attr( "disabled", "disabled");
+					$('#generate_powerpoint').removeAttr( "disabled" );
+					$('#generate_powerpoint').show();
 				}
 				});//end ajax
 			}

@@ -31,25 +31,25 @@
         <%= f.submit "Update", :class => "btn" %>
       <% end %>
     <% end %></h2>
-    <p>Number of images in collection: <%= collection_size %> / 25</p>
     
     <p>
       <div class="row">
         <div class="col-block col-md-6">
-        <% if collection_size < 26 %>
-          <%= link_to "/dil_collections/generate_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block", data: { disable_with: "Generating PowerPoint File... <span class='glyphicon glyphicon-cog' aria-hidden='true'></span>" } do %>
-            Generate PowerPoint File <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+        <% if @collection.powerpoint.content.present? %>
+          <%= link_to dil_collection_path(format: :pptx), class: "btn btn-default btn-block", id: "download_powerpoint" do %>
+          Download PowerPoint <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+        <% end %>
+          <%= link_to "/dil_collections/generate_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block", id: "generate_powerpoint", remote: true, style: "display:none;" do %>
+              Generate PowerPoint File <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
           <% end %>
         <% else %>
-          <%= link_to "/dil_collections/generate_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block", disabled: true do %>
-            Export to PowerPoint disbled <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+          <%= link_to dil_collection_path(format: :pptx), class: "btn btn-default btn-block", id: "download_powerpoint", disabled: @collection.powerpoint.content.nil?, style: "display:none;" do %>
+          Download PowerPoint <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+        <% end %>
+          <%= link_to "/dil_collections/generate_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block", id: "generate_powerpoint", remote: true, disabled: @collection.powerpoint.content.present? do %>
+              Generate PowerPoint File <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
           <% end %>
-        <%  end %>
-        </div>
-        <div class="col-block col-md-6">
-          <%= link_to "/dil_collections/download_powerpoint/#{@collection.pid}", class: "btn btn-default btn-block" do %>
-            Download PowerPoint <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-          <% end %>
+        <% end %>
         </div>
       </div>
     </p>

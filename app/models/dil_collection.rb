@@ -137,7 +137,7 @@ class DILCollection < ActiveFedora::Base
   end
 
   def generate_powerpoint
-    # Instantiate PowerPoint::Presentation object
+    # Instantiate Powerpoint::Presentation object
     @deck = Powerpoint::Presentation.new
 
     # Track tmp_files so they can be deleted later on
@@ -147,7 +147,7 @@ class DILCollection < ActiveFedora::Base
 
     # Loop through DILCollection and generate pictorial slides for each image
     multiresimages.each do |image|
-      # PowerPoint slide title information
+      # Powerpoint slide title information
       title = image.pref_title
 
       # URL is provided as input to local_resource_from_url method
@@ -172,7 +172,7 @@ class DILCollection < ActiveFedora::Base
     end
 
     begin
-      # Save the PowerPoint Presentation file
+      # Save the Powerpoint Presentation file
       @deck.save(Rails.root.join("tmp","#{self.title}.#{Time.now.to_f}.pptx"))
       self.powerpoint.content = @deck.pptx_path
       self.powerpoint.mimeType = MIME::Types.type_for(@deck.pptx_path.basename.to_s).first.content_type

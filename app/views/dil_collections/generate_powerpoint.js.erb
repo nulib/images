@@ -1,0 +1,19 @@
+$('#generate_powerpoint').hide();
+$('#download_powerpoint').html('<%= escape_javascript("Generating PowerPoint File... <span class=\'glyphicon glyphicon-cog\' aria-hidden=\'true\'></span>").html_safe %>');
+$('#download_powerpoint').show();
+
+PowerpointPoller = {
+  poll: function(collection) {
+    setInterval(function(){
+      $.get( "powerpoint_check/" + collection, function( data ) {
+      if (data === "true") {
+        $('#download_powerpoint').html('<%= escape_javascript("Download PowerPoint <span class=\'glyphicon glyphicon-download-alt\' aria-hidden=\'true\'></span>").html_safe %>');
+        $('#download_powerpoint').removeAttr( "disabled" );
+        clearInterval();
+      }
+    })}, 1000);
+  }
+};
+
+var collection = $("#gallery_container").attr('pid');
+PowerpointPoller.poll(collection);

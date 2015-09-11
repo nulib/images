@@ -208,22 +208,44 @@ class DilCollectionsController < ApplicationController
   def show
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
+
+    respond_to do |format|
+      format.pptx {
+        if @collection.powerpoint.content.present?
+          send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"
+        else
+          redirect_to dil_collection_path(@collection), alert: "PowerPoint file doesn't exist"
+        end
+      }
+      format.html
+    end
   end
 
   def generate_powerpoint
     @collection = DILCollection.find(params[:id])
     authorize! :update, @collection
 
-    @collection.delay.generate_powerpoint
-    
-    redirect_to dil_collection_path(@collection)
+    Delayed::Job.enqueue GeneratePowerpointJob.new(@collection.pid)
   end
 
   def download_powerpoint
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
 
-    send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"
+    respond_to do |format|
+      format.pptx { send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"}
+    end
+  end
+
+  def powerpoint_check
+    @collection = DILCollection.find(params[:id])
+    authorize! :show, @collection
+
+    if @collection.powerpoint.content.present?
+      render text: true
+    else
+      render text: false
+    end
   end
 
   # This will return a JSON string for all the subcollections of the collection
