@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/benjaminwood/powerpoint.git
+  revision: 5c7506baefe89c6078e04108826f09d3b02bebc2
+  specs:
+    powerpoint (1.5)
+      fastimage (~> 1)
+      rubyzip (~> 1)
+
+GIT
   remote: https://github.com/mbklein/equivalent-xml.git
   revision: 1d1dc4919e120db599164fc81351913e2c62d11e
   specs:
@@ -153,6 +161,8 @@ GEM
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
     fastercsv (1.5.5)
+    fastimage (1.7.0)
+      addressable (~> 2.3, >= 2.3.5)
     ffi (1.9.8)
     gon (5.2.3)
       actionpack (>= 2.3.0)
@@ -237,6 +247,7 @@ GEM
       systemu (~> 2.6.2)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    method_source (0.8.2)
     mime-types (2.4.3)
     mini_exiftool (2.5.0)
     mini_portile (0.6.2)
@@ -271,6 +282,10 @@ GEM
     pg (0.18.2)
     protected_attributes (1.0.8)
       activemodel (>= 4.0.1, < 5.0)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     pyu-ruby-sasl (0.0.3.3)
     rack (1.5.2)
     rack-test (0.6.3)
@@ -490,7 +505,9 @@ DEPENDENCIES
   mini_exiftool
   omniauth-ldap
   pg
+  powerpoint!
   protected_attributes
+  pry
   rails (~> 4.1.0)
   rb-readline
   rspec-rails
@@ -506,4 +523,4 @@ DEPENDENCIES
   uuid
 
 BUNDLED WITH
-   1.10.5
+   1.10.6

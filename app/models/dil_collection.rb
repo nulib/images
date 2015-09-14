@@ -1,5 +1,6 @@
 require 'json'
 require 'dil/pid_minter'
+require 'pry'
 
 class DILCollection < ActiveFedora::Base
 
@@ -32,6 +33,9 @@ class DILCollection < ActiveFedora::Base
 
   has_attributes :title, datastream: :descMetadata, multiple: false
   has_attributes :owner, datastream: :members, multiple: false
+
+  # Has a PowerPoint file
+  has_file_datastream :name => "powerpoint", :label => "PowerPoint File"
 
   validates :title, :presence => true
 
@@ -116,48 +120,69 @@ class DILCollection < ActiveFedora::Base
     return export_xml
   end
 
-  # This is used by the Export to PowerPoint feature.
-  # It generates xml for each image in the collection
-  def export_image_info_as_xml(email)
-    export_xml = "<collection><email>#{email}</email>"
-    export_xml = get_collection_xml(self, export_xml)
-    export_xml << "</collection>"
-    export_xml = export_xml.gsub('&', '&amp;')
-    return export_xml
-  end
-
-  # This goes through the collection and builds the xml for each image.
-  # If the object in the collection is a collection, this method gets called recursively.
-  def get_collection_xml(collection, export_xml)
-    logger.debug("COLLECTION XML INCREMENT" << export_xml)
-    #for each member of the collection
-    collection.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
-      logger.debug("PID:" << pid)
+  def get_all_images(multiresimages)
+    self.members.find_by_terms(:mods, :relatedItem, :identifier).each do |pid|
       #get object from Fedora
       fedora_object = ActiveFedora::Base.find(pid.text, :cast=>:true)
 
       #if it's a collection, make call recursively
       if (fedora_object.instance_of?(DILCollection))
-       export_xml = get_collection_xml(fedora_object, export_xml)
+       multiresimages = fedora_object.get_all_images(multiresimages)
       #if it's an image, build the xml
       elsif (fedora_object.instance_of?(Multiresimage))
-
-        multiresimage = Multiresimage.find(pid.text)
-
-        src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
-        src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
-
-        max_size = src_width > src_height ? src_width > 950 ? 950 : src_width : src_height > 700 ? 700 : src_height
-
-        image_url = multiresimage.image_url(max_size)
-
-        logger.debug("PID: #{pid}")
-        export_xml << "<image><url>#{URI.parse(image_url)}</url><metadata></metadata></image>"
-        logger.debug("export_xml debug:" << export_xml)
+        multiresimages << Multiresimage.find(pid.text)
       end
     end
+    multiresimages
+  end
 
-   return export_xml
+  def generate_powerpoint
+    # Instantiate Powerpoint::Presentation object
+    @deck = Powerpoint::Presentation.new
+
+    # Track tmp_files so they can be deleted later on
+    tmp_file_list = []
+    multiresimages = []
+    multiresimages = self.get_all_images(multiresimages)
+
+    # Loop through DILCollection and generate pictorial slides for each image
+    multiresimages.each do |image|
+      # Powerpoint slide title information
+      title = image.pref_title
+
+      # URL is provided as input to local_resource_from_url method
+      max_size = 1000
+      url = image.image_url(max_size)
+
+      # Create a local representation of the remote resource
+      local_resource = LocalResource.new(URI.parse(url))
+
+      # Copy the remote file for processing
+      local_copy_of_remote_file = local_resource.file
+
+      # Set the image_path for the slide
+      image_path = local_copy_of_remote_file.path
+
+      # Add the slide to the Presentation
+      coords = set_coords(image_path)
+
+      @deck.add_pictorial_slide title, image_path, coords
+
+      tmp_file_list << local_copy_of_remote_file
+    end
+
+    begin
+      # Save the Powerpoint Presentation file
+      @deck.save(Rails.root.join("tmp","#{self.title}.#{Time.now.to_f}.pptx"))
+      self.powerpoint.content = @deck.pptx_path
+      self.powerpoint.mimeType = MIME::Types.type_for(@deck.pptx_path.basename.to_s).first.content_type
+      self.save
+    ensure
+      # Delete each tmp_file to tidy things up
+      tmp_file_list.each { |file| file.close }
+      tmp_file_list.each { |file| file.unlink }
+      File.delete(@deck.pptx_path) if File.exist?(@deck.pptx_path)
+    end
   end
 
 
@@ -277,6 +302,30 @@ class DILCollection < ActiveFedora::Base
 
   def show_navigation_elements?
     self.members.find_by_terms(:mods, :type => "image").size > 1
+  end
+
+
+  private
+
+  def set_coords(image_path)
+    return {} unless dimensions = FastImage.size(image_path)
+    slide_width = 720
+
+    src_width = dimensions[0].to_f
+    src_height = dimensions[1].to_f
+
+    max_size = 400
+
+    ratio = [ max_size / src_width , max_size / src_height ].min
+
+    dest_width = (src_width * ratio).to_i
+    dest_height = (src_height * ratio).to_i
+
+    {x: pixle_to_pt((slide_width / 2) - (dest_width / 2)), y: pixle_to_pt(120), cx: pixle_to_pt(dest_width), cy: pixle_to_pt(dest_height)}
+  end
+
+  def pixle_to_pt(px)
+    px * 12700
   end
 
 end

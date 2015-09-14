@@ -1,10 +1,13 @@
 require 'dil/pid_minter'
+require 'pry'
 
 class DilCollectionsController < ApplicationController
 
   include Blacklight::Catalog
   include Blacklight::SolrHelper
   include DIL::PidMinter
+
+  after_action :delete_powerpoint, only: [:update, :add, :remove, :move]
 
   def create
     authorize!(:create, DILCollection)
@@ -205,23 +208,44 @@ class DilCollectionsController < ApplicationController
   def show
     @collection = DILCollection.find(params[:id])
     authorize! :show, @collection
+
+    respond_to do |format|
+      format.pptx {
+        if @collection.powerpoint.content.present?
+          send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"
+        else
+          redirect_to dil_collection_path(@collection), alert: "PowerPoint file doesn't exist"
+        end
+      }
+      format.html
+    end
   end
 
-  def export
+  def generate_powerpoint
     @collection = DILCollection.find(params[:id])
     authorize! :update, @collection
 
-    export_xml = @collection.export_image_info_as_xml(current_user.email)
-    logger.debug("export_xml: " + export_xml)
+    Delayed::Job.enqueue GeneratePowerpointJob.new(@collection.pid)
+  end
 
-  	logger.debug("Before CGI call for export")
-  	post_args = {'xml' => export_xml}
-  	cgi_response = Net::HTTP.post_form(URI.parse(DIL_CONFIG['dil_ppt_cgi_url']), 'collection_xml' => export_xml).body
-  	logger.debug("After CGI call for export")
-  	logger.debug("response:" + cgi_response)
+  def download_powerpoint
+    @collection = DILCollection.find(params[:id])
+    authorize! :show, @collection
 
-    flash[:notice] = "Image Group exported.  Please check your Northwestern University email account for a link to your presentation."
-    redirect_to dil_collection_path(@collection)
+    respond_to do |format|
+      format.pptx { send_data @collection.powerpoint.content, type: "pptx", filename: "#{@collection.title}.pptx"}
+    end
+  end
+
+  def powerpoint_check
+    @collection = DILCollection.find(params[:id])
+    authorize! :show, @collection
+
+    if @collection.powerpoint.content.present?
+      render text: true
+    else
+      render text: false
+    end
   end
 
   # This will return a JSON string for all the subcollections of the collection
@@ -368,6 +392,13 @@ class DilCollectionsController < ApplicationController
   # Catalog searching in dil_collections 
   def search_action_url
     url_for(controller: '/catalog', action: 'index', only_path: true)
+  end
+
+  private
+
+  def delete_powerpoint
+    @collection = DILCollection.find(params[:id])
+    @collection.powerpoint.delete if @collection.powerpoint.content.present?
   end
 
 end

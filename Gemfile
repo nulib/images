@@ -36,7 +36,7 @@ source 'http://rubygems.org'
   gem 'uuid'
   gem 'hydra-ldap'
   gem 'high_voltage'
-
+  gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
 
 group :test do
   gem 'rspec-rails'
@@ -58,6 +58,7 @@ group :development, :remote_dev do
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'byebug'
+  gem 'pry'
 end
 
 group :staging do
