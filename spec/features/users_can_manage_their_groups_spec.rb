@@ -1,95 +1,19 @@
 require 'capybara/rspec'
 require 'rails_helper'
 require 'rake'
-
-# README: Run the rake hydra:fixtures:refresh command besides the db:test:prepare commands in order to have
-# images present. Also for now I just run it alone with the rspec spec/features/add_image_to_collection_spec.rb command.
-
-# You'll also need to have firefox 24 installed to run the tests, and make sure rails is running in another tab.
-# need a teardown that removes each image from collection after each test
-# 12/19 - using fixture data like "Marche" for search term; new gem for maintaining session among specific tests
-# you need a .env file with the credentials in it, in your root directory, also.
-
+require 'feature_utilities'
 
 Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
 
-# Utility functions
-
-def drag_n_drop(source, target)
-  source.drag_to(target)
-end
-
-def make_test_group(name)
-  within('#new_dil_collection') do
-    fill_in 'new_dil_collection_title', with: name
-    click_button('Create Group')
-  end
-end
-
-def add_images_to_test_group(name)
-  #add images to name (test group)
-  fill_in('q', with: "every man")
-  click_button('search')
-
-  #you need unique images
-  #this is the best way to reference the image element, because it doesn't contain a pid or url, and the link with caption is below it
-  source_li = page.find("#images li", match: :first)
-  source = source_li.find("img")
-  target = page.find('a', text: name)
-
-  drag_n_drop(source, target)
-
-  visit('http://localhost:3000/')
-
-  find_link('Creator').click
-  find_link('U.S. G.P.O.').click
-
-  source_li2 = page.find("#images li", match: :first)
-  source2 = source_li2.find("img")
-  target2 = page.find('a', :text => name)
-
-  drag_n_drop(source2, target2)
-
-  visit('http://localhost:3000/')
-
-  find_link('Work Type').click
-  find_link('Prints').click
-
-  source_li3 = page.find("#images li", match: :first)
-  source3 = source_li3.find("img")
-  target3 = page.find('a', :text => name)
-
-  drag_n_drop(source3, target3)
-end
-
-def delete_test_group(name)
-  # Delete test group
-  visit('http://localhost:3000/')
-  click_link(name, match: :first)
-  page.accept_confirm "Delete this group?" do
-    click_link "Delete"
-  end
-  expect(page).to have_content('Image Group deleted')
-end
-
-def remove_images_from_test_group(name)
-  visit('http://localhost:3000')
-  click_link(name)
-  all('.member-remove').each do |el|
-    click_link(el)
-  end
-end
-
-#Tests
 
 steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   before :all do
-    @driver = Capybara.default_driver
+    @driver = :rack_test
     visit('http://localhost:3000/users/sign_in')
     within("#new_user") do
-      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
-      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
+      fill_in 'username', :with => Rails.application.secrets["test_non_admin_id"]
+      fill_in 'password', :with => Rails.application.secrets["test_non_admin_password"]
     end
     click_button('signIn')
   end
@@ -107,7 +31,11 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     puts "Image Title: #{img_title}"
 
     # drag the first image result to the Test Group
-    drag_n_drop(first("#images > ul > li > a > img"), find_link('Test Group'))
+    test_group = find_link('Test Group')
+    img = find("#images > ul > li > a > img", match: :first)
+
+    drag_n_drop(img, test_group)
+
 
     click_link('Test Group')
     expect(page).to have_content(img_title)
@@ -115,7 +43,8 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     delete_test_group('Test Group')
   end
 
-  pending "lets a user export to PowerPoint" do
+  #changing the panding to x because pending executes most of this code anyway, creates but doesn't delete ppt group (of course).
+   xit "lets a user export to PowerPoint" do
     #DIL-4085
     visit('http://localhost:3000')
     make_test_group('PPT Group')
@@ -216,10 +145,13 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     click_link('Test Group')
 
-    #fix this:
+    #separating out some text processing because selenium can't get out of first gear:
+
     titles = page.all("#images:first-child > a:nth-child(2)")
-    first_title = titles[0].text.split[0..3].join(" ")
-    second_title = titles[1].text.split[0..3].join(" ")
+    first = titles[0].text
+    first_title = first.split[0..3].join(" ")
+    second = titles[1].text
+    second_title = second.split[0..3].join(" ")
 
     first('#images > a').click
 
@@ -317,90 +249,5 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
   #   image_present.should be_truthy
   # end
-
-end
-
-
-steps 'Logged-in Users can use Images to view Collections',  :js => true do
-  before :all do
-    @driver = Capybara.default_driver
-    visit('http://localhost:3000/users/sign_in')
-    within("#new_user") do
-      fill_in 'username', :with => Rails.application.secrets["test_user_id"]
-      fill_in 'password', :with => Rails.application.secrets["test_user_password"]
-    end
-    click_button('signIn')
-  end
-
-  it "shows a user with admin rights the delete button" do
-    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
-
-    expect(page).to have_content("Delete Image")
-  end
-
-  it "does not create facets from subject display data" do
-    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
-
-    #subject display fixture data - would be ideal to get this from fedora
-    expect(page).to have_content("World War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work ")
-
-
-    find('#logo a').click
-    find_link('Subject').click
-    find_link('more').click
-
-    terms_not_in_facets = true
-
-    next_link_exists = true
-
-    while next_link_exists do
-      begin
-        find_link('Next').click
-      rescue Capybara::ElementNotFound
-        next_link_exists = false
-      end
-        all('a').each do |a|
-          if a[:text].include?("War, 1939-1945--War work--United States--Posters ; War posters, American ; Defense work")
-            terms_not_in_facets = false
-          end
-        end
-    end
-
-    expect(terms_not_in_facets).to be_truthy
-
-  end
-
-end
-
-steps "Logged out users can use Images to",  :js => true do
-  it "lets you do a facets (narrowing) search" do
-    visit('http://localhost:3000')
-    find_link('Work Type').click
-    find_link('Prints').click
-    expect(page).to have_selector('.listing', count: 6)
-  end
-
-  it "lets you choose how many images you see in search results" do
-    visit('http://localhost:3000/catalog?utf8=%E2%9C%93&q=*')
-    click_button('Sort by Relevance')
-    find('.dropdown-menu').visible?
-  end
-
-  it "lets you choose the sort method for search results" do
-    visit('http://localhost:3000/catalog?utf8=%E2%9C%93&q=*')
-    click_button('10 per page')
-    find('.dropdown-menu').visible?
-  end
-
-  it "won't display 'add an image to a group' unless user is signed in" do
-    visit("http://localhost:3000/multiresimages/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60")
-
-    expect(page).to_not have_content("Add to Image Group")
-  end
-
-  it "does not show the delete button to a non-admin" do
-    visit('http://localhost:3000/multiresimages/inu:dil-af3c7e97-8fee-4a3d-8584-913fd3089c92')
-    expect(page).to_not have_content("Delete Image")
-  end
 
 end
