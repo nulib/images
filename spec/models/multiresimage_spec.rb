@@ -206,6 +206,11 @@ EOF
     it "other_related_works should be the others" do
       expect( @img.other_related_works ).to eq( [@work2, @work3] )
     end
+
+    it "should return nil if preferred_related_work_pid is empty" do
+      @img.preferred_related_work_pid = ""
+      expect (@img.preferred_related_work.nil?) == true
+    end
   end
 end
 

@@ -361,7 +361,7 @@ EOF
 
   def preferred_related_work
     return @preferred_related_work if @preferred_related_work
-    return nil unless preferred_related_work_pid
+    return nil unless preferred_related_work_pid.present?
 		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
   end
 
