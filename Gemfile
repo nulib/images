@@ -51,7 +51,6 @@ group :test do
 end
 
 group :development, :remote_dev do
-  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
   gem 'jettywrapper'
   gem 'sqlite3'
   gem 'better_errors'
@@ -61,13 +60,15 @@ group :development, :remote_dev do
   gem 'pry'
 end
 
-group :staging do
-  gem 'pg'
+group :development, :remote_dev, :staging do
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
 end
 
-group :production do
+group :staging, :production do
   gem 'pg'
   gem 'rb-readline'
+end
+
+group :production do
   gem 'google-analytics-rails'
 end
