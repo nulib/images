@@ -63,6 +63,7 @@ end
 
 group :staging do
   gem 'pg'
+  gem 'rb-readline'
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
 end
 
