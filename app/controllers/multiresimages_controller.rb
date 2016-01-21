@@ -101,25 +101,12 @@ class MultiresimagesController < ApplicationController
     logger.debug "multiresimages/create was just called with this from_menu param: #{params[:xml]}"
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
-        raise "An accession number is required" if params[:accession_nbr].blank?
-        raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+      #  raise "An accession number is required" if params[:accession_nbr].blank?
+      #  raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
         i.save
-
-        i.create_archv_techmd_datastream( params[:path] )
-        i.create_archv_exif_datastream( params[:path] )
-        i.create_deliv_techmd_datastream( params[:path] )
-        ImageMover.delay.move_jp2_to_ansel(i.jp2_img_name, i.jp2_img_path)
-        i.create_deliv_ops_datastream
-        i.create_deliv_img_datastream
-        i.create_archv_img_datastream
-        ImageMover.delay.move_tiff_to_repo( i.tiff_img_name, params[ :path ])
-        i.edit_groups = [ 'registered' ]
-        i.save!
-
-        j = Multiresimage.find( i.pid )
-        j.save!
-
+        puts "Images path #{params[:path]}"
+        i.create_datastreams_and_persist_image_files(params[:path])
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         # puts msg.backtrace.join("\n")
