@@ -7,7 +7,7 @@ Rails.application.configure do
   # and recreated between test runs.  Don't rely on the data there!
   config.cache_classes = false
   config.eager_load = false
-  
+
   # Log error messages when you accidentally call methods on nil.
   config.whiny_nils = true
 
@@ -42,6 +42,16 @@ Rails.application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.lograge.enabled = true
+
+  config.lograge.custom_options = lambda do |event|
+  params = event.payload[:params].reject do |k|
+    ['controller', 'action'].include? k
+  end
+
+  { "params" => params }
+  end  
 
   # For emailing exceptions that occur in the app
   # config.middleware.use ExceptionNotifier,

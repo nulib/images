@@ -13,7 +13,6 @@ source 'http://rubygems.org'
   gem 'devise'
   gem 'omniauth-ldap'
 
-  gem 'clamav'
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
@@ -64,10 +63,12 @@ end
 group :staging do
   gem 'pg'
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
+  gem 'lograge'
 end
 
 group :production do
   gem 'pg'
   gem 'rb-readline'
   gem 'google-analytics-rails'
+  gem 'lograge'
 end

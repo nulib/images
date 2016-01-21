@@ -43,6 +43,15 @@ Rails.application.configure do
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
+  config.lograge.enabled = true
+
+  config.lograge.custom_options = lambda do |event|
+  params = event.payload[:params].reject do |k|
+    ['controller', 'action'].include? k
+  end
+
+  { "params" => params }
+  end
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
