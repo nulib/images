@@ -7,10 +7,12 @@ include DIL::PidMinter
   end
 
   def create
-    xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{params[:job_number]}/[\d].xml" )
+    #this expects the xml files to be all numbers, will have to discuss with jen and nicole
+    xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{params[:job_number]}/[!jhove_output].xml" )
     xml_files.each do |xf|
       xml = nokogiri_doc = Nokogiri::XML(File.read( xf ))
       pid = mint_pid("dil")
+      #from_menu = true now has to be re-named.
       multiresimage = Multiresimage.new(pid: pid, vra_xml: xml.to_xml(), from_menu: true)
       multiresimage.save
       tif_path = File.file?(xf.gsub(/.xml/, '.tiff')) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
