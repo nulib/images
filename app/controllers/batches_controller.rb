@@ -7,7 +7,6 @@ include DIL::PidMinter
   end
 
   def create
-    #throw the whole thing in a background job
     Delayed::Job.enqueue CreateMultiresimagesBatchJob.new(params[:job_number])
     render :create
   end
