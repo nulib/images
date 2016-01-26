@@ -9,6 +9,7 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::AccessControls::Permissions
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
+  include VraValidator
 
   belongs_to :institutional_collection, :property=> :is_governed_by
 
@@ -114,7 +115,7 @@ class Multiresimage < ActiveFedora::Base
     work.update_relation_set(self.pid)
 
     # re-validate the newly updated vra
-    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
+    self.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
 
@@ -191,7 +192,7 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        MultiresimageHelper.validate_vra( vra.to_xml )
+        self.validate_vra( vra.to_xml )
         self.datastreams[ 'VRA' ].content = vra.to_xml
       else
         raise "not an image type"
