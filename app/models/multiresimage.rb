@@ -79,15 +79,15 @@ class Multiresimage < ActiveFedora::Base
     self.pref_relation = pref_title
   end
 
-  def create_datastreams_and_persist_image_files(path)
+  def create_datastreams_and_persist_image_files(path, batch=false)
     create_archv_techmd_datastream( path )
     create_archv_exif_datastream( path )
     create_deliv_techmd_datastream( path )
-    ImageMover.delay.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
+    batch ? ImageMover.move_jp2_to_ansel(jp2_img_name, jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
     create_deliv_ops_datastream
     create_deliv_img_datastream
     create_archv_img_datastream
-    ImageMover.delay.move_tiff_to_repo( tiff_img_name, :path)
+    batch ? ImageMover.move_tiff_to_repo( tiff_img_name, :path) : ImageMover.delay.move_tiff_to_repo( tiff_img_name, :path)
     edit_groups = [ 'registered' ]
     save!
 
