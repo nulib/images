@@ -22,10 +22,10 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
         bad_file_storage << result unless result.blank?
       end
       Delayed::Worker.logger.info("Bad files here: #{bad_file_storage}")
-      send_status_email("jennifer.lindner@northwestern.edu", job_number, bad_file_storage)
+      send_status_email(user_email, job_number, bad_file_storage)
 
     rescue StandardError => e
-      error("jennifer.lindner@northwestern.edu", e)
+      error(job_number, "jennifer.lindner@northwestern.edu", e)
     end
   end
 
@@ -38,9 +38,9 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
     BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
   end
 
-  def error(admin_email, exception)
+  def error(job_number, admin_email, exception)
     #send check to monitor
-    Delayed::Worker.logger.error("job caused error because #{exception}")
+    Delayed::Worker.logger.error("job #{job_number} caused error because #{exception}")
     BatchJobMailer.error_email(admin_email, exception).deliver
   end
 end

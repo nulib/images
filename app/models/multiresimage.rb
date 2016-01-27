@@ -98,9 +98,9 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find( pid )
       j.save!
     rescue StandardError => e
+      file_number.blank? ? "no file number" : file_number
       user_error_message = "#{file_number} had a problem: #{e}"
     end
-
     user_error_message
   end
 
