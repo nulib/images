@@ -7,7 +7,8 @@ include DIL::PidMinter
   end
 
   def create
-    Delayed::Job.enqueue CreateMultiresimagesBatchJob.new(params[:job_number])
+    user_email = current_user.email
+    Delayed::Job.enqueue CreateMultiresimagesBatchJob.new(params[:job_number], user_email)
     render :create
   end
 

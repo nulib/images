@@ -80,19 +80,28 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_datastreams_and_persist_image_files(path, batch=false)
-    create_archv_techmd_datastream( path )
-    create_archv_exif_datastream( path )
-    create_deliv_techmd_datastream( path )
-    batch ? ImageMover.move_jp2_to_ansel(jp2_img_name, jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
-    create_deliv_ops_datastream
-    create_deliv_img_datastream
-    create_archv_img_datastream
-    batch ? ImageMover.move_tiff_to_repo( tiff_img_name, :path) : ImageMover.delay.move_tiff_to_repo( tiff_img_name, :path)
-    edit_groups = [ 'registered' ]
-    save!
+    file = path.split("/").last
+    file_number = file.split(".tif").first
+    user_error_message = ""
+    begin
+      create_archv_techmd_datastream( path )
+      create_archv_exif_datastream( path )
+      create_deliv_techmd_datastream( path )
+      batch ? user_error_message = ImageMover.move_jp2_to_ansel(jp2_img_name, jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
+      create_deliv_ops_datastream
+      create_deliv_img_datastream
+      create_archv_img_datastream
+      batch ? user_error_message = ImageMover.move_tiff_to_repo( tiff_img_name, :path) : ImageMover.delay.move_tiff_to_repo( tiff_img_name, :path)
+      edit_groups = [ 'registered' ]
+      save!
 
-    j = Multiresimage.find( pid )
-    j.save!
+      j = Multiresimage.find( pid )
+      j.save!
+    rescue StandardError => e
+      user_error_message = "#{file_number} had a problem: #{e}"
+    end
+
+    user_error_message
   end
 
   def create_vra_work(vra, current_user=nil)
