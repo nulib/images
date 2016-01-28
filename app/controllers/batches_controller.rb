@@ -16,8 +16,10 @@ class BatchesController < ApplicationController
     job_number = params.fetch(:job_number) # "123345"
     @errors = validate_job(job_number)
 
+
     if @errors[:invalid_job_number].present? || @errors[:vra_errors].any? || @errors[:match_errors].any? || @errors[:invalid_file_names].any?
-      respond_with @errors
+      puts "hi i am #{@errors} but i don't know how to respond"
+      respond_with @errors, location: batches_path
     else
       user_email = current_user.email
       Delayed::Job.enqueue CreateMultiresimagesBatchJob.new(job_number, user_email)
