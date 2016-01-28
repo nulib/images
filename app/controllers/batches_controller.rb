@@ -18,9 +18,8 @@ class BatchesController < ApplicationController
     if @errors[:invalid_job_number].present? || @errors[:vra_errors].any? || @errors[:match_errors].any? || @errors[:invalid_file_names].any?
       respond_with @errors
     else
-      Delayed::Job.enqueue CreateMultiresimagesBatchJob.new(job_number) if current_user.admin?
-      flash[:success] = "Congratulations, the batch is processing!"
-      flash.keep(:success)
+      user_email = current_user.email
+      Delayed::Job.enqueue CreateMultiresimagesBatchJob.new(job_number, user_email)
       render :js => "window.location = #{root_path.to_json}"
     end
   end

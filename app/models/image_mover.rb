@@ -35,8 +35,10 @@ class ImageMover < ActiveRecord::Base
 
       logger.debug DIL_CONFIG[ 'repo_server' ]
       logger.debug DIL_CONFIG[ 'repo_ssh_user' ]
-      scp_mover( server: DIL_CONFIG['repo_server'], user: DIL_CONFIG[ 'repo_ssh_user' ], local_img_path: tiff_img_path, remote_img_path: repo_location )
+      status = scp_mover( server: DIL_CONFIG['repo_server'], user: DIL_CONFIG[ 'repo_ssh_user' ], local_img_path: tiff_img_path, remote_img_path: repo_location )
+      status
     end
+
   end
 
 
@@ -49,6 +51,6 @@ class ImageMover < ActiveRecord::Base
     `scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
     logger.debug $?
     logger.debug "UPLOADING COMPLETE"
+    $?
   end
 end
-
