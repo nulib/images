@@ -1,67 +1,9 @@
-<style>
-td:nth-child(2){
-  border-left: solid 1px #ddd;
-  border-right: solid 1px #ddd;
-}
-table{
-  border: solid 1px #ddd;
-}
-
-tr{
-  height:37px;
-}
-
-.form-control.mini-form {
-    display: inline;
-    width: 10%;
-}
-</style>
-
-
-
-<div class="form-group" id="option_a">
-  <%= form_tag({controller: "batches", action: "create"}, method: "post") do %>
-  <div class="field">
-    <%= text_field_tag "job_number", nil, placeholder: "Job Number", size: 15, class: "form-control mini-form" %>
-    <span class="actions">
-      <%= submit_tag "Create Image Records", {:class => 'btn btn-info'}%>
-    </span>
+<%= form_tag({controller: "batches", action: "create"}, method: "post", class: 'form-inline', remote: true) do %>
+<div class="field">
+  <div class="form-group">
+    <label for="job_number">Enter Job Number</label>
+    <%= text_field_tag "job_number", nil, placeholder: "Job Number", size: 15, class: "form-control" %>
   </div>
-<% end %>
+  <%= submit_tag "Create Image Records", {:class => 'btn btn-info'}%>
 </div>
-
-  <table class="table table-striped breathing-room">
-    <thead>
-      <tr>
-        <th id="filename_status">Invalid Filename <span class="glyphicon glyphicon-remove"></span></th>
-        <th id="vra_status">Invalid VRA <span class="glyphicon glyphicon-remove"></span></th>
-        <th id="one_to_one_status">Missing XML or TIFF <span class="glyphicon glyphicon-remove"></span></th>
-      </tr>
-    </thead>
-    <tbody>
-      <%= render "rows" %>
-    </tbody>
-  </table>
-
-
-
-<script>
-$(function(){
-  $(".glyphicon.glyphicon-remove").hide();
-  $(".filenames").hide();
-  $(".files").hide();
-  $(".vra").hide();
-  $(".one_to_one").hide();
-
-  $("#option_a form").submit(function( event ) {
-    //use job number to get each xml file and put it in hash? with js?
-    $("#filename_status").css("color", "red").show();
-    $("#vra_status").css("color", "red").show();
-    $(".one_to_one").show();
-    $(".vra").show();
-    $(".files").show();
-
-    //event.preventDefault();
-  });
-});
-</script>
+<% end %>

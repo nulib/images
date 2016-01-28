@@ -15,7 +15,6 @@ module VraValidator
       next if err =~ /is not a valid value of the atomic type 'xs:ID'/
       raise
     end
-    true
   end
 
   def valid_vra?(vra)

@@ -1,0 +1,74 @@
+<% @invalid_job_number = errors.fetch(:invalid_job_number) %>
+<% @invalid_file_names = errors.fetch(:invalid_file_names) %>
+<% @vra_errors = errors.fetch(:vra_errors) %>
+<% @match_errors = errors.fetch(:match_errors) %>
+
+<% if @invalid_job_number.present? %>
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Invalid Job Number</h3>
+    </div>
+    <div class="panel-body">
+      Hi there, it looks like the job "<%= @invalid_job_number %>" does not exist in the dropbox. Please double-check to make sure you entered the correct job number.
+    </div>
+<% end %>
+
+<% if @invalid_file_names.any? %>
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Invalid File Names</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <th>Filenames</th>
+        </thead>
+        <% @invalid_file_names.each do |file_name| %>
+          <tr>
+            <td><%= File.basename(file_name) %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<% if @match_errors.any? %>
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Missing Corresponding XML or TIFF</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <th>Filenames</th>
+        </thead>
+        <% @match_errors.each do |file_name| %>
+          <tr>
+            <td><%= File.basename(file_name) %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<% if @vra_errors.any? %>
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">VRA Validation Errors</h3>
+    </div>
+    <div class="panel-body">
+      <table class="table">
+        <thead>
+          <th>Filenames</th>
+        </thead>
+        <% @vra_errors.each do |file_name| %>
+          <tr>
+            <td><%= File.basename(file_name) %></td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+<% end %>
