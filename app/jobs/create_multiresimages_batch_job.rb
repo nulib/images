@@ -21,27 +21,17 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
 
         bad_file_storage << result unless result.blank?
       end
-
+      
       Delayed::Worker.logger.info("Bad files here: #{bad_file_storage}")
-      send_status_email(user_email, job_number, bad_file_storage)
+      BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
 
     rescue StandardError => e
-      send_error_email(job_number, "jennifer.lindner@northwestern.edu", e)
+      BatchJobMailer.error_email(job_number, admin_email, exception).deliver
     end
   end
 
   def success(job)
     Delayed::Worker.logger.info("Success #{job} is just fine that's great sweet")
-  end
-
-  def send_status_email(user_email, job_number, bad_file_storage)
-    #when updating to rails 4.2 switch to .deliver_now
-    BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
-  end
-
-  def send_error_email(job_number, admin_email, exception)
-    #send check to monitor
-    BatchJobMailer.error_email(job_number, admin_email, exception).deliver
   end
 
   def error(job, exception)
