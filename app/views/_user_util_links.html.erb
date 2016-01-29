@@ -1,10 +1,11 @@
 <div id="top-menu-links">
 <% if current_user %>
-  
-    <%= link_to "Log Out", destroy_user_session_path %> [<%= link_to current_user.to_s, edit_user_registration_path %>]
+  <%= link_to "Log Out", destroy_user_session_path %> [<%= link_to current_user.to_s, edit_user_registration_path %>]
 <% else %>
-    <%= link_to 'Login', new_user_session_path %> 
+  <%= link_to 'Login', new_user_session_path %> 
 <% end %>
-			|
-	<%= link_to 'Help', page_path('help') %>
+ | <%= link_to 'Help', page_path('help') %>
+<% if current_user && current_user.admin? %>
+   | <%= link_to "Batch Import", batches_path %>
+<% end %>
 </div>

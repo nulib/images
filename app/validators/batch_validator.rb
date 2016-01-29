@@ -50,7 +50,7 @@ module BatchValidator
   end
 
   def get_vra_files(job_dir)
-    Dir.glob(job_dir + "*[!jhove_output].xml", File::FNM_CASEFOLD).sort
+    Dir.glob(job_dir + "*.xml", File::FNM_CASEFOLD).sort
   end
 
   def get_basenames(file_list)
