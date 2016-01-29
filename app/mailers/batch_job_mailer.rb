@@ -12,6 +12,6 @@ class BatchJobMailer < ApplicationMailer
 
     def error_email(job_number, admin_email, exception)
     @body = "Hello, the job #{job_number} failed."
-    mail(to:"#{admin_email},jennifer.lindner@northwestern.edu", from: "Brendan-Quinn@northwestern.edu", subject: "Job #{job_numbers} didn't make it", body: @body)
+    mail(to:"#{admin_email},jennifer.lindner@northwestern.edu", from: "Brendan-Quinn@northwestern.edu", subject: "Job #{job_number} didn't make it", body: @body)
   end
 end
