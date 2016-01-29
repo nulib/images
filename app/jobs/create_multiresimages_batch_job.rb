@@ -5,7 +5,6 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
 
   def perform
     begin
-    #this expects the xml files to be all numbers, will have to discuss with jen and nicole
     xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
     good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
     bad_file_storage = []
@@ -21,7 +20,7 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
 
         bad_file_storage << result unless result.blank?
       end
-      
+
       Delayed::Worker.logger.info("Bad files here: #{bad_file_storage}")
       BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
 
