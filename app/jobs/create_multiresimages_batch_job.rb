@@ -25,7 +25,7 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
       BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
 
     rescue StandardError => e
-      BatchJobMailer.error_email(job_number, admin_email, exception).deliver
+      BatchJobMailer.error_email(job_number, e).deliver
     end
   end
 
