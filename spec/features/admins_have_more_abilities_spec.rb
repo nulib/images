@@ -31,12 +31,4 @@ steps 'admins have abilities', :js => true  do
     expect(page).to have_content("Delete Image")
   end
 
-  it "lets admins batch publish multiresimages if a jobnumber is provided" do
-    pending
-  end
-
-  it "shows admins validation errors before batch publishing multiresimages" do
-    pending
-  end
-
 end

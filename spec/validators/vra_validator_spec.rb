@@ -20,22 +20,22 @@ RSpec.describe VraValidator do
 
   context "validation" do
     describe "with invalid vra" do
-      xit "should fail" do
+      it "should fail" do
         expect( @dummy_class.valid_vra?( File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal_invalid.xml").read )).to be_falsey
       end
     end
 
     describe "with valid vra" do
-      xit "should pass" do
+      it "should pass" do
         expect( @dummy_class.validate_vra( File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal.xml").read )).to be_truthy
       end
     end
 
-    describe "with valid vra" do
-      it "should pass" do
-        expect( @dummy_class.validate_vra( File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal_invalid.xml").read )).to be_truthy
-      end
-    end
+    # describe "with valid vra" do
+    #   it "should pass" do
+    #     expect( @dummy_class.validate_vra( File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal_invalid.xml").read )).to be_truthy
+    #   end
+    # end
   end
 
 end
