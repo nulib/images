@@ -281,6 +281,8 @@ GEM
       omniauth (~> 1.0)
       pyu-ruby-sasl (~> 0.0.3.1)
       rubyntlm (~> 0.1.1)
+    openseadragon (0.2.1)
+      rails (> 3.2.0)
     orm_adapter (0.5.0)
     pg (0.18.2)
     protected_attributes (1.0.8)
@@ -358,6 +360,8 @@ GEM
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
+    riiif (0.2.0)
+      rails (> 3.2.0)
     rsolr (1.0.10)
       builder (>= 2.1.2)
     rspec (3.1.0)
@@ -507,12 +511,14 @@ DEPENDENCIES
   lograge
   mini_exiftool
   omniauth-ldap
+  openseadragon
   pg
   powerpoint!
   protected_attributes
   pry
   rails (~> 4.1.0)
   rb-readline
+  riiif
   rspec-rails
   rspec-steps
   rufus-scheduler

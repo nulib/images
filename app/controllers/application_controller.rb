@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  helper Openseadragon::OpenseadragonHelper
 layout "images"
 
   rescue_from CanCan::AccessDenied do |exception|

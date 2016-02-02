@@ -36,6 +36,8 @@ source 'http://rubygems.org'
   gem 'hydra-ldap'
   gem 'high_voltage'
   gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
+  gem 'riiif'
+  gem 'openseadragon'
 
 group :test do
   gem 'rspec-rails'

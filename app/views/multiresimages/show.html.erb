@@ -5,9 +5,11 @@
 <br />
 
 <%= render :partial=>'downloads' %>
-<%= render :partial => 'multiresimages/crop' %>
+
+<div id="osdViewer" class="openseadragon" style='width:100%;height:600px;'>
+  <%= openseadragon_picture_tag(["/image-service/#{@multiresimage.pid}/info.json"]) %>
+</div>
+
 <%= render :partial => 'multiresimages/photostream' %>
 <%= render :partial => 'multiresimages/show_description' %>
 <div class="modal-collection"></div>
-
-
