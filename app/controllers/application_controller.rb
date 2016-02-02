@@ -15,9 +15,27 @@ layout "images"
 
   end
 
-  rescue_from ActiveRecord::RecordNotFound do |exception|
-    render :file => "#{Rails.root}/public/404", :status => 404, :layout => false
+  def ouch
+    raise 
   end
+
+  def page_not_found
+    respond_to do |format|
+      format.html { render template: 'errors/not_found_error', status: 404 }
+      format.all  { render nothing: true, status: 404 }
+    end
+  end
+
+  def server_error
+    respond_to do |format|
+      format.html { render template: 'errors/internal_server_error', status: 500 }
+      format.all  { render nothing: true, status: 500}
+    end
+  end
+
+  # rescue_from ActiveRecord::RecordNotFound do |exception|
+  #   render :file => "#{Rails.root}/public/404", :status => 404, :layout => false
+  # end
 
 
   # Adds a few additional behaviors into the application controller

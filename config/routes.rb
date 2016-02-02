@@ -6,6 +6,12 @@ Rails.application.routes.draw do
     mount AboutPage::Engine => '/about(.:format)'
   end
 
+  if Rails.env.production?
+     get '404', :to => 'application#page_not_found'
+     get '422', :to => 'application#server_error'
+     get '500', :to => 'application#server_error'
+  end
+
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   get "/multiresimages/get_vra/", to: "multiresimages#get_vra"
