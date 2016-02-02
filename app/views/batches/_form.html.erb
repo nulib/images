@@ -1,0 +1,9 @@
+<%= form_tag({controller: "batches", action: "create"}, method: "post", class: 'form-inline', remote: true) do %>
+<div class="field">
+  <div class="form-group">
+    <label for="job_number">Enter Job Number</label>
+    <%= text_field_tag "job_number", nil, placeholder: "Job Number", size: 15, class: "form-control" %>
+  </div>
+  <%= submit_tag "Create Image Records", {:class => 'btn btn-info'}%>
+</div>
+<% end %>

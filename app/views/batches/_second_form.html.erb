@@ -1,0 +1,54 @@
+<style>
+td:nth-child(1){
+
+  border-right: solid 1px #ddd;
+}
+
+td:nth-child(3){
+  border-left: solid 1px #ddd;
+  border-right: solid 1px #ddd;
+}
+
+table{
+  border: solid 1px #ddd;
+}
+</style>
+
+<div class="form-group" id="option_b">
+  <%= form_for(@new_batch) do |f| %>
+  <div class="field">
+    <%= f.text_field :job_number, placeholder: "Job Number", class: "form-control mini-form" %>  <span class="actions">    <%= f.submit "Create Image Records", {:class => 'btn btn-info'}%> </span>
+  </div>
+<% end %>
+</div>
+
+  <table class="table table-striped breathing-room">
+    <thead>
+      <tr>
+        <th id="files">Files</th>
+        <th id="filename_status" class="error_icon">Invalid Filename</th>
+        <th id="vra_status" class="error_icon">Invalid VRA</th>
+        <th id="one_to_one_status" class="error_icon">Missing XML or TIFF</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render 'second_rows' %>
+    </tbody>
+  </table>
+
+
+
+<script>
+$(function(){
+  $(".filenames").css("display", "inline");
+  $("td.error_icon").css("text-align", "center");
+  $("th.error_icon").css("text-align", "center");
+  $(".glyphicon.glyphicon-remove").hide();
+  $("#option_b form").submit(function( event ) {
+    $(".filenames .glyphicon.glyphicon-remove").css("color", "red").show();
+    $(".vra .glyphicon.glyphicon-remove").css("color", "red").show();
+    $(".one_to_one .glyphicon.glyphicon-remove").css("color", "red").show();
+    event.preventDefault();
+  });
+});
+</script>

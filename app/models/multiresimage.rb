@@ -9,6 +9,7 @@ class Multiresimage < ActiveFedora::Base
   include Hydra::AccessControls::Permissions
   include Rails.application.routes.url_helpers
   include DIL::PidMinter
+  include VraValidator
 
   belongs_to :institutional_collection, :property=> :is_governed_by
 
@@ -79,6 +80,31 @@ class Multiresimage < ActiveFedora::Base
     self.pref_relation = pref_title
   end
 
+  def create_datastreams_and_persist_image_files(path, batch=false)
+    file = path.split("/").last
+    file_number = file.split(".tif").first
+    user_error_message = ""
+    begin
+      create_archv_techmd_datastream( path )
+      create_archv_exif_datastream( path )
+      create_deliv_techmd_datastream( path )
+      batch ? user_error_message = ImageMover.move_jp2_to_ansel(jp2_img_name, jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
+      create_deliv_ops_datastream
+      create_deliv_img_datastream
+      create_archv_img_datastream
+      batch ? user_error_message = ImageMover.move_tiff_to_repo( tiff_img_name, :path) : ImageMover.delay.move_tiff_to_repo( tiff_img_name, :path)
+      edit_groups = [ 'registered' ]
+      save!
+
+      j = Multiresimage.find( pid )
+      j.save!
+    rescue StandardError => e
+      file_number.blank? ? "no file number" : file_number
+      user_error_message = "#{file_number} had a problem: #{e}"
+    end
+    user_error_message
+  end
+
   def create_vra_work(vra, current_user=nil)
     work = Vrawork.new(pid: mint_pid("dil"))
 
@@ -98,7 +124,7 @@ class Multiresimage < ActiveFedora::Base
     work.update_relation_set(self.pid)
 
     # re-validate the newly updated vra
-    MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
+    self.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
 
@@ -175,7 +201,7 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        MultiresimageHelper.validate_vra( vra.to_xml )
+        self.validate_vra( vra.to_xml )
         self.datastreams[ 'VRA' ].content = vra.to_xml
       else
         raise "not an image type"
