@@ -15,8 +15,8 @@ layout "images"
 
   end
 
-  def ouch
-    raise 
+  def test500
+    raise
   end
 
   def page_not_found
