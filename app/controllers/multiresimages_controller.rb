@@ -101,8 +101,8 @@ class MultiresimagesController < ApplicationController
     logger.debug "multiresimages/create was just called with this from_menu param: #{params[:xml]}"
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
-      #  raise "An accession number is required" if params[:accession_nbr].blank?
-      #  raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+        raise "An accession number is required" if params[:accession_nbr].blank?
+        raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
         i.save
         puts "Images path #{params[:path]}"
@@ -114,7 +114,7 @@ class MultiresimagesController < ApplicationController
         # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
         # Delete the work and image if creation fails
         if i
-          logger.debug "Deleting work and image..."
+          logger.debug "Deleting work and image because #{msg}"
           i.vraworks.first.delete if i.vraworks.first
           i.delete
         end
