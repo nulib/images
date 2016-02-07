@@ -30,7 +30,7 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
   end
 
   def success(job)
-    Delayed::Worker.logger.info("Success #{job} is just fine that's great sweet")
+    Delayed::Worker.logger.info("Success #{job.inspect} is just fine that's great sweet")
   end
 
   def error(job, exception)
