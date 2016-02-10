@@ -82,6 +82,8 @@ class Multiresimage < ActiveFedora::Base
 
   def create_datastreams_and_persist_image_files(path, batch=false)
     file = path.split("/").last
+    tif_path = File.dirname(path)
+
     file_number = file.split(".tif").first
     create_and_persist_status = true
 
