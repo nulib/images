@@ -16,7 +16,8 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
 
         multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml.to_xml(), from_menu: true)
         multiresimage.save
-        tif_path = File.file?(xf.gsub(/.xml/, '.tiff')) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
+        test_tif = xf.gsub(/.xml/, '.tiff')
+        tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
         path = File.dirname(tif_path)
         renamed_tif = File.rename(tif_path, "#{path}/#{multiresimage.tiff_img_name}")
         logger.debug "am i properly renamed? #{renamed_tif}"
