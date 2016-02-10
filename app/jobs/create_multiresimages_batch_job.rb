@@ -19,9 +19,9 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
         test_tif = xf.gsub(/.xml/, '.tiff')
         tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
         path = File.dirname(tif_path)
-        renamed_tif = File.rename(tif_path, "#{path}/#{multiresimage.tiff_img_name}")
-        Delayed::Worker.logger.debug "am i properly renamed? #{renamed_tif}"
-        result = multiresimage.create_datastreams_and_persist_image_files(renamed_tif, batch=true)
+        File.rename(tif_path, "#{path}/#{multiresimage.tiff_img_name}")
+        Delayed::Worker.logger.debug "what is this path for new tiff: #{path}/#{multiresimage.tiff_img_name}"
+        result = multiresimage.create_datastreams_and_persist_image_files("#{path}/#{multiresimage.tiff_img_name}", batch=true)
         bad_file_storage << result unless result == true
       end
 
