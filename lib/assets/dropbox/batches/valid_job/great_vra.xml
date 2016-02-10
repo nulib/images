@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vra:vra xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:rdf="http://www.w3.org/1999
+/02/22-rdf-syntax-ns#" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.loc.gov/standards/vracore/vra-strict.xsd">
+   <vra:image>
+       <!--Agents-->
+       <vra:agentSet><vra:display>Mo Agents Mo Problems</vra:display>
+         <vra:agent>
+             <vra:name type="personal" vocab="lcnaf">Mo Agents Mo Problems</vra:name>
+             <vra:attribution/>
+             <vra:role vocab="RDA"/>
+         </vra:agent>
+       </vra:agentSet>
+       <!--Cultural Context-->
+       <vra:culturalContextSet><vra:display/>
+           <vra:culturalContext/>
+       </vra:culturalContextSet>
+       <!--Dates-->
+       <vra:dateSet>
+           <vra:display/>
+           <vra:date type="creation">
+               <vra:earliestDate>2014</vra:earliestDate>
+           </vra:date>
+       </vra:dateSet>
+      <!--Description-->
+      <vra:descriptionSet><vra:display/>
+          <vra:description/>
+      </vra:descriptionSet>
+      <!--Inscription-->
+      <vra:inscriptionSet><vra:display/>
+          <vra:inscription>
+              <vra:text/>
+          </vra:inscription>
+      </vra:inscriptionSet>
+      <!--Location-->
+      <vra:locationSet><vra:display>Accession:modinia</vra:display>
+          <vra:location type="creation">
+              <vra:name type="geographic"/>
+          </vra:location>
+          <vra:location type="repository">
+              <vra:name type="geographic"/>
+          </vra:location>
+          <vra:location>
+              <vra:refid source="DIL"/><vra:refid source="Accession">modinia</vra:refid>
+          </vra:location>
+      </vra:locationSet>
+      <!--Materials-->
+      <vra:materialSet><vra:display/>
+          <vra:material/>
+      </vra:materialSet>
+      <!--Measurements-->
+      <vra:measurementsSet><vra:display/>
+          <vra:measurements/>
+      </vra:measurementsSet>
+      <!--Relation-->
+      <vra:relationSet><vra:display/>
+          <vra:relation pref="true" type="imageOf" relids=""/>
+      </vra:relationSet>
+      <!--Rights-->
+      <vra:rightsSet><vra:display/>
+          <vra:rights>
+              <vra:rightsHolder/>
+              <vra:text/>
+          </vra:rights>
+      </vra:rightsSet>
+      <!-- Source -->
+      <vra:sourceSet><vra:display/>
+          <vra:source/>
+      </vra:sourceSet>
+      <!--Style Period-->
+      <vra:stylePeriodSet><vra:display/>
+          <vra:stylePeriod/>
+      </vra:stylePeriodSet>
+      <!--Subjects-->
+      <vra:subjectSet>
+          <vra:display/>
+          <vra:subject>
+              <vra:term type="geographicPlace" vocab="lcnaf"/>
+          </vra:subject>
+          <vra:subject>
+              <vra:term type="personalName" vocab="lcnaf"/>
+          </vra:subject>
+          <vra:subject>
+              <vra:term type="personalName" vocab="lcnaf"/>
+          </vra:subject>
+          <vra:subject>
+              <vra:term type="otherTopic"/>
+          </vra:subject>
+          <vra:subject>
+              <vra:term type="descriptiveTopic" vocab="lcsh"/>
+          </vra:subject>
+      </vra:subjectSet>
+      <!--Technique-->
+      <vra:techniqueSet><vra:display/>
+          <vra:technique/>
+      </vra:techniqueSet>
+      <!--Textref-->
+      <vra:textrefSet><vra:display/>
+          <vra:textref/>
+      </vra:textrefSet>
+      <!-- Titles -->
+      <vra:titleSet><vra:display>Hello Titles</vra:display>
+          <vra:title pref="true">Hello Titles</vra:title>
+      </vra:titleSet>
+      <!--Work Type-->
+      <vra:worktypeSet><vra:display/>
+          <vra:worktype/>
+      </vra:worktypeSet>
+      </vra:image>
+<vra:work/>
+</vra:vra>
