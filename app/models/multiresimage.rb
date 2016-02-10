@@ -95,7 +95,7 @@ class Multiresimage < ActiveFedora::Base
       self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
-      batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, :path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, :path)
+      batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
       self.edit_groups = [ 'registered' ]
       self.save!
 
