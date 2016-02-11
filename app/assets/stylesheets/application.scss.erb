@@ -11,6 +11,6 @@
 @import 'blacklight/blacklight';
 @import 'blacklight_overrides';
 
-<% unless Rails.env.production? %>
+<% if Rails.env.staging? or Rails.env.remote_dev? %>
 @import 'about_page';
 <% end %>
