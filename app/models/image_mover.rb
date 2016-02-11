@@ -27,7 +27,7 @@ class ImageMover < ActiveRecord::Base
     Delayed::Worker.logger.debug tiff_img_name
     Delayed::Worker.logger.debug tiff_img_path
 
-    if Rails.env == "development"
+    if Rails.env == "development" or Rails.env == "test"
       Delayed::Worker.logger.debug "assume the tiff image was successfully moved"
     else
       repo_location = "#{ DIL_CONFIG[ 'repo_location' ]}#{ tiff_img_name }"

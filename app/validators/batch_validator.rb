@@ -1,6 +1,6 @@
 module BatchValidator
   def validate_job(job_number)
-    job_dir = "#{DIL_CONFIG['batch_dir']}/#{job_number}"
+    job_dir = "#{DIL_CONFIG['batch_dir']}/#{job_number}/"
     vra_files = get_vra_files(job_dir)
     image_files = get_image_files(job_dir)
     all_files = vra_files + image_files
