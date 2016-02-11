@@ -8,7 +8,7 @@ class ImageMover < ActiveRecord::Base
     logger.debug jp2_img_name
     logger.debug jp2_img_path
 
-    if Rails.env == "development"
+    if Rails.env == "development" or Rails.env == "test"
       puts "assume the jp2 image was successfully moved"
     else
       #sleep( 10 )
