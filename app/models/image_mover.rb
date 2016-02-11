@@ -41,8 +41,6 @@ class ImageMover < ActiveRecord::Base
 
   end
 
-
-
   private
 
   def self.scp_mover( options )
