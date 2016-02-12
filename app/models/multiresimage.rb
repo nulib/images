@@ -132,7 +132,7 @@ class Multiresimage < ActiveFedora::Base
     self.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-    Delayed::Worker.logger.info("work.save? #{work.inspect}")
+    #Delayed::Worker.logger.info("work.save? #{work.inspect}")
     work #you'd better
   end
 
@@ -208,14 +208,14 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        Delayed::Worker.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
+        #Delayed::Worker.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
 
         result = self.validate_vra( vra.to_xml )
       #  Delayed::Worker.logger.info("valid vra? #{result}")
 
 
         self.datastreams[ 'VRA' ].content = vra.to_xml
-        Delayed::Worker.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
+        #Delayed::Worker.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
         self.datastreams[ 'VRA' ].content
       else
         raise "not an image type"
@@ -385,7 +385,7 @@ EOF
 
 
   def update_associated_work
-    Delayed::Worker.logger.info("update associated work #{vraworks.first.present?}")
+    #Delayed::Worker.logger.info("update associated work #{vraworks.first.present?}")
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
     if vraworks.first.present?
       vra_work = vraworks.first
