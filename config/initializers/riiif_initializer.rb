@@ -3,7 +3,7 @@ FEDORA_CONFIG = YAML.load_file(Rails.root.join('config', 'fedora.yml'))[Rails.en
 
 # Tell RIIIF to get files via HTTP (not from the local disk)
 Riiif::Image.file_resolver = Riiif::HTTPFileResolver.new
-Riiif::Image.file_resolver.basic_auth_credentials = [FEDORA_CONFIG['user'], FEDORA_CONFIG['password']]
+Riiif::Image.file_resolver.basic_auth_credentials = ["#{FEDORA_CONFIG['user']}", "#{FEDORA_CONFIG['password']}"]
 
 # This tells RIIIF how to resolve the identifier to a URI in Fedora
 DATASTREAM = 'DELIV-IMG'
@@ -11,7 +11,7 @@ Riiif::Image.file_resolver.id_to_uri = lambda do |id|
   connection = ActiveFedora::Base.connection_for_pid(id)
   host = connection.config[:url]
   path = connection.api.datastream_content_url(id, DATASTREAM, {})
-  # logger.info("what the hell, yo?? #{host + '/' + path}")
+  logger.info("fedora auth creds #{FEDORA_CONFIG['user']}, #{FEDORA_CONFIG['password']}")
   host + '/' + path
 end
 
@@ -36,6 +36,5 @@ end
 def logger
   Rails.logger
 end
-
 
 Riiif::Engine.config.cache_duration_in_days = 30

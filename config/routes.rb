@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   blacklight_for :catalog
+  iiif_for 'riiif/image', at: '/image-service'
 
   if Rails.env.staging? or Rails.env.remote_dev?
     mount AboutPage::Engine => '/about(.:format)'
@@ -58,7 +59,7 @@ Rails.application.routes.draw do
     resources :users, :only=>[:create, :edit, :destroy]
   end
 
-  iiif_for 'riiif/image', at: '/image-service'
+
 
   resources :batches
   # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
