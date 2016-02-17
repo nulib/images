@@ -11,7 +11,6 @@ Riiif::Image.file_resolver.id_to_uri = lambda do |id|
   connection = ActiveFedora::Base.connection_for_pid(id)
   host = connection.config[:url]
   path = connection.api.datastream_content_url(id, DATASTREAM, {})
-  logger.info("fedora auth creds #{FEDORA_CONFIG['user']}, #{FEDORA_CONFIG['password']}")
   host + '/' + path
 end
 
