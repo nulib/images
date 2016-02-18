@@ -7,7 +7,7 @@
 <%= render :partial=>'downloads' %>
 
 <div id="osdViewer" class="openseadragon" style='width:100%;height:600px;'>
-  <%= openseadragon_picture_tag("/image-service" + Riiif::Engine.routes.url_helpers.info_path(@multiresimage.pid, format: 'jp2')) %>
+  <%= openseadragon_picture_tag("/image-service" + Riiif::Engine.routes.url_helpers.info_path(@multiresimage.pid)) %>
 </div>
 
 <%= render :partial => 'multiresimages/photostream' %>

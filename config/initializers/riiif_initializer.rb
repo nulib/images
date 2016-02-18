@@ -9,8 +9,10 @@ Riiif::Image.file_resolver.basic_auth_credentials = ["#{FEDORA_CONFIG['user']}",
 DATASTREAM = 'DELIV-IMG'
 Riiif::Image.file_resolver.id_to_uri = lambda do |id|
   connection = ActiveFedora::Base.connection_for_pid(id)
+  #logger.info("okay is this in the pid? #{id}")
   host = connection.config[:url]
   path = connection.api.datastream_content_url(id, DATASTREAM, {})
+  #logger.info("or the path? #{path}")
   host + '/' + path
 end
 
