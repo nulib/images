@@ -11,7 +11,7 @@ class BatchJobMailer < ApplicationMailer
   end
 
     def error_email(job_number, exception)
-    @body = "Hello, the job #{job_number} failed."
-    mail(to:"#{DIL_CONFIG['admin_email']}", from: "#{DIL_CONFIG['images_dev_email']}", subject: "Job #{job_number} didn't make it", body: @body)
+    @body = "Hello, the job #{job_number} contained an error: #{exception}."
+    mail(to:"#{DIL_CONFIG['admin_email']}", from: "#{DIL_CONFIG['images_dev_email']}", subject: "Job #{job_number} had an error in it", body: @body)
   end
 end
