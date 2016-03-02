@@ -3,6 +3,7 @@
 # The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
 # the institutional collection's permissions.
 require 'dil/pid_minter'
+require 'open3'
 
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
@@ -89,10 +90,10 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
-
-      batch ? ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
+      Delayed::Worker.logger.debug("after create techmd and jp2 path: #{self.jp2_img_path}")
+      batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
       self.create_deliv_ops_datastream
-      self.create_deliv_img_datastream
+      self.create_deliv_img_datastream("create_deliv_img_datastream")
       self.create_archv_img_datastream
 
       batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
@@ -264,32 +265,43 @@ class Multiresimage < ActiveFedora::Base
     "#{ self.pid }.tif".gsub( /:/, '-' )
   end
 
-
   def create_jp2( img_location )
+    Delayed::Worker.logger.debug("before file exist?")
     return jp2_img_path if File.exist?( jp2_img_path )
 
     if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
     else
-      create_jp2_staging( img_location )
+      Delayed::Worker.logger.debug("before jp2 img path in create_jp2 (staging)")
+      create_jp2_staging( img_location ) #which also means production. SUCKAGE.
+      Delayed::Worker.logger.debug("right after create_jp2 (staging) #{jp2_img_path}")
     end
 
-    #sleep( 5 )
     if $?.to_i == 0 && File.file?( jp2_img_path )
+      Delayed::Worker.logger(" going to return jp2 img path from create_jp2 (staging) #{jp2_img_path}")
       jp2_img_path
     else
       raise "Failed to create jp2 image"
     end
   end
 
-
+  #these need to be refactored, we need one way of doing this in every environment. imagemagick or graphicsmagick.
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
 
   def create_jp2_staging( img_location )
-   `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
+    Delayed::Worker.logger.debug("okay, can the image just go here and be cool? #{img_location}")
+    # `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
+     stdout, stdeerr, status = Open3.capture3("convert #{img_location} -format jp2 #{jp2_img_path}")
+     Delayed::Worker.logger.info(status)
+     Delayed::Worker.logger.info(stdeerr)
+     Delayed::Worker.logger.info(stdout)
+     Delayed::Worker.logger.info("okay here's the jp2 #{jp2_img_path}")
+     Delayed::Worker.logger.info("and is it a file? #{File.exist?( jp2_img_path )}")
+     jp2_img_path
+  # `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
 
@@ -342,7 +354,13 @@ EOF
 
 
   def create_deliv_techmd_datastream( img_location )
-    create_jp2( img_location )
+    #this is stupid, it's stupid to create it more than once
+    Delayed::Worker.logger.debug("in create techmd about to create jp2 from this #{img_location}")
+    begin
+      create_jp2( img_location )
+    rescue StandardError => e
+      Delayed::Worker.logger.info("create jp2 failed because: #{e}")
+    end
     jhove_xml = create_jhove_xml( jp2_img_path )
 
     unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
@@ -527,6 +545,8 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     self.rels_ext.content.include? "isCropOf"
   end
 
+
+  #get rid of this - image server will do it
   def image_url(max_size=1600)
 
     src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f
