@@ -285,7 +285,10 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  #these need to be refactored, we need one way of doing this in every environment. imagemagick or graphicsmagick.
+
+#these need to be refactored, we need one way of doing this in every environment. imagemagick or graphicsmagick.
+#when refactoring there's only going to be one create jp2 method
+
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
