@@ -17,6 +17,7 @@ class ImageMover < ActiveRecord::Base
 
       logger.debug DIL_CONFIG[ 'jp2_server' ]
       logger.debug DIL_CONFIG[ 'jp2_ssh_user' ]
+      #going to want status = scp results and to return it here too.
       scp_mover( server: DIL_CONFIG['jp2_server'], user: DIL_CONFIG[ 'jp2_ssh_user' ], local_img_path: jp2_img_path, remote_img_path: repo_location )
     end
   end
