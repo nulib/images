@@ -165,6 +165,22 @@ class VRADatastream < ActiveFedora::OmDatastream
       }
     }
 
+    t.textrefSet_ref(:path=>"textrefSet", :label=>"Text References", :index_as=>[:searchable]) {
+      t.textrefSet_display(:path=>"display", :index_as=>[:searchable])
+      t.textref(:ref=>[:textref_ref], :index_as=>[:searchable])
+    }
+
+    t.textref_ref(:path=>"textref", :index_as=>[:searchable]){
+      t.name {
+        t.name_content(:path=>'text()', :index_as=>[:searchable])
+        t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
+      }
+      t.refid {
+        t.refid_content(:path=>'text()', :index_as=>[:searchable])
+        t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
+      }
+    }
+
     # subjectSet OM definition
     t.subjectSet_ref(:path=>"subjectSet", :label=>"Subjects", :index_as=>[:searchable]) {
       t.subjectSet_display(:path=>"display")
@@ -242,6 +258,7 @@ class VRADatastream < ActiveFedora::OmDatastream
       t.relationSet(:ref=>[:relationSet_ref])
       t.editionSet(:ref=>[:editionSet_ref])
       t.rightsSet(:ref=>[:rightsSet_ref])
+      t.textrefSet(:ref=>[:textrefSet_ref])
     }
 
     # VRA Work OM definition
@@ -263,6 +280,7 @@ class VRADatastream < ActiveFedora::OmDatastream
       t.relationSet(:ref=>[:relationSet_ref])
       t.editionSet(:ref=>[:editionSet_ref])
       t.rightsSet(:ref=>[:rightsSet_ref])
+      t.textrefSet(:ref=>[:textrefSet_ref])
     }
 
     t.agentSet_display(:proxy=>[:image, :agentSet, :agentSet_display])
@@ -284,6 +302,8 @@ class VRADatastream < ActiveFedora::OmDatastream
     t.editionSet_display(:proxy=>[:image, :editionSet, :editionSet_display])
     t.rightsSet_display(:proxy=>[:image, :rightsSet, :rightsSet_display])
     t.relationSet_display(:proxy=>[:image, :relationSet, :relationSet_display])
+    t.textrefSet_display(:proxy=>[:image, :textrefSet, :textrefSet_display])
+
 
     t.agentSet_display_work(:proxy=>[:work, :agentSet, :agentSet_display])
     t.titleSet_display_work(:proxy=>[:work, :titleSet, :titleSet_display])
@@ -304,7 +324,7 @@ class VRADatastream < ActiveFedora::OmDatastream
     t.editionSet_display_work(:proxy=>[:work, :editionSet, :editionSet_display])
     t.rightsSet_display_work(:proxy=>[:work, :rightsSet, :rightsSet_display])
     t.relationSet_display_work(:proxy=>[:work, :relationSet, :relationSet_display])
-
+    t.textrefSet_display_work(:proxy=>[:work, :textrefSet, :textrefSet_display])
     #t.title(:proxy=>[:work, :titleSet, :titleSet_display])
   end
 
@@ -407,6 +427,11 @@ class VRADatastream < ActiveFedora::OmDatastream
           xml['vra'].worktypeSet {
             xml.display_
             xml.worktype
+          }
+
+          xml['vra'].textrefSet {
+            xml.display_
+            xml.textref
           }
         }
       }
@@ -559,6 +584,12 @@ class VRADatastream < ActiveFedora::OmDatastream
     search_field << extract_values_for_search_field(hashSet)
     solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval|  oldval | newval }
 
+    #textrefSet
+    hashSet = extract_textrefSet
+    search_field << extract_values_for_search_field(hashSet)
+    solr_doc = solr_doc.merge(hashSet) { |field_name, oldval, newval|  oldval | newval }
+
+
     # The block is to tell Ruby what to do when it encounters a duplicate key during hash merging.
     # We add the work's solr fields after the image solr fields are already there, so we tell Ruby
     # to append the new string to the old
@@ -633,7 +664,7 @@ class VRADatastream < ActiveFedora::OmDatastream
 
     solr_doc = add_vra_description_to_solrdoc(solr_doc) # Add description for this object
     solr_doc = solr_doc.merge(extract_work_image_relationships) # Add relationships for this object
-    
+
     # Is this an Image?
     if !self.find_by_xpath("/vra:vra/vra:image").text.blank? # Is this datastream for an Image object?
       # Set its object_type_facet
@@ -1024,6 +1055,29 @@ class VRADatastream < ActiveFedora::OmDatastream
     return subjectSet_array
   end
 
+
+  #########################
+  # TEXTREF SET
+  #
+  # Extracts the textrefSet fields and creates Solr::Field objects
+  #
+  # == Returns:
+  # An array of Solr::Field objects
+  def extract_textrefSet
+    textrefSet_array = {}
+
+    self.find_by_terms('//vra:textrefSet/vra:display').each do |textref_display|
+      insert_solr_field_value(textrefSet_array, "textref_display_tesim", textref_display.text)
+    end
+    # Add a textref facet for each textref
+    self.find_by_terms('//vra:textrefSet/vra:textref').each do |textref|
+      textref.xpath('vra:name', 'vra' => 'http://www.vraweb.org/vracore4.htm').map { |name|
+        insert_solr_field_value(textrefSet_array, "textref_name_tesim", name.text)
+      }
+    end
+  
+    return textrefSet_array
+  end
 
 
   #########################

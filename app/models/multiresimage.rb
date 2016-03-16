@@ -54,7 +54,7 @@ class Multiresimage < ActiveFedora::Base
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
-      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display]
+      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display, :textrefSet_display]
 
 
   attributes.each do |att|
@@ -380,6 +380,7 @@ EOF
       vra_work.subjectSet_display_work = subjectSet_display
       vra_work.relationSet_display_work = relationSet_display
       vra_work.titleSet_display_work = titleSet_display
+      vrawork.textrefSet_display_work = textrefSet_display
       vra_work.save!
     end
   end
