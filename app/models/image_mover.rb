@@ -49,7 +49,7 @@ class ImageMover < ActiveRecord::Base
 
     Delayed::Worker.logger.debug "UPLOADING ..."
     `scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
-    Delayed::Worker.logger("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
+    Delayed::Worker.logger.debug("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
     Delayed::Worker.logger.debug $?
     Delayed::Worker.logger.debug "UPLOADING COMPLETE"
     $?
