@@ -92,7 +92,7 @@ class Multiresimage < ActiveFedora::Base
       create_deliv_ops_datastream
       create_deliv_img_datastream
       create_archv_img_datastream
-      batch ? user_error_message = ImageMover.move_tiff_to_repo( tiff_img_name, :path) : ImageMover.delay.move_tiff_to_repo( tiff_img_name, :path)
+      batch ? user_error_message = ImageMover.move_tiff_to_repo( tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( tiff_img_name, path)
       edit_groups = [ 'registered' ]
       save!
 
