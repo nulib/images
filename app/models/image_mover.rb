@@ -44,11 +44,11 @@ class ImageMover < ActiveRecord::Base
   private
 
   def self.scp_mover( options )
-
-    logger.debug "UPLOADING ..."
+    Delayed::Worker.logger.debug "UPLOADING ..."
     `scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
-    logger.debug $?
-    logger.debug "UPLOADING COMPLETE"
+    Delayed::Worker.logger.debug("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
+    Delayed::Worker.logger.debug $?
+    Delayed::Worker.logger.debug "UPLOADING COMPLETE"
     $?
   end
 end
