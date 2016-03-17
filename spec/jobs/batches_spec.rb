@@ -46,6 +46,6 @@ RSpec.describe CreateMultiresimagesWithErrorsBatchJob, type: :job do
     Delayed::Job.enqueue CreateMultiresimagesWithErrorsBatchJob.new("12345", "user_email@test.com")
     Delayed::Worker.new.work_off
 
-    expect(ActionMailer::Base.deliveries.last.subject).to include("didn't make it")
+    expect(ActionMailer::Base.deliveries.last.subject).to include("had an error in it")
   end
 end

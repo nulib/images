@@ -8,7 +8,7 @@ class ImageMover < ActiveRecord::Base
     logger.debug jp2_img_name
     logger.debug jp2_img_path
 
-    if Rails.env == "development"
+    if Rails.env == "development" or Rails.env == "test"
       puts "assume the jp2 image was successfully moved"
     else
       #sleep( 10 )
@@ -27,8 +27,8 @@ class ImageMover < ActiveRecord::Base
     Delayed::Worker.logger.debug tiff_img_name
     Delayed::Worker.logger.debug tiff_img_path
 
-    if Rails.env == "development"
-      puts "assume the tiff image was successfully moved"
+    if Rails.env == "development" or Rails.env == "test"
+      Delayed::Worker.logger.debug "assume the tiff image was successfully moved"
     else
       repo_location = "#{ DIL_CONFIG[ 'repo_location' ]}#{ tiff_img_name }"
       logger.debug repo_location
@@ -41,12 +41,9 @@ class ImageMover < ActiveRecord::Base
 
   end
 
-
-
   private
 
   def self.scp_mover( options )
-
     Delayed::Worker.logger.debug "UPLOADING ..."
     `scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
     Delayed::Worker.logger.debug("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
