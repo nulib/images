@@ -9,16 +9,21 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
     good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
     bad_file_storage = []
       good_xml_files.each do |xf|
-        xml = nokogiri_doc = Nokogiri::XML(File.read( xf ))
+        xml = Nokogiri::XML(File.read( xf ))
+        ready_xml = TransformXML.add_empty_work_element(xml)
         pid = mint_pid("dil")
         #from_menu = true now has to be re-named.
-        multiresimage = Multiresimage.new(pid: pid, vra_xml: xml.to_xml(), from_menu: true)
+        multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml.to_xml(), from_menu: true)
         multiresimage.save
-        #xf ~= ".tif" or ".tiff" -- maybe benchmark faster way of finding this; select on array based on [xf.tif|xf.tiff]?
-        tif_path = File.file?(xf.gsub(/.xml/, '.tiff')) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
-        result = multiresimage.create_datastreams_and_persist_image_files(tif_path, batch=true)
+        test_tif = xf.gsub(/.xml/, '.tiff')
+        tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
 
-        bad_file_storage << result unless result.blank?
+        tif = File.basename(tif_path)
+        FileUtils.mv(tif_path, "tmp/#{tif}")
+
+        File.rename("tmp/#{tif}", "tmp/#{multiresimage.tiff_img_name}")
+        result = multiresimage.create_datastreams_and_persist_image_files("tmp/#{multiresimage.tiff_img_name}", batch=true)
+        bad_file_storage << result unless result == true
       end
 
       Delayed::Worker.logger.info("Bad files here: #{bad_file_storage}")
@@ -30,7 +35,7 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
   end
 
   def success(job)
-    Delayed::Worker.logger.info("Success #{job} is just fine that's great sweet")
+    Delayed::Worker.logger.info("Success #{job.inspect} is just fine that's great sweet")
   end
 
   def error(job, exception)
