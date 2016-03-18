@@ -18,8 +18,6 @@ class CatalogController < ApplicationController
       :rows => 10
     }
 
-     byebug
-
     # solr field configuration for search results/index views
     config.index.title_field = 'title_display'
     config.index.display_type_field = 'has_model_ssim'
