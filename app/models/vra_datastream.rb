@@ -153,7 +153,6 @@ class VRADatastream < ActiveFedora::OmDatastream
       t.sourceSet_display(:path=>"display", :index_as=>[:searchable])
       t.source(:ref=>[:source_ref], :index_as=>[:searchable])
     }
-
     t.source_ref(:path=>"source", :index_as=>[:searchable]){
       t.name {
         t.name_content(:path=>'text()', :index_as=>[:searchable])
@@ -164,7 +163,6 @@ class VRADatastream < ActiveFedora::OmDatastream
         t.name_type(:path=>{:attribute =>"type"}, :index_as=>[:searchable])
       }
     }
-
     t.textrefSet_ref(:path=>"textrefSet", :label=>"Text References", :index_as=>[:searchable]) {
       t.textrefSet_display(:path=>"display", :index_as=>[:searchable])
       t.textref(:ref=>[:textref_ref], :index_as=>[:searchable])
@@ -1075,7 +1073,7 @@ class VRADatastream < ActiveFedora::OmDatastream
         insert_solr_field_value(textrefSet_array, "textref_name_tesim", name.text)
       }
     end
-  
+
     return textrefSet_array
   end
 
