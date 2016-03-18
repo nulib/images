@@ -395,7 +395,7 @@ EOF
       vra_work.subjectSet_display_work = subjectSet_display
       vra_work.relationSet_display_work = relationSet_display
       vra_work.titleSet_display_work = titleSet_display
-      vrawork.textrefSet_display_work = textrefSet_display
+      vra_work.textrefSet_display_work = textrefSet_display
       vra_work.save!
     end
   end
