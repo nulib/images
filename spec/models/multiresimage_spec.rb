@@ -156,13 +156,13 @@ EOF
     it "should have read groups writer" do
       subject.read_groups = ['group-2', 'group-3']
       expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'} )
-      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
+      expect( subject.rightsMetadata.users ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
     it "should only revoke eligible groups" do
       subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
       # 'group-7' is not eligible to be revoked
       expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'} )
-      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
+      expect( subject.rightsMetadata.users ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
   end
 
@@ -213,4 +213,3 @@ EOF
     end
   end
 end
-

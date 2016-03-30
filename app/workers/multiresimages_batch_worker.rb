@@ -1,9 +1,16 @@
 require 'dil/pid_minter'
+#sidekiq  -- worker instead of jobs
 
-class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
+#Important note! Be sure to only pass primitives or simple objects as arguements to the worker, e.g. .perform_async(@project.id).
+#These arguements must be serialized and placed #into the Redis queue, and attempting to serialize an entire ActiveRecord object is inefficient and not likely to work.
+
+class MultiresimagesBatchWorker
   include DIL::PidMinter
+  include Sidekiq::Worker
+  include Sidekiq::Status::Worker
 
-  def perform
+
+  def perform(job_number, user_email)
     begin
     xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
     good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
@@ -26,8 +33,12 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
         bad_file_storage << result unless result == true
       end
 
-      Delayed::Worker.logger.info("Bad files here: #{bad_file_storage}")
+      Sidekiq::Logging.logger.info("Bad files here: #{bad_file_storage}")
       BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
+
+      status = Sidekiq::Status::status(job_id)
+      Sidekiq::Logging.logger.info("status? -> #{status}")
+      Sidekiq::Logging.logger.info("queued? -> #{Sidekiq::Status::queued?(job_id)}")
 
     rescue StandardError => e
       BatchJobMailer.error_email(job_number, e).deliver
@@ -35,10 +46,10 @@ class CreateMultiresimagesBatchJob < Struct.new(:job_number, :user_email)
   end
 
   def success(job)
-    Delayed::Worker.logger.info("Success #{job.inspect} is just fine that's great sweet")
+    Sidekiq::Logging.logger.info("Success #{job.inspect} is just fine that's great sweet")
   end
 
   def error(job, exception)
-    Delayed::Worker.logger.error("job #{job} caused error because #{exception}")
+    Sidekiq::Logging.logger.error("job #{job} caused error because #{exception}")
   end
 end

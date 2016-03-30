@@ -24,11 +24,11 @@ class ImageMover < ActiveRecord::Base
 
   def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
     logger.debug Rails.env
-    Delayed::Worker.logger.debug tiff_img_name
-    Delayed::Worker.logger.debug tiff_img_path
+    Sidekiq::Logging.logger.debug tiff_img_name
+    Sidekiq::Logging.logger.debug tiff_img_path
 
     if Rails.env == "development" or Rails.env == "test"
-      Delayed::Worker.logger.debug "assume the tiff image was successfully moved"
+      Sidekiq::Logging.logger.debug "assume the tiff image was successfully moved"
     else
       repo_location = "#{ DIL_CONFIG[ 'repo_location' ]}#{ tiff_img_name }"
       logger.debug repo_location
@@ -44,11 +44,11 @@ class ImageMover < ActiveRecord::Base
   private
 
   def self.scp_mover( options )
-    Delayed::Worker.logger.debug "UPLOADING ..."
+    Sidekiq::Logging.logger.debug "UPLOADING ..."
     `scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
-    Delayed::Worker.logger.debug("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
-    Delayed::Worker.logger.debug $?
-    Delayed::Worker.logger.debug "UPLOADING COMPLETE"
+    Sidekiq::Logging.logger.debug("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
+    Sidekiq::Logging.logger.debug $?
+    Sidekiq::Logging.logger.debug "UPLOADING COMPLETE"
     $?
   end
 end

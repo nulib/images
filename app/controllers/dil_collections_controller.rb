@@ -4,7 +4,7 @@ require 'pry'
 class DilCollectionsController < ApplicationController
 
   include Blacklight::Catalog
-  include Blacklight::SolrHelper
+  include Blacklight::SearchHelper
   include DIL::PidMinter
 
   after_action :delete_powerpoint, only: [:update, :add, :remove, :move]
@@ -225,7 +225,7 @@ class DilCollectionsController < ApplicationController
     @collection = DILCollection.find(params[:id])
     authorize! :update, @collection
 
-    Delayed::Job.enqueue GeneratePowerpointJob.new(@collection.pid)
+    #Delayed::Job.enqueue GeneratePowerpointJob.new(@collection.pid)
   end
 
   def download_powerpoint
@@ -389,7 +389,7 @@ class DilCollectionsController < ApplicationController
     redirect_to dil_collection_path(c)
   end
 
-  # Catalog searching in dil_collections 
+  # Catalog searching in dil_collections
   def search_action_url
     url_for(controller: '/catalog', action: 'index', only_path: true)
   end

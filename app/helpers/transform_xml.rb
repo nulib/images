@@ -1,5 +1,5 @@
 module TransformXML
-  include Delayed
+  #include Sidekiq
   #Copied from Menu (github.com/nulib/menu), only the methods required for the batch import flow. JL 02/10/16
 
   def self.add_empty_work_element( nokogiri_doc )
@@ -7,7 +7,6 @@ module TransformXML
 
     work_element = Nokogiri::XML::Node.new('vra:work', nokogiri_doc)
     nokogiri_doc.root.add_child(work_element)
-    Delayed::Worker.logger.info("did work work? #{nokogiri_doc}")
     nokogiri_doc
   end
 
