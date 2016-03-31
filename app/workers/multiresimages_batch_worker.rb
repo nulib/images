@@ -9,7 +9,6 @@ class MultiresimagesBatchWorker
   include Sidekiq::Worker
   include Sidekiq::Status::Worker
 
-
   def perform(job_number, user_email)
     begin
     xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
@@ -35,10 +34,6 @@ class MultiresimagesBatchWorker
 
       Sidekiq::Logging.logger.info("Bad files here: #{bad_file_storage}")
       BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
-
-      status = Sidekiq::Status::status(job_id)
-      Sidekiq::Logging.logger.info("status? -> #{status}")
-      Sidekiq::Logging.logger.info("queued? -> #{Sidekiq::Status::queued?(job_id)}")
 
     rescue StandardError => e
       BatchJobMailer.error_email(job_number, e).deliver

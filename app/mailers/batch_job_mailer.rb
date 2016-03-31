@@ -1,5 +1,5 @@
 class BatchJobMailer < ApplicationMailer
-  default from: "#{DIL_CONFIG['admin_email']}"
+  default from: "#{DIL_CONFIG['repository_apps_email']}"
 
   def status_email(user_email, job_number, bad_file_storage="")
     if bad_file_storage.blank?
@@ -7,11 +7,11 @@ class BatchJobMailer < ApplicationMailer
     else
       @body = "Hello, your batch submission of #{job_number} to Images contained some errors. The following files didn't turned into Multiresimage records: #{bad_file_storage}."
     end
-    mail(to:"#{user_email}, #{DIL_CONFIG['admin_email']}", from: "#{DIL_CONFIG['images_dev_email']}", subject: "The status of your batch of Images records", body: @body)
+    mail(to:"#{user_email}, #{DIL_CONFIG['admin_email']}", from: "#{DIL_CONFIG['repository_apps_email']}", subject: "The status of your batch of Images records", body: @body)
   end
 
     def error_email(job_number, exception)
     @body = "Hello, the job #{job_number} contained an error: #{exception}."
-    mail(to:"#{DIL_CONFIG['admin_email']}", from: "#{DIL_CONFIG['images_dev_email']}", subject: "Job #{job_number} had an error in it", body: @body)
+    mail(to:"#{DIL_CONFIG['admin_email']}", from: "#{DIL_CONFIG['repository_apps_email']}", subject: "Job #{job_number} had an error in it", body: @body)
   end
 end
