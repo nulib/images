@@ -1,10 +1,11 @@
 require 'dil/pid_minter'
 require 'pry'
-
+require 'sidekiq'
 
 class BatchesController < ApplicationController
   include DIL::PidMinter
   include BatchValidator
+  include Sidekiq::Worker
 
   respond_to :html, :json , :js
 
@@ -24,16 +25,7 @@ class BatchesController < ApplicationController
       respond_with @errors, location: batches_path
     else
       user_email = current_user.email
-      job_id = MultiresimagesBatchWorker.perform_async(job_number, user_email)
-      #sidekiq
-      # status = Sidekiq::Status::status(job_id)
-      # Sidekiq::Logging.logger.info("status? -> #{status}")
-      # Sidekiq::Logging.logger.info("queued? -> #{Sidekiq::Status::queued?(job_id)}")
-      # Sidekiq::Status::working?     job_id
-      # Sidekiq::Status::complete?    job_id
-      # Sidekiq::Status::failed?      job_id
-      # Sidekiq::Status::interrupted? job_id
-
+      MultiresimagesBatchWorker.perform_async(job_number, user_email)
       render :js => "window.location = #{root_path.to_json}"
     end
   end

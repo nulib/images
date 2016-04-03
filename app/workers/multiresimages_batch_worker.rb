@@ -1,5 +1,4 @@
 require 'dil/pid_minter'
-#sidekiq  -- worker instead of jobs
 
 #Important note! Be sure to only pass primitives or simple objects as arguements to the worker, e.g. .perform_async(@project.id).
 #These arguements must be serialized and placed #into the Redis queue, and attempting to serialize an entire ActiveRecord object is inefficient and not likely to work.
@@ -7,7 +6,6 @@ require 'dil/pid_minter'
 class MultiresimagesBatchWorker
   include DIL::PidMinter
   include Sidekiq::Worker
-  include Sidekiq::Status::Worker
 
   def perform(job_number, user_email)
     begin
