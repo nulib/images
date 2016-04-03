@@ -1,7 +1,6 @@
 
 class MultiresimagesWithErrorsBatchWorker
   include Sidekiq::Worker
-  include Sidekiq::Status::Worker
 
   def perform(job_number, user_email)
     begin
