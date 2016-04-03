@@ -23,7 +23,7 @@ source 'http://rubygems.org'
   gem 'jhove-service'
   gem 'protected_attributes'
   gem 'sidekiq'
-  gem 'sidekiq-status'
+  gem 'sinatra', :require => nil
 
   gem 'daemons'
 
