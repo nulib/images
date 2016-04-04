@@ -1,11 +1,13 @@
 require 'dil/pid_minter'
 require 'pry'
+require 'sidekiq'
 
 class DilCollectionsController < ApplicationController
 
   include Blacklight::Catalog
   include Blacklight::SearchHelper
   include DIL::PidMinter
+  include Sidekiq::Worker
 
   after_action :delete_powerpoint, only: [:update, :add, :remove, :move]
 
@@ -225,7 +227,7 @@ class DilCollectionsController < ApplicationController
     @collection = DILCollection.find(params[:id])
     authorize! :update, @collection
 
-    #Delayed::Job.enqueue GeneratePowerpointJob.new(@collection.pid)
+    GeneratePowerpointWorker.perform_async(@collection.pid)
   end
 
   def download_powerpoint
