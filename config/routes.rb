@@ -99,6 +99,4 @@ end
 
   get "external_search/search_hydra" => "external_search#index"
 
-  get 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
-
 end
