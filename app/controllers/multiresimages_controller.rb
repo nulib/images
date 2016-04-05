@@ -139,13 +139,23 @@ class MultiresimagesController < ApplicationController
 
     @display_content_nav_elements = @collection.present? && @collection.show_navigation_elements? && @index.present?
 
-    @multiresimage = Multiresimage.find(params[:id])
-    authorize! :read, @multiresimage
+    begin
+      @multiresimage = Multiresimage.find(params[:id])
+      authorize! :read, @multiresimage
+    rescue => Blacklight::Exceptions::InvalidSolrID
+      if @user_with_groups_is_signed_in = false
+        flash[:error] = "You must log in to view this image."
+        redirect_to  "/users/sign_in"
+      else
+        redirect_to "/server_error"
+      end
+    end
 
     @user_with_groups_is_signed_in = false
     if user_signed_in? and !current_user.collections.empty?
       @user_with_groups_is_signed_in = true
     end
+
     @page_title = @multiresimage.titleSet_display
     gon.url = DIL_CONFIG['dil_js_url']
   end
