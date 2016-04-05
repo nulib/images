@@ -279,7 +279,7 @@ class Multiresimage < ActiveFedora::Base
 
     if $?.to_i == 0 && File.file?( jp2_img_path )
       Delayed::Worker.logger("going to return jp2 img path from create_jp2 (staging) #{jp2_img_path}")
-      jp2_img_path
+      #jp2_img_path
     else
       raise "Failed to create jp2 image"
     end
