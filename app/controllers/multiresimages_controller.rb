@@ -140,10 +140,12 @@ class MultiresimagesController < ApplicationController
     @display_content_nav_elements = @collection.present? && @collection.show_navigation_elements? && @index.present?
 
     begin
+      session[:previous_url] = request.fullpath unless request.xhr?
+      
       @multiresimage = Multiresimage.find(params[:id])
       authorize! :read, @multiresimage
     rescue Blacklight::Exceptions::InvalidSolrID => e
-      if !user_signed_in? 
+      if !user_signed_in?
         flash[:error] = "You must log in to view this image."
         redirect_to  "/users/sign_in"
       else
