@@ -278,7 +278,7 @@ class Multiresimage < ActiveFedora::Base
     end
 
     if $?.to_i == 0 && File.file?( jp2_img_path )
-      Delayed::Worker.logger(" going to return jp2 img path from create_jp2 (staging) #{jp2_img_path}")
+      Delayed::Worker.logger("going to return jp2 img path from create_jp2 (staging) #{jp2_img_path}")
       jp2_img_path
     else
       raise "Failed to create jp2 image"
@@ -303,7 +303,7 @@ class Multiresimage < ActiveFedora::Base
      Delayed::Worker.logger.info(stdout)
      Delayed::Worker.logger.info("okay here's the jp2 #{jp2_img_path}")
      Delayed::Worker.logger.info("and is it a file? #{File.exist?( jp2_img_path )}")
-     jp2_img_path
+     #jp2_img_path
   # `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
