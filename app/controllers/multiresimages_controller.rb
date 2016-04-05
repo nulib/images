@@ -142,8 +142,8 @@ class MultiresimagesController < ApplicationController
     begin
       @multiresimage = Multiresimage.find(params[:id])
       authorize! :read, @multiresimage
-    rescue => Blacklight::Exceptions::InvalidSolrID
-      if @user_with_groups_is_signed_in = false
+    rescue Blacklight::Exceptions::InvalidSolrID => e
+      if user_signed_in? = false
         flash[:error] = "You must log in to view this image."
         redirect_to  "/users/sign_in"
       else
