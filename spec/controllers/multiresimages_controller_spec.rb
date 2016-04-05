@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe MultiresimagesController, :type => :request do
 
+  ##TODO riiif -- we need test covering login check and rescue and redirect for show.
+
   describe "existing image with Voyager number" do
     it "raises an error if accession number matches Voyager number" do
       @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
