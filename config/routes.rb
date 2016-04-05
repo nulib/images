@@ -7,7 +7,7 @@ Rails.application.routes.draw do
     mount AboutPage::Engine => '/about(.:format)'
   end
 
-if Rails.env.test? 
+if Rails.env.test?
   match 'ouch', :to => 'application#test500', via: [ :get, :post, :patch, :delete ]
   match "error", :to => "application#page_not_found", via: [ :get, :post, :patch, :delete ]
 end
@@ -77,6 +77,8 @@ end
   # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
   # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
 
+  get 'technical_metadata/:id/:type' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
+
   get "multiresimages/svg/:id" => "multiresimages#get_svg"
   get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
@@ -99,7 +101,5 @@ end
   get "groups/edit/:id" => "groups#edit"
 
   get "external_search/search_hydra" => "external_search#index"
-
-  get 'technical_metadata/:id/:type.:format' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
 end
