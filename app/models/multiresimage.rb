@@ -266,20 +266,16 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_jp2( img_location )
-    Delayed::Worker.logger.debug("before file exist?")
     return jp2_img_path if File.exist?( jp2_img_path )
 
     if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
     else
-      Delayed::Worker.logger.debug("before jp2 img path in create_jp2 (staging)")
       create_jp2_staging( img_location ) #which also means production. SUCKAGE.
-      Delayed::Worker.logger.debug("right after create_jp2 (staging) #{jp2_img_path}")
-    end
+     end
 
-    if $?.to_i == 0 && File.file?( jp2_img_path )
-      Delayed::Worker.logger("going to return jp2 img path from create_jp2 (staging) #{jp2_img_path}")
-      #jp2_img_path
+    if File.file?( jp2_img_path )
+      jp2_img_path
     else
       raise "Failed to create jp2 image"
     end
@@ -295,15 +291,7 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_jp2_staging( img_location )
-    Delayed::Worker.logger.debug("okay, can the image just go here and be cool? #{img_location}")
-    # `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
      stdout, stdeerr, status = Open3.capture3("convert #{img_location} -format jp2 #{jp2_img_path}")
-     Delayed::Worker.logger.info(status)
-     Delayed::Worker.logger.info(stdeerr)
-     Delayed::Worker.logger.info(stdout)
-     Delayed::Worker.logger.info("okay here's the jp2 #{jp2_img_path}")
-     Delayed::Worker.logger.info("and is it a file? #{File.exist?( jp2_img_path )}")
-     #jp2_img_path
   # `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
