@@ -23,9 +23,6 @@ set :log_level, :debug
 # set :pty, true
 #sidekiq
 set :pty,  false
-:sidekiq_user => 'deploy'
-:sidekiq_config => "#{current_path}/config/sidekiq.yml"
-
 
 
 # Default value for :linked_files is []

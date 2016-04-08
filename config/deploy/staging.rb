@@ -26,6 +26,10 @@ set :rbenv_ruby, '2.2.2'
 set :bundle_without, %w{development test production}.join(' ')
 set :bundle_with, %w{default staging}.join(' ')
 
+
+set :sidekiq_user, 'deploy'
+set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a
