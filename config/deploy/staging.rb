@@ -27,7 +27,7 @@ set :bundle_without, %w{development test production}.join(' ')
 set :bundle_with, %w{default staging}.join(' ')
 
 
-set :sidekiq_user, 'deploy'
+#set :sidekiq_user, 'deploy'
 set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 
 # Custom SSH Options
