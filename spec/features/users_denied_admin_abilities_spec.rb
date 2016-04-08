@@ -7,7 +7,7 @@ Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
 
 
-steps 'Logged-in Users do not have admin abilities' do
+RSpec::Steps.steps 'Logged-in Users do not have admin abilities' do
   before :all do
     @driver = :rack_test
      visit('http://localhost:3000/users/sign_in')

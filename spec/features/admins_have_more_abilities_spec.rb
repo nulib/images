@@ -6,7 +6,7 @@ require 'feature_utilities'
 Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
 
-steps 'admins have abilities', :js => true  do
+RSpec::Steps.steps 'admins have abilities', :js => true  do
   before :all do
     @driver = :rack_test
     visit('http://localhost:3000/users/sign_in')

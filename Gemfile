@@ -34,7 +34,6 @@ source 'http://rubygems.org'
   gem 'capistrano-bundler'
   gem 'capistrano-sidekiq'
 
-  gem 'therubyracer'
   gem 'jquery-ui-rails'
 
   gem "cancan"

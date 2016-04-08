@@ -6,7 +6,7 @@ require 'feature_utilities'
 Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
 
-steps "Logged out users can use Images for searching",  :js => true do
+RSpec::Steps.steps "Logged out users can use Images for searching",  :js => true do
   before :all do
     @driver = :rack_test
   end
