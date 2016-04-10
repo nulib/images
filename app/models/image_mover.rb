@@ -4,19 +4,19 @@ class ImageMover < ActiveRecord::Base
   # This is sort of a weird class, but we created it so we could use the delayed_jobs gem to run the copying of huge tiff (and jp2) files to repository in the background and not effect the responsiveness of the entire app.
 
   def self.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
-    logger.debug Rails.env
-    logger.debug jp2_img_name
-    logger.debug jp2_img_path
+    Delayed::Worker.logger.debug Rails.env
+    Delayed::Worker.logger.debug jp2_img_name
+    Delayed::Worker.logger.debug jp2_img_path
 
     if Rails.env == "development" or Rails.env == "test"
       puts "assume the jp2 image was successfully moved"
     else
       #sleep( 10 )
       repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
-      logger.debug repo_location
+      Delayed::Worker.logger.debug repo_location
 
-      logger.debug DIL_CONFIG[ 'jp2_server' ]
-      logger.debug DIL_CONFIG[ 'jp2_ssh_user' ]
+      Delayed::Worker.logger.debug DIL_CONFIG[ 'jp2_server' ]
+      Delayed::Worker.logger.debug DIL_CONFIG[ 'jp2_ssh_user' ]
       #going to want status = scp results and to return it here too.
       scp_mover( server: DIL_CONFIG['jp2_server'], user: DIL_CONFIG[ 'jp2_ssh_user' ], local_img_path: jp2_img_path, remote_img_path: repo_location )
     end
@@ -24,7 +24,7 @@ class ImageMover < ActiveRecord::Base
 
 
   def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
-    logger.debug Rails.env
+    Delayed::Worker.logger.debug Rails.env
     Delayed::Worker.logger.debug tiff_img_name
     Delayed::Worker.logger.debug tiff_img_path
 
