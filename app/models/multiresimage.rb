@@ -90,25 +90,20 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
-      Delayed::Worker.logger.debug("after create techmd and jp2 path: #{self.jp2_img_path}")
       #batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
-      Delayed::Worker.logger.debug("after image_mover")
+
       self.create_deliv_ops_datastream
-      Delayed::Worker.logger.debug("after deliv_ops ds")
       self.create_deliv_img_datastream
-      Delayed::Worker.logger.debug("after deliv_img ds")
       self.create_archv_img_datastream
-      Delayed::Worker.logger.debug("after create_archiv ds")
+
       #batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
       self.edit_groups = [ 'registered' ]
-      Delayed::Worker.logger.debug("standard error: #{e}")
       self.save!
 
       j = Multiresimage.find( self.pid )
       j.save!
     rescue StandardError => e
       Delayed::Worker.logger.debug("standard error: #{e}")
-
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
     end
