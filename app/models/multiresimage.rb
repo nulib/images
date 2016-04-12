@@ -95,12 +95,13 @@ class Multiresimage < ActiveFedora::Base
       Delayed::Worker.logger.debug("after image_mover")
       self.create_deliv_ops_datastream
       Delayed::Worker.logger.debug("after deliv_ops ds")
-      self.create_deliv_img_datastream("create_deliv_img_datastream")
+      self.create_deliv_img_datastream
       Delayed::Worker.logger.debug("after deliv_img ds")
       self.create_archv_img_datastream
       Delayed::Worker.logger.debug("after create_archiv ds")
       batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
       self.edit_groups = [ 'registered' ]
+      Delayed::Worker.logger.debug("standard error: #{e}")
       self.save!
 
       j = Multiresimage.find( self.pid )
