@@ -18,7 +18,7 @@ set :format, :pretty
 
 # Default value for :log_level is :debug
 set :log_level, :debug
-
+set :passenger_restart_with_touch, true
 # Default value for :pty is false
 # set :pty, true
 

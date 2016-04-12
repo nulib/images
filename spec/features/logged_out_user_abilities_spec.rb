@@ -35,4 +35,15 @@ steps "Logged out users can use Images for searching",  :js => true do
 
     expect(page).to_not have_content("Add to Image Group")
   end
+
+end
+
+steps "Logged-out users can see metadata elements on a public image record page" do
+
+  it "an image record contains a textref Element" do
+    visit("http://localhost:3000/multiresimages/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60")
+
+    expect(page).to have_content("Textref:")
+  end
+
 end
