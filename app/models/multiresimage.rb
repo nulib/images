@@ -55,7 +55,7 @@ class Multiresimage < ActiveFedora::Base
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
-      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display]
+      :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display, :textrefSet_display]
 
 
   attributes.each do |att|
@@ -107,6 +107,7 @@ class Multiresimage < ActiveFedora::Base
       j.save!
     rescue StandardError => e
       Delayed::Worker.logger.debug("standard error: #{e}")
+
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
     end
@@ -300,7 +301,6 @@ class Multiresimage < ActiveFedora::Base
     Delayed::Worker.logger.debug("out #{stdout}")
     Delayed::Worker.logger.debug("err #{stdeerr}")
     Delayed::Worker.logger.debug("status #{status}")
-  # `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
 
@@ -329,6 +329,7 @@ EOF
 
 
   def get_image_width_and_height
+    Delayed::Worker.logger.info("going to get image height and width")
     unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
       raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
     end
@@ -343,11 +344,11 @@ EOF
     require 'jhove_service'
 
     # This parameter is where the output file will go
-    logger.debug( 'IN create_jhove_xml' )
+    Delayed::Worker.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
     logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
-    logger.debug( "xml_loc: #{ xml_loc }")
+    Delayed::Worker.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
@@ -412,6 +413,7 @@ EOF
       vra_work.subjectSet_display_work = subjectSet_display
       vra_work.relationSet_display_work = relationSet_display
       vra_work.titleSet_display_work = titleSet_display
+      vra_work.textrefSet_display_work = textrefSet_display
       vra_work.save!
     end
   end

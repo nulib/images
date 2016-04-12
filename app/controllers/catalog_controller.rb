@@ -94,4 +94,3 @@ class CatalogController < ApplicationController
 
 
 end
-

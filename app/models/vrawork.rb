@@ -23,7 +23,7 @@ class Vrawork  < ActiveFedora::Base
   attributes = [ :titleSet_display_work, :agentSet_display_work,
                 :dateSet_display_work, :descriptionSet_display_work,
                 :subjectSet_display_work, :culturalContextSet_display_work,
-                :relationSet_display_work ]
+                :relationSet_display_work, :textrefSet_display_work ]
 
   attributes.each do |att|
     has_attributes att, datastream: :VRA, multiple: false
