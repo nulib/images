@@ -102,6 +102,7 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find( pid )
       j.save!
     rescue StandardError => e
+      Delayed::Worker.logger.info("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
     end
@@ -289,6 +290,7 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_jp2_staging( img_location )
+    Delayed::Worker.logger.info("jp2 staging")
    `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
   end
 
@@ -318,6 +320,7 @@ EOF
 
 
   def get_image_width_and_height
+    Delayed::Worker.logger.info("going to get image height and width")
     unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
       raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
     end
@@ -332,11 +335,11 @@ EOF
     require 'jhove_service'
 
     # This parameter is where the output file will go
-    logger.debug( 'IN create_jhove_xml' )
+    Delayed::Worker.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
     logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
-    logger.debug( "xml_loc: #{ xml_loc }")
+    Delayed::Worker.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
