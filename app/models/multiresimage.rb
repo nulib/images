@@ -293,7 +293,7 @@ class Multiresimage < ActiveFedora::Base
 
   def create_jp2_staging( img_location )
     Delayed::Worker.logger.debug("about to create jp2 staging")
-    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.0/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 30")
+    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.0/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 60 -q 60")
     Delayed::Worker.logger.debug("out #{stdout}")
     Delayed::Worker.logger.debug("err #{stdeerr}")
     Delayed::Worker.logger.debug("status #{status}")
@@ -329,7 +329,9 @@ EOF
     unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
       raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
     end
+
     jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
+    Delayed::Worker.logger.info("got DELIV-TECHMD content")
     width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
     height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     return { width: width, height: height }
