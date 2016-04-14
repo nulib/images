@@ -293,7 +293,7 @@ class Multiresimage < ActiveFedora::Base
 
   def create_jp2_staging( img_location )
     Delayed::Worker.logger.debug("about to create jp2 staging")
-    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 60")
+    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
     Delayed::Worker.logger.debug("out #{stdout}")
     Delayed::Worker.logger.debug("err #{stdeerr}")
     Delayed::Worker.logger.debug("status #{status}")
