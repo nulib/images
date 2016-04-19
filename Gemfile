@@ -38,7 +38,6 @@ source 'http://rubygems.org'
   gem 'high_voltage'
   gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
   gem 'riiif'
-  gem 'mini_magick'
   gem 'openseadragon'
 
 group :test do

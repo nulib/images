@@ -255,7 +255,6 @@ GEM
     method_source (0.8.2)
     mime-types (2.4.3)
     mini_exiftool (2.5.0)
-    mini_magick (4.5.1)
     mini_portile (0.6.2)
     minitest (5.5.1)
     multi_json (1.11.0)
@@ -514,7 +513,6 @@ DEPENDENCIES
   launchy
   lograge
   mini_exiftool
-  mini_magick
   omniauth-ldap
   openseadragon
   pg
