@@ -326,14 +326,24 @@ EOF
 
   def get_image_width_and_height
     Delayed::Worker.logger.info("going to get image height and width")
-    unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
-      raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
-    end
+    # unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
+    #   raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
+    # end
+    #
+    # jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
+    # Delayed::Worker.logger.info("got DELIV-TECHMD content")
+    # width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
+    # height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
+    # #use graphicsmagick or imagemagick (probably imagemagick for this)
 
-    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
-    Delayed::Worker.logger.info("got DELIV-TECHMD content")
-    width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
-    height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
+    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_dump -i /dropbox/123/better_test.jp2")
+
+    x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
+    width = x1.split(",", 2).first
+    y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
+    height = y1.split(" ", 2).first
+
+    Delayed::Worker.logger.info("got width: #{width} and height: #{height}")
     return { width: width, height: height }
   end
 
