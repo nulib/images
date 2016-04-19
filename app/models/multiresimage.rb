@@ -336,7 +336,7 @@ EOF
     # height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
     # #use graphicsmagick or imagemagick (probably imagemagick for this)
 
-    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_dump -i /dropbox/123/better_test.jp2")
+    stdout, stdeerr, status = Open3.capture3("/usr/share/openjpeg2/bin/opj_dump -i #{jp2_img_path}")
 
     x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
     width = x1.split(",", 2).first
