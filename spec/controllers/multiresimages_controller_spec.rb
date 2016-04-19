@@ -51,6 +51,12 @@ describe MultiresimagesController, :type => :request do
     end
   end
 
+  it "should publish a multiresimage and return success message with pid upon create" do
+
+    "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+  end
+
+
   it "should update both image and work vra" do
     @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" )
 

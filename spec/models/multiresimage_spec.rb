@@ -22,6 +22,14 @@ describe Multiresimage do
     end
   end
 
+  describe "#create_datastreams_and_persist_image_files" do
+    #create_datastreams_and_persist_image_files(path, batch=false)
+
+    #should return true
+  end
+
+
+
   describe "#vra_save" do
     before( :each ) do
       @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )

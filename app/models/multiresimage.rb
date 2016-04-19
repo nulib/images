@@ -90,8 +90,6 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
 
-      #sidekiq -- delay method the same, all still cool?
-
       batch ? ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
       self.create_deliv_ops_datastream
       self.create_deliv_img_datastream
