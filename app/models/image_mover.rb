@@ -6,9 +6,6 @@ class ImageMover < ActiveRecord::Base
   # This is sort of a weird class, but we created it so we could use the delayed_jobs gem to run the copying of huge tiff (and jp2) files to repository in the background and not effect the responsiveness of the entire app.
 
   def self.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
-    Delayed::Worker.logger.debug jp2_img_name
-    Delayed::Worker.logger.debug jp2_img_path
-
     if Rails.env == "development" or Rails.env == "test"
       puts "assume the jp2 image was successfully moved"
     else
@@ -24,36 +21,25 @@ class ImageMover < ActiveRecord::Base
     end
   end
 
-
   def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
-    Delayed::Worker.logger.debug Rails.env
     Delayed::Worker.logger.debug tiff_img_name
     Delayed::Worker.logger.debug tiff_img_path
 
     if Rails.env == "development" or Rails.env == "test"
       Delayed::Worker.logger.debug "assume the tiff image was successfully moved"
     else
-      repo_location = "#{ DIL_CONFIG[ 'repo_location' ]}#{ tiff_img_name }"
-      logger.debug repo_location
+      #needs to be in config
+      new_path = "DIL_CONFIG['repo_location']#{ tiff_img_name }"
+      old_path = tiff_img_path
 
-      logger.debug DIL_CONFIG[ 'repo_server' ]
-      logger.debug DIL_CONFIG[ 'repo_ssh_user' ]
-      status = scp_mover( server: DIL_CONFIG['repo_server'], user: DIL_CONFIG[ 'repo_ssh_user' ], local_img_path: tiff_img_path, remote_img_path: repo_location )
-      status
+      Delayed::Worker.logger.debug "Moving tiff to #{new_path}"
+      begin
+        FileUtils.mkdir_p File.dirname(new_path)
+        FileUtils.mv old_path, new_path
+        Delayed::Worker.logger.info "#{old_path} has been moved to #{new_path}"
+      rescue StandardError => e
+        Delayed::Worker.logger.error "the copy failed because #{e}"
+      end
     end
-
-  end
-
-  private
-
-  def self.scp_mover( options )
-    Delayed::Worker.logger.debug "UPLOADING ..."
-    `scp -i #{ options[:path_to_keyfile]} #{ options[ :local_img_path ]} #{ options[:user] }#{options[:server]}:#{options[:remote_img_path]} 2>&1`
-    #{}`scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
-    Delayed::Worker.logger.debug("scp cmd: scp -i #{ options[:path_to_keyfile]} #{ options[ :local_img_path ]} #{ options[:user] }#{options[:server]}:#{options[:remote_img_path]}")
-
-    Delayed::Worker.logger.debug $?
-    Delayed::Worker.logger.debug "UPLOADING COMPLETE"
-    $?
   end
 end
