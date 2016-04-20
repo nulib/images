@@ -29,7 +29,7 @@ class ImageMover < ActiveRecord::Base
       Delayed::Worker.logger.debug "assume the tiff image was successfully moved"
     else
       #needs to be in config
-      new_path = "DIL_CONFIG['repo_location']#{ tiff_img_name }"
+      new_path = "#{ DIL_CONFIG['repo_location']}#{ tiff_img_name }"
       old_path = tiff_img_path
 
       Delayed::Worker.logger.debug "Moving tiff to #{new_path}"
