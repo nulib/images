@@ -14,9 +14,9 @@ class ImageMover < ActiveRecord::Base
     else
       repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
       Delayed::Worker.logger.debug "UPLOADING ..."
-      Delayed::Worker.logger.debug("scp cmd: scp -i #{ DIL_CONFIG['path_to_keyfile']} #{ jp2_img_path } #{ DIL_CONFIG['jp2_ssh_user'] } #{DIL_CONFIG['jp2_server']}:#{DIL_CONFIG['jp2_location']}")
+      Delayed::Worker.logger.debug("scp cmd: scp -i #{ DIL_CONFIG['path_to_keyfile']} #{ jp2_img_path } #{ DIL_CONFIG['jp2_ssh_user'] }@#{DIL_CONFIG['jp2_server']}:#{DIL_CONFIG['jp2_location']}")
 
-      stdout, stdeerr, status = Open3.capture3("scp -i #{ DIL_CONFIG['path_to_keyfile']} #{ jp2_img_path } #{ DIL_CONFIG['jp2_ssh_user'] } #{DIL_CONFIG['jp2_server']}:#{DIL_CONFIG['jp2_location']}")
+      stdout, stdeerr, status = Open3.capture3("scp -i #{ DIL_CONFIG['path_to_keyfile']} #{ jp2_img_path } #{ DIL_CONFIG['jp2_ssh_user'] }@#{DIL_CONFIG['jp2_server']}:#{DIL_CONFIG['jp2_location']}")
       Delayed::Worker.logger.debug("out #{stdout}")
       Delayed::Worker.logger.debug("err #{stdeerr}")
       Delayed::Worker.logger.debug("status #{status}")
