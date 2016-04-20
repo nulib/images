@@ -327,7 +327,12 @@ EOF
   def get_image_width_and_height
     Delayed::Worker.logger.info("going to get image height and width")
 
-    stdout, stdeerr, status = Open3.capture3("/usr/share/openjpeg2/bin/opj_dump -i #{jp2_img_path}")
+    if "#{Rails.env}" == "test"
+      info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
+      stdout = info.to_s
+    else
+      stdout, stdeerr, status = Open3.capture3("#{Rails.root}#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{jp2_img_path}")
+    end
 
     x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
     width = x1.split(",", 2).first

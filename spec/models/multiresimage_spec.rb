@@ -22,6 +22,26 @@ describe Multiresimage do
     end
   end
 
+  describe "#create_datastreams_and_persist_image_files" do
+
+    it "takes a tiff and creates a jp2 and datastreams and persists the tif and jp2" do
+
+    end
+
+
+    it "can get the height and width of a jp2" do
+      img = Multiresimage.first
+      jp2_img_path = "#{ Rails.root }#{DIL_CONFIG['test_jp2_path']}"
+      height_and_width = img.get_image_width_and_height
+
+      expect(height_and_width[:width]).to eq("600")
+      expect(height_and_width[:height]).to eq("664\\n\",")
+    end
+
+  end
+
+
+
   describe "#vra_save" do
     before( :each ) do
       @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
@@ -213,4 +233,3 @@ EOF
     end
   end
 end
-
