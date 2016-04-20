@@ -1,24 +1,26 @@
+require 'open3'
+
 class ImageMover < ActiveRecord::Base
 
   DIL_CONFIG = YAML.load_file(Rails.root.join('config', 'dil-config.yml'))[Rails.env]
   # This is sort of a weird class, but we created it so we could use the delayed_jobs gem to run the copying of huge tiff (and jp2) files to repository in the background and not effect the responsiveness of the entire app.
 
   def self.move_jp2_to_ansel(jp2_img_name, jp2_img_path)
-    Delayed::Worker.logger.debug Rails.env
     Delayed::Worker.logger.debug jp2_img_name
     Delayed::Worker.logger.debug jp2_img_path
 
     if Rails.env == "development" or Rails.env == "test"
       puts "assume the jp2 image was successfully moved"
     else
-      #sleep( 10 )
       repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
-      Delayed::Worker.logger.debug repo_location
+      Delayed::Worker.logger.debug "UPLOADING ..."
+      Delayed::Worker.logger.debug("scp cmd: scp -i #{ DIL_CONFIG[:path_to_keyfile]} #{ jp2_img_path } #{ DIL_CONFIG[:jp2_ssh_user] } #{DIL_CONFIG[:jp2_server]}:#{DIL_CONFIG[:jp2_location]}")
 
-      Delayed::Worker.logger.debug DIL_CONFIG[ 'jp2_server' ]
-      Delayed::Worker.logger.debug DIL_CONFIG[ 'jp2_ssh_user' ]
-      #going to want status = scp results and to return it here too.
-      scp_mover( server: DIL_CONFIG['jp2_server'], user: DIL_CONFIG[ 'jp2_ssh_user' ], local_img_path: jp2_img_path, remote_img_path: repo_location )
+      stdout, stdeerr, status = Open3.capture3("scp -i #{ DIL_CONFIG[:path_to_keyfile]} #{ jp2_img_path } #{ DIL_CONFIG[:jp2_ssh_user] } #{DIL_CONFIG[:jp2_server]}:#{DIL_CONFIG[:jp2_location]}")
+      Delayed::Worker.logger.debug("out #{stdout}")
+      Delayed::Worker.logger.debug("err #{stdeerr}")
+      Delayed::Worker.logger.debug("status #{status}")
+      $?
     end
   end
 
@@ -48,7 +50,7 @@ class ImageMover < ActiveRecord::Base
     Delayed::Worker.logger.debug "UPLOADING ..."
     `scp -i #{ options[:path_to_keyfile]} #{ options[ :local_img_path ]} #{ options[:user] }#{options[:server]}:#{options[:remote_img_path]} 2>&1`
     #{}`scp #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]} 2>&1`
-    Delayed::Worker.logger.debug("full scp cmd #{ options[ :local_img_path ]} #{ options[:user] }@#{options[:server]}:#{options[:remote_img_path]}")
+    Delayed::Worker.logger.debug("scp cmd: scp -i #{ options[:path_to_keyfile]} #{ options[ :local_img_path ]} #{ options[:user] }#{options[:server]}:#{options[:remote_img_path]}")
 
     Delayed::Worker.logger.debug $?
     Delayed::Worker.logger.debug "UPLOADING COMPLETE"

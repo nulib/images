@@ -326,15 +326,6 @@ EOF
 
   def get_image_width_and_height
     Delayed::Worker.logger.info("going to get image height and width")
-    # unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
-    #   raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
-    # end
-    #
-    # jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
-    # Delayed::Worker.logger.info("got DELIV-TECHMD content")
-    # width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
-    # height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
-    # #use graphicsmagick or imagemagick (probably imagemagick for this)
 
     stdout, stdeerr, status = Open3.capture3("/usr/share/openjpeg2/bin/opj_dump -i #{jp2_img_path}")
 
