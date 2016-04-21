@@ -50,6 +50,19 @@ set :keep_releases, 5
 
 namespace :deploy do
 
+  namespace :assets do
+      task :backup_manifest do
+        on roles(fetch(:assets_roles)) do
+          within release_path do
+            execute :cp,
+            #  release_path.join('public', fetch(:assets_prefix), '.sprockets-manifest*'),
+              release_path.join('assets_manifest_backup')
+          end
+        end
+      end
+    end
+
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
