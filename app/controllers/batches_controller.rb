@@ -21,7 +21,7 @@ class BatchesController < ApplicationController
 
 
     if @errors[:invalid_job_number].present? || @errors[:vra_errors].any? || @errors[:match_errors].any? || @errors[:invalid_file_names].any?
-      puts "hi i am #{@errors} but i don't know how to respond"
+      Sidekiq::Logging.logger "hi i am #{@errors} but i don't know how to respond"
       respond_with @errors, location: batches_path
     else
       user_email = current_user.email
