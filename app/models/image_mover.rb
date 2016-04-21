@@ -10,7 +10,7 @@ class ImageMover < ActiveRecord::Base
       puts "assume the jp2 image was successfully moved"
     else
       repo_location = "#{ DIL_CONFIG[ 'jp2_location' ]}#{ jp2_img_name }"
-      .logger.debug "UPLOADING ..."
+      Sidekiq::Logging.logger.debug "UPLOADING ..."
       Sidekiq::Logging.logger.debug("scp cmd: scp -i #{ DIL_CONFIG['path_to_keyfile']} #{ jp2_img_path } #{ DIL_CONFIG['jp2_ssh_user'] }@#{DIL_CONFIG['jp2_server']}:#{DIL_CONFIG['jp2_location']}")
 
       stdout, stdeerr, status = Open3.capture3("scp -i #{ DIL_CONFIG['path_to_keyfile']} #{ jp2_img_path } #{ DIL_CONFIG['jp2_ssh_user'] }@#{DIL_CONFIG['jp2_server']}:#{DIL_CONFIG['jp2_location']}")

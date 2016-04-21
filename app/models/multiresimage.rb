@@ -349,7 +349,7 @@ EOF
     # This parameter is where the output file will go
     Sidekiq::Logging.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
-    logger.debug( "j: #{ j }")
+    Sidekiq::Logging.logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
     Sidekiq::Logging.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
@@ -467,7 +467,7 @@ EOF
     File.open(new_filepath, 'wb') do |f|
       f.write raw.content
     end
-    logger.debug("New filepath:" + new_filepath)
+    Sidekiq::Logging.logger.debug("New filepath:" + new_filepath)
     FileUtils.chmod(0644, new_filepath)
     new_filepath
   end
