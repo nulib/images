@@ -330,7 +330,7 @@ EOF
       info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
       stdout = info.to_s
     else
-      stdout, stdeerr, status = Open3.capture3("#{Rails.root}#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{jp2_img_path}")
+      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{jp2_img_path}")
     end
 
     x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
