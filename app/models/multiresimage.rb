@@ -134,7 +134,7 @@ class Multiresimage < ActiveFedora::Base
     self.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-    #Delayed::Worker.logger.info("work.save? #{work.inspect}")
+    #Sidekiq::Logging.logger.info("work.save? #{work.inspect}")
     work #you'd better
   end
 
@@ -155,7 +155,7 @@ class Multiresimage < ActiveFedora::Base
     #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
     if from_menu
       vra = Nokogiri::XML(vra_xml)
-    #  Delayed::Worker.logger.info("vra_save #{vra.xpath("/vra:vra/vra:image").present?}")
+    #  Sidekiq::Logging.logger.info("vra_save #{vra.xpath("/vra:vra/vra:image").present?}")
       if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
@@ -210,14 +210,14 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        #Delayed::Worker.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
+        #Sidekiq::Logging.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
 
         result = self.validate_vra( vra.to_xml )
-      #  Delayed::Worker.logger.info("valid vra? #{result}")
+      #  Sidekiq::Logging.logger.info("valid vra? #{result}")
 
 
         self.datastreams[ 'VRA' ].content = vra.to_xml
-        #Delayed::Worker.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
+        #Sidekiq::Logging.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
         self.datastreams[ 'VRA' ].content
       else
         raise "not an image type"
@@ -407,7 +407,7 @@ EOF
 
 
   def update_associated_work
-    #Delayed::Worker.logger.info("update associated work #{vraworks.first.present?}")
+    #Sidekiq::Logging.logger.info("update associated work #{vraworks.first.present?}")
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
     if vraworks.first.present?
       vra_work = vraworks.first

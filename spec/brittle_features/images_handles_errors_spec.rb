@@ -6,7 +6,7 @@ require 'feature_utilities'
 Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
 
-steps 'Images returns proper error codes and pages' do
+RSpec::Steps.steps 'Images returns proper error codes and pages' do
   it "responds to 404s with not_found_error", :error_handling => true do
     visit "/error"
   #  expect(page.status_code).to eq 404

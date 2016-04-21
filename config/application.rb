@@ -31,10 +31,11 @@ module DIL
     # config.i18n.default_locale = :de
 
     config.assets.paths << "#{Rails}/vendor/assets/fonts"
+    config.eager_load_paths += ["#{config.root}/app/workers"]
 
     config.assets.initialize_on_precompile = true
     config.exceptions_app = self.routes
-    
+
     # Location where dil puts files to be processed
      config.processing_file_path = "/tmp"
 

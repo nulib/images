@@ -4,7 +4,6 @@ require 'dil/pid_minter'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
   include DIL::PidMinter
-  include Delayed
   helper :permissions
 
   respond_to :html, :xml

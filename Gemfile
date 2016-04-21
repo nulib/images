@@ -8,29 +8,30 @@ source 'http://rubygems.org'
   gem 'jbuilder', '~> 2.0'
   gem 'rb-readline'
 
-  gem 'hydra-head', '~> 7.2.2'
+  gem 'hydra-head', '~> 8.0.0'
+  gem 'rsolr'
+  gem 'blacklight', '5.16.3'
+  gem 'blacklight-marc'
 
   gem 'rufus-scheduler'
   gem 'devise'
   gem 'omniauth-ldap'
-
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'protected_attributes'
-  gem 'delayed_job_active_record'
+  gem 'sidekiq'
+  gem 'sinatra', :require => nil
 
   gem 'daemons'
-
-  # Use Capistrano for deployment
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
-  gem 'therubyracer'
-  gem 'jquery-ui-rails'
+  gem 'capistrano-sidekiq'
 
+  gem 'jquery-ui-rails'
   gem "cancan"
 
   gem 'uuid'

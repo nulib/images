@@ -7,7 +7,7 @@ Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
 
 
-steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
+RSpec::Steps.steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
   before :all do
     @driver = :rack_test
     visit('http://localhost:3000/users/sign_in')
@@ -26,9 +26,9 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
     find_link('Work Type').click
     find_link('Prints').click
-    titles = page.all("#documents > div:nth-child(1) > div > a")
+    titles = page.all("#documents > div.blacklight-info-fedora-afmodel-multiresimage > div > a")
+
     img_title = titles[0].text.split[0..3].join(" ")
-    puts "Image Title: #{img_title}"
 
     # drag the first image result to the Test Group
     test_group = find_link('Test Group')
@@ -38,24 +38,26 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
 
 
     click_link('Test Group')
+    sleep(5)
     expect(page).to have_content(img_title)
 
     delete_test_group('Test Group')
   end
 
-  #changing the panding to x because pending executes most of this code anyway, creates but doesn't delete ppt group (of course).
-   xit "lets a user export to PowerPoint" do
-    #DIL-4085
-    visit('http://localhost:3000')
-    make_test_group('PPT Group')
-    add_images_to_test_group('PPT Group')
-    click_link('PPT Group')
-    click_link('Export to PowerPoint')
-
-    expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
-
-    delete_test_group('PPT Group')
-  end
+  # just commenting it out
+  #  it "lets a user export to PowerPoint" do
+  #   pending
+  #   #DIL-4085
+  #   visit('http://localhost:3000')
+  #   make_test_group('PPT Group')
+  #   add_images_to_test_group('PPT Group')
+  #   click_link('PPT Group')
+  #   click_link('Export to PowerPoint')
+  #
+  #   expect(page).to have_content('Image Group exported. Please check your Northwestern University email account for a link to your presentation.')
+  #
+  #   delete_test_group('PPT Group')
+  # end
 
   it "lets a user search with a keyword" do
     # DIL-4069
@@ -75,10 +77,10 @@ steps 'Logged-in Users can Manage their Groups of Images',  :js => true do
     find_link('Creator').click
     find_link('U.S. G.P.O.').click
 
-    titles = page.all("#documents > div:nth-child(1) > div > a")
+    titles = page.all("#documents > div.blacklight-info-fedora-afmodel-multiresimage > div > a")
     img_title = titles[0].text.split[0..3].join(" ")
 
-    first('#documents > div:nth-child(1) > div > a').click
+    first('#documents > div.blacklight-info-fedora-afmodel-multiresimage > div > a').click
 
     click_link('Add to Image Group')
     select('Test Group')

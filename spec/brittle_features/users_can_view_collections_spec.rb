@@ -17,7 +17,7 @@ Capybara.default_wait_time = 5
 
 #Tests
 
-steps 'Logged-in Users can use Images to view Collections',  :js => true do
+RSpec::Steps.steps 'Logged-in Users can use Images to view Collections',  :js => true do
   before :all do
     @driver = Capybara.default_driver
     visit('http://localhost:3000/users/sign_in')
@@ -61,4 +61,3 @@ steps 'Logged-in Users can use Images to view Collections',  :js => true do
   end
 
 end
-

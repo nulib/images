@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
 
   blacklight_for :catalog
@@ -7,17 +9,20 @@ Rails.application.routes.draw do
     mount AboutPage::Engine => '/about(.:format)'
   end
 
-if Rails.env.test?
-  match 'ouch', :to => 'application#test500', via: [ :get, :post, :patch, :delete ]
-  match "error", :to => "application#page_not_found", via: [ :get, :post, :patch, :delete ]
-end
+  if Rails.env.test?
+    match 'ouch', :to => 'application#test500', via: [ :get, :post, :patch, :delete ]
+    match "error", :to => "application#page_not_found", via: [ :get, :post, :patch, :delete ]
+  end
 
-if Rails.env.production? or Rails.env.test?
-   get '404', :to => 'application#page_not_found'
-   get '422', :to => 'application#server_error'
-   get '500', :to => 'application#server_error'
-end
+  if Rails.env.production? or Rails.env.test?
+     get '404', :to => 'application#page_not_found'
+     get '422', :to => 'application#server_error'
+     get '500', :to => 'application#server_error'
+  end
 
+  authenticate :user do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
