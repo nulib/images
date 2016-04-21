@@ -22,7 +22,7 @@ class ImageMover < ActiveRecord::Base
   end
 
   def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
-    Sidekiq::Logginglogger.debug Rails.env
+    Sidekiq::Logging.logger.debug Rails.env
     Sidekiq::Logging.logger.debug tiff_img_name
     Sidekiq::Logging.logger.debug tiff_img_path
 
