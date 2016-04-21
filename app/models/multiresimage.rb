@@ -103,7 +103,7 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find( self.pid )
       j.save!
     rescue StandardError => e
-      Delayed::Worker.logger.debug("standard error: #{e}")
+      Sidekiq::Logging.logger.debug("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
     end
@@ -292,11 +292,11 @@ class Multiresimage < ActiveFedora::Base
 
 
   def create_jp2_staging( img_location )
-    Delayed::Worker.logger.debug("about to create jp2 staging")
+    Sidekiq::Logging.logger.debug("about to create jp2 staging")
     stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-    Delayed::Worker.logger.debug("out #{stdout}")
-    Delayed::Worker.logger.debug("err #{stdeerr}")
-    Delayed::Worker.logger.debug("status #{status}")
+    Sidekiq::Logging.logger.debug("out #{stdout}")
+    Sidekiq::Logging.logger.debug("err #{stdeerr}")
+    Sidekiq::Logging.logger.debug("status #{status}")
   end
 
 
@@ -325,8 +325,7 @@ EOF
 
 
   def get_image_width_and_height
-    Delayed::Worker.logger.info("going to get image height and width")
-
+    Sidekiq::Logging.logger.info("going to get image height and width")
     if "#{Rails.env}" == "test"
       info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
       stdout = info.to_s
@@ -336,10 +335,10 @@ EOF
 
     x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
     width = x1.split(",", 2).first
+
     y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
     height = y1.split(" ", 2).first
 
-    Delayed::Worker.logger.info("got width: #{width} and height: #{height}")
     return { width: width, height: height }
   end
 
@@ -348,22 +347,22 @@ EOF
     require 'jhove_service'
 
     # This parameter is where the output file will go
-    Delayed::Worker.logger.info( 'IN create_jhove_xml' )
+    Sidekiq::Logging.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
     logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
-    Delayed::Worker.logger.info( "xml_loc: #{ xml_loc }")
+    Sidekiq::Logging.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
 
   def create_deliv_techmd_datastream( img_location )
     #this is stupid, it's stupid to create it more than once
-    Delayed::Worker.logger.debug("in create techmd about to create jp2 from this #{img_location}")
+    Sidekiq::Logging.logger.debug("in create techmd about to create jp2 from this #{img_location}")
     begin
       create_jp2( img_location )
     rescue StandardError => e
-      Delayed::Worker.logger.info("create jp2 failed because: #{e}")
+      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
     end
     jhove_xml = create_jhove_xml( jp2_img_path )
 

@@ -27,12 +27,6 @@ Riiif::Image.info_service = lambda do |id, file|
   { height: height, width: width, scale_factors: [1, 2, 4, 8, 16, 32] }
 end
 
-include Blacklight::SolrHelper
-def blacklight_config
-  CatalogController.blacklight_config
-end
-
-### ActiveSupport::Benchmarkable (used in Blacklight::SolrHelper) depends on a logger method
 
 def logger
   Rails.logger

@@ -53,7 +53,7 @@ describe MultiresimagesController, :type => :request do
     end
   end
 
-  it "should publish a multiresimage and return success message with pid upon create" do
+  pending it "should publish a multiresimage and return success message with pid upon create" do
 
     "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
   end

@@ -18,8 +18,8 @@ RSpec::Steps.steps 'Images will create batches of multiresimages from valid vra 
   end
 
   it "admins can create records" do
-    delay_jobs = Delayed::Worker.delay_jobs
-    Delayed::Worker.delay_jobs = false
+    delay_jobs = Sidekiq::Logging.delay_jobs
+    Sidekiq::Logging.delay_jobs = false
 
     click_link("Batch Import")
     fill_in("job_number", :with =>  "valid_job")
@@ -39,6 +39,6 @@ RSpec::Steps.steps 'Images will create batches of multiresimages from valid vra 
 
     FileUtils.mv(tif, "lib/assets/dropbox/batches/valid_job/#{File.basename(tif)}")
     File.rename("lib/assets/dropbox/batches/valid_job/#{File.basename(tif)}", "lib/assets/dropbox/batches/valid_job/great_vra.tiff")
-    Delayed::Worker.delay_jobs = delay_jobs
+    Sidekiq::Logging.delay_jobs = delay_jobs
   end
 end

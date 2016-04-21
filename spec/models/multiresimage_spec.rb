@@ -33,7 +33,7 @@ describe Multiresimage do
       height_and_width = img.get_image_width_and_height
 
       expect(height_and_width[:width]).to eq("600")
-      expect(height_and_width[:height]).to eq("664\\n\",")
+      expect(height_and_width[:height]).to eq("664")
     end
 
   end
@@ -99,14 +99,11 @@ describe Multiresimage do
 
     describe "#create_deliv_ops_datastream" do
       it "populates the DELIV-OPS datastream" do
-        deliv_ops_xml = <<-EOF
-<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
-  <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"/inu-dil/hydra/test/from-menu/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/>
-</svg:svg>
-EOF
+        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         @m.create_deliv_ops_datastream
-        expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml.chomp )
+        p deliv_ops_xml.strip.gsub(/\s+/, " ")
+        expect( @m.datastreams[ "DELIV-OPS" ].content.gsub(/\s+/, " ").chomp).to eq( deliv_ops_xml.strip.gsub(/\s+/, " ").chomp )
       end
     end
 

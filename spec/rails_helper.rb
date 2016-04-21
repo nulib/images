@@ -52,13 +52,13 @@ RSpec.configure do |config|
     # These are optional and can impact performance because they slow down the
     # test suite. Nevertheless, it is helpful to have them in a clean state
     # before each test.
-    DIL::Application.load_tasks
-    ActiveFedora::Base.delete_all
-    Blacklight.solr.delete_by_query("*:*")
-    Blacklight.solr.commit
-
-    #add fixture data to Solr and Fedora
-    Rake::Task["hydra:fixtures:refresh"].invoke
+    # DIL::Application.load_tasks
+    # ActiveFedora::Base.delete_all
+    # Blacklight.solr.delete_by_query("*:*")
+    # Blacklight.solr.commit
+    #
+    # #add fixture data to Solr and Fedora
+    # Rake::Task["hydra:fixtures:refresh"].invoke
   end
 
 
