@@ -24,8 +24,9 @@ source 'http://rubygems.org'
   gem 'sinatra', :require => nil
 
   gem 'daemons'
+  gem 'rubyntlm', '~> 0.1.1'
   gem 'capistrano', '~> 3.2'
-  gem 'capistrano-rails'
+  gem 'capistrano-rails', '~> 1.1.3'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
