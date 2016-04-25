@@ -33,6 +33,11 @@ Rails.application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
+  config.to_prepare { Devise::SessionsController.force_ssl }
+  config.to_prepare { Devise::RegistrationsController.force_ssl }
+  config.to_prepare { Devise::PasswordsController.force_ssl }
+
+
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
