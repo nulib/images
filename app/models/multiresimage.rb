@@ -90,13 +90,16 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
-      batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
-
+      unless Rails.env == "test"
+        batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
+      end
       self.create_deliv_ops_datastream
       self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
-      batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
+      unless Rails.env == "test"
+        batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
+      end
       self.edit_groups = [ 'registered' ]
       self.save!
 
