@@ -24,6 +24,24 @@ describe Multiresimage do
 
   describe "#create_datastreams_and_persist_image_files" do
     it "takes a tiff and creates a jp2 and datastreams and persists the tif and jp2" do
+      path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+
+      count = Multiresimage.all.count
+
+      #expects the multiresimage to have been created. so do that in setup.
+      @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
+
+      @img = Multiresimage.create( from_menu: true, vra_xml: @xml_from_menu )
+
+      @img.create_datastreams_and_persist_image_files(path)
+
+      expect(count + 1).to eql(Multiresimage.all.count)
+
+
+    end
+
+    it "will delete images and vra works if an error is raised in their creation" do
+        @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/good_from_menu_accession.xml" )
 
     end
 

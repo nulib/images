@@ -106,8 +106,10 @@ class Multiresimage < ActiveFedora::Base
       Sidekiq::Logging.logger.debug("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
+      Sidekiq::Logging.logger.info "Deleting work and image because #{e}"
+      j.vraworks.first.delete if j.vraworks.first
+      j.delete
     end
-
     create_and_persist_status
   end
 

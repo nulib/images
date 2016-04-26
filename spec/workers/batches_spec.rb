@@ -36,6 +36,17 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
 
   end
 
+  it "will raise an error if there's already an image with the accession munber" do
+    count = Multiresimage.all.count
+
+    #expects the multiresimage to have been created. so do that in setup.
+
+    @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
+    MultiresimagesWithErrorsBatchWorker.perform_async("12345", "user_email@test.com")
+
+    expect(count).to eql(Multiresimage.all.count)
+  end
+
   it "will send status notifications to user if the job succeeds" do
     ActionMailer::Base.deliveries.clear
     MultiresimagesBatchWorker.perform_async("valid_job", "user_email@test.com")

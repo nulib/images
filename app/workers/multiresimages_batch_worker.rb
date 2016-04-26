@@ -14,6 +14,12 @@ class MultiresimagesBatchWorker
     bad_file_storage = []
       good_xml_files.each do |xf|
         xml = Nokogiri::XML(File.read( xf ))
+
+        if xml.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='Accession']").present?
+          accession_number = xml.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='Accession']")
+          raise "Existing image found with this accession number" if existing_image?( accession_number.text )
+        end
+
         ready_xml = TransformXML.add_empty_work_element(xml)
         pid = mint_pid("dil")
         #from_menu = true now has to be re-named.
