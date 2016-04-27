@@ -3,6 +3,7 @@
 # The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
 # the institutional collection's permissions.
 require 'dil/pid_minter'
+require 'open3'
 
 class Multiresimage < ActiveFedora::Base
   include Hydra::ModelMethods
@@ -89,24 +90,32 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
-
-      batch ? ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
+      unless Rails.env == "test"
+        batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
+      end
       self.create_deliv_ops_datastream
       self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
-      batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
+      unless Rails.env == "test"
+        batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
+      end
       self.edit_groups = [ 'registered' ]
       self.save!
 
-      j = Multiresimage.find( pid )
+      j = Multiresimage.find( self.pid )
       j.save!
     rescue StandardError => e
-      Delayed::Worker.logger.info("standard error: #{e}")
+      Sidekiq::Logging.logger.debug("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
-    end
+      Sidekiq::Logging.logger.info "Deleting work and image because #{e}"
 
+      if self
+        self.vraworks.first.delete if self.vraworks.first
+        self.delete
+      end
+    end
     create_and_persist_status
   end
 
@@ -133,7 +142,7 @@ class Multiresimage < ActiveFedora::Base
     self.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-    #Delayed::Worker.logger.info("work.save? #{work.inspect}")
+    #Sidekiq::Logging.logger.info("work.save? #{work.inspect}")
     work #you'd better
   end
 
@@ -154,7 +163,7 @@ class Multiresimage < ActiveFedora::Base
     #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
     if from_menu
       vra = Nokogiri::XML(vra_xml)
-    #  Delayed::Worker.logger.info("vra_save #{vra.xpath("/vra:vra/vra:image").present?}")
+    #  Sidekiq::Logging.logger.info("vra_save #{vra.xpath("/vra:vra/vra:image").present?}")
       if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
@@ -209,14 +218,14 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        #Delayed::Worker.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
+        #Sidekiq::Logging.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
 
         result = self.validate_vra( vra.to_xml )
-      #  Delayed::Worker.logger.info("valid vra? #{result}")
+      #  Sidekiq::Logging.logger.info("valid vra? #{result}")
 
 
         self.datastreams[ 'VRA' ].content = vra.to_xml
-        #Delayed::Worker.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
+        #Sidekiq::Logging.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
         self.datastreams[ 'VRA' ].content
       else
         raise "not an image type"
@@ -265,18 +274,16 @@ class Multiresimage < ActiveFedora::Base
     "#{ self.pid }.tif".gsub( /:/, '-' )
   end
 
-
   def create_jp2( img_location )
     return jp2_img_path if File.exist?( jp2_img_path )
 
     if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
     else
-      create_jp2_staging( img_location )
-    end
+      create_jp2_staging( img_location ) #which also means production. SUCKAGE.
+     end
 
-    #sleep( 5 )
-    if $?.to_i == 0 && File.file?( jp2_img_path )
+    if File.file?( jp2_img_path )
       jp2_img_path
     else
       raise "Failed to create jp2 image"
@@ -284,14 +291,20 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
+#these need to be refactored, we need one way of doing this in every environment. imagemagick or graphicsmagick.
+#when refactoring there's only going to be one create jp2 method
+
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
 
   def create_jp2_staging( img_location )
-    Delayed::Worker.logger.info("jp2 staging")
-   `LD_LIBRARY_PATH=#{Rails.root}/lib/awaresdk/lib/; export LD_LIBRARY_PATH; lib/awaresdk/bin/j2kdriver -i #{img_location} -t jp2 --tile-size 1024 1024 -R 30 -o #{jp2_img_path}`
+    Sidekiq::Logging.logger.debug("about to create jp2 staging")
+    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
+    Sidekiq::Logging.logger.debug("out #{stdout}")
+    Sidekiq::Logging.logger.debug("err #{stdeerr}")
+    Sidekiq::Logging.logger.debug("status #{status}")
   end
 
 
@@ -320,13 +333,20 @@ EOF
 
 
   def get_image_width_and_height
-    Delayed::Worker.logger.info("going to get image height and width")
-    unless Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
-      raise "Problem with DELIV-TECHMD datastream (maybe it doesn't exist?)"
+    Sidekiq::Logging.logger.info("going to get image height and width")
+    if "#{Rails.env}" == "test"
+      info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
+      stdout = info.to_s
+    else
+      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{jp2_img_path}")
     end
-    jhove_xml = Nokogiri::XML( self.datastreams[ 'DELIV-TECHMD' ].content )
-    width = jhove_xml.at_xpath( '//mix:imageWidth', :mix => 'http://www.loc.gov/mix/v10' ).content
-    height = jhove_xml.at_xpath( '//mix:imageHeight', :mix => 'http://www.loc.gov/mix/v10' ).content
+
+    x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
+    width = x1.split(",", 2).first
+
+    y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
+    height = y1.split(" ", 2).first
+
     return { width: width, height: height }
   end
 
@@ -335,17 +355,23 @@ EOF
     require 'jhove_service'
 
     # This parameter is where the output file will go
-    Delayed::Worker.logger.info( 'IN create_jhove_xml' )
+    Sidekiq::Logging.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
-    logger.debug( "j: #{ j }")
+    Sidekiq::Logging.logger.debug( "j: #{ j }")
     xml_loc = j.run_jhove( img_location )
-    Delayed::Worker.logger.info( "xml_loc: #{ xml_loc }")
+    Sidekiq::Logging.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
 
   def create_deliv_techmd_datastream( img_location )
-    create_jp2( img_location )
+    #this is stupid, it's stupid to create it more than once
+    Sidekiq::Logging.logger.debug("in create techmd about to create jp2 from this #{img_location}")
+    begin
+      create_jp2( img_location )
+    rescue StandardError => e
+      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
+    end
     jhove_xml = create_jhove_xml( jp2_img_path )
 
     unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
@@ -388,7 +414,7 @@ EOF
 
 
   def update_associated_work
-    #Delayed::Worker.logger.info("update associated work #{vraworks.first.present?}")
+    #Sidekiq::Logging.logger.info("update associated work #{vraworks.first.present?}")
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
     if vraworks.first.present?
       vra_work = vraworks.first
@@ -449,7 +475,7 @@ EOF
     File.open(new_filepath, 'wb') do |f|
       f.write raw.content
     end
-    logger.debug("New filepath:" + new_filepath)
+    Sidekiq::Logging.logger.debug("New filepath:" + new_filepath)
     FileUtils.chmod(0644, new_filepath)
     new_filepath
   end
@@ -531,6 +557,8 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     self.rels_ext.content.include? "isCropOf"
   end
 
+
+  #get rid of this - image server will do it
   def image_url(max_size=1600)
 
     src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f

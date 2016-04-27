@@ -7,9 +7,6 @@ class CatalogController < ApplicationController
   include DIL_Blacklight::SolrHelpers::ObjectTypeFacet
   include Hydra::PolicyAwareAccessControlsEnforcement
 
-  # This applies appropriate access controls to all solr queries
-  self.solr_search_params_logic += [:add_access_controls_to_solr_params]
-  self.solr_search_params_logic << :multiresimage_object_type_facet
 
   configure_blacklight do |config|
     config.default_solr_params = {

@@ -4,7 +4,6 @@ require 'dil/pid_minter'
 class MultiresimagesController < ApplicationController
   include DIL::MultiresimageService
   include DIL::PidMinter
-  include Delayed
   helper :permissions
 
   respond_to :html, :xml
@@ -99,14 +98,16 @@ class MultiresimagesController < ApplicationController
   end
 
   def create
-
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?
         raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
         i.save
+
         i.create_datastreams_and_persist_image_files(params[:path])
+
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         # puts msg.backtrace.join("\n")
@@ -139,13 +140,25 @@ class MultiresimagesController < ApplicationController
 
     @display_content_nav_elements = @collection.present? && @collection.show_navigation_elements? && @index.present?
 
-    @multiresimage = Multiresimage.find(params[:id])
-    authorize! :read, @multiresimage
+    begin
+      session[:previous_url] = request.fullpath unless request.xhr?
+
+      @multiresimage = Multiresimage.find(params[:id])
+      authorize! :read, @multiresimage
+    rescue Blacklight::Exceptions::InvalidSolrID => e
+      if !user_signed_in?
+        flash[:error] = "You must log in to view this image."
+        redirect_to  "/users/sign_in"
+      else
+        redirect_to "/server_error"
+      end
+    end
 
     @user_with_groups_is_signed_in = false
     if user_signed_in? and !current_user.collections.empty?
       @user_with_groups_is_signed_in = true
     end
+
     @page_title = @multiresimage.titleSet_display
     gon.url = DIL_CONFIG['dil_js_url']
   end

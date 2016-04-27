@@ -1,6 +1,6 @@
 class Ability
   include CanCan::Ability
-  include Hydra::Ability
+  #include Hydra::Ability
   include Hydra::PolicyAwareAbility
 
   ## This method overrides the default Hydra implementation to provide LDAP integration
@@ -34,7 +34,7 @@ class Ability
     end
     can :destroy, ActiveFedora::Base do |obj|
       #TODO this may not be necessary.  Also it's ignoring groups.
-      obj.rightsMetadata.individuals[@user.email] == 'edit'
+      obj.rightsMetadata.users[@user.email] == 'edit'
     end
 
     can :create, AdminPolicy

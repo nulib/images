@@ -22,6 +22,47 @@ describe Multiresimage do
     end
   end
 
+  describe "#create_datastreams_and_persist_image_files" do
+    it "takes a tiff and creates a jp2 and datastreams and persists the tif and jp2" do
+      path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+      count = Multiresimage.all.count
+
+      @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
+      @img = Multiresimage.create( from_menu: true, vra_xml: @xml_from_menu )
+      all_good = @img.create_datastreams_and_persist_image_files(path)
+
+      expect(all_good).to be true
+      expect(count + 1).to eql(Multiresimage.all.count)
+    end
+
+    it "will delete images and vra works if an error is raised in their creation" do
+      @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
+      image_count = Multiresimage.all.count
+      vra_count = Vrawork.all.count
+
+      @img = Multiresimage.new( from_menu: true, vra_xml: @xml_from_menu )
+      @img.save
+
+      path = "invalid_path"
+      all_good = @img.create_datastreams_and_persist_image_files(path)
+
+      expect(image_count).to eql(Multiresimage.all.count)
+      expect(vra_count).to eql(Vrawork.all.count)
+      expect(all_good).to_not be true
+
+    end
+
+    it "can get the height and width of a jp2" do
+      img = Multiresimage.first
+      jp2_img_path = "#{ Rails.root }#{DIL_CONFIG['test_jp2_path']}"
+      height_and_width = img.get_image_width_and_height
+
+      expect(height_and_width[:width]).to eq("600")
+      expect(height_and_width[:height]).to eq("664")
+    end
+
+  end
+
   describe "#vra_save" do
     before( :each ) do
       @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
@@ -83,14 +124,11 @@ describe Multiresimage do
 
     describe "#create_deliv_ops_datastream" do
       it "populates the DELIV-OPS datastream" do
-        deliv_ops_xml = <<-EOF
-<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">
-  <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"/inu-dil/hydra/test/from-menu/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/>
-</svg:svg>
-EOF
+        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         @m.create_deliv_ops_datastream
-        expect( @m.datastreams[ "DELIV-OPS" ].content).to eq( deliv_ops_xml.chomp )
+        p deliv_ops_xml.strip.gsub(/\s+/, " ")
+        expect( @m.datastreams[ "DELIV-OPS" ].content.gsub(/\s+/, " ").chomp).to eq( deliv_ops_xml.strip.gsub(/\s+/, " ").chomp )
       end
     end
 
@@ -156,13 +194,13 @@ EOF
     it "should have read groups writer" do
       subject.read_groups = ['group-2', 'group-3']
       expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'} )
-      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
+      expect( subject.rightsMetadata.users ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
     it "should only revoke eligible groups" do
       subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
       # 'group-7' is not eligible to be revoked
       expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-7' => 'read', 'group-8' => 'edit'} )
-      expect( subject.rightsMetadata.individuals ).to eq( {"person1"=>"read","person2"=>"discover"} )
+      expect( subject.rightsMetadata.users ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
   end
 
@@ -213,4 +251,3 @@ EOF
     end
   end
 end
-

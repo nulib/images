@@ -8,38 +8,43 @@ source 'http://rubygems.org'
   gem 'jbuilder', '~> 2.0'
   gem 'rb-readline'
 
-  gem 'hydra-head', '~> 7.2.2'
+  gem 'hydra-head', '~> 8.0.0'
+  gem 'rsolr'
+  gem 'blacklight', '5.16.3'
+  gem 'blacklight-marc'
 
   gem 'rufus-scheduler'
   gem 'devise'
   gem 'omniauth-ldap'
-
   gem 'gon'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'protected_attributes'
-  gem 'delayed_job_active_record'
+  gem 'sidekiq'
+  gem 'sinatra', :require => nil
 
   gem 'daemons'
-
-  # Use Capistrano for deployment
+  gem 'rubyntlm', '~> 0.1.1'
   gem 'capistrano', '~> 3.2'
-  gem 'capistrano-rails'
+  gem 'capistrano-rails', '~> 1.1.3'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
-  gem 'therubyracer'
-  gem 'jquery-ui-rails'
+  gem 'capistrano-sidekiq'
 
+  gem 'jquery-ui-rails'
   gem "cancan"
 
   gem 'uuid'
   gem 'hydra-ldap'
   gem 'high_voltage'
   gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
+  gem 'riiif'
+  gem 'openseadragon'
 
 group :test do
   gem 'rspec-rails'
+  gem 'byebug'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara'
@@ -65,6 +70,8 @@ group :staging do
   gem 'pg'
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
   gem 'lograge'
+  gem 'rb-readline'
+  gem 'byebug'
 end
 
 group :production do

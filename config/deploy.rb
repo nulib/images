@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.3.5'
+lock '3.4.0'
 
 set :application, 'dil_hydra'
 set :repo_url, 'git@github.com:nulib/images.git'
@@ -21,6 +21,9 @@ set :log_level, :debug
 set :passenger_restart_with_touch, true
 # Default value for :pty is false
 # set :pty, true
+#sidekiq
+set :pty,  false
+
 
 # Default value for :linked_files is []
 set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml config/secrets.yml config/solr.yml}
@@ -37,7 +40,8 @@ set :bundle_binstubs, -> { shared_path.join('bin') }
 # rbenv setup
 set :rbenv_type, :user
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+#set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+#set :rbenv_map_bins, fetch(:rbenv_map_bins).to_a.concat(%w({rake gem bundle ruby rails}))
 set :rbenv_roles, :all # default value
 
 
@@ -51,7 +55,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       execute :touch, release_path.join('tmp/restart.txt')
-      invoke 'delayed_job:restart'
+    #  invoke 'delayed_job:restart'
     end
   end
 

@@ -2,6 +2,8 @@ require 'rails_helper'
 
 describe MultiresimagesController, :type => :request do
 
+  ##TODO riiif -- we need test covering login check and rescue and redirect for show.
+
   describe "existing image with Voyager number" do
     it "raises an error if accession number matches Voyager number" do
       @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
@@ -13,7 +15,7 @@ describe MultiresimagesController, :type => :request do
         'accession_nbr' => "1234"
       }
 
-      post menu_publish_multiresimages_path, params
+      post multiresimages_path, params
 
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>Existing image found with this accession number</description></response>')
     end
@@ -30,7 +32,7 @@ describe MultiresimagesController, :type => :request do
         'accession_nbr' => "5678"
       }
 
-      post menu_publish_multiresimages_path, params
+      post multiresimages_path, params
 
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>Existing image found with this accession number</description></response>')
     end
@@ -45,11 +47,25 @@ describe MultiresimagesController, :type => :request do
         'accession_nbr' => ''
       }
 
-      post menu_publish_multiresimages_path, params
+      post multiresimages_path, params
 
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>An accession number is required</description></response>')
     end
   end
+
+  it "should publish a multiresimage and return success message with pid upon create" do
+    params = {
+      'format' => 'xml',
+      'from_menu'=> true,
+      'xml' =>   @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" ),
+      'path' => "#{ Rails.root }/lib/assets/dropbox/123/123_Rodinia.tiff",
+      'accession_nbr' => '224321'
+    }
+    post multiresimages_path, params
+    expect(response.body).to include("Publish successful")
+    expect(response.body).to include("inu:dil")
+  end
+
 
   it "should update both image and work vra" do
     @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" )
