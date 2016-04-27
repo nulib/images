@@ -58,7 +58,7 @@ RSpec.configure do |config|
     Blacklight.solr.commit
 
     #add fixture data to Solr and Fedora
-    Rake::Task["hydra:fixtures:refresh"].invoke
+     Rake::Task["hydra:fixtures:refresh"].invoke
   end
 
 

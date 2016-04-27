@@ -53,9 +53,16 @@ describe MultiresimagesController, :type => :request do
     end
   end
 
-  pending it "should publish a multiresimage and return success message with pid upon create" do
-
-    "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
+  it "should publish a multiresimage and return success message with pid upon create" do
+    params = {
+      'format' => 'xml',
+      'from_menu'=> true,
+      'xml' =>   @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" ),
+      'path' => "#{ Rails.root }/lib/assets/dropbox/123/123_Rodinia.tiff",
+      'accession_nbr' => '224321'
+    }
+    post menu_publish_multiresimages_path, params
+    expect(response.body).to eq("<response><returnCode>Publish successful</returnCode><pid>#{Multiresimage.last.pid}</pid></response>")
   end
 
 

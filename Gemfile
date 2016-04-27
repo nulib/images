@@ -44,6 +44,7 @@ source 'http://rubygems.org'
 
 group :test do
   gem 'rspec-rails'
+  gem 'byebug'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara'

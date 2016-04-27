@@ -1,6 +1,6 @@
 module VraValidator
 
-  # returns nil is there weren't any validation errors
+  # returns nil if there weren't any validation errors
   def validate_vra(vra)
     doc = Nokogiri::XML(vra)
 

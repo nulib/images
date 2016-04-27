@@ -28,23 +28,23 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
 
   #job will do its job -- might belong in controller test
   it "will take a valid job and create Multiresimages" do
+    old_count = Multiresimage.all.count
     MultiresimagesBatchWorker.perform_async("valid_job", "user_email@test.com")
     MultiresimagesBatchWorker.drain
-    old_count = Multiresimage.all.count
-    expect(Multiresimage.all.count == (old_count + 1))
-    stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
 
+    expect(Multiresimage.all.count == (old_count + 1))
   end
 
   it "will raise an error if there's already an image with the accession munber" do
-    count = Multiresimage.all.count
+    #test array of three files contains two files with same accession number, which will cause one error, which means count should only go up by one.
+    image_count = Multiresimage.all.count
+    vra_count = Vrawork.all.count
 
-    #expects the multiresimage to have been created. so do that in setup.
+    MultiresimagesBatchWorker.perform_async("duplicates", "user_email@test.com")
+    MultiresimagesBatchWorker.drain
 
-    @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_image_sample.xml" )
-    MultiresimagesWithErrorsBatchWorker.perform_async("12345", "user_email@test.com")
-
-    expect(count).to eql(Multiresimage.all.count)
+    expect(image_count + 1).to eql(Multiresimage.all.count)
+    expect(vra_count + 1).to eql(Vrawork.all.count)
   end
 
   it "will send status notifications to user if the job succeeds" do
