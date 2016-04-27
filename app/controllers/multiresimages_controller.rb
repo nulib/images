@@ -98,14 +98,16 @@ class MultiresimagesController < ApplicationController
   end
 
   def create
-
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?
         raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
         i.save
+
         i.create_datastreams_and_persist_image_files(params[:path])
+
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
         # puts msg.backtrace.join("\n")
@@ -140,7 +142,7 @@ class MultiresimagesController < ApplicationController
 
     begin
       session[:previous_url] = request.fullpath unless request.xhr?
-      
+
       @multiresimage = Multiresimage.find(params[:id])
       authorize! :read, @multiresimage
     rescue Blacklight::Exceptions::InvalidSolrID => e

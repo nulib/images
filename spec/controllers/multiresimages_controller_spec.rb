@@ -15,7 +15,7 @@ describe MultiresimagesController, :type => :request do
         'accession_nbr' => "1234"
       }
 
-      post menu_publish_multiresimages_path, params
+      post multiresimages_path, params
 
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>Existing image found with this accession number</description></response>')
     end
@@ -32,7 +32,7 @@ describe MultiresimagesController, :type => :request do
         'accession_nbr' => "5678"
       }
 
-      post menu_publish_multiresimages_path, params
+      post multiresimages_path, params
 
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>Existing image found with this accession number</description></response>')
     end
@@ -47,7 +47,7 @@ describe MultiresimagesController, :type => :request do
         'accession_nbr' => ''
       }
 
-      post menu_publish_multiresimages_path, params
+      post multiresimages_path, params
 
       expect(response.body).to eq('<response><returnCode>Error</returnCode><description>An accession number is required</description></response>')
     end
@@ -61,8 +61,9 @@ describe MultiresimagesController, :type => :request do
       'path' => "#{ Rails.root }/lib/assets/dropbox/123/123_Rodinia.tiff",
       'accession_nbr' => '224321'
     }
-    post menu_publish_multiresimages_path, params
-    expect(response.body).to eq("<response><returnCode>Publish successful</returnCode><pid>#{Multiresimage.last.pid}</pid></response>")
+    post multiresimages_path, params
+    expect(response.body).to include("Publish successful")
+    expect(response.body).to include("inu:dil")
   end
 
 

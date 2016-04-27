@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'sidekiq/testing'
-require 'multiresimages_with_errors_batch_job'
 require 'open3'
 
 Sidekiq::Testing.fake!
@@ -23,6 +22,8 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
     MultiresimagesBatchWorker.drain
 
     expect(MultiresimagesBatchWorker.jobs.count).to eq(0)
+    stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
+
     Sidekiq::Testing.fake!
   end
 
@@ -33,6 +34,7 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
     MultiresimagesBatchWorker.drain
 
     expect(Multiresimage.all.count == (old_count + 1))
+    stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
   end
 
   it "will raise an error if there's already an image with the accession munber" do
