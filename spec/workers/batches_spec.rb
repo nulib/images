@@ -54,15 +54,18 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
 
     expect(ActionMailer::Base.deliveries.last.subject).to eq("The status of your batch of Images records")
     stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
+    puts "err #{stdeerr}"
+    puts "out #{stdout}"
+    puts "status #{status}"
   end
 
 end
 
-RSpec.describe MultiresimagesWithErrorsBatchWorker, type: :job do
+RSpec.describe MultiresimagesBatchWorker, type: :job do
   it "will send error notifications to admins if the job has errors" do
     ActionMailer::Base.deliveries.clear
-    MultiresimagesWithErrorsBatchWorker.perform_async("12345", "user_email@test.com")
-    MultiresimagesWithErrorsBatchWorker.drain
+    MultiresimagesBatchWorker.perform_async("invalid_vra", "user_email@test.com")
+    MultiresimagesBatchWorker.drain
 
     expect(ActionMailer::Base.deliveries.last.subject).to include("had an error in it")
   end
