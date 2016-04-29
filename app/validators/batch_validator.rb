@@ -35,8 +35,11 @@ module BatchValidator
   end
 
   def find_match_errors(first_array, second_array)
+    puts "names - #{first_array}, #{second_array}"
+
     first_array_basenames = get_basenames(first_array)
     second_array_basenames = get_basenames(second_array)
+    puts "base-names - #{first_array_basenames}, #{second_array_basenames}"
     corresponding_file_missing = []
 
     first_array.each do |item|
@@ -58,6 +61,6 @@ module BatchValidator
   end
 
   def get_image_files(job_dir)
-    Dir.glob(job_dir + "*.tif[f]", File::FNM_CASEFOLD).sort
+    Dir.glob(job_dir + "*.tif*", File::FNM_CASEFOLD).sort
   end
 end
