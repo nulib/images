@@ -2,24 +2,16 @@ require 'rails_helper'
 
 describe Multiresimage do
 
-  # This isn't a valid test. We don't instantiate these objects with file names
-  # describe "a new instance with a file name" do
-  #   m = Multiresimage.new(:file_name=>'readme.txt')
-  #   expect(m.file_name).to eq('readme.txt')
-  # end
-
-  pending("It doesn't look like we're using policies") do
-    describe "should have an admin policy" do
-      before do
-        @policy = AdminPolicy.create
-      end
-      after do
-        @policy.delete
-      end
-      subject { Multiresimage.new(:admin_policy=>@policy) }
-      its(:admin_policy) { should == @policy }
-
+  pending("It doesn't look like we're using policies and we should") do
+    before do
+      @policy = AdminPolicy.create
     end
+    after do
+      @policy.delete
+    end
+    subject { Multiresimage.new(:admin_policy=>@policy) }
+    its(:admin_policy) { should == @policy }
+
   end
 
   describe "#create_datastreams_and_persist_image_files" do
@@ -60,6 +52,19 @@ describe Multiresimage do
       expect(height_and_width[:width]).to eq("600")
       expect(height_and_width[:height]).to eq("664")
     end
+
+    it "can add the location display element that holds the pid to vra xml if it's missing" do
+      path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+      count = Multiresimage.all.count
+
+      @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_without_locationset_display.xml" )
+      @img = Multiresimage.create( from_menu: true, vra_xml: @xml_from_menu )
+      all_good = @img.create_datastreams_and_persist_image_files(path)
+
+      expect(all_good).to be true
+      expect(count + 1).to eql(Multiresimage.all.count)
+    end
+
 
   end
 
