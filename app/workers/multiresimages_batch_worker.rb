@@ -18,6 +18,7 @@ class MultiresimagesBatchWorker
           xml = Nokogiri::XML(File.read( xf ))
           begin
             accession_number = xml.xpath("//refid[@source=\"Accession\"]")
+            raise "No Accession number for #{xf}" if accession_number.nil?
             raise "Existing image found with this accession number" if existing_image?( accession_number.text )
           rescue => e
             Sidekiq::Logging.logger.error("Problem with accession number: #{e}")

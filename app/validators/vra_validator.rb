@@ -13,7 +13,7 @@ module VraValidator
       next if err =~ /is not a valid value of the list type 'xs:IDREFS'/
       next if err =~ /is not a valid value of the atomic type 'xs:IDREF'/
       next if err =~ /is not a valid value of the atomic type 'xs:ID'/
-      raise StandardError.new("#{err}")
+      raise StandardError.new("Invalid vra error: #{err}")
     end
   end
 

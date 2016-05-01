@@ -178,7 +178,12 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #add the pid to the locationset Display
-        vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
+        if vra.at_xpath("/vra:vra/vra:image/vra:locationSet/vra:display").nil?
+          vra.at_xpath("/vra:vra/vra:image/vra:locationSet").children.first.add_previous_sibling( Nokogiri::XML::Node.new('vra:display', vra) )
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library"
+        else 
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
+        end
 
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
