@@ -170,7 +170,7 @@ class Multiresimage < ActiveFedora::Base
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #add the pid to the locationset
-        if vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']").present?
+        if vra.at_xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")
           vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
         else
           vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location").set_attribute('source', 'DIL')
@@ -181,7 +181,7 @@ class Multiresimage < ActiveFedora::Base
         if vra.at_xpath("/vra:vra/vra:image/vra:locationSet/vra:display").nil?
           vra.at_xpath("/vra:vra/vra:image/vra:locationSet").children.first.add_previous_sibling( Nokogiri::XML::Node.new('vra:display', vra) )
           vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library"
-        else 
+        else
           vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
         end
 
@@ -226,7 +226,7 @@ class Multiresimage < ActiveFedora::Base
         #Sidekiq::Logging.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
 
         result = self.validate_vra( vra.to_xml )
-      #  Sidekiq::Logging.logger.info("valid vra? #{result}")
+        Sidekiq::Logging.logger.info("valid vra? #{result}")
 
 
         self.datastreams[ 'VRA' ].content = vra.to_xml

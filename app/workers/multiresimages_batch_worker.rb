@@ -23,11 +23,12 @@ class MultiresimagesBatchWorker
           rescue => e
             Sidekiq::Logging.logger.error("Problem with accession number: #{e}")
           end
-
-          ready_xml = TransformXML.add_empty_work_element(xml)
+          doc = File.read( xf )
+          ready_xml = TransformXML.prepare_vra_xml(doc)
           pid = mint_pid("dil")
           #from_menu = true now has to be re-named.
-          multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml.to_xml(), from_menu: true)
+          multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
+
           multiresimage.save
           test_tif = xf.gsub(/.xml/, '.tiff')
           tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
