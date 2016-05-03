@@ -31,11 +31,11 @@ RSpec.describe VraValidator do
       end
     end
 
-    # describe "with valid vra" do
-    #   it "should pass" do
-    #     expect( @dummy_class.validate_vra( File.open("#{ Rails.root }/spec/fixtures/vra_image_minimal_invalid.xml").read )).to be_truthy
-    #   end
-    # end
+    describe "valid vra except for pids" do
+      it "should pass" do
+        expect( @dummy_class.validate_vra( File.open("#{ Rails.root }/spec/fixtures/vra_image_with_pids.xml").read )).to be_truthy
+      end
+    end
   end
 
 end

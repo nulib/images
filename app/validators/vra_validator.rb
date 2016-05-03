@@ -3,18 +3,19 @@ module VraValidator
   # returns nil if there weren't any validation errors
   def validate_vra(vra)
     doc = Nokogiri::XML(vra)
-
-    invalid = []
+    valid = false
+    errors = []
     XSD.validate(doc).each do |error|
-      invalid << "Validation error: #{error.message}\n"
+      errors << "Validation error: #{error.message}\n"
     end
 
-    invalid.each do |err|
-      next if err =~ /is not a valid value of the list type 'xs:IDREFS'/
-      next if err =~ /is not a valid value of the atomic type 'xs:IDREF'/
-      next if err =~ /is not a valid value of the atomic type 'xs:ID'/
-      raise StandardError.new("Invalid vra error: #{err}")
+    invalid_errors = errors.reject do |err|
+      err.to_s.include?("inu:dil")
     end
+    if invalid_errors.empty?
+      valid = true
+    end
+    valid
   end
 
   def valid_vra?(vra)

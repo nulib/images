@@ -226,7 +226,9 @@ class Multiresimage < ActiveFedora::Base
         #Sidekiq::Logging.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
 
         result = self.validate_vra( vra.to_xml )
+
         Sidekiq::Logging.logger.info("valid vra? #{result}")
+        Sidekiq::Logging.logger.info("pid? #{self.pid}")
 
 
         self.datastreams[ 'VRA' ].content = vra.to_xml
