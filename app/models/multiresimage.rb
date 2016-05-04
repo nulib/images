@@ -91,14 +91,14 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
       unless Rails.env == "test"
-        batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
+        batch ? create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
       self.create_deliv_ops_datastream
       self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
       unless Rails.env == "test"
-        batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
+        batch ? create_and_persist_status = ImageMover.move_img_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_img_to_repo( self.tiff_img_name, path)
       end
       self.edit_groups = [ 'registered' ]
       self.save!
@@ -145,17 +145,6 @@ class Multiresimage < ActiveFedora::Base
     #Sidekiq::Logging.logger.info("work.save? #{work.inspect}")
     work #you'd better
   end
-
-
-  # This function removes the image from a dil_collection object, NOT an institutional collection
-  def remove_from_all_dil_collections
-    self.collections.each do |collection|
-      collection.members.remove_member_by_pid( self.pid )
-      collection.save
-      self.collections.delete(collection)
-    end
-  end
-
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
@@ -287,7 +276,7 @@ class Multiresimage < ActiveFedora::Base
     if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
     else
-      create_jp2_staging( img_location ) #which also means production. SUCKAGE.
+      create_jp2_remote( img_location )
      end
 
     if File.file?( jp2_img_path )
@@ -298,17 +287,14 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-#these need to be refactored, we need one way of doing this in every environment. imagemagick or graphicsmagick.
-#when refactoring there's only going to be one create jp2 method
-
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
 
-  def create_jp2_staging( img_location )
+  def create_jp2_remote( img_location )
     Sidekiq::Logging.logger.debug("about to create jp2 staging")
-    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
+    stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
     Sidekiq::Logging.logger.debug("out #{stdout}")
     Sidekiq::Logging.logger.debug("err #{stdeerr}")
     Sidekiq::Logging.logger.debug("status #{status}")
@@ -340,7 +326,6 @@ EOF
 
 
   def get_image_width_and_height
-    Sidekiq::Logging.logger.info("going to get image height and width")
     if "#{Rails.env}" == "test"
       info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
       stdout = info.to_s
@@ -364,9 +349,8 @@ EOF
     # This parameter is where the output file will go
     Sidekiq::Logging.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
-    Sidekiq::Logging.logger.debug( "j: #{ j }")
+    Sidekiq::Logging.logger.debug( "jhove: #{ j }")
     xml_loc = j.run_jhove( img_location )
-    Sidekiq::Logging.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
@@ -565,7 +549,7 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
   end
 
 
-  #get rid of this - image server will do it
+  #get rid of this - image server will do it. proxy_image relies on it, replace
   def image_url(max_size=1600)
 
     src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f
@@ -578,6 +562,16 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
 
     "#{DIL_CONFIG['aware_region_url']}#{self.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
   end
+
+  # This function removes the image from a dil_collection object, NOT an institutional collection
+  def remove_from_all_dil_collections
+    self.collections.each do |collection|
+      collection.members.remove_member_by_pid( self.pid )
+      collection.save
+      self.collections.delete(collection)
+    end
+  end
+
 
   private
 

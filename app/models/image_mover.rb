@@ -21,19 +21,27 @@ class ImageMover < ActiveRecord::Base
     end
   end
 
-  def self.move_tiff_to_repo(tiff_img_name, tiff_img_path)
+  def self.move_img_to_repo(img_name, img_path)
     Sidekiq::Logging.logger.debug Rails.env
-    Sidekiq::Logging.logger.debug tiff_img_name
-    Sidekiq::Logging.logger.debug tiff_img_path
+    Sidekiq::Logging.logger.debug img_name
+    Sidekiq::Logging.logger.debug img_path
 
     if Rails.env == "development" or Rails.env == "test"
-      Sidekiq::Logging.logger.debug "assume the tiff image was successfully moved"
-    else
-      #needs to be in config
-      new_path = "#{ DIL_CONFIG['repo_location']}#{ tiff_img_name }"
-      old_path = tiff_img_path
+      Sidekiq::Logging.logger.debug "assume the image was successfully moved"
 
-      Sidekiq::Logging.logger.debug "Moving tiff to #{new_path}"
+    else
+      #needs to be in config --- just make /tmp owned by deploy on staging to fully mimic production
+      if img_name.include?('.tif')
+          new_path = "#{ DIL_CONFIG['repo_location']}#{ img_name }"
+      elsif img_name.include?('.jp2')
+        new_path = "#{DIL_CONFIG[ 'jp2_location' ]}#{ img_name }"
+      else
+        raise "Wrong image format, not tif or jp2"
+      end
+
+      old_path = img_path
+
+      Sidekiq::Logging.logger.debug "Moving image file to #{new_path}"
       begin
         FileUtils.mkdir_p File.dirname(new_path)
         FileUtils.mv old_path, new_path
