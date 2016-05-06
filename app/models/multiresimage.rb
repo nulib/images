@@ -319,7 +319,7 @@ class Multiresimage < ActiveFedora::Base
 
   def create_deliv_ops_datastream
     #this gets called after copy of file from local tmp directory to isilon-backed location at DIL_CONFIG['jp2_location']
-    jp2_location = "#{DIL_CONFIG['jp2_location']}"
+    jp2_location = "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
     width_and_height = get_image_width_and_height(jp2_location)
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
