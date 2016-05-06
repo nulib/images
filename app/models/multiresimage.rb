@@ -91,14 +91,14 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
       unless Rails.env == "test"
-        batch ? create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
+        create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
       self.create_deliv_ops_datastream
       self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
       unless Rails.env == "test"
-        batch ? create_and_persist_status = ImageMover.move_img_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_img_to_repo( self.tiff_img_name, path)
+        create_and_persist_status = ImageMover.move_img_to_repo( self.tiff_img_name, path)
       end
       self.edit_groups = [ 'registered' ]
       self.save!
@@ -247,6 +247,22 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
+  def create_deliv_techmd_datastream( img_location )
+    #this is stupid, it's stupid to create it more than once
+    Sidekiq::Logging.logger.info("in create techmd about to create jp2 from this #{img_location}")
+    begin
+      create_jp2( img_location )
+    rescue StandardError => e
+      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
+    end
+    jhove_xml = create_jhove_xml( jp2_img_path )
+
+    unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
+      raise "Failed to create Jhove datastream"
+    end
+  end
+
+
   def create_archv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'archv_url' ]}#{jp2_img_name}"
     ds_location = "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif"
@@ -291,48 +307,39 @@ class Multiresimage < ActiveFedora::Base
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
-
+  #something is going wrong and jp2s though output says created in local tmp, they are going to /images_tmp. and don't forget to change all debugs to info
   def create_jp2_remote( img_location )
-    Sidekiq::Logging.logger.debug("about to create jp2 staging")
+    Sidekiq::Logging.logger.info("about to create jp2 staging")
     stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-    Sidekiq::Logging.logger.debug("out #{stdout}")
-    Sidekiq::Logging.logger.debug("err #{stdeerr}")
-    Sidekiq::Logging.logger.debug("status #{status}")
+    Sidekiq::Logging.logger.info("out #{stdout}")
+    Sidekiq::Logging.logger.info("err #{stdeerr}")
+    Sidekiq::Logging.logger.info("status #{status}")
   end
 
 
   def create_deliv_ops_datastream
-    width_and_height = get_image_width_and_height
+    #this gets called after copy of file from local tmp directory to isilon-backed location at DIL_CONFIG['jp2_location']
+    jp2_location = "#{DIL_CONFIG['jp2_location']}"
+    width_and_height = get_image_width_and_height(jp2_location)
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
-    jp2_location = DIL_CONFIG['jp2_location']
     deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location, self.pid )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
 
 
-  def jp2_deliv_ops_xml( width, height, rel_path, pid )
-    rel_path = rel_path.chop if rel_path.end_with?( '/' )
-    path_array = rel_path.split('/')
-    short_path = path_array[4, path_array.length].join('/')
-
-    xml = <<-EOF
-<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{short_path}/#{ jp2_img_name }"/>
-</svg:svg>
-EOF
-  end
-
-
-  def get_image_width_and_height
+  def get_image_width_and_height(img)
     if "#{Rails.env}" == "test"
       info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
       stdout = info.to_s
     else
-      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{jp2_img_path}")
+      Sidekiq::Logging.logger.info("get image width and height #{DIL_CONFIG['openjpeg2_location']}")
+      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{img}")
     end
-
+    Sidekiq::Logging.logger.info("stdout #{stdout}")
+    Sidekiq::Logging.logger.info("stdeerr #{stdeerr}")
+    Sidekiq::Logging.logger.info("status #{status}")
     x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
     width = x1.split(",", 2).first
 
@@ -341,6 +348,16 @@ EOF
 
     return { width: width, height: height }
   end
+
+
+
+    def jp2_deliv_ops_xml( width, height, rel_path, pid )
+      xml = <<-EOF
+  <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}/#{ jp2_img_name }"/>
+  </svg:svg>
+  EOF
+    end
 
 
   def create_jhove_xml( img_location )
@@ -354,21 +371,6 @@ EOF
     jhove_xml = File.open(xml_loc).read
   end
 
-
-  def create_deliv_techmd_datastream( img_location )
-    #this is stupid, it's stupid to create it more than once
-    Sidekiq::Logging.logger.debug("in create techmd about to create jp2 from this #{img_location}")
-    begin
-      create_jp2( img_location )
-    rescue StandardError => e
-      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
-    end
-    jhove_xml = create_jhove_xml( jp2_img_path )
-
-    unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
-      raise "Failed to create Jhove datastream"
-    end
-  end
 
 
   def create_deliv_img_datastream( ds_location = nil )

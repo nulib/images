@@ -22,15 +22,9 @@ class ImageMover < ActiveRecord::Base
   end
 
   def self.move_img_to_repo(img_name, img_path)
-    Sidekiq::Logging.logger.debug Rails.env
-    Sidekiq::Logging.logger.debug img_name
-    Sidekiq::Logging.logger.debug img_path
-
     if Rails.env == "development" or Rails.env == "test"
-      Sidekiq::Logging.logger.debug "assume the image was successfully moved"
-
+      Sidekiq::Logging.logger.info "assume the image was successfully moved"
     else
-      #needs to be in config --- just make /tmp owned by deploy on staging to fully mimic production
       if img_name.include?('.tif')
           new_path = "#{ DIL_CONFIG['repo_location']}#{ img_name }"
       elsif img_name.include?('.jp2')
@@ -38,10 +32,9 @@ class ImageMover < ActiveRecord::Base
       else
         raise "Wrong image format, not tif or jp2"
       end
-
       old_path = img_path
+      Sidekiq::Logging.logger.info "Going to move image file #{img_name} from #{old_path} to #{new_path}"
 
-      Sidekiq::Logging.logger.debug "Moving image file to #{new_path}"
       begin
         FileUtils.mkdir_p File.dirname(new_path)
         FileUtils.mv old_path, new_path
@@ -50,7 +43,6 @@ class ImageMover < ActiveRecord::Base
         Sidekiq::Logging.logger.error "the copy failed because #{e}"
       end
     end
-
   end
 
   private
