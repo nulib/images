@@ -106,7 +106,7 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find( self.pid )
       j.save!
     rescue StandardError => e
-      Sidekiq::Logging.logger.debug("standard error: #{e}")
+      Sidekiq::Logging.logger.info("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
       Sidekiq::Logging.logger.info "Deleting work and image because #{e}"
@@ -340,11 +340,20 @@ class Multiresimage < ActiveFedora::Base
     Sidekiq::Logging.logger.info("stdout #{stdout}")
     Sidekiq::Logging.logger.info("stdeerr #{stdeerr}")
     Sidekiq::Logging.logger.info("status #{status}")
-    x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
-    width = x1.split(",", 2).first
 
-    y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
-    height = y1.split(" ", 2).first
+    begin
+      x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
+      Sidekiq::Logging.logger.info("after stdout split x1 - #{x1}")
+      width = x1.split(",", 2).first
+      Sidekiq::Logging.logger.info("after x1 split width - #{width}")
+
+      y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
+      Sidekiq::Logging.logger.info("after stdout split y1 - #{y1}")
+      height = y1.split(" ", 2).first
+      Sidekiq::Logging.logger.info("after y1 split height - #{height}")
+    rescue StandardError => e
+      Sidekiq::Logging.logger.info("trouble with split #{e}")
+    end
 
     return { width: width, height: height }
   end
