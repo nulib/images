@@ -377,8 +377,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_deliv_img_datastream( ds_location = nil )
-    #ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
-    ds_location ||= "#{ DIL_CONFIG[ 'jp2_location' ]}#{jp2_img_name}"
+    ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed. (is the jp2 location accessible?)"
     end
@@ -536,7 +535,6 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
 
    if self.institutional_collection.present?
      institutional_collection = InstitutionalCollection.find(self.institutional_collection.pid)
-     Sidekiq::Logging.logger.info("looking for split on nil - institutional_collection.title? #{institutional_collection.title}")
      unit_name, collection_title = institutional_collection.title.split("|")
      solr_doc["institutional_collection_unit_ssim"] = unit_name
      solr_doc["institutional_collection_unit_facet"] = unit_name
