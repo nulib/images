@@ -343,14 +343,10 @@ class Multiresimage < ActiveFedora::Base
 
     begin
       x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
-      Sidekiq::Logging.logger.info("after stdout split x1 - #{x1}")
       width = x1.split(",", 2).first
-      Sidekiq::Logging.logger.info("after x1 split width - #{width}")
 
       y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
-      Sidekiq::Logging.logger.info("after stdout split y1 - #{y1}")
       height = y1.split(" ", 2).first
-      Sidekiq::Logging.logger.info("after y1 split height - #{height}")
     rescue StandardError => e
       Sidekiq::Logging.logger.info("trouble with split #{e}")
     end
@@ -540,6 +536,7 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
 
    if self.institutional_collection.present?
      institutional_collection = InstitutionalCollection.find(self.institutional_collection.pid)
+     Sidekiq::Logging.logger.info("looking for split on nil - institutional_collection.title? #{institutional_collection.title}")
      unit_name, collection_title = institutional_collection.title.split("|")
      solr_doc["institutional_collection_unit_ssim"] = unit_name
      solr_doc["institutional_collection_unit_facet"] = unit_name
