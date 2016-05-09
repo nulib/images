@@ -323,7 +323,7 @@ class Multiresimage < ActiveFedora::Base
     width_and_height = get_image_width_and_height(jp2_location)
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
-    deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location, self.pid )
+    deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
@@ -356,10 +356,10 @@ class Multiresimage < ActiveFedora::Base
 
 
 
-    def jp2_deliv_ops_xml( width, height, rel_path, pid )
+    def jp2_deliv_ops_xml( width, height, rel_path)
       xml = <<-EOF
   <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}/#{ jp2_img_name }"/>
+    <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}"/>
   </svg:svg>
   EOF
     end

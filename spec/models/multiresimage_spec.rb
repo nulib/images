@@ -47,7 +47,7 @@ describe Multiresimage do
     it "can get the height and width of a jp2" do
       img = Multiresimage.first
       jp2_img_path = "#{ Rails.root }#{DIL_CONFIG['test_jp2_path']}"
-      height_and_width = img.get_image_width_and_height
+      height_and_width = img.get_image_width_and_height(jp2_img_path)
 
       expect(height_and_width[:width]).to eq("600")
       expect(height_and_width[:height]).to eq("664")
@@ -129,7 +129,7 @@ describe Multiresimage do
 
     describe "#create_deliv_ops_datastream" do
       it "populates the DELIV-OPS datastream" do
-        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
+        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//dimages/public/images/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         @m.create_deliv_ops_datastream
         p deliv_ops_xml.strip.gsub(/\s+/, " ")
