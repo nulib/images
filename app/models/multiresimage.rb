@@ -91,14 +91,14 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_exif_datastream( path )
       self.create_deliv_techmd_datastream( path )
       unless Rails.env == "test"
-        batch ? create_and_persist_status = ImageMover.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path) : ImageMover.delay.move_jp2_to_ansel(self.jp2_img_name, self.jp2_img_path)
+        create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
       self.create_deliv_ops_datastream
       self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
       unless Rails.env == "test"
-        batch ? create_and_persist_status = ImageMover.move_tiff_to_repo( self.tiff_img_name, path) : ImageMover.delay.move_tiff_to_repo( self.tiff_img_name, path)
+        create_and_persist_status = ImageMover.move_img_to_repo( self.tiff_img_name, path)
       end
       self.edit_groups = [ 'registered' ]
       self.save!
@@ -106,7 +106,7 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find( self.pid )
       j.save!
     rescue StandardError => e
-      Sidekiq::Logging.logger.debug("standard error: #{e}")
+      Sidekiq::Logging.logger.info("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
       Sidekiq::Logging.logger.info "Deleting work and image because #{e}"
@@ -146,17 +146,6 @@ class Multiresimage < ActiveFedora::Base
     work #you'd better
   end
 
-
-  # This function removes the image from a dil_collection object, NOT an institutional collection
-  def remove_from_all_dil_collections
-    self.collections.each do |collection|
-      collection.members.remove_member_by_pid( self.pid )
-      collection.save
-      self.collections.delete(collection)
-    end
-  end
-
-
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
     #This check will probably go away when we get rid of the synchronizer.
@@ -170,7 +159,7 @@ class Multiresimage < ActiveFedora::Base
         vra.xpath("/vra:vra/vra:image" )[ 0 ][ "refid" ] = self.pid
 
         #add the pid to the locationset
-        if vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']").present?
+        if vra.at_xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")
           vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location/vra:refid[@source='DIL']")[0].content = self.pid
         else
           vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:location").set_attribute('source', 'DIL')
@@ -178,7 +167,12 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #add the pid to the locationset Display
-        vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
+        if vra.at_xpath("/vra:vra/vra:image/vra:locationSet/vra:display").nil?
+          vra.at_xpath("/vra:vra/vra:image/vra:locationSet").children.first.add_previous_sibling( Nokogiri::XML::Node.new('vra:display', vra) )
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library"
+        else
+          vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content.blank? ? vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content = "DIL:#{self.pid} ; Digital Image Library" : vra.xpath("/vra:vra/vra:image/vra:locationSet/vra:display")[0].content += " ; DIL:#{self.pid} ; Digital Image Library"
+        end
 
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
@@ -221,7 +215,9 @@ class Multiresimage < ActiveFedora::Base
         #Sidekiq::Logging.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
 
         result = self.validate_vra( vra.to_xml )
-      #  Sidekiq::Logging.logger.info("valid vra? #{result}")
+
+        Sidekiq::Logging.logger.info("valid vra? #{result}")
+        Sidekiq::Logging.logger.info("pid? #{self.pid}")
 
 
         self.datastreams[ 'VRA' ].content = vra.to_xml
@@ -250,6 +246,22 @@ class Multiresimage < ActiveFedora::Base
       raise "Failed to create EXIF datastream"
     end
   end
+
+  def create_deliv_techmd_datastream( img_location )
+    #this is stupid, it's stupid to create it more than once
+    Sidekiq::Logging.logger.info("in create techmd about to create jp2 from this #{img_location}")
+    begin
+      create_jp2( img_location )
+    rescue StandardError => e
+      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
+    end
+    jhove_xml = create_jhove_xml( jp2_img_path )
+
+    unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
+      raise "Failed to create Jhove datastream"
+    end
+  end
+
 
   def create_archv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'archv_url' ]}#{jp2_img_name}"
@@ -280,7 +292,7 @@ class Multiresimage < ActiveFedora::Base
     if ["development", "test"].include? Rails.env
       create_jp2_local( img_location )
     else
-      create_jp2_staging( img_location ) #which also means production. SUCKAGE.
+      create_jp2_remote( img_location )
      end
 
     if File.file?( jp2_img_path )
@@ -291,64 +303,66 @@ class Multiresimage < ActiveFedora::Base
   end
 
 
-#these need to be refactored, we need one way of doing this in every environment. imagemagick or graphicsmagick.
-#when refactoring there's only going to be one create jp2 method
-
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
-
-  def create_jp2_staging( img_location )
-    Sidekiq::Logging.logger.debug("about to create jp2 staging")
-    stdout, stdeerr, status = Open3.capture3("/home/jld555/openjpeg-openjpeg-2.1/bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-    Sidekiq::Logging.logger.debug("out #{stdout}")
-    Sidekiq::Logging.logger.debug("err #{stdeerr}")
-    Sidekiq::Logging.logger.debug("status #{status}")
+  #something is going wrong and jp2s though output says created in local tmp, they are going to /images_tmp. and don't forget to change all debugs to info
+  def create_jp2_remote( img_location )
+    Sidekiq::Logging.logger.info("about to create jp2 staging")
+    stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
+    Sidekiq::Logging.logger.info("out #{stdout}")
+    Sidekiq::Logging.logger.info("err #{stdeerr}")
+    Sidekiq::Logging.logger.info("status #{status}")
   end
 
 
   def create_deliv_ops_datastream
-    width_and_height = get_image_width_and_height
+    #this gets called after copy of file from local tmp directory to isilon-backed location at DIL_CONFIG['jp2_location']
+    jp2_location = "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
+    width_and_height = get_image_width_and_height(jp2_location)
     width = width_and_height[ :width ]
     height = width_and_height[ :height ]
-    jp2_location = DIL_CONFIG['jp2_location']
-    deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location, self.pid )
+    deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location )
 
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
 
 
-  def jp2_deliv_ops_xml( width, height, rel_path, pid )
-    rel_path = rel_path.chop if rel_path.end_with?( '/' )
-    path_array = rel_path.split('/')
-    short_path = path_array[4, path_array.length].join('/')
-
-    xml = <<-EOF
-<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{short_path}/#{ jp2_img_name }"/>
-</svg:svg>
-EOF
-  end
-
-
-  def get_image_width_and_height
-    Sidekiq::Logging.logger.info("going to get image height and width")
+  def get_image_width_and_height(img)
     if "#{Rails.env}" == "test"
       info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
       stdout = info.to_s
     else
-      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{jp2_img_path}")
+      Sidekiq::Logging.logger.info("get image width and height #{DIL_CONFIG['openjpeg2_location']}")
+      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{img}")
     end
+    Sidekiq::Logging.logger.info("stdout #{stdout}")
+    Sidekiq::Logging.logger.info("stdeerr #{stdeerr}")
+    Sidekiq::Logging.logger.info("status #{status}")
 
-    x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
-    width = x1.split(",", 2).first
+    begin
+      x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
+      width = x1.split(",", 2).first
 
-    y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
-    height = y1.split(" ", 2).first
+      y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
+      height = y1.split(" ", 2).first
+    rescue StandardError => e
+      Sidekiq::Logging.logger.info("trouble with split #{e}")
+    end
 
     return { width: width, height: height }
   end
+
+
+
+    def jp2_deliv_ops_xml( width, height, rel_path)
+      xml = <<-EOF
+  <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}"/>
+  </svg:svg>
+  EOF
+    end
 
 
   def create_jhove_xml( img_location )
@@ -357,37 +371,17 @@ EOF
     # This parameter is where the output file will go
     Sidekiq::Logging.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
-    Sidekiq::Logging.logger.debug( "j: #{ j }")
+    Sidekiq::Logging.logger.debug( "jhove: #{ j }")
     xml_loc = j.run_jhove( img_location )
-    Sidekiq::Logging.logger.info( "xml_loc: #{ xml_loc }")
     jhove_xml = File.open(xml_loc).read
   end
 
-
-  def create_deliv_techmd_datastream( img_location )
-    #this is stupid, it's stupid to create it more than once
-    Sidekiq::Logging.logger.debug("in create techmd about to create jp2 from this #{img_location}")
-    begin
-      create_jp2( img_location )
-    rescue StandardError => e
-      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
-    end
-    jhove_xml = create_jhove_xml( jp2_img_path )
-
-    unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
-      raise "Failed to create Jhove datastream"
-    end
-  end
-
-
   def create_deliv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
-
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed. (is the jp2 location accessible?)"
     end
   end
-
 
   def create_archv_img_datastream( ds_location = nil )
     ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
@@ -558,7 +552,7 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
   end
 
 
-  #get rid of this - image server will do it
+  #get rid of this - image server will do it. proxy_image relies on it, replace
   def image_url(max_size=1600)
 
     src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f
@@ -571,6 +565,16 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
 
     "#{DIL_CONFIG['aware_region_url']}#{self.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
   end
+
+  # This function removes the image from a dil_collection object, NOT an institutional collection
+  def remove_from_all_dil_collections
+    self.collections.each do |collection|
+      collection.members.remove_member_by_pid( self.pid )
+      collection.save
+      self.collections.delete(collection)
+    end
+  end
+
 
   private
 
