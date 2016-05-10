@@ -15,7 +15,8 @@ RSpec.feature "Image Viewing", :type => :feature, :js => true do
 
   scenario 'the multiresimage info.json is in the OSD-generated html' do
     visit "http://localhost:3000/multiresimages/inu:dil-cffada80-57f3-4d98-a0ee-e73048943f90"
+
     expect(page).to have_css 'div.openseadragon-container'
-    expect(page.html).to include('<source src="/image-service/inu-dil-cffada80-57f3-4d98-a0ee-e73048943f90/info.json" media="openseadragon" />')
+    expect(page.html).to include('<source src="/image-service/inu:dil-cffada80-57f3-4d98-a0ee-e73048943f90/info.json" media="openseadragon" />')
   end
 end

@@ -12,7 +12,6 @@ require 'capybara/rails'
 #require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'
-require 'open3'
 
 SimpleCov.start 'rails'
 
@@ -60,8 +59,6 @@ RSpec.configure do |config|
 
     #add fixture data to Solr and Fedora
      Rake::Task["hydra:fixtures:refresh"].invoke
-     stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/inu-dil-cffada80-57f3-4d98-a0ee-e73048943f90.jp2 /tmp/inu-dil-cffada80-57f3-4d98-a0ee-e73048943f90.jp2")
-     puts "trying to copy fixture image to tester's /tmp dir: #{stdout}"
   end
 
 

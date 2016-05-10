@@ -153,8 +153,6 @@ class DILCollection < ActiveFedora::Base
       # URL is provided as input to local_resource_from_url method
       max_size = 1000
       url = image.image_url(max_size)
-      #this needs to be fixed, image_url is no longer a viable method.
-
 
       # Create a local representation of the remote resource
       local_resource = LocalResource.new(URI.parse(url))
