@@ -11,7 +11,6 @@ class MultiresimagesBatchWorker
 
   def perform(job_number, user_email)
     begin
-      puts "batch dir? #{DIL_CONFIG['batch_dir']}"
       xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
       good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
       bad_file_storage = []
@@ -19,17 +18,15 @@ class MultiresimagesBatchWorker
           xml = Nokogiri::XML(File.read( xf ))
           begin
             accession_number = xml.xpath("//refid[@source=\"Accession\"]")
-            raise "No Accession number for #{xf}" if accession_number.nil?
             raise "Existing image found with this accession number" if existing_image?( accession_number.text )
           rescue => e
             Sidekiq::Logging.logger.error("Problem with accession number: #{e}")
           end
-          doc = File.read( xf )
-          ready_xml = TransformXML.prepare_vra_xml(doc)
+
+          ready_xml = TransformXML.add_empty_work_element(xml)
           pid = mint_pid("dil")
           #from_menu = true now has to be re-named.
-          multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
-
+          multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml.to_xml(), from_menu: true)
           multiresimage.save
           test_tif = xf.gsub(/.xml/, '.tiff')
           tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
