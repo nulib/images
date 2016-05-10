@@ -4,7 +4,7 @@
      <% if !document[:id].nil? %>
        <li pid="<%=document[:id]%>" title="<%=document[:title_t]%>">
         <a href="/multiresimages/<%=document[:id]%>">
-        <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path(document[:id], size: ',120')) %>
+        <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{document[:id]}".gsub!(/:/, '-'), size: ',120')) %>
         </a>
       <% end %>
      </li>
@@ -26,4 +26,3 @@
 
   <%#= batch_edit_select(document) %>
 </div>
-
