@@ -2,24 +2,16 @@ require 'rails_helper'
 
 describe Multiresimage do
 
-  # This isn't a valid test. We don't instantiate these objects with file names
-  # describe "a new instance with a file name" do
-  #   m = Multiresimage.new(:file_name=>'readme.txt')
-  #   expect(m.file_name).to eq('readme.txt')
-  # end
-
-  pending("It doesn't look like we're using policies") do
-    describe "should have an admin policy" do
-      before do
-        @policy = AdminPolicy.create
-      end
-      after do
-        @policy.delete
-      end
-      subject { Multiresimage.new(:admin_policy=>@policy) }
-      its(:admin_policy) { should == @policy }
-
+  pending("It doesn't look like we're using policies and we should") do
+    before do
+      @policy = AdminPolicy.create
     end
+    after do
+      @policy.delete
+    end
+    subject { Multiresimage.new(:admin_policy=>@policy) }
+    its(:admin_policy) { should == @policy }
+
   end
 
   describe "#create_datastreams_and_persist_image_files" do
@@ -55,11 +47,24 @@ describe Multiresimage do
     it "can get the height and width of a jp2" do
       img = Multiresimage.first
       jp2_img_path = "#{ Rails.root }#{DIL_CONFIG['test_jp2_path']}"
-      height_and_width = img.get_image_width_and_height
+      height_and_width = img.get_image_width_and_height(jp2_img_path)
 
       expect(height_and_width[:width]).to eq("600")
       expect(height_and_width[:height]).to eq("664")
     end
+
+    it "can add the location display element that holds the pid to vra xml if it's missing" do
+      path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
+      count = Multiresimage.all.count
+
+      @xml_from_menu = File.read( "#{ Rails.root }/spec/fixtures/vra_without_locationset_display.xml" )
+      @img = Multiresimage.create( from_menu: true, vra_xml: @xml_from_menu )
+      all_good = @img.create_datastreams_and_persist_image_files(path)
+
+      expect(all_good).to be true
+      expect(count + 1).to eql(Multiresimage.all.count)
+    end
+
 
   end
 
@@ -124,7 +129,7 @@ describe Multiresimage do
 
     describe "#create_deliv_ops_datastream" do
       it "populates the DELIV-OPS datastream" do
-        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
+        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//dimages/public/images/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
         @m.create_deliv_techmd_datastream( @sample_jp2 )
         @m.create_deliv_ops_datastream
         p deliv_ops_xml.strip.gsub(/\s+/, " ")

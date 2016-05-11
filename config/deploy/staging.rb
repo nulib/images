@@ -30,6 +30,8 @@ set :bundle_with, %w{default staging}.join(' ')
 #set :sidekiq_user, 'deploy'
 set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 
+set :keep_releases, 1
+
 # Custom SSH Options
 # ==================
 # You may pass any option but keep in mind that net/ssh understands a

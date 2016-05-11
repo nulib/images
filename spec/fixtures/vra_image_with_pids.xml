@@ -9,6 +9,7 @@
 
       <!--Agents-->
        <vra:agentSet>
+         <vra:display></vra:display>
          <vra:agent>
             <vra:name type="corporate" vocab="lcnaf"></vra:name>
             <vra:attribution/>
@@ -21,11 +22,13 @@
 
       <!--Cultural Context-->
       <vra:culturalContextSet>
+         <vra:display/>
          <vra:culturalContext/>
       </vra:culturalContextSet>
 
       <!--Dates-->
       <vra:dateSet>
+         <vra:display/>
          <vra:date type="creation">
             <vra:earliestDate>2014</vra:earliestDate>
          </vra:date>
@@ -33,12 +36,14 @@
 
       <!--Description-->
       <vra:descriptionSet>
+         <vra:display></vra:display>
          <vra:notes></vra:notes>
          <vra:description></vra:description>
       </vra:descriptionSet>
 
       <!--Inscription-->
       <vra:inscriptionSet>
+         <vra:display/>
          <vra:inscription>
             <vra:text></vra:text>
          </vra:inscription>
@@ -46,6 +51,7 @@
 
       <!--Location-->
       <vra:locationSet>
+         <vra:display></vra:display>
          <vra:location type="creation">
             <vra:name type="geographic"></vra:name>
          </vra:location>
@@ -53,28 +59,32 @@
             <vra:name type="geographic"></vra:name>
          </vra:location>
          <vra:location>
-            <vra:refid source="DIL"></vra:refid>
-            <vra:refid source="Accession">12345</vra:refid>
+            <vra:refid source="DIL">inu:dil-19f443a0-fce4-4b9b-8f9f-528f7f06fb32</vra:refid>
+            <vra:refid source="Voyager"></vra:refid>
          </vra:location>
       </vra:locationSet>
 
       <!--Materials-->
       <vra:materialSet>
+         <vra:display></vra:display>
          <vra:material></vra:material>
       </vra:materialSet>
 
       <!--Measurements-->
       <vra:measurementsSet>
+         <vra:display></vra:display>
          <vra:measurements></vra:measurements>
       </vra:measurementsSet>
 
       <!--Relation-->
       <vra:relationSet>
+         <vra:display/>
          <vra:relation pref="true" type="imageOf" relids=""/>
       </vra:relationSet>
 
       <!--Rights-->
       <vra:rightsSet>
+         <vra:display></vra:display>
          <vra:rights>
             <vra:rightsHolder></vra:rightsHolder>
             <vra:text></vra:text>
@@ -83,11 +93,13 @@
 
       <!--Style Period-->
       <vra:stylePeriodSet>
+         <vra:display/>
          <vra:stylePeriod/>
       </vra:stylePeriodSet>
 
       <!--Subjects-->
       <vra:subjectSet>
+         <vra:display></vra:display>
          <vra:subject>
             <vra:term type="geographicPlace" vocab="lcnaf"></vra:term>
          </vra:subject>
@@ -107,21 +119,25 @@
 
       <!--Technique-->
       <vra:techniqueSet>
+         <vra:display/>
          <vra:technique/>
       </vra:techniqueSet>
 
       <!--Textref-->
       <vra:textrefSet>
+         <vra:display/>
          <vra:textref/>
       </vra:textrefSet>
 
       <!-- Titles -->
       <vra:titleSet>
+         <vra:display></vra:display>
          <vra:title></vra:title>
       </vra:titleSet>
 
       <!--Work Type-->
       <vra:worktypeSet>
+         <vra:display></vra:display>
          <vra:worktype></vra:worktype>
       </vra:worktypeSet>
    </vra:image>
