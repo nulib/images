@@ -18,12 +18,12 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
 
   it "will perform an enqueued job" do
     Sidekiq::Testing.disable!
-    MultiresimagesBatchWorker.perform_async("12345", "#{DIL_CONFIG['admin_email']}")
+    MultiresimagesBatchWorker.perform_async("valid_job", "#{DIL_CONFIG['admin_email']}")
     MultiresimagesBatchWorker.drain
 
     expect(MultiresimagesBatchWorker.jobs.count).to eq(0)
+    stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/12345_valid_vra.tiff")
     stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
-
     Sidekiq::Testing.fake!
   end
 
@@ -35,6 +35,7 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
 
     expect(Multiresimage.all.count == (old_count + 1))
     stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
+    stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/12345_valid_vra.tiff")
   end
 
   it "will raise an error if there's already an image with the accession munber" do
@@ -56,9 +57,7 @@ RSpec.describe MultiresimagesBatchWorker, type: :job do
 
     expect(ActionMailer::Base.deliveries.last.subject).to eq("The status of your batch of Images records")
     stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/1234_valid_vra.tiff")
-    puts "err #{stdeerr}"
-    puts "out #{stdout}"
-    puts "status #{status}"
+    stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/internet.tiff #{Rails.root}/spec/fixtures/batches/valid_job/12345_valid_vra.tiff")
   end
 
 end
