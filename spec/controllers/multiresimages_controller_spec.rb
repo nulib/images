@@ -74,7 +74,7 @@ describe MultiresimagesController, :type => :request do
       'format' => 'xml',
       'from_menu'=> true,
       'xml' => "#{@xml_from_menu3}",
-      'path' => "lib/assets/dropbox/123/123_Rodinia.tiff",
+      'path' => "#{ Rails.root }/spec/fixtures/images/internet.tiff",
       'accession_nbr' => '128789',
       'id' => 'create'
     }
