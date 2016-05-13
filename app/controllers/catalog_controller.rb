@@ -15,6 +15,9 @@ class CatalogController < ApplicationController
       :rows => 10
     }
 
+    self.solr_search_params_logic += [:add_access_controls_to_solr_params]
+    self.solr_search_params_logic << :multiresimage_object_type_facet
+
     # solr field configuration for search results/index views
     config.index.title_field = 'title_display'
     config.index.display_type_field = 'has_model_ssim'
