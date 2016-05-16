@@ -41,6 +41,7 @@ source 'http://rubygems.org'
   gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
   gem 'riiif'
   gem 'openseadragon'
+  gem 'whenever', :require => false
 
 group :test do
   gem 'rspec-rails'
