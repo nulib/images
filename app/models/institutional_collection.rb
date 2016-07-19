@@ -4,22 +4,20 @@
 # with the InstitutionalCollection. This model acts like an Administrative Policy Object. Its permissions
 # are inherited by its collection members. The most permissive permissions win out.
 
-class InstitutionalCollection < Hydra::AdminPolicy
+class InstitutionalCollection < ActiveFedora::Base
 
-  include Hydra::ModelMethods
+  include Hydra::AdminPolicyBehavior
   include Hydra::AccessControls::Permissions
 
-  has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_collection_member
 
-  # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
-  has_metadata :name => "defaultRights", :type => Hydra::Datastream::InheritableRightsMetadata
-
-  has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
-
-  def to_solr(solr_doc=Hash.new)
-    solr_doc = super(solr_doc)
-    solr_doc
+  has_metadata 'descMetadata', type: ActiveFedora::QualifiedDublinCoreDatastream do |m|
+    m.title :type=> :text, :index_as=>[:searchable]
   end
+
+  has_attributes :title, :description, datastream: 'descMetadata', multiple: false
+  has_attributes :license_title, datastream: 'rightsMetadata', at: [:license, :title], multiple: false
+  has_attributes :license_description, datastream: 'rightsMetadata', at: [:license, :description], multiple: false
+  has_attributes :license_url, datastream: 'rightsMetadata', at: [:license, :url], multiple: false
 
 
 end
