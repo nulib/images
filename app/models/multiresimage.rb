@@ -519,6 +519,9 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     #self.datastreams["VRA"].dirty = true
   end
 
+  def update_institutional_collection(collection)
+    self.institutional_collection = collection
+  end
 
   def get_work_pid
     self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')

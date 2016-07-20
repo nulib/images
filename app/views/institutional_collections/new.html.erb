@@ -1,0 +1,29 @@
+<div data-ajax-modal="container">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="well">
+      <%= form_for @institutional_collection, url: {action: "create"}, html: {class: "nifty_form"} do |f| %>
+        <%#= f.label :title, "Title" #%>
+        <div class="form-group">
+          <label for="title_part">Collection Title:</label>
+          <%= f.text_field :title_part, class: 'form-control'%>
+        </div>
+        <!-- needs to become title, gets concatenated in controller -->
+        <div class="form-group">
+          <label for="unit_part">Unit:</label>
+          <%= f.text_field :unit_part, class: 'form-control'%>
+        </div>
+        <div class="form-group">
+          <label for="description">Collection Description:</label>
+          <%= f.text_field :description, class: 'form-control' %>
+        </div>
+        <div class="form-group">
+          <label for="rights_description">Rights Description:</label>
+          <%= f.text_area :rights_description, class: 'form-control' %>
+        </div>
+        <%= f.submit "Create Collection", class: 'btn btn-primary btn-large' %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>

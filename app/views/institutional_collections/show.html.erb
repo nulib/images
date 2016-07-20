@@ -1,0 +1,36 @@
+<% content_for :title do %>
+  <%= @collection.title %>
+<% end %>
+
+<div class="row-fluid">
+  <div class="span12">
+    <div class="well">
+    <h3><%= @collection.title %></h3>
+    <p> <strong>Description:</strong> <%= @collection.description %> </p>
+    <p> <strong>Unit:</strong> <%= @collection.collection_unit_formatter%> </p>
+    <p> <strong>Rights Metadata Description and Link:</strong> <%= @collection.rights_description %> </p>
+
+    <%= link_to('List All Items', images_institutional_collection_path('f[institutional_collection_title_facet][]' => @collection.collection_title_formatter), class: 'btn') %>
+    <%= link_to('Edit Collection Info', edit_institutional_collection_path(@collection), class: 'btn', remote: true, modal: true) %>
+
+    <br/><br>
+
+
+
+    <form class="search-query-form clearfix" method="get" action="<%=add_images_institutional_collection_path(@collection.id)%>" accept-charset="UTF-8">
+      <div class="input-group search-input-group">
+        <input name="f[institutional_collection_title_facet][]" type="hidden" value ="Digital Image Library" />
+        <input id="q" class="search_q q form-control" type="text" placeholder="Find Images to add to Collection: <%= @collection.collection_title_formatter %>" name="q">
+        <span class="input-group-btn">
+          <button id="search" class="btn btn-primary search-btn" type="submit">
+            <span class="submit-search-text">Find Images</span>
+            <span class="glyphicon glyphicon-search"></span>
+          </button>
+        </span>
+      </div>
+    </form>
+
+
+    </div>
+  </div>
+</div>

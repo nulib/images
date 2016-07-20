@@ -1,0 +1,22 @@
+<table class='table table-striped'>
+  <tbody>
+    <tr>
+      <td>pid</td>
+      <td>Title</td>
+      <td>Collection</td>
+      <td>&nbsp;</td>
+    </tr>
+    <% @document_list.each do |document| %>
+      <% if !document[:id].nil? %>
+        <tr>
+          <td><%=document[:id] %> </td>
+          <td><%=document[:title_display_tesim].first%></td>
+          <td><%=document[:is_governed_by_ssim]%></td>
+          <td>
+            <%= link_to('Remove', "#", class: 'btn btn-xs btn-danger') %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

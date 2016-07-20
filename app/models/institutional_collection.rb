@@ -10,6 +10,9 @@ class InstitutionalCollection < ActiveFedora::Base
   include Hydra::AccessControls::Permissions
   include Hydra::ModelMethods
 
+  #think about this line...
+  has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_collection_member
+
 
   has_metadata 'descMetadata', type: ActiveFedora::QualifiedDublinCoreDatastream do |m|
     m.title :type=> :text, :index_as=>[:searchable]
@@ -19,16 +22,37 @@ class InstitutionalCollection < ActiveFedora::Base
   #has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
 
   has_metadata :name => "properties", :type => ActiveFedora::SimpleDatastream do |m|
-        m.field "collection_description",  :string
+        m.field "title_part", :string
+        m.field "unit_part"
         m.field "rights_description", :string
   end
 
 
-  has_attributes :collection_description, :rights_description, datastream: 'properties', multiple: false
+  has_attributes :title_part, :unit_part, :rights_description, datastream: 'properties', multiple: false
   has_attributes :title, :description, datastream: 'descMetadata', multiple: false
   has_attributes :license_title, datastream: 'rightsMetadata', at: [:license, :title], multiple: false
   has_attributes :license_description, datastream: 'rightsMetadata', at: [:license, :description], multiple: false
   has_attributes :license_url, datastream: 'rightsMetadata', at: [:license, :url], multiple: false
+
+  def make_public
+    #this refers to the rights in the defaultRights datastream
+    self.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]
+  end
+
+  def make_private
+    #this refers to the rights in the defaultRights
+    self.default_permissions=[{:type=>"group", :access=>"read", :name=>"registered"}]
+  end
+
+  def collection_title_formatter
+   title.split("|")[1]
+  end
+
+  def collection_unit_formatter
+   title.split("|")[0]
+  end
+
+
 
 
 end
