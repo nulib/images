@@ -45,7 +45,11 @@ class InstitutionalCollection < ActiveFedora::Base
   end
 
   def collection_title_formatter
-   title.split("|")[1]
+    if title.nil? or title==""
+      title
+    else     
+      title.split("|")[1]
+    end
   end
 
   def collection_unit_formatter
