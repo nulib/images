@@ -1,7 +1,7 @@
 <div class='container-fluid'>
   <div class="row col-md-9 col-lg-8">
   <% if @institutional_collections.present? %>
-    <h2>Collections</h2>
+    <h2>Public Collections</h2>
     <p><%= link_to("Create New Collection", new_institutional_collection_path, :data => {:ajax_modal => "trigger"}, class: 'btn btn-primary btn-large') %></p>
 
 

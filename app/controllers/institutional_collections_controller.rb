@@ -15,6 +15,8 @@ class InstitutionalCollectionsController < CatalogController
   # GET /institutional_collections
   def index
     @institutional_collections = InstitutionalCollection.all
+    #Dont show DIL since it's not a public collection
+    @institutional_collections.delete(InstitutionalCollection.find(DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]))
     respond_to do |format|
       format.html
       format.json { paginate json: @institutional_collections }
