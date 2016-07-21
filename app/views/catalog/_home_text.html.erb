@@ -1,13 +1,19 @@
-<div class="row">
-  <% DIL_CONFIG["institutional_collection"].each do |key, inst_collection| %>
-    <div class="col-md-4">
-      <a href="<%=inst_collection["solr_url"]%>" class="thumbnail home-header">
-        <%= image_tag( inst_collection["image"]) %>
-      </a>
-      <h4><%=inst_collection["title"]%></h4>
-    </div>
+  <% InstitutionalCollection.all.each_with_index do |institutional_collection, index| %>
+    <% if index%3==0 %>
+      <div class="row homepage_row">
+    <% end %>
+        <div class="col-md-4">
+          <a href="/catalog?f[institutional_collection_title_facet][]=<%=institutional_collection.collection_title_formatter%>" class="thumbnail home-header">
+            <%= image_tag( "placeholder.jpg") %>
+          </a>
+        <h4><%=institutional_collection.collection_title_formatter %></h4>
+        <%= link_to("Rights Description", rights_institutional_collection_path(institutional_collection.id), :data => {:ajax_modal => "trigger"}) %>
+        </div>
+    <% if index%3==2 or index == InstitutionalCollection.all.size %>
+      </div>
+    <% end %>
   <% end %>
-</div>
+
 <div class="row">
   <div class="col-md-12">
     <h3>Finding Images</h3>
