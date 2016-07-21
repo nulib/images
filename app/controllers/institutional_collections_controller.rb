@@ -37,12 +37,14 @@ class InstitutionalCollectionsController < CatalogController
   # GET /institutional_collections/1/images
   def images
     @collection_id = params[:id]
+    @collection = InstitutionalCollection.find(params[:id])
     (@response, @document_list) = get_search_results
   end
 
   # GET /institutional_collections/1/add_images
   def add_images
     @collection_id = params[:id]
+    @collection = InstitutionalCollection.find(params[:id])
     query_params = { :q => "-is_governed_by_ssim:" + @collection_id + " "+ params[:q],
                      :f => params[:f]}
     (@response, @document_list) = get_search_results(query_params)
