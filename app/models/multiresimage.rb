@@ -528,6 +528,11 @@ x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
   end
 
 
+  def update_institutional_collection(collection)
+    self.institutional_collection = collection
+  end
+
+
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
     solr_doc["title_display"] = solr_doc["title_display"].first if solr_doc['title_display'].kind_of? Array
