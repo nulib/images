@@ -1,19 +1,24 @@
+<h4>Images in <%=@collection.collection_title_formatter %></h4>
 <table class='table table-striped'>
   <tbody>
     <tr>
-      <td>pid</td>
-      <td>Title</td>
-      <td>Collection</td>
-      <td>&nbsp;</td>
+      <th>Thumbnail</th>
+      <th>pid<br />Title</th>
+      <th>Location</th>
+      <th></th>
     </tr>
     <% @document_list.each do |document| %>
       <% if !document[:id].nil? %>
         <tr>
-          <td><%=document[:id] %> </td>
-          <td><%=document[:title_display_tesim].first%></td>
-          <td><%=document[:is_governed_by_ssim]%></td>
+          <tr>
+          <td><a href="/multiresimages/<%=document[:id]%>">
+          <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{document[:id]}".gsub!(/:/, '-'), size: ',50')) %></td>
+          <td><%=document[:id] %><br /><%=document[:title_display_tesim].first%></td>
+          <td><small><%=document[:location_display_tesim].first%></small></td>
           <td>
-            <%= link_to('Remove', "#", class: 'btn btn-xs btn-danger') %>
+            <%= button_to "Remove", remove_image_institutional_collection_path(@collection_id, image_id: document[:id]), method: :post, data: { confirm: "Are you sure? By clicking confirm the image will be removed from this collection and placed back in DIL"}, class: 'btn btn-xs btn-danger'%>
+
+
           </td>
         </tr>
       <% end %>
