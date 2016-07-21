@@ -10,7 +10,7 @@
     <p> <strong>Unit:</strong> <%= @collection.collection_unit_formatter%> </p>
     <p> <strong>Rights Metadata Description and Link:</strong> <%= @collection.rights_description %> </p>
 
-    <%= link_to('List All Items', images_institutional_collection_path('f[institutional_collection_title_facet][]' => @collection.collection_title_formatter), class: 'btn') %>
+    <%= link_to('List Images', images_institutional_collection_path('f[institutional_collection_title_facet][]' => @collection.collection_title_formatter), class: 'btn') %>
     <%= link_to('Edit Collection Info', edit_institutional_collection_path(@collection), class: 'btn', remote: true, modal: true) %>
 
     <br/><br>

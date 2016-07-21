@@ -36,6 +36,7 @@ class InstitutionalCollectionsController < CatalogController
 
   # GET /institutional_collections/1/images
   def images
+    @collection_id = params[:id]
     (@response, @document_list) = get_search_results
   end
 
@@ -54,6 +55,19 @@ class InstitutionalCollectionsController < CatalogController
     puts @pid_list
 
     #render json: @document_list
+  end
+
+  # POST /institutional_collections/1/remove_image/:image_id
+  def remove_image
+    @collection_id = params[:id]
+    collection = InstitutionalCollection.find(@collection_id)
+    dil_collection = InstitutionalCollection.find(DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"])
+    image = Multiresimage.find(params[:image_id])
+    image.update_institutional_collection(dil_collection)
+    image.save
+
+    flash[:success]="Image was successfully removed from collection"
+    redirect_to :action => 'images', :id => @collection_id, 'f[institutional_collection_title_facet][]' => collection.collection_title_formatter
   end
 
   def confirm_add_images
@@ -101,6 +115,7 @@ class InstitutionalCollectionsController < CatalogController
 
     if @collection.persisted?
       #render json: {id: @collection.pid}, status: 200
+      flash[:success]="Collection was successfully created"
       redirect_to @collection
     else
       logger.warn "Failed to create collection: #{@collection.errors.full_messages}"

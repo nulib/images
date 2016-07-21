@@ -2,7 +2,7 @@
   <div class="row col-md-9 col-lg-8">
   <% if @institutional_collections.present? %>
     <h2>Public Collections</h2>
-    <p><%= link_to("Create New Collection", new_institutional_collection_path, :data => {:ajax_modal => "trigger"}, class: 'btn btn-primary btn-large') %></p>
+    <p><%= button_to("Create New Collection", new_institutional_collection_path, :data => {:ajax_modal => "trigger"}, class: 'btn btn-primary btn-large', method: :get) %></p>
 
 
 
@@ -11,12 +11,11 @@
       <% @institutional_collections.to_a.each do |collection| %>
         <tr>
           <td> <%= link_to collection.title, institutional_collection_path(collection) %> </td>
-          <td> <%= link_to(pluralize(collection.multiresimages.size, 'image'), "FIXME") %>
-					</td>
-          <td>  </td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
           <td> <%= collection.description %> </td>
           <td>
-            <%= link_to('Delete', "/institutional_collections/remove/", class: 'btn btn-xs btn-danger') %>
+            <%= button_to('Delete', "/institutional_collections/remove/", class: 'btn btn-xs btn-danger') %>
           </td>
         </tr>
       <% end %>

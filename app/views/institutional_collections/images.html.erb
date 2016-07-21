@@ -13,7 +13,9 @@
           <td><%=document[:title_display_tesim].first%></td>
           <td><%=document[:is_governed_by_ssim]%></td>
           <td>
-            <%= link_to('Remove', "#", class: 'btn btn-xs btn-danger') %>
+            <%= button_to "Remove", remove_image_institutional_collection_path(@collection_id, image_id: document[:id]), method: :post, data: { confirm: "Are you sure? By clicking confirm the image will be removed from this collection and placed back in DIL"}, class: 'btn btn-xs btn-danger'%>
+
+
           </td>
         </tr>
       <% end %>
