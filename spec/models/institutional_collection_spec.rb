@@ -31,11 +31,11 @@ describe InstitutionalCollection do
     @public_collection.remove_relationship(:has_representative_member, @img)
   end
 
-  it "can provide a url for serving its representative image" do
+  it "can provide a pid for serving its representative image" do
     @img = Multiresimage.last
     @public_collection.set_representative_image(@img)
 
-    expect(@public_collection.representative_image_url).to eq("https://localhost:3000/multiresimages/inu:dil-zza1b27840-c9ca-41a5-a39d-531621421d6d")
+    expect(@public_collection.representative_image_pid).to eq(@img.pid)
   end
 
   describe "to_solr" do

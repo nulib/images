@@ -62,11 +62,11 @@ class InstitutionalCollection < ActiveFedora::Base
     self.add_relationship(:has_representative_member, image)
   end
 
-  def representative_image_url
+  def representative_image_pid
     unless self.relationships(:has_representative_member).empty?
-      @img_pid = self.relationships(:has_representative_member).first.gsub(/info:fedora\//, '') || ""
+      return self.relationships(:has_representative_member).first.gsub(/info:fedora\//, '')
     end
-    "#{DIL_CONFIG['dil_app_url']}multiresimages/#{@img_pid}"
+    ""
   end
 
 end
