@@ -2,7 +2,7 @@
   <div class="row col-md-9 col-lg-8">
   <% if @institutional_collections.present? %>
     <h2>Public Collections</h2>
-    <p><%= button_to("Create New Collection", new_institutional_collection_path, :data => {:ajax_modal => "trigger"}, class: 'btn btn-primary btn-large', method: :get) %></p>
+    <p><%= link_to("Create New Collection", new_institutional_collection_path, :data => {:ajax_modal => "trigger"}, class: 'btn btn-default btn-large') %></p>
 
 
 

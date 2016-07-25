@@ -87,15 +87,31 @@ class InstitutionalCollectionsController < CatalogController
   # GET /institional_collections/new
   def new
     @institutional_collection = InstitutionalCollection.new
-    render 'new'
   end
 
   # GET /institional_collections/1/edit
   def edit
-    respond_to do |format|
-      format.js   { render json: modal_form_response(@collection) }
+    @institutional_collection = InstitutionalCollection.find(params[:id])
+  end
+
+  def update
+    # do not allow changing the title and unit after collection
+    # creation. If we do change these after creation and the collection has images,
+    # keep in mind that we must at minimum reindex the associated images
+    @institutional_collection = InstitutionalCollection.find params[:id]
+
+    if ( params[:institutional_collection][:rights_description] or params[:institutional_collection][:description] )
+      attr_hash = { :rights_description=> params[:institutional_collection][:rights_description],
+                    :description=>params[:institutional_collection][:description]}
+      if @institutional_collection.update_attributes(attr_hash)
+        flash[:success]="Collection info successfully updated"
+        redirect_to institutional_collections_path
+      else
+        render :action => :edit
+      end
     end
   end
+
 
   def rights
     @collection = InstitutionalCollection.find(params[:id])
@@ -121,8 +137,14 @@ class InstitutionalCollectionsController < CatalogController
       redirect_to @collection
     else
       logger.warn "Failed to create collection: #{@collection.errors.full_messages}"
-      render json: {errors: ["Failed to create collection with these params: #{params[:collection]}"] + @collection.errors.full_messages}, status: 422
+      #render json: {errors: ["Failed to create collection with these params: #{params[:collection]}"] + @collection.errors.full_messages}, status: 422
+      render 'new'
     end
+  end
+
+  def collection_name_ok
+    #TODO placeholder to remeber to check wither the name of the collection is already in use, etc
+    return true
   end
 
   def make_public
