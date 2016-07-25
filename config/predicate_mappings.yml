@@ -6,20 +6,20 @@
   fedora-relations-model: info:fedora/fedora-system:def/relations-external#
   nulib-rel: http://projecthydra.org/ns/relations#
 
-# namespace mappings--- 
+# namespace mappings---
 # you can add specific mappings for your institution by providing the following:
 #   namespace_uri:
 #     :relationship_symbol: relationship_identifier
-# 
+#
 # For example, if you have the following element in your rels_ext:
-#  
+#
 #  <oai:itemID>oai:example.edu:changeme:500</oai:itemID>
-# 
+#
 # With the last two lines of this file uncommented, the relationships hash of your object will include:
 #   :oai_item_id => ["info:fedora/oai:example.edu:changeme:500"]
 #
 :predicate_mapping:
-  info:fedora/fedora-system:def/relations-external#: 
+  info:fedora/fedora-system:def/relations-external#:
     :conforms_to: conformsTo
     :has_annotation: hasAnnotation
     :has_collection_member: hasCollectionMember
@@ -40,6 +40,7 @@
     :is_description_of: isDescriptionOf
     :is_member_of: isMemberOf
     :is_member_of_collection: isMemberOfCollection
+    :has_representative_member: hasRepresentativeMember
     :is_metadata_for: isMetadataFor
     :is_part_of: isPartOf
     :is_subset_of: isSubsetOf
@@ -49,7 +50,7 @@
     :is_deployment_of: isDeploymentOf
     :has_service: hasService
     :has_model: hasModel
-  http://www.openarchives.org/OAI/2.0/: 
+  http://www.openarchives.org/OAI/2.0/:
     :oai_item_id: itemID
   http://projecthydra.org/ns/relations#:
     :is_governed_by: isGovernedBy

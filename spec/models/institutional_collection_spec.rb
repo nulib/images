@@ -1,8 +1,5 @@
 require 'rails_helper'
 
-
-
-
 describe InstitutionalCollection do
 
   before do
@@ -25,6 +22,21 @@ describe InstitutionalCollection do
     expect(@public_collection.descMetadata.title) == @public_collection.title
   end
 
+  it "can create a representative image association" do
+    @img = Multiresimage.last
+    @public_collection.set_representative_image(@img)
+
+    expect(@public_collection.relationships(:has_representative_member).first).not_to be_nil
+    @public_collection.remove_relationship(:has_representative_member, @img)
+  end
+
+  it "can provide a pid for serving its representative image" do
+    @img = Multiresimage.last
+    @public_collection.set_representative_image(@img)
+
+    expect(@public_collection.representative_image_pid).to eq(@img.pid)
+  end
+
   describe "to_solr" do
     subject { @public_collection.to_solr }
     it "should have title_tesim" do
@@ -36,17 +48,17 @@ describe InstitutionalCollection do
   end
 
   describe "Setting (inheritable) default_permissions" do
-    it "New Institutional Collections should be public by default" do
-      @public_collection.default_permissions.should == [{:type=>"group", :access=>"read", :name=>"public"}]
+    xit "New Institutional Collections should be public by default" do
+      subject.default_permissions.should == [{:type=>"group", :access=>"read", :name=>"public"}]
     end
   end
 
   describe "Attribute validations" do
-    #if that's what we decide ultimately
-    # it "should concatenate Unit and Title with a pipe (|)" do
-    #   expect(@public_collection.title) == "Unit Part|Title Part"
-    #   #coll.valid?.should be true
-    # end
+    xit "Valid title must contain a Unit and Title concatanated with a pipe (|)" do
+      coll = InstitutionalCollection.new
+      coll.title = "oneword"
+      coll.valid?.should be false
+    end
   end
 
 
@@ -106,10 +118,5 @@ describe InstitutionalCollection do
       end
     end
   end
-
-
-
-
-
 
 end

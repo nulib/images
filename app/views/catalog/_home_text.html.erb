@@ -4,7 +4,7 @@
     <% end %>
         <div class="col-md-4">
           <a href="/catalog?f[institutional_collection_title_facet][]=<%=institutional_collection.collection_title_formatter%>" class="thumbnail home-header">
-            <%= image_tag( "placeholder.jpg") %>
+            <%= image_tag("placeholder.jpg")%>
           </a>
         <h4><%=institutional_collection.collection_title_formatter %></h4>
         <%= link_to("Rights Description", rights_institutional_collection_path(institutional_collection.id), :data => {:ajax_modal => "trigger"}) %>

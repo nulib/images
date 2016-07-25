@@ -10,9 +10,8 @@ class InstitutionalCollection < ActiveFedora::Base
   include Hydra::AccessControls::Permissions
   include Hydra::ModelMethods
 
-  #think about this line...
   has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_collection_member
-
+  has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_representative_member
 
   has_metadata 'descMetadata', type: ActiveFedora::QualifiedDublinCoreDatastream do |m|
     m.title :type=> :text, :index_as=>[:searchable]
@@ -27,12 +26,12 @@ class InstitutionalCollection < ActiveFedora::Base
         m.field "rights_description", :string
   end
 
-
   has_attributes :title_part, :unit_part, :rights_description, datastream: 'properties', multiple: false
   has_attributes :title, :description, datastream: 'descMetadata', multiple: false
   has_attributes :license_title, datastream: 'rightsMetadata', at: [:license, :title], multiple: false
   has_attributes :license_description, datastream: 'rightsMetadata', at: [:license, :description], multiple: false
   has_attributes :license_url, datastream: 'rightsMetadata', at: [:license, :url], multiple: false
+
 
   def make_public
     #this refers to the rights in the defaultRights datastream
@@ -47,7 +46,7 @@ class InstitutionalCollection < ActiveFedora::Base
   def collection_title_formatter
     if title.nil? or title==""
       title
-    else     
+    else
       title.split("|")[1]
     end
   end
@@ -56,7 +55,18 @@ class InstitutionalCollection < ActiveFedora::Base
    title.split("|")[0]
   end
 
+  def set_representative_image(image)
+    unless self.relationships(:has_representative_member).empty?
+      self.remove_relationship(:has_representative_member, self.relationships(:has_representative_member).first)
+    end
+    self.add_relationship(:has_representative_member, image)
+  end
 
-
+  def representative_image_pid
+    unless self.relationships(:has_representative_member).empty?
+      return self.relationships(:has_representative_member).first.gsub(/info:fedora\//, '')
+    end
+    ""
+  end
 
 end
