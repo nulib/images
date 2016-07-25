@@ -48,17 +48,16 @@ describe InstitutionalCollection do
   end
 
   describe "Setting (inheritable) default_permissions" do
-    xit "New Institutional Collections should be public by default" do
-      subject.default_permissions.should == [{:type=>"group", :access=>"read", :name=>"public"}]
+    it "New Institutional Collections should be public by default" do
+      @public_collection.default_permissions.should == [{:type=>"group", :access=>"read", :name=>"public"}]
     end
   end
 
   describe "Attribute validations" do
-    xit "Valid title must contain a Unit and Title concatanated with a pipe (|)" do
-      coll = InstitutionalCollection.new
-      coll.title = "oneword"
-      coll.valid?.should be false
-    end
+    # it "should concatenate Unit and Title with a pipe (|)" do
+   #   expect(@public_collection.title) == "Unit Part|Title Part"
+   #   #coll.valid?.should be true
+   # end
   end
 
 
