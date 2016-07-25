@@ -6,9 +6,8 @@ require 'rails_helper'
 describe InstitutionalCollection do
 
   before do
-    @public_collection = InstitutionalCollection.new(pid: "Testing:12335")
+    @public_collection = InstitutionalCollection.new(pid: "Testing:12335", title: "Unit Part|Title Part", title_part: "Title Part", unit_part: "Unit Part")
     @public_collection.save
-    @public_collection.title="Test Unit|Test Title"
     @public_collection.rightsMetadata
     @public_collection.default_permissions
     @public_collection.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]#likely this would be done in model when created
@@ -38,17 +37,16 @@ describe InstitutionalCollection do
 
   describe "Setting (inheritable) default_permissions" do
     it "New Institutional Collections should be public by default" do
-      subject.default_permissions.should == [{:type=>"group", :access=>"read", :name=>"public"}]
+      @public_collection.default_permissions.should == [{:type=>"group", :access=>"read", :name=>"public"}]
     end
   end
 
   describe "Attribute validations" do
     #if that's what we decide ultimately
-    it "Valid title must contain a Unit and Title concatanated with a pipe (|)" do
-      coll = InstitutionalCollection.new
-      coll.title = "oneword"
-      coll.valid?.should be false
-    end
+    # it "should concatenate Unit and Title with a pipe (|)" do
+    #   expect(@public_collection.title) == "Unit Part|Title Part"
+    #   #coll.valid?.should be true
+    # end
   end
 
 

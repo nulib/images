@@ -1,0 +1,38 @@
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="well">
+        <em>* Collection Title and Unit cannot be edited after creation</em>
+        <%= form_for @institutional_collection do |f| %>
+          <% if  @institutional_collection.new_record? %>
+            <div class="form-group">
+              <label for="title_part">Collection Title:</label>
+              <%= f.text_field :title_part, class: 'form-control'%>
+            </div>
+            <div class="form-group">
+              <label for="unit_part">Unit:</label>
+              <%= f.text_field :unit_part, class: 'form-control'%>
+            </div>
+          <% else %>
+            <div class="form-group">
+              <label for="title_part">Collection Title:</label>
+              <%= f.text_field :title_part, class: 'form-control',:readonly => true%>
+            </div>
+            <div class="form-group">
+              <label for="unit_part">Unit:</label>
+              <%= f.text_field :unit_part, class: 'form-control',:readonly => true%>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <label for="description">Collection Description:</label>
+            <%= f.text_field :description, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <label for="rights_description">Rights Description:</label>
+            <%= f.text_area :rights_description, class: 'form-control' %>
+          </div>
+          <%= f.submit 'Submit', class: 'btn btn-default btn-large' %>
+          <button type="button" class="btn btn-default btn-large" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
