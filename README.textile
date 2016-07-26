@@ -18,14 +18,10 @@ rake db:test:prepare
 h3. Local development only
 
 You'll need to install imagemagick to handle the tiff to jp2 conversion on your local machine.
-<pre>
-brew install imagemagick --with-libtiff --with-jp2
-</pre>
+<pre>brew install imagemagick --with-libtiff --with-jp2</pre>
 
 You'll also need redis running on port 6379
-<pre>
-brew install redis
-</pre>
+<pre>brew install redis</pre>
 Then you can start sidekiq normally using <code>bundle exec sidekiq</code>
 
 h2. Running the application
