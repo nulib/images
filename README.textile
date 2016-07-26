@@ -22,12 +22,11 @@ You'll need to install imagemagick to handle the tiff to jp2 conversion on your 
 brew install imagemagick --with-libtiff --with-jp2
 </pre>
 
-h3. Install ClamAV
-
-On OSX, the easiest way to get clamav is through homebrew
+You'll also need redis running on port 6379
 <pre>
-brew install clamav
+brew install redis
 </pre>
+Then you can start sidekiq normally using <code>bundle exec sidekiq</code>
 
 h2. Running the application
 
