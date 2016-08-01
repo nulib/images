@@ -54,4 +54,5 @@ We've got capistrano set up, so deploying *should* be as easy as 'cap environmen
 Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or run cap deploy setup.
 
 h2. stuff to remember
+
 the dropbox mount isn't managed by puppet
