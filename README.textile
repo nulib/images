@@ -56,3 +56,9 @@ Keep in mind that a deploy only copies over whatever files are in the public git
 h2. stuff to remember
 
 the dropbox mount isn't managed by puppet
+
+h2. new decisions
+
+We're going to mount shares on images (both staging and prod) and use ImageMover and use FileUtils to move them around. 
+
+refer to the dil-config.yml for exact paths
