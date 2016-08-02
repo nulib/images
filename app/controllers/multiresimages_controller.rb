@@ -138,7 +138,7 @@ class MultiresimagesController < ApplicationController
   end
 
   def get_vra(pid=params[:pid])
-    @vra_url = "#{DIL_CONFIG['dil_fedora_vra_url']}objects/#{pid}/datastreams/VRA/content"
+    @vra_url = "http://#{DIL_CONFIG['dil_fedora_vra_url']}/fedora/objects/#{pid}/datastreams/VRA/content"
   #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
   #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))
