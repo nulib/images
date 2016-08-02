@@ -134,7 +134,6 @@ class MultiresimagesController < ApplicationController
     end
 
     @page_title = @multiresimage.titleSet_display
-    gon.url = DIL_CONFIG['dil_js_url']
   end
 
   def get_vra(pid=params[:pid])
