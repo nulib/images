@@ -505,7 +505,7 @@ class Multiresimage < ActiveFedora::Base
       replace_locationset_display_pid(old_pid, new_pid)
       replace_locationset_location_pid(new_pid)
     rescue Exception => e
-x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
+      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     end
   end
 
