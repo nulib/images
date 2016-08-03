@@ -23,6 +23,7 @@ config/fedora.yml
 config/database.yml
 config/dil-config.yml
 config/secrets.yml
+config/solr.yml
 *.swp
 *.swo
 *.swn

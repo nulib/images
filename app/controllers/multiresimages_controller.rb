@@ -22,32 +22,6 @@ class MultiresimagesController < ApplicationController
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
 
-
-  # Get SVG for id
-  def get_svg
-	  expires_in(1.hours, :private => false, :public => true)
-	  source_fedora_object = Multiresimage.find(params[:id])
-	  authorize! :show, source_fedora_object
-	  @svg = source_fedora_object.DELIV_OPS.content()
-    gon.url = DIL_CONFIG['dil_js_url']
-    respond_to do |wants|
-       wants.xml  { render :xml => @svg }
-    end
-  end
-
-   # Get Aware's HTML view of the image for screen scraping geometry
-  def aware_details
-    @aware_details_url = "#{DIL_CONFIG['dil_aware_detail_url']}#{params[:file_path]}"
-  end
-
-  # Get tile from Aware
-  def aware_tile
-    tile_url = "#{DIL_CONFIG['dil_aware_tile_url']}#{params[:file_path]}&zoom=#{params[:level]}&x=#{params[:x]}&y=#{params[:y]}&rotation=0"
-    #logger.debug("tile_url:#{tile_url}")
-    expires_in(1.hours, :private => false, :public => true)
-    send_data Net::HTTP.get_response(URI.parse(tile_url)).body, :type => 'image/jpeg', :disposition => 'inline'
-  end
-
   def update_vra
     #this method updates both image and work vra.
     #it replaces the content of the work with the updated image xml,
@@ -160,7 +134,6 @@ class MultiresimagesController < ApplicationController
     end
 
     @page_title = @multiresimage.titleSet_display
-    gon.url = DIL_CONFIG['dil_js_url']
   end
 
   def get_vra(pid=params[:pid])

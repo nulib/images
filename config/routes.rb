@@ -34,8 +34,6 @@ Rails.application.routes.draw do
 
   resources :multiresimages do
     collection do
-      get 'aware_tile'
-      get 'aware_details'
       post 'add_datastream'
       post 'add_external_datastream'
       post 'menu_publish'
@@ -84,7 +82,6 @@ Rails.application.routes.draw do
 
   get 'technical_metadata/:id/:type' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
-  get "multiresimages/svg/:id" => "multiresimages#get_svg"
   get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
   patch "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
