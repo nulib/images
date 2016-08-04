@@ -377,14 +377,14 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_deliv_img_datastream( ds_location = nil )
-    ds_location # TODO: this doesn't work anymore. we don't use ansel anymore  #||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
+    ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
     unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
       raise "deliv-img failed. (is the jp2 location accessible?)"
     end
   end
 
   def create_archv_img_datastream( ds_location = nil )
-    ds_location # TODO: this doesn't work anymore. we don't use ansel anymore ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
+    ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
 
     unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
       raise "archv-img failed."
