@@ -89,7 +89,7 @@ module TransformXML
     begin
       nokogiri_doc.root.add_child(work_element)
     rescue => e
-      Sidekiq::Logging.logger.error "TransformXML error: #{e}"
+      logger.error "TransformXML error: #{e}"
     end
     nokogiri_doc
   end
