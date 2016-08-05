@@ -94,7 +94,7 @@ class Multiresimage < ActiveFedora::Base
         create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
       self.create_deliv_ops_datastream
-      self.create_deliv_img_datastream
+      #self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
       unless Rails.env == "test"
@@ -262,15 +262,6 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
-  def create_archv_img_datastream( ds_location = nil )
-    ds_location ||= "#{ DIL_CONFIG[ 'archv_url' ]}#{jp2_img_name}"
-    ds_location = "http://upload.wikimedia.org/wikipedia/commons/0/0e/Haeberli_off_luv24.tif"
-
-    unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
-      raise "archv-img failed for some reason and i hate it"
-    end
-  end
 
   def jp2_img_name
     "#{ self.pid }.jp2".gsub( /:/, '-' )
@@ -505,7 +496,7 @@ class Multiresimage < ActiveFedora::Base
       replace_locationset_display_pid(old_pid, new_pid)
       replace_locationset_location_pid(new_pid)
     rescue Exception => e
-x      logger.error("Exception in replace_pid_in_vra:#{e.message}")
+      logger.error("Exception in replace_pid_in_vra:#{e.message}")
     end
   end
 

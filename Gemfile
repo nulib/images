@@ -44,7 +44,6 @@ source 'http://rubygems.org'
 
 group :test do
   gem 'rspec-rails'
-  gem 'byebug'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara'
@@ -55,27 +54,25 @@ group :test do
   gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
 end
 
-group :development, :remote_dev do
-  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
+group :development do
   gem 'jettywrapper'
   gem 'sqlite3'
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'sextant'
-  gem 'byebug'
   gem 'pry'
 end
 
-group :staging do
-  gem 'pg'
-  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
-  gem 'lograge'
-  gem 'rb-readline'
+group :development, :test, :staging do
   gem 'byebug'
+  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
+end
+
+group :staging, :production do
+  gem 'pg'
+  gem 'lograge'
 end
 
 group :production do
-  gem 'pg'
   gem 'google-analytics-rails'
-  gem 'lograge'
 end
