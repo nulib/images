@@ -106,10 +106,8 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find( self.pid )
       j.save!
     rescue StandardError => e
-      Sidekiq::Logging.logger.info("standard error: #{e}")
       file_number.blank? ? "no file number" : file_number
       create_and_persist_status = "#{file_number} had a problem: #{e}"
-      Sidekiq::Logging.logger.info "Deleting work and image because #{e}"
 
       if self
         self.vraworks.first.delete if self.vraworks.first
@@ -216,10 +214,6 @@ class Multiresimage < ActiveFedora::Base
 
         result = self.validate_vra( vra.to_xml )
 
-        Sidekiq::Logging.logger.info("valid vra? #{result}")
-        Sidekiq::Logging.logger.info("pid? #{self.pid}")
-
-
         self.datastreams[ 'VRA' ].content = vra.to_xml
         #Sidekiq::Logging.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
         self.datastreams[ 'VRA' ].content
@@ -229,7 +223,6 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
   def create_archv_techmd_datastream( img_location )
     jhove_xml = create_jhove_xml( img_location )
 
@@ -237,7 +230,6 @@ class Multiresimage < ActiveFedora::Base
       raise "Failed to create Jhove datastream"
     end
   end
-
 
   def create_archv_exif_datastream( img_location )
     exif_xml = `#{ Rails.root }/lib/exif.pl #{ img_location }`
@@ -248,12 +240,10 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_deliv_techmd_datastream( img_location )
-    #this is stupid, it's stupid to create it more than once
-    Sidekiq::Logging.logger.info("in create techmd about to create jp2 from this #{img_location}")
     begin
       create_jp2( img_location )
     rescue StandardError => e
-      Sidekiq::Logging.logger.info("create jp2 failed because: #{e}")
+      # NOOP
     end
     jhove_xml = create_jhove_xml( jp2_img_path )
 
@@ -262,16 +252,13 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
   def jp2_img_name
     "#{ self.pid }.jp2".gsub( /:/, '-' )
   end
 
-
   def jp2_img_path
     Rails.root.join( 'tmp', jp2_img_name )
   end
-
 
   def tiff_img_name
     "#{ self.pid }.tif".gsub( /:/, '-' )
@@ -293,20 +280,14 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
   def create_jp2_local( img_location )
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
   #something is going wrong and jp2s though output says created in local tmp, they are going to /images_tmp. and don't forget to change all debugs to info
   def create_jp2_remote( img_location )
-    Sidekiq::Logging.logger.info("about to create jp2 staging")
     stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-    Sidekiq::Logging.logger.info("out #{stdout}")
-    Sidekiq::Logging.logger.info("err #{stdeerr}")
-    Sidekiq::Logging.logger.info("status #{status}")
   end
-
 
   def create_deliv_ops_datastream
     #this gets called after copy of file from local tmp directory to isilon-backed location at DIL_CONFIG['jp2_location']
@@ -319,18 +300,13 @@ class Multiresimage < ActiveFedora::Base
     populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
   end
 
-
   def get_image_width_and_height(img)
     if "#{Rails.env}" == "test"
       info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
       stdout = info.to_s
     else
-      Sidekiq::Logging.logger.info("get image width and height #{DIL_CONFIG['openjpeg2_location']}")
       stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{img}")
     end
-    Sidekiq::Logging.logger.info("stdout #{stdout}")
-    Sidekiq::Logging.logger.info("stdeerr #{stdeerr}")
-    Sidekiq::Logging.logger.info("status #{status}")
 
     begin
       x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
@@ -339,30 +315,24 @@ class Multiresimage < ActiveFedora::Base
       y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
       height = y1.split(" ", 2).first
     rescue StandardError => e
-      Sidekiq::Logging.logger.info("trouble with split #{e}")
+      # NOOP
     end
 
     return { width: width, height: height }
   end
 
-
-
-    def jp2_deliv_ops_xml( width, height, rel_path)
-      xml = <<-EOF
-  <svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}"/>
-  </svg:svg>
-  EOF
-    end
-
+  def jp2_deliv_ops_xml( width, height, rel_path)
+    xml = <<-EOF
+<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}"/>
+</svg:svg>
+    EOF
+  end
 
   def create_jhove_xml( img_location )
     require 'jhove_service'
 
-    # This parameter is where the output file will go
-    Sidekiq::Logging.logger.info( 'IN create_jhove_xml' )
     j = JhoveService.new( File.dirname( img_location ))
-    Sidekiq::Logging.logger.debug( "jhove: #{ j }")
     xml_loc = j.run_jhove( img_location )
     jhove_xml = File.open(xml_loc).read
   end
@@ -382,13 +352,11 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
   def populate_datastream(xml, ds_name, ds_label, mime_type)
     self.datastreams[ds_name].content = xml
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
   end
-
 
   def populate_external_datastream( ds_name, ds_label, mime_type, ds_location )
     self.datastreams[ds_name].controlGroup = 'E'
@@ -397,9 +365,7 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams[ds_name].dsLocation = ds_location
   end
 
-
   def update_associated_work
-    #Sidekiq::Logging.logger.info("update associated work #{vraworks.first.present?}")
     #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
     if vraworks.first.present?
       vra_work = vraworks.first
@@ -413,7 +379,6 @@ class Multiresimage < ActiveFedora::Base
       vra_work.save!
     end
   end
-
 
   def preferred_related_work
     return @preferred_related_work if @preferred_related_work
@@ -431,19 +396,17 @@ class Multiresimage < ActiveFedora::Base
     @other_related_works
   end
 
-
   def longside_max
-      ds = self.DELIV_OPS
-      if ds.svg_rect.empty?
-        svg_height = ds.svg_image.svg_height.first.to_i
-        svg_width = ds.svg_image.svg_width.first.to_i
-      else
-        svg_height = ds.svg_rect.svg_rect_height.first.to_i
-        svg_width = ds.svg_rect.svg_rect_width.first.to_i
-      end
-      svg_height > svg_width ? svg_height : svg_width
+    ds = self.DELIV_OPS
+    if ds.svg_rect.empty?
+      svg_height = ds.svg_image.svg_height.first.to_i
+      svg_width = ds.svg_image.svg_width.first.to_i
+    else
+      svg_height = ds.svg_rect.svg_rect_height.first.to_i
+      svg_width = ds.svg_rect.svg_rect_width.first.to_i
+    end
+    svg_height > svg_width ? svg_height : svg_width
   end
-
 
   def attach_file(files)
     if files.present?
@@ -453,18 +416,15 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
-  # Moving file from temp location to config location.  Messing server will pull from here.
+  # Moving file from temp location to config location. Messing server will pull from here.
   def write_out_raw
     new_filepath = temp_filename(file_name, DIL::Application.config.processing_file_path)
     File.open(new_filepath, 'wb') do |f|
       f.write raw.content
     end
-    Sidekiq::Logging.logger.debug("New filepath:" + new_filepath)
     FileUtils.chmod(0644, new_filepath)
     new_filepath
   end
-
 
   #update the VRA ref id value
   def update_ref_id(ref_id)
@@ -473,12 +433,10 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
   end
 
-
   #replace the VRA locationSet_display value
   def replace_locationset_display_pid(old_pid, new_pid)
     self.VRA.locationSet_display = [self.VRA.locationSet_display[0].gsub(old_pid, new_pid)]
   end
-
 
   #replace the VRA locationSet location value
   def replace_locationset_location_pid(new_pid)
@@ -536,14 +494,11 @@ class Multiresimage < ActiveFedora::Base
    solr_doc
   end
 
-
-  ## Checks if this image is a crop
   def is_crop?
     self.rels_ext.content.include? "isCropOf"
   end
 
-
-  #get rid of this - image server will do it. proxy_image relies on it, replace
+  # Possibly get rid of this - image server will do it. proxy_image relies on it, replace
   def image_url(max_size=1600)
 
     src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f
@@ -565,7 +520,6 @@ class Multiresimage < ActiveFedora::Base
       self.collections.delete(collection)
     end
   end
-
 
   private
 
