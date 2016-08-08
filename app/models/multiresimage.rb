@@ -50,13 +50,11 @@ class Multiresimage < ActiveFedora::Base
     m.field 'file_name', :string
   end
 
-
   attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
       :measurementsSet_display, :stylePeriodSet_display, :inscriptionSet_display,
       :worktypeSet_display, :sourceSet_display, :relationSet_display, :techniqueSet_display, :editionSet_display, :rightsSet_display, :textrefSet_display]
-
 
   attributes.each do |att|
     has_attributes att, datastream: :VRA, multiple: false
@@ -89,12 +87,9 @@ class Multiresimage < ActiveFedora::Base
     begin
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
-      self.create_deliv_techmd_datastream( path )
       unless Rails.env == "test"
         create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
-      self.create_deliv_ops_datastream
-      #self.create_deliv_img_datastream
       self.create_archv_img_datastream
 
       unless Rails.env == "test"
@@ -140,8 +135,7 @@ class Multiresimage < ActiveFedora::Base
     self.validate_vra( work.datastreams["VRA"].content )
 
     work.save!
-    #Sidekiq::Logging.logger.info("work.save? #{work.inspect}")
-    work #you'd better
+    work
   end
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
@@ -150,7 +144,6 @@ class Multiresimage < ActiveFedora::Base
     #We only want this code to execute if we are getting a record from menu (as opposed to the synchronizer)
     if from_menu
       vra = Nokogiri::XML(vra_xml)
-    #  Sidekiq::Logging.logger.info("vra_save #{vra.xpath("/vra:vra/vra:image").present?}")
       if vra.xpath("/vra:vra/vra:image").present?
 
         #set the refid attribute to the new pid
@@ -187,7 +180,6 @@ class Multiresimage < ActiveFedora::Base
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
         vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
 
-
         self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
@@ -210,12 +202,8 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        #Sidekiq::Logging.logger.info("vra to xml after all sorts modifications: #{vra.to_xml}")
-
-        result = self.validate_vra( vra.to_xml )
-
+        self.validate_vra( vra.to_xml )
         self.datastreams[ 'VRA' ].content = vra.to_xml
-        #Sidekiq::Logging.logger.info("datastreams vra content #{self.datastreams[ 'VRA' ].content}")
         self.datastreams[ 'VRA' ].content
       else
         raise "not an image type"
@@ -224,7 +212,10 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_archv_techmd_datastream( img_location )
-    jhove_xml = create_jhove_xml( img_location )
+    xml_loc = create_jhove_xml( img_location )
+    file = File.open(xml_loc, "r")
+    jhove_xml = file.read
+    file.close
 
     unless populate_datastream(jhove_xml, 'ARCHV-TECHMD', 'MIX Technical Metadata', 'text/xml')
       raise "Failed to create Jhove datastream"
@@ -236,19 +227,6 @@ class Multiresimage < ActiveFedora::Base
 
     unless populate_datastream(exif_xml, 'ARCHV-EXIF', 'EXIF Technical Metadata', 'text/xml')
       raise "Failed to create EXIF datastream"
-    end
-  end
-
-  def create_deliv_techmd_datastream( img_location )
-    begin
-      create_jp2( img_location )
-    rescue StandardError => e
-      # NOOP
-    end
-    jhove_xml = create_jhove_xml( jp2_img_path )
-
-    unless populate_datastream(jhove_xml, 'DELIV-TECHMD', 'MIX Technical Metadata for JP2', 'text/xml')
-      raise "Failed to create Jhove datastream"
     end
   end
 
@@ -271,7 +249,7 @@ class Multiresimage < ActiveFedora::Base
       create_jp2_local( img_location )
     else
       create_jp2_remote( img_location )
-     end
+    end
 
     if File.file?( jp2_img_path )
       jp2_img_path
@@ -286,62 +264,14 @@ class Multiresimage < ActiveFedora::Base
 
   #something is going wrong and jp2s though output says created in local tmp, they are going to /images_tmp. and don't forget to change all debugs to info
   def create_jp2_remote( img_location )
-    stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-  end
-
-  def create_deliv_ops_datastream
-    #this gets called after copy of file from local tmp directory to isilon-backed location at DIL_CONFIG['jp2_location']
-    jp2_location = "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
-    width_and_height = get_image_width_and_height(jp2_location)
-    width = width_and_height[ :width ]
-    height = width_and_height[ :height ]
-    deliv_ops_xml = jp2_deliv_ops_xml( width, height, jp2_location )
-
-    populate_datastream( deliv_ops_xml, 'DELIV-OPS', 'SVG Datastream', 'text/xml' )
-  end
-
-  def get_image_width_and_height(img)
-    if "#{Rails.env}" == "test"
-      info = File.readlines("#{Rails.root}/spec/fixtures/test_jp2_info.txt")
-      stdout = info.to_s
-    else
-      stdout, stdeerr, status = Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_dump -i #{img}")
-    end
-
-    begin
-      x1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("x1=", 2).last
-      width = x1.split(",", 2).first
-
-      y1 = stdout.gsub(/\n/, "").gsub(/\t/, "").split("y1=", 2).last
-      height = y1.split(" ", 2).first
-    rescue StandardError => e
-      # NOOP
-    end
-
-    return { width: width, height: height }
-  end
-
-  def jp2_deliv_ops_xml( width, height, rel_path)
-    xml = <<-EOF
-<svg:svg xmlns:svg="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <svg:image x="0" y="0" height="#{ height }" width="#{ width }" xlink:href="/#{rel_path}"/>
-</svg:svg>
-    EOF
+    Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
   end
 
   def create_jhove_xml( img_location )
     require 'jhove_service'
 
     j = JhoveService.new( File.dirname( img_location ))
-    xml_loc = j.run_jhove( img_location )
-    jhove_xml = File.open(xml_loc).read
-  end
-
-  def create_deliv_img_datastream( ds_location = nil )
-    ds_location ||= "#{ DIL_CONFIG[ 'jp2_url' ]}#{jp2_img_name}"
-    unless populate_external_datastream( 'DELIV-IMG', 'Delivery Image Datastream', 'image/jp2', ds_location )
-      raise "deliv-img failed. (is the jp2 location accessible?)"
-    end
+    j.run_jhove( img_location )
   end
 
   def create_archv_img_datastream( ds_location = nil )
@@ -366,7 +296,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def update_associated_work
-    #Update the image's work (NOTE: only for 1-1 mapping, no need to update work when it's not 1-1)
+    #Update the image's work (only for 1-1 mapping, no need to update work when it's not 1-1)
     if vraworks.first.present?
       vra_work = vraworks.first
       vra_work.agentSet_display_work = agentSet_display
@@ -396,36 +326,6 @@ class Multiresimage < ActiveFedora::Base
     @other_related_works
   end
 
-  def longside_max
-    ds = self.DELIV_OPS
-    if ds.svg_rect.empty?
-      svg_height = ds.svg_image.svg_height.first.to_i
-      svg_width = ds.svg_image.svg_width.first.to_i
-    else
-      svg_height = ds.svg_rect.svg_rect_height.first.to_i
-      svg_width = ds.svg_rect.svg_rect_width.first.to_i
-    end
-    svg_height > svg_width ? svg_height : svg_width
-  end
-
-  def attach_file(files)
-    if files.present?
-      raw.content = files.first.read
-      raw.mimeType = files.first.content_type
-      self.file_name = files.first.original_filename
-    end
-  end
-
-  # Moving file from temp location to config location. Messing server will pull from here.
-  def write_out_raw
-    new_filepath = temp_filename(file_name, DIL::Application.config.processing_file_path)
-    File.open(new_filepath, 'wb') do |f|
-      f.write raw.content
-    end
-    FileUtils.chmod(0644, new_filepath)
-    new_filepath
-  end
-
   #update the VRA ref id value
   def update_ref_id(ref_id)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
@@ -446,7 +346,6 @@ class Multiresimage < ActiveFedora::Base
     #self.datastreams["VRA"].dirty = true
   end
 
-
   #replace every instance of old pid with new pid in VRA
   def replace_pid_in_vra(old_pid, new_pid)
     begin
@@ -458,21 +357,17 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-
   def update_relation_set(work_pid)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')
     node_set[0].set_attribute("pref", "true")
     node_set[0].set_attribute("relids", work_pid)
     node_set[0].set_attribute("type", "imageOf")
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
-    #self.datastreams["VRA"].dirty = true
   end
-
 
   def get_work_pid
     self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end
-
 
   def to_solr(solr_doc = Hash.new, opts={})
     solr_doc = super(solr_doc, opts)
@@ -492,10 +387,6 @@ class Multiresimage < ActiveFedora::Base
    end
 
    solr_doc
-  end
-
-  def is_crop?
-    self.rels_ext.content.include? "isCropOf"
   end
 
   # Possibly get rid of this - image server will do it. proxy_image relies on it, replace
@@ -520,18 +411,4 @@ class Multiresimage < ActiveFedora::Base
       self.collections.delete(collection)
     end
   end
-
-  private
-
-  ## Produce a unique filename that doesn't already exist.
-  def temp_filename(basename, tmpdir='/tmp')
-    n = 0
-    begin
-      tmpname = File.join(tmpdir, sprintf('%s%d.%d', basename, $$, n))
-      lock = tmpname + '.lock'
-      n += 1
-    end while File.exist?(tmpname)
-    tmpname
-  end
-
 end

@@ -52,7 +52,6 @@ class MultiresimagesController < ApplicationController
     begin
       update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
     rescue StandardError => msg
-      puts "image is not happening"
       puts "Error -- update_fedora_object image: #{msg}"
       status = 500
       update_work = false

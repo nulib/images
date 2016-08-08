@@ -66,7 +66,6 @@ describe MultiresimagesController, :type => :request do
     expect(response.body).to include("inu:dil")
   end
 
-
   it "should update both image and work vra" do
     @xml_from_menu3 = File.read( "#{ Rails.root }/spec/fixtures/vra_image_from_menu_sample.xml" )
 
@@ -115,13 +114,9 @@ describe MultiresimagesController, :type => :request do
     expect(@updated_work_xml).to include("Agent Bon Bon")
   end
 
-  it "should allow an admin to delete a Multiresimage record" do
-
-
+  xit "should allow an admin to delete a Multiresimage record" do
   end
 
-  it "should deny an anonymous user from deleting a Multiresimage record" do |variable|
-
+  xit "should deny an anonymous user from deleting a Multiresimage record" do |variable|
   end
-
 end

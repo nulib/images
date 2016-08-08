@@ -11,7 +11,6 @@ class MultiresimagesBatchWorker
 
   def perform(job_number, user_email)
     begin
-      puts "batch dir? #{DIL_CONFIG['batch_dir']}"
       xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
       good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
       bad_file_storage = []

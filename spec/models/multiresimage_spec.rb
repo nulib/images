@@ -11,7 +11,6 @@ describe Multiresimage do
     end
     subject { Multiresimage.new(:admin_policy=>@policy) }
     its(:admin_policy) { should == @policy }
-
   end
 
   describe "#create_datastreams_and_persist_image_files" do
@@ -64,8 +63,6 @@ describe Multiresimage do
       expect(all_good).to be true
       expect(count + 1).to eql(Multiresimage.all.count)
     end
-
-
   end
 
   describe "#vra_save" do
@@ -118,33 +115,6 @@ describe Multiresimage do
         expect( @m.datastreams[ "ARCHV-EXIF" ].content ).to match_xml_except( exif_xml, 'File_Access_Date_Time', 'File Access Date/Time' )
       end
     end
-
-    describe "#create_deliv_techmd_datastream" do
-      it "populates the DELIV-TECHMD datastream" do
-        jhove_xml = File.open("#{ Rails.root }/spec/fixtures/deliv_jhove_output.xml").read
-        @m.create_deliv_techmd_datastream( @sample_jp2 )
-        expect( @m.datastreams[ "DELIV-TECHMD" ].content ).to match_xml_except( jhove_xml, 'date' )
-      end
-    end
-
-    describe "#create_deliv_ops_datastream" do
-      it "populates the DELIV-OPS datastream" do
-        deliv_ops_xml = "<svg:svg xmlns:svg=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"> <svg:image x=\"0\" y=\"0\" height=\"664\" width=\"600\" xlink:href=\"//dimages/public/images/#{ @m.pid.gsub( /:/, '-' )}.jp2\"/> </svg:svg>"
-        @m.create_deliv_techmd_datastream( @sample_jp2 )
-        @m.create_deliv_ops_datastream
-        p deliv_ops_xml.strip.gsub(/\s+/, " ")
-        expect( @m.datastreams[ "DELIV-OPS" ].content.gsub(/\s+/, " ").chomp).to eq( deliv_ops_xml.strip.gsub(/\s+/, " ").chomp )
-      end
-    end
-
-    describe "#create_deliv_img_datastream" do
-      it "populates the DELIV-IMG datastream" do
-        public_jp2 = "http://memory.loc.gov/service/gmd/gmd4/g4974/g4974s/ct001338.jp2"
-        @m.create_deliv_img_datastream( public_jp2 )
-        @m.save!
-        expect( @m.datastreams[ "DELIV-IMG" ].content ).to_not be_nil
-      end
-    end
   end
 
   # We don't have working/updated factories right now
@@ -157,7 +127,6 @@ describe Multiresimage do
     subject { Multiresimage.new(:collections=>[@collection1, @collection2]) }
     its(:collections) { should == [@collection1, @collection2] }
   end
-
 
   context "with an associated work" do
     xml = File.read("#{Rails.root}/spec/fixtures/vra_minimal.xml")
@@ -173,7 +142,6 @@ describe Multiresimage do
       expect( img.related_ids ).to eq img.vraworks.first.pid
     end
   end
-
 
   context "to_solr" do
     before do
@@ -193,14 +161,17 @@ describe Multiresimage do
       m.save
       m
     end
+
     it "should have read groups accessor" do
       expect( subject.read_groups ).to eq ['group-6', 'group-7']
     end
+
     it "should have read groups writer" do
       subject.read_groups = ['group-2', 'group-3']
       expect( subject.rightsMetadata.groups ).to eq( {'group-2' => 'read', 'group-3'=>'read', 'group-8' => 'edit'} )
       expect( subject.rightsMetadata.users ).to eq( {"person1"=>"read","person2"=>"discover"} )
     end
+
     it "should only revoke eligible groups" do
       subject.set_read_groups(['group-2', 'group-3'], ['group-6'])
       # 'group-7' is not eligible to be revoked
@@ -215,10 +186,10 @@ describe Multiresimage do
       @work = Vrawork.create
       @img.vraworks = [@work]
     end
+
     it "should update the work" do
       @img.update_attributes(:titleSet_display => "Woah cowboy")
       expect( @img.vraworks.first.titleSet_display_work ).to eq "Woah cowboy"
-
     end
   end
 
@@ -243,9 +214,11 @@ describe Multiresimage do
       eos
       @img.datastreams["VRA"] = VRADatastream.from_xml(vra_xml)
     end
+
     it "preferred_related_work should return the preferred work" do
       expect( @img.preferred_related_work ).to eq @work1
     end
+    
     it "other_related_works should be the others" do
       expect( @img.other_related_works ).to eq( [@work2, @work3] )
     end

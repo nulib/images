@@ -36,19 +36,16 @@ module DIL
     config.assets.initialize_on_precompile = true
     config.exceptions_app = self.routes
 
-    # Location where dil puts files to be processed
-     config.processing_file_path = "/tmp"
-
-     config.public_permission_levels = {
-       "No Access"=>"none",
-       "Discover" => "discover",
-       "View" => "read"
-     }
-     config.permission_levels = {
-       "No Access"=>"none",
-       "Discover" => "discover",
-       "View" => "read",
-       "Edit" => "edit"
-     }
+    config.public_permission_levels = {
+      "No Access"=>"none",
+      "Discover" => "discover",
+      "View" => "read"
+    }
+    config.permission_levels = {
+      "No Access"=>"none",
+      "Discover" => "discover",
+      "View" => "read",
+      "Edit" => "edit"
+    }
   end
 end
