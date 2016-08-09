@@ -37,6 +37,8 @@ vendor/servlet/
 .env
 .capistrano/
 
+dump.rdb
+
 tags
 
 spec/fixtures/images/jhove_output.xml
