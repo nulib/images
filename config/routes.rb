@@ -46,10 +46,7 @@ Rails.application.routes.draw do
     end
     member do
       post 'permissions'
-      # get 'svg'
-      # get 'get_image'
       # get 'archival_image_proxy'
-      # patch 'updatecrop'
     end
   end
 
@@ -82,9 +79,7 @@ Rails.application.routes.draw do
 
   get 'technical_metadata/:id/:type' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
-  get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
-  patch "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
 
   get "dil_collections/:pid/:id/:index" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
   get "dil_collections/:pid/:id" => "multiresimages#show", :constraints=> { pid: /inu.*/ }

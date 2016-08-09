@@ -43,15 +43,6 @@ describe Multiresimage do
 
     end
 
-    xit "can get the height and width of a jp2" do
-      img = Multiresimage.first
-      jp2_img_path = "#{ Rails.root }#{DIL_CONFIG['test_jp2_path']}"
-      height_and_width = img.get_image_width_and_height(jp2_img_path)
-
-      expect(height_and_width[:width]).to eq("600")
-      expect(height_and_width[:height]).to eq("664")
-    end
-
     it "can add the location display element that holds the pid to vra xml if it's missing" do
       path = "#{Rails.root}/spec/fixtures/images/internet.tiff"
       count = Multiresimage.all.count
@@ -218,7 +209,7 @@ describe Multiresimage do
     it "preferred_related_work should return the preferred work" do
       expect( @img.preferred_related_work ).to eq @work1
     end
-    
+
     it "other_related_works should be the others" do
       expect( @img.other_related_works ).to eq( [@work2, @work3] )
     end
