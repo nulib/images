@@ -3,7 +3,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
 
   blacklight_for :catalog
-  iiif_for 'riiif/image', at: '/image-service'
+  mount Riiif::Engine => '/image-service', as: 'riiif'
 
   if Rails.env.staging? or Rails.env.remote_dev?
     mount AboutPage::Engine => '/about(.:format)'
