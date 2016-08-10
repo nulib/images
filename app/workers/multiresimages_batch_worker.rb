@@ -1,5 +1,4 @@
 require 'dil/pid_minter'
-require 'dil/multiresimage_service'
 
 #Important note! Be sure to only pass primitives or simple objects as arguements to the worker, e.g. .perform_async(@project.id).
 #These arguements must be serialized and placed #into the Redis queue, and attempting to serialize an entire ActiveRecord object is inefficient and not likely to work.
@@ -7,7 +6,6 @@ require 'dil/multiresimage_service'
 class MultiresimagesBatchWorker
   include DIL::PidMinter
   include Sidekiq::Worker
-  include DIL::MultiresimageService
 
   def perform(job_number, user_email)
     begin
@@ -19,7 +17,7 @@ class MultiresimagesBatchWorker
           begin
             accession_number = xml.xpath("//refid[@source=\"Accession\"]")
             raise "No Accession number for #{xf}" if accession_number.nil?
-            raise "Existing image found with this accession number" if existing_image?( accession_number.text )
+            raise "Existing image found with this accession number" if Multiresimage.existing_image?( accession_number.text )
           rescue => e
             Sidekiq::Logging.logger.error("Problem with accession number: #{e}")
           end

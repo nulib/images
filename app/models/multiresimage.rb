@@ -79,6 +79,13 @@ class Multiresimage < ActiveFedora::Base
     self.pref_relation = pref_title
   end
 
+  def self.existing_image?(accession_nbr)
+    if accession_nbr.present?
+      logger.info "Checking for existing image..."
+      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+    end
+  end
+
   def create_datastreams_and_persist_image_files(path, batch=false)
     file = path.split("/").last
     file_number = file.split(".tif").first

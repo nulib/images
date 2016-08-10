@@ -1,8 +1,6 @@
-require 'dil/multiresimage_service'
 require 'dil/pid_minter'
 
 class MultiresimagesController < ApplicationController
-  include DIL::MultiresimageService
   include DIL::PidMinter
   helper :permissions
 
@@ -33,10 +31,11 @@ class MultiresimagesController < ApplicationController
     work_xml = work.datastreams['VRA'].content
 
     #because u might need it in the rescue
-    image_xml = image.datastreams['VRA'].content
+    #image_xml = image.datastreams['VRA'].content
 
     image_metadata = Nokogiri::XML(params[:xml])
     work_metadata = Nokogiri::XML(work_xml)
+
     work_node = work_metadata.at_xpath("//vra:work")
 
     image_metadata.at_xpath("//vra:refid[@source='DIL']").swap(work_metadata.at_xpath("//vra:refid[@source='DIL']"))
@@ -46,35 +45,36 @@ class MultiresimagesController < ApplicationController
     work_node.children = image_metadata.xpath("//vra:image").children
 
     updated_work_xml = work_metadata.to_xml
-    status = 200
-    update_work = true
 
     begin
-      update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
+      image.datastreams['VRA'].content = params[:xml]
+      image.save
+
+      work.datastreams['VRA'].content = updated_work_xml
+      work.save
     rescue StandardError => msg
       puts "Error -- update_fedora_object image: #{msg}"
-      status = 500
-      update_work = false
+
     end
 
-    if update_work
-      begin
-        update_fedora_object(work_pid, updated_work_xml, "VRA", "VRA", "text/xml")
-      rescue StandardError => msg
-        logger.error "Error -- update_fedora_object work: #{msg}"
-        update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
-        status = 500
-      end
-    end
+    # if update_work
+    #   begin
+    #     update_fedora_object(work_pid, updated_work_xml, "VRA", "VRA", "text/xml")
+    #   rescue StandardError => msg
+    #     logger.error "Error -- update_fedora_object work: #{msg}"
+    #     update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
+    #     status = 500
+    #   end
+    # end
 
-    head status
+    #    head status
   end
 
   def create
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?
-        raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+        raise "Existing image found with this accession number" if Multiresimage.existing_image?( params[:accession_nbr] )
 
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
         i.save
