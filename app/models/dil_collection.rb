@@ -150,8 +150,8 @@ class DILCollection < ActiveFedora::Base
       title = image.pref_title
       
       # URL is provided as input to local_resource_from_url method
-      url = "http://localhost:3331/image-service/#{image.pid.gsub!(/:/, '-')}/full/,1000/0/default.jpg"
-      
+      url = "#{DIL_CONFIG['base_url']}/image-service/#{image.pid.gsub!(/:/, '-')}/full/,1000/0/default.jpg"
+
       # Create a local representation of the remote resource
       local_resource = LocalResource.new(URI.parse(url))
 
