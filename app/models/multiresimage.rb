@@ -360,6 +360,9 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def update_institutional_collection(collection)
+    # we are not sure if there is a reason it's better to do this via self.add_relationship(:is_governed_by)
+    # it seems that updating the institutional_collection accomplishes this as well in one step
+    # to use :is_governed by you must first remove any existing relationship (or there will be multiple) and additionally update the institutional_collection
     self.institutional_collection = collection
   end
 
