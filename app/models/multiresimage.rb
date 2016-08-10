@@ -396,20 +396,6 @@ class Multiresimage < ActiveFedora::Base
    solr_doc
   end
 
-  # Possibly get rid of this - image server will do it. proxy_image relies on it, replace
-  def image_url(max_size=1600)
-
-    src_width = self.DELIV_OPS.svg_image.svg_width.first.to_f
-    src_height = self.DELIV_OPS.svg_image.svg_height.first.to_f
-
-    ratio = [ max_size / src_width , max_size / src_height ].min
-
-    dest_width = (src_width * ratio).to_i
-    dest_height = (src_height * ratio).to_i
-
-    "#{DIL_CONFIG['aware_region_url']}#{self.DELIV_OPS.svg_image.svg_image_path.first}&destwidth=#{dest_width}&destheight=#{dest_height}&padh=center&padv=center"
-  end
-
   # This function removes the image from a dil_collection object, NOT an institutional collection
   def remove_from_all_dil_collections
     self.collections.each do |collection|

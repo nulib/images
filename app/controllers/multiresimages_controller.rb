@@ -143,36 +143,6 @@ class MultiresimagesController < ApplicationController
     render xml: @res
   end
 
-  # This method is called from multiresimage/_index.html.erb (image search results).
-  # We don't want to show the Fedora URL to the user, so we call this action.
-  # The permissions are checked and, if applicable, the image is retrieved and
-  # displayed in the browser. The request to Fedora is coming from the app server
-  # (and not the user's browser) so the Fedora XACML policy won't reject the request. If an unauthorized
-  # user requests the image from Fedora directly, the XACML policy will block them.  If they request it from
-  # this action, the permissions check will deny access.
-
-  def proxy_image
-    multiresimage = Multiresimage.find(params[:id])
-
-    src_width = multiresimage.DELIV_OPS.svg_image.svg_width.first.to_f
-    src_height = multiresimage.DELIV_OPS.svg_image.svg_height.first.to_f
-
-    # Max size is 1600 pixels or less, because we can't give away higher quality versions I guess!
-    max_size = [ params[:image_length].to_i, 1600, src_width, src_height ].min
-
-    image_url = multiresimage.image_url(max_size)
-
-    if can?(:read, multiresimage)
-      begin
-        send_data( Net::HTTP.get_response(URI.parse(image_url)).body, type: 'image/jpeg' )
-      rescue
-        default_image = File.open("app/assets/images/site/missing2.png", 'rb').read
-        filename = "missing2.png"
-        send_data( default_image, disposition: 'inline', type: 'image/jpeg', filename: filename )
-      end
-    end
-  end
-
   def archival_image_proxy
     multiresimage = Multiresimage.find(params[:id])
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]

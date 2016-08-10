@@ -3,12 +3,24 @@
 	<% prev_img = @collection.get_prev_img(@index) %>
 	<% next_img = @collection.get_next_img(@index) %>
 
-
 	<div id="photostream" class="photostream">
+			<h3>Navigate through your collection:</h3>
 	    <ul>
-	       <li pid="<%=prev_img[:pid]%>" title="<%=prev_img[:titleSet_display]%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=prev_img[:pid]%>/<%=prev_img[:index]%>"><img src="/multiresimages/get_image/<%= prev_img[:pid]%>/120" alt><br /> Previous</a></p>
+	       <li pid="<%= prev_img[:pid] %>" title="<%= prev_img[:titleSet_display] %>">
+					 <p>
+						 <a href="/dil_collections/<%= @collection.pid %>/<%= prev_img[:pid] %>/<%= prev_img[:index] %>">
+							 <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{prev_img[:pid]}".gsub!(/:/, '-'), size: ',120')) %>
+							 <br /> Previous
+						 </a>
+					 </p>
 	     </li>
-	       <li pid="<%=next_img[:pid]%>" title="<%=next_img[:titleSet_display]%>"><p><a href="/dil_collections/<%=@collection.pid%>/<%=next_img[:pid]%>/<%=next_img[:index]%>"><img src="/multiresimages/get_image/<%= next_img[:pid]%>/120" alt><br /> Next</a></p>
+	       <li pid="<%= next_img[:pid] %>" title="<%= next_img[:titleSet_display] %>">
+					 <p>
+						 <a href="/dil_collections/<%= @collection.pid %>/<%= next_img[:pid] %>/<%= next_img[:index] %>">
+							 <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{next_img[:pid]}".gsub!(/:/, '-'), size: ',120')) %>
+							 <br /> Next
+						 </a>
+					 </p>
 	     </li>
 	   </ul>
 	</div>
