@@ -21,6 +21,9 @@ class InstitutionalCollection < ActiveFedora::Base
   #has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
 
   has_metadata :name => "properties", :type => ActiveFedora::SimpleDatastream do |m|
+        # title_part and unit_part of the pieces of the (existing) Institional Collection title
+        # ex: Unit|Title
+        # redundant to store them but not sure we want to mess with the existing title setup...
         m.field "title_part", :string
         m.field "unit_part"
         m.field "rights_description", :string
@@ -34,12 +37,12 @@ class InstitutionalCollection < ActiveFedora::Base
 
 
   def make_public
-    #this refers to the rights in the defaultRights datastream
+    #this refers to the rights in the defaultRights datastream, (the rights that are inhertied by images)
     self.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]
   end
 
   def make_private
-    #this refers to the rights in the defaultRights
+    #this refers to the rights in the defaultRights, (the ones inherited by images in collection)
     self.default_permissions=[{:type=>"group", :access=>"read", :name=>"registered"}]
   end
 
@@ -66,7 +69,6 @@ class InstitutionalCollection < ActiveFedora::Base
     unless self.relationships(:has_representative_member).empty?
       return self.relationships(:has_representative_member).first.gsub(/info:fedora\//, '')
     end
-    ""
   end
 
 end

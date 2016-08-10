@@ -45,6 +45,7 @@ class InstitutionalCollectionsController < CatalogController
   def add_images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
+    # Only images from DIL are available to add to the collection. 
     query_params = { :q => "-is_governed_by_ssim:" + @collection_id + " "+ params[:q],
                      :f => params[:f]}
     (@response, @document_list) = get_search_results(query_params)
@@ -54,8 +55,7 @@ class InstitutionalCollectionsController < CatalogController
       @pid_list << document[:id]
     end
 
-    puts @pid_list
-
+    #puts @pid_list
     #render json: @document_list
   end
 
@@ -96,8 +96,8 @@ class InstitutionalCollectionsController < CatalogController
 
   def update
     # do not allow changing the title and unit after collection
-    # creation. If we do change these after creation and the collection has images,
-    # keep in mind that we must at minimum reindex the associated images
+    # creation. (If we do change these after creation and the collection has images,
+    # keep in mind that we must at minimum reindex the associated images)
     @institutional_collection = InstitutionalCollection.find params[:id]
 
     if ( params[:institutional_collection][:rights_description] or params[:institutional_collection][:description] )
@@ -112,7 +112,7 @@ class InstitutionalCollectionsController < CatalogController
     end
   end
 
-
+  # this is for the little popup that displays the rights description on the homepage
   def rights
     @collection = InstitutionalCollection.find(params[:id])
   end
@@ -127,17 +127,16 @@ class InstitutionalCollectionsController < CatalogController
     @collection = InstitutionalCollection.create(faceted_title_params)
     @collection.rightsMetadata
     @collection.default_permissions
-    #default to public collection
-    @collection.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]
+    #default to public collection, DIL is the only private collection
+    #@collection.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]
+    @collection.make_public
     @collection.save!
 
     if @collection.persisted?
-      #render json: {id: @collection.pid}, status: 200
       flash[:success]="Collection was successfully created"
       redirect_to @collection
     else
       logger.warn "Failed to create collection: #{@collection.errors.full_messages}"
-      #render json: {errors: ["Failed to create collection with these params: #{params[:collection]}"] + @collection.errors.full_messages}, status: 422
       render 'new'
     end
   end
@@ -147,19 +146,10 @@ class InstitutionalCollectionsController < CatalogController
     return true
   end
 
-  def make_public
-    @collection = InstitionalCollection.find(params[:collection])
-    #@collection.
-  end
-
-  def make_private
-    @collection = InstitionalCollection.create(params[:collection])
-  end
 
   def remove
-    #will need to change the is_governed_by to default or private and is_representative_of_collection properties on its members first
-    InstitutionalCollection.find(params[:id]).destroy
-    render json: 'ok', status: 200
+    #TODO delete collection. We will need to change the is_governed_by to default or private and is_representative_of_collection properties on its members first. (They should go back into DIL)
+
   end
 
 
