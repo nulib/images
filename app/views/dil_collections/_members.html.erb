@@ -29,7 +29,7 @@
 					<li pid="<%=pid%>" title="<%=title%>">
 						<a href="<%=ref%>">
 							<% if mods.search('type').text=='image' %>
-								<%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{pid}".gsub!(/:/, '-'), size: ',120')) %>
+								<%= image_tag(Riiif::Engine.routes.url_helpers.image_path("#{pid}".gsub!(/:/, '-'), size: ',120')) %>
 							<% else %>
 								<img src="/assets/folder.jpg"/>
 							<% end %>

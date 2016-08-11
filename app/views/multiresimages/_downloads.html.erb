@@ -23,7 +23,7 @@
         </div>
       <% end %>
         <div class="col-block col-md-3">
-          <%= link_to "/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{@multiresimage.pid}".gsub!(/:/, '-'), size: ',1600'), method: :get, class: "btn btn-default btn-block" do %>
+          <%= link_to(Riiif::Engine.routes.url_helpers.image_path("#{@multiresimage.pid}".gsub!(/:/, '-'), size: ',1600'), method: :get, class: "btn btn-default btn-block") do %>
             Download Small Image (JPG) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
           <% end %>
         </div>

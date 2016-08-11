@@ -9,7 +9,7 @@
 	       <li pid="<%= prev_img[:pid] %>" title="<%= prev_img[:titleSet_display] %>">
 					 <p>
 						 <a href="/dil_collections/<%= @collection.pid %>/<%= prev_img[:pid] %>/<%= prev_img[:index] %>">
-							 <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{prev_img[:pid]}".gsub!(/:/, '-'), size: ',120')) %>
+							 <%= image_tag(Riiif::Engine.routes.url_helpers.image_path("#{prev_img[:pid]}".gsub!(/:/, '-'), size: ',120')) %>
 							 <br /> Previous
 						 </a>
 					 </p>
@@ -17,7 +17,7 @@
 	       <li pid="<%= next_img[:pid] %>" title="<%= next_img[:titleSet_display] %>">
 					 <p>
 						 <a href="/dil_collections/<%= @collection.pid %>/<%= next_img[:pid] %>/<%= next_img[:index] %>">
-							 <%= image_tag("/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{next_img[:pid]}".gsub!(/:/, '-'), size: ',120')) %>
+							 <%= image_tag(Riiif::Engine.routes.url_helpers.image_path("#{next_img[:pid]}".gsub!(/:/, '-'), size: ',120')) %>
 							 <br /> Next
 						 </a>
 					 </p>
