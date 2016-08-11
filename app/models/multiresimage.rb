@@ -267,8 +267,6 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_jp2_local( img_location )
-    puts "here's the image location: #{img_location}"
-    puts "and here is the jp2_img_path: #{jp2_img_path}"
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
