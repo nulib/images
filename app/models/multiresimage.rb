@@ -94,6 +94,7 @@ class Multiresimage < ActiveFedora::Base
     begin
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
+      self.create_jp2( path )
       unless Rails.env == "test"
         create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
@@ -242,7 +243,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def jp2_img_path
-    Rails.root.join( 'tmp', jp2_img_name )
+    "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
   end
 
   def tiff_img_name
@@ -266,6 +267,8 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def create_jp2_local( img_location )
+    puts "here's the image location: #{img_location}"
+    puts "and here is the jp2_img_path: #{jp2_img_path}"
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
