@@ -71,8 +71,6 @@ Rails.application.routes.draw do
     resources :users, :only=>[:create, :edit, :destroy]
   end
 
-
-
   resources :batches
   # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
   # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
