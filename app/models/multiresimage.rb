@@ -25,20 +25,12 @@ class Multiresimage < ActiveFedora::Base
   # Uses the VRA profile for tracking the descriptive metadata
   has_metadata :name => "VRA", :type => VRADatastream, :label=> 'VRA metadata'
 
-  # Uses the SVG schema to encode jp2 image path, size, crop, and rotation
-  has_metadata :name => "DELIV-OPS", :type => SVGDatastream, :label=>'SVG Datastream'
-
   has_metadata :name => "ARCHV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Archive image technical metadata'
 
   has_metadata :name => "ARCHV-EXIF", :type => ActiveFedora::Datastream, :label=>'Archive image EXIF metadata'
 
-  has_metadata :name => "DELIV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Image technical metadata'
-
   # External datastream
   has_metadata :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
-
-  # External datastream
-  has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
 
   # External datastream
   has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
@@ -49,6 +41,16 @@ class Multiresimage < ActiveFedora::Base
     m.field 'depositor', :string
     m.field 'file_name', :string
   end
+
+  ###
+  # The following datastreams are no longer created for new Multiresimage objects.
+  # They remain in "legacy" image records created prior to the riiif migration.
+  has_metadata :name => "DELIV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Image technical metadata'  
+  # Uses the SVG schema to encode jp2 image path, size, crop, and rotation
+  has_metadata :name => "DELIV-OPS", :type => SVGDatastream, :label=>'SVG Datastream'
+  # External datastream
+  has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+  ###
 
   attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
