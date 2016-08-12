@@ -30,9 +30,6 @@ class MultiresimagesController < ApplicationController
     work = Multiresimage.find(work_pid)
     work_xml = work.datastreams['VRA'].content
 
-    #because u might need it in the rescue
-    #image_xml = image.datastreams['VRA'].content
-
     image_metadata = Nokogiri::XML(params[:xml])
     work_metadata = Nokogiri::XML(work_xml)
 
@@ -54,20 +51,7 @@ class MultiresimagesController < ApplicationController
       work.save
     rescue StandardError => msg
       puts "Error -- update_fedora_object image: #{msg}"
-
     end
-
-    # if update_work
-    #   begin
-    #     update_fedora_object(work_pid, updated_work_xml, "VRA", "VRA", "text/xml")
-    #   rescue StandardError => msg
-    #     logger.error "Error -- update_fedora_object work: #{msg}"
-    #     update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
-    #     status = 500
-    #   end
-    # end
-
-    #    head status
   end
 
   def create
@@ -83,7 +67,6 @@ class MultiresimagesController < ApplicationController
 
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
-        # puts msg.backtrace.join("\n")
         returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
         # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
         # Delete the work and image if creation fails
@@ -137,8 +120,6 @@ class MultiresimagesController < ApplicationController
 
   def get_vra(pid=params[:pid])
     @vra_url = "http://#{DIL_CONFIG['repo_server']}/fedora/objects/#{pid}/datastreams/VRA/content"
-  #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
-  #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))
     render xml: @res
   end
