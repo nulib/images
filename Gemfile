@@ -61,6 +61,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'sextant'
   gem 'pry'
+  gem 'rubocop', '~> 0.42.0', require: false
 end
 
 group :development, :test, :staging do

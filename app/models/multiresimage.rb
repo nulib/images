@@ -79,6 +79,13 @@ class Multiresimage < ActiveFedora::Base
     self.pref_relation = pref_title
   end
 
+  def self.existing_image?(accession_nbr)
+    if accession_nbr.present?
+      logger.info "Checking for existing image..."
+      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+    end
+  end
+
   def create_datastreams_and_persist_image_files(path, batch=false)
     file = path.split("/").last
     file_number = file.split(".tif").first
@@ -87,6 +94,7 @@ class Multiresimage < ActiveFedora::Base
     begin
       self.create_archv_techmd_datastream( path )
       self.create_archv_exif_datastream( path )
+      self.create_jp2( path )
       unless Rails.env == "test"
         create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
       end
@@ -235,7 +243,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def jp2_img_path
-    Rails.root.join( 'tmp', jp2_img_name )
+    "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
   end
 
   def tiff_img_name

@@ -1,8 +1,6 @@
-require 'dil/multiresimage_service'
 require 'dil/pid_minter'
 
 class MultiresimagesController < ApplicationController
-  include DIL::MultiresimageService
   include DIL::PidMinter
   helper :permissions
 
@@ -32,11 +30,9 @@ class MultiresimagesController < ApplicationController
     work = Multiresimage.find(work_pid)
     work_xml = work.datastreams['VRA'].content
 
-    #because u might need it in the rescue
-    image_xml = image.datastreams['VRA'].content
-
     image_metadata = Nokogiri::XML(params[:xml])
     work_metadata = Nokogiri::XML(work_xml)
+
     work_node = work_metadata.at_xpath("//vra:work")
 
     image_metadata.at_xpath("//vra:refid[@source='DIL']").swap(work_metadata.at_xpath("//vra:refid[@source='DIL']"))
@@ -46,35 +42,23 @@ class MultiresimagesController < ApplicationController
     work_node.children = image_metadata.xpath("//vra:image").children
 
     updated_work_xml = work_metadata.to_xml
-    status = 200
-    update_work = true
 
     begin
-      update_fedora_object(params[:pid], params[:xml], "VRA", "VRA", "text/xml")
+      image.datastreams['VRA'].content = params[:xml]
+      image.save
+
+      work.datastreams['VRA'].content = updated_work_xml
+      work.save
     rescue StandardError => msg
       puts "Error -- update_fedora_object image: #{msg}"
-      status = 500
-      update_work = false
     end
-
-    if update_work
-      begin
-        update_fedora_object(work_pid, updated_work_xml, "VRA", "VRA", "text/xml")
-      rescue StandardError => msg
-        logger.error "Error -- update_fedora_object work: #{msg}"
-        update_fedora_object(params[:pid], image_xml, "VRA", "VRA", "text/xml")
-        status = 500
-      end
-    end
-
-    head status
   end
 
   def create
     if params[:path] && params[:xml] && params[:accession_nbr]
       begin
         raise "An accession number is required" if params[:accession_nbr].blank?
-        raise "Existing image found with this accession number" if existing_image?( params[:accession_nbr] )
+        raise "Existing image found with this accession number" if Multiresimage.existing_image?( params[:accession_nbr] )
 
         i = Multiresimage.new(pid: mint_pid("dil"), vra_xml: params[:xml], from_menu: params[:from_menu])
         i.save
@@ -83,7 +67,6 @@ class MultiresimagesController < ApplicationController
 
         returnXml = "<response><returnCode>Publish successful</returnCode><pid>#{i.pid}</pid></response>"
       rescue StandardError => msg
-        # puts msg.backtrace.join("\n")
         returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
         # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
         # Delete the work and image if creation fails
@@ -137,8 +120,6 @@ class MultiresimagesController < ApplicationController
 
   def get_vra(pid=params[:pid])
     @vra_url = "http://#{DIL_CONFIG['repo_server']}/fedora/objects/#{pid}/datastreams/VRA/content"
-  #  DIL_CONFIG['dil_fedora_vra_url']objects/pid/datastreams/VRA/content
-  #  http://localhost:8983/fedora/objects/inu:dil-c5275483-699b-46de-b7ac-d4e54112cb60/datastreams/VRA/content
     @res = Net::HTTP.get(URI(@vra_url))
     render xml: @res
   end
