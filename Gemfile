@@ -60,12 +60,12 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'sextant'
-  gem 'pry'
   gem 'rubocop', '~> 0.42.0', require: false
 end
 
 group :development, :test, :staging do
   gem 'byebug'
+  gem 'pry'
   gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
 end
 
