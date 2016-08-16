@@ -43,15 +43,13 @@ class MultiresimagesController < ApplicationController
 
     updated_work_xml = work_metadata.to_xml
 
-    begin
-      image.datastreams['VRA'].content = params[:xml]
-      image.save
+    image.datastreams['VRA'].content = params[:xml]
+    image.save
 
-      work.datastreams['VRA'].content = updated_work_xml
-      work.save
-    rescue StandardError => msg
-      puts "Error -- update_fedora_object image: #{msg}"
-    end
+    work.datastreams['VRA'].content = updated_work_xml
+    work.save
+
+    head :ok
   end
 
   def create
