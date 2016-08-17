@@ -12,32 +12,32 @@ class MultiresimagesBatchWorker
       xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
       good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
       bad_file_storage = []
-        good_xml_files.each do |xf|
-          xml = Nokogiri::XML(File.read( xf ))
-          begin
-            accession_number = xml.xpath("//refid[@source=\"Accession\"]")
-            raise "No Accession number for #{xf}" if accession_number.nil?
-            raise "Existing image found with this accession number" if Multiresimage.existing_image?( accession_number.text )
-          rescue => e
-            Sidekiq::Logging.logger.error("Problem with accession number: #{e}")
-          end
-          doc = File.read( xf )
-          ready_xml = TransformXML.prepare_vra_xml(doc)
-          pid = mint_pid("dil")
-          #from_menu = true now has to be re-named.
-          multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
-
-          multiresimage.save
-          test_tif = xf.gsub(/.xml/, '.tiff')
-          tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
-
-          tif = File.basename(tif_path)
-          FileUtils.mv(tif_path, "tmp/#{tif}")
-
-          File.rename("tmp/#{tif}", "tmp/#{multiresimage.tiff_img_name}")
-          result = multiresimage.create_datastreams_and_persist_image_files("tmp/#{multiresimage.tiff_img_name}", batch=true)
-          bad_file_storage << result unless result == true
+      good_xml_files.each do |xf|
+        xml = Nokogiri::XML(File.read( xf ))
+        begin
+          accession_number = xml.xpath("//vra:refid[@source=\"Accession\"]").text
+          raise "No Accession number for #{xf}" if accession_number.empty?
+          raise "Existing image found with this accession number" if Multiresimage.existing_image?( accession_number )
+        rescue => e
+          Sidekiq::Logging.logger.error("Problem with accession number: #{e}")
         end
+        doc = File.read( xf )
+        ready_xml = TransformXML.prepare_vra_xml(doc)
+        pid = mint_pid("dil")
+        #from_menu = true now has to be re-named.
+        multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
+
+        multiresimage.save
+        test_tif = xf.gsub(/.xml/, '.tiff')
+        tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
+
+        tif = File.basename(tif_path)
+        FileUtils.cp(tif_path, "tmp/#{tif}")
+
+        File.rename("tmp/#{tif}", "tmp/#{multiresimage.tiff_img_name}")
+        result = multiresimage.create_datastreams_and_persist_image_files("tmp/#{multiresimage.tiff_img_name}", batch=true)
+        bad_file_storage << result unless result == true
+      end
 
       Sidekiq::Logging.logger.info("Bad files here: #{bad_file_storage}")
       BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
