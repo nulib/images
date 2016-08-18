@@ -14,7 +14,7 @@ class ImageMover < ActiveRecord::Base
   end
 
   def self.move_img_to_repo(img_name, img_path)
-    if Rails.env == "development" or Rails.env == "test"
+    if Rails.env.test? || Rails.env.development?
       # NOOP
     else
       if img_name.include?('.tif')

@@ -88,38 +88,23 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  def create_datastreams_and_persist_image_files(path, batch=false)
-    file = path.split("/").last
-    file_number = file.split(".tif").first
-    create_and_persist_status = true
-
+  def create_datastreams_and_persist_image_files(path)
     begin
-      self.create_archv_techmd_datastream( path )
-      self.create_archv_exif_datastream( path )
-      self.create_jp2( path )
-      unless Rails.env == "test"
-        create_and_persist_status = ImageMover.move_img_to_repo(self.jp2_img_name, self.jp2_img_path)
-      end
+      self.create_archv_techmd_datastream(path)
+      self.create_archv_exif_datastream(path)
+      self.create_jp2(path)      
       self.create_archv_img_datastream
-
-      unless Rails.env == "test"
-        create_and_persist_status = ImageMover.move_img_to_repo( self.tiff_img_name, path)
-      end
+      ImageMover.move_img_to_repo(self.tiff_img_name, path)
       self.edit_groups = [ 'registered' ]
       self.save!
-
-      j = Multiresimage.find( self.pid )
+      # Save the multiresimage twice to index correctly
+      j = Multiresimage.find(self.pid)
       j.save!
     rescue StandardError => e
-      file_number.blank? ? "no file number" : file_number
-      create_and_persist_status = "#{file_number} had a problem: #{e}"
-
-      if self
-        self.vraworks.first.delete if self.vraworks.first
-        self.delete
-      end
+      puts "#{self.pid} had a problem: #{e.message}"
+      self.vraworks.first.delete if self.vraworks.first
+      self.delete
     end
-    create_and_persist_status
   end
 
   def create_vra_work(vra, current_user=nil)
@@ -255,7 +240,7 @@ class Multiresimage < ActiveFedora::Base
   def create_jp2( img_location )
     return jp2_img_path if File.exist?( jp2_img_path )
 
-    if ["development", "test"].include? Rails.env
+    if Rails.env.development? || Rails.env.test?
       create_jp2_local( img_location )
     else
       create_jp2_remote( img_location )
@@ -272,7 +257,6 @@ class Multiresimage < ActiveFedora::Base
     `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
   end
 
-  #something is going wrong and jp2s though output says created in local tmp, they are going to /images_tmp. and don't forget to change all debugs to info
   def create_jp2_remote( img_location )
     Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
   end

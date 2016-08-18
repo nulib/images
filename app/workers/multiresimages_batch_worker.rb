@@ -14,6 +14,8 @@ class MultiresimagesBatchWorker
       bad_file_storage = []
       good_xml_files.each do |xf|
         xml = Nokogiri::XML(File.read( xf ))
+        raise "Invalid VRA" unless XSD.valid?(xml)
+
         begin
           accession_number = xml.xpath("//vra:refid[@source=\"Accession\"]").text
           raise "No Accession number for #{xf}" if accession_number.empty?
@@ -35,7 +37,7 @@ class MultiresimagesBatchWorker
         FileUtils.cp(tif_path, "tmp/#{tif}")
 
         File.rename("tmp/#{tif}", "tmp/#{multiresimage.tiff_img_name}")
-        result = multiresimage.create_datastreams_and_persist_image_files("tmp/#{multiresimage.tiff_img_name}", batch=true)
+        result = multiresimage.create_datastreams_and_persist_image_files("tmp/#{multiresimage.tiff_img_name}")
         bad_file_storage << result unless result == true
       end
 
@@ -43,7 +45,7 @@ class MultiresimagesBatchWorker
       BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
 
     rescue StandardError => e
-      p "an error #{e}"
+      Sidekiq::Logging.logger.error("Batch ingest error: #{e}")
       BatchJobMailer.error_email(job_number, e).deliver
     end
   end
