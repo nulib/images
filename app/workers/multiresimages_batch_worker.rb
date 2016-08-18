@@ -7,41 +7,41 @@ class MultiresimagesBatchWorker
   include DIL::PidMinter
   include Sidekiq::Worker
 
-  def perform(job_number, user_email)
-    tiff_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.tif*" )
-    tiff_files.each do |t|
-      # Regular expression swapping out file extension for .xml
-      xml = t.sub /\.[^.]+\z/, ".xml"
-      raise "TIFF image does not exist" if !File.exist?(xml)
+  sidekiq_options retry: 0
 
-      doc = Nokogiri::XML(File.read( xml ))
-      accession_number = get_accession_number(doc)
+  def perform(tiff_file)
+    # Regular expression swapping out file extension for .xml
+    xml = tiff_file.sub /\.[^.]+\z/, ".xml"
+    raise "XML file does not exist" if !File.exist?(xml)
 
-      raise "Invalid VRA" unless XSD.valid?(doc)
-      raise "No accession" if accession_number.empty?
-      raise "Existing image found with this accession number: #{accession_number}" if Multiresimage.existing_image?( accession_number )
+    doc = Nokogiri::XML(File.read( xml ))
+    accession_number = get_accession_number(doc)
 
-      ready_xml = TransformXML.prepare_vra_xml(doc.to_xml)
-      m = Multiresimage.create(pid: mint_pid("dil"), vra_xml: ready_xml, from_menu: true)
+    raise "Invalid VRA" unless XSD.valid?(doc)
+    raise "No accession" if accession_number.empty?
+    raise "Existing image found with this accession number: #{accession_number}" if Multiresimage.existing_image?(accession_number)
+    ready_xml = TransformXML.prepare_vra_xml(doc.to_xml)
+    pid = mint_pid("dil")
+    m = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
+    m.save
 
-      begin
-        # Copy tiff file to tmp directory
-        FileUtils.cp(t, "tmp/#{m.tiff_img_name}")
-        m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
-      rescue
-        m.vraworks.first.delete if m.vraworks.first
-        m.delete
-        raise "An error occurred in the batch"
-      end
+    begin
+      # Copy tiff file to tmp directory
+      FileUtils.cp(tiff_file, "tmp/#{m.tiff_img_name}")
+      m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
+    rescue
+      m.vraworks.first.delete if m.vraworks.first
+      m.delete
+      raise "An error occurred in the batch that is not handled explicitly"
     end
   end
 
   def success(job)
-    Sidekiq::Logging.logger.info("Success #{job.inspect} is just fine that's great sweet")
+    logger.info("Success #{job.inspect} is just fine that's great sweet")
   end
 
   def error(job, exception)
-    Sidekiq::Logging.logger.error("job #{job} caused error because #{exception}")
+    logger.error("job #{job} caused error because #{exception}")
   end
 
   private
