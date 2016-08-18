@@ -8,45 +8,31 @@ class MultiresimagesBatchWorker
   include Sidekiq::Worker
 
   def perform(job_number, user_email)
-    begin
-      xml_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.xml" )
-      good_xml_files = xml_files.reject{|x| x.include? "jhove_output.xml" }
-      bad_file_storage = []
-      good_xml_files.each do |xf|
-        xml = Nokogiri::XML(File.read( xf ))
-        raise "Invalid VRA" unless XSD.valid?(xml)
+    tiff_files = Dir.glob( "#{DIL_CONFIG['batch_dir']}/#{job_number}/*.tif*" )
+    tiff_files.each do |t|
+      # Regular expression swapping out file extension for .xml
+      xml = t.sub /\.[^.]+\z/, ".xml"
+      raise "TIFF image does not exist" if !File.exist?(xml)
 
-        begin
-          accession_number = xml.xpath("//vra:refid[@source=\"Accession\"]").text
-          raise "No Accession number for #{xf}" if accession_number.empty?
-          raise "Existing image found with this accession number" if Multiresimage.existing_image?( accession_number )
-        rescue => e
-          Sidekiq::Logging.logger.error("Problem with accession number: #{e}")
-        end
-        doc = File.read( xf )
-        ready_xml = TransformXML.prepare_vra_xml(doc)
-        pid = mint_pid("dil")
-        #from_menu = true now has to be re-named.
-        multiresimage = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
+      doc = Nokogiri::XML(File.read( xml ))
+      accession_number = get_accession_number(doc)
 
-        multiresimage.save
-        test_tif = xf.gsub(/.xml/, '.tiff')
-        tif_path = File.file?(test_tif) ? xf.gsub(/.xml/, '.tiff') : xf.gsub(/.xml/, '.tif')
+      raise "Invalid VRA" unless XSD.valid?(doc)
+      raise "No accession" if accession_number.empty?
+      raise "Existing image found with this accession number: #{accession_number}" if Multiresimage.existing_image?( accession_number )
 
-        tif = File.basename(tif_path)
-        FileUtils.cp(tif_path, "tmp/#{tif}")
+      ready_xml = TransformXML.prepare_vra_xml(doc.to_xml)
+      m = Multiresimage.create(pid: mint_pid("dil"), vra_xml: ready_xml, from_menu: true)
 
-        File.rename("tmp/#{tif}", "tmp/#{multiresimage.tiff_img_name}")
-        result = multiresimage.create_datastreams_and_persist_image_files("tmp/#{multiresimage.tiff_img_name}")
-        bad_file_storage << result unless result == true
+      begin
+        # Copy tiff file to tmp directory
+        FileUtils.cp(t, "tmp/#{m.tiff_img_name}")
+        m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
+      rescue
+        m.vraworks.first.delete if m.vraworks.first
+        m.delete
+        raise "An error occurred in the batch"
       end
-
-      Sidekiq::Logging.logger.info("Bad files here: #{bad_file_storage}")
-      BatchJobMailer.status_email(user_email, job_number, bad_file_storage).deliver
-
-    rescue StandardError => e
-      Sidekiq::Logging.logger.error("Batch ingest error: #{e}")
-      BatchJobMailer.error_email(job_number, e).deliver
     end
   end
 
@@ -56,5 +42,19 @@ class MultiresimagesBatchWorker
 
   def error(job, exception)
     Sidekiq::Logging.logger.error("job #{job} caused error because #{exception}")
+  end
+
+  private
+
+  def get_accession_number(xml)
+    xml.xpath("//vra:refid[@source=\"Accession\"]").text
+  end
+
+  def tiff_file_name(accession_number)
+    if File.exist?(accession_number + ".tiff")
+      accession_number + ".tiff"
+    else
+      accession_number + ".tif"
+    end
   end
 end

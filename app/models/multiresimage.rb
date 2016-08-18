@@ -94,7 +94,7 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_exif_datastream(path)
       self.create_jp2(path)      
       self.create_archv_img_datastream
-      ImageMover.move_img_to_repo(self.tiff_img_name, path)
+      ImageMover.move_img_to_repo(path)
       self.edit_groups = [ 'registered' ]
       self.save!
       # Save the multiresimage twice to index correctly
