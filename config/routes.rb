@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     match "error", :to => "application#page_not_found", via: [ :get, :post, :patch, :delete ]
   end
 
-  if Rails.env.production? or Rails.env.test?
+  if Rails.env.production?
      get '404', :to => 'application#page_not_found'
      get '422', :to => 'application#server_error'
      get '500', :to => 'application#server_error'
