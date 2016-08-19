@@ -29,10 +29,10 @@ class MultiresimagesBatchWorker
       # Copy tiff file to tmp directory
       FileUtils.cp(tiff_file, "tmp/#{m.tiff_img_name}")
       m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
-    rescue
+    rescue StandardError => e
       m.vraworks.first.delete if m.vraworks.first
       m.delete
-      raise "An error occurred in the batch that is not handled explicitly"
+      raise "Had a problem saving #{tiff_file}: #{e.message}"
     end
   end
 

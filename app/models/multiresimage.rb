@@ -101,9 +101,9 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find(self.pid)
       j.save!
     rescue StandardError => e
-      puts "#{self.pid} had a problem: #{e.message}"
       self.vraworks.first.delete if self.vraworks.first
       self.delete
+      raise e
     end
   end
 
