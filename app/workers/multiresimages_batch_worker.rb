@@ -7,8 +7,6 @@ class MultiresimagesBatchWorker
   include DIL::PidMinter
   include Sidekiq::Worker
 
-  sidekiq_options retry: 0
-
   def perform(tiff_file)
     # Regular expression swapping out file extension for .xml
     xml = tiff_file.sub /\.[^.]+\z/, ".xml"
