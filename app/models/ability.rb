@@ -36,12 +36,6 @@ class Ability
       #TODO this may not be necessary.  Also it's ignoring groups.
       obj.rightsMetadata.users[@user.email] == 'edit'
     end
-
-    can :create, AdminPolicy
-    can :update, AdminPolicy do |obj|
-      test_edit(obj.pid)
-    end
-
   end
 
   # Extends Hydra::Ability.test_edit to try policy controls if object-level controls deny access

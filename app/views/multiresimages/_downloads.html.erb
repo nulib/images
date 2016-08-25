@@ -1,45 +1,30 @@
 <% if can?(:read, @multiresimage) %>
-  <% if @multiresimage.datastreams["DELIV-OPS"].find_by_terms(:svg_image).empty? %>
-     <% if user_signed_in? && current_user.admin? %>
-      <div id="downloads">
-        <div class="row">
-          <%= link_to( "Delete Image", multiresimage_path(@multiresimage), method: :delete, class: "btn btn-primary btn-danger", data: { confirm: "Are you sure you want to delete this image?" } ) %>
-        </div>
+  <div id="downloads">
+    <div class="row">
+    <!-- Don't show the "Add to Image Group" div unless the user is signed in and has at least one group (collection) -->
+    <% if @user_with_groups_is_signed_in %>
+      <div class="col-block col-md-3">
+          <span id="addToImageGroup">
+            <a class="btn btn-default btn-block" id="addToImageGroupBtn" href="#">Add to Image Group</a>
+          </span>
       </div>
-      <hr>
     <% end %>
-
-  <% else %>
-
-    <div id="downloads">
-      <div class="row">
-
-      <!-- Don't show the "Add to Image Group" div unless the user is signed in and has at least one group (collection) -->
-      <% if @user_with_groups_is_signed_in %>
-        <div class="col-block col-md-3">
-            <span id="addToImageGroup">
-              <a class="btn btn-default btn-block" id="addToImageGroupBtn" href="#">Add to Image Group</a>
-            </span>
-        </div>
-      <% end %>
-        <div class="col-block col-md-3">
-          <%= link_to "/image-service" + Riiif::Engine.routes.url_helpers.image_path("#{@multiresimage.pid}".gsub!(/:/, '-'), size: ',1600'), method: :get, class: "btn btn-default btn-block" do %>
-            Download Small Image (JPG) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-          <% end %>
-        </div>
-        <div class="col-block col-md-3">
-      <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] %>
-        <%= link_to "/multiresimages/archival_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
-          Download Original Image (TIFF) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-          <% end %>
-      <% end %>
-        </div>
-          <% if user_signed_in? && current_user.admin? %>
-          <%= link_to( "Delete Image", multiresimage_path(@multiresimage), method: :delete, class: "btn btn-primary btn-danger", data: { confirm: "Are you sure you want to delete this image?" } ) %>
-           <% end %>
+      <div class="col-block col-md-3">
+        <%= link_to(Riiif::Engine.routes.url_helpers.image_path("#{@multiresimage.pid}".gsub!(/:/, '-'), size: ',1600'), method: :get, class: "btn btn-default btn-block") do %>
+          Download Small Image (JPG) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+        <% end %>
       </div>
+      <div class="col-block col-md-3">
+    <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] %>
+      <%= link_to "/multiresimages/archival_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
+        Download Original Image (TIFF) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+      <% end %>
+    <% end %>
+      </div>
+      <% if user_signed_in? && current_user.admin? %>
+      <%= link_to( "Delete Image", multiresimage_path(@multiresimage), method: :delete, class: "btn btn-primary btn-danger", data: { confirm: "Are you sure you want to delete this image?" } ) %>
+      <% end %>
     </div>
-    <hr>
-
-<% end %>
+  </div>
+  <hr>
 <% end %>

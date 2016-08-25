@@ -6,7 +6,7 @@
 	<% img_count = 0 %>
 	<% @collection.members.find_by_terms(:mods).each_with_index do |mods, index| %>
 		<%
-			pid = '' 
+			pid = ''
 			title = ''
 			img = ''
 			ref = ''
@@ -15,12 +15,10 @@
 			pid = mods.search('relatedItem/identifier').first.text() unless mods.search('relatedItem/identifier').empty?
 			title = mods.search('titleInfo/title').first.text() unless mods.search('titleInfo/title').empty?
 			if !mods.search('type').text.present? || mods.search('type').text=='image'
-				img = "/multiresimages/get_image/#{pid}/120"
 				ref = '/dil_collections/' + @collection.pid + '/' + pid + '/' + img_count.to_s
 				img_count += 1
 				type = 'image'
 			elsif mods.search('type').text == 'collection'
-				img = '/assets/folder.jpg'
 				ref = '/dil_collections/' + pid
 				type = 'collection'
 			end
@@ -29,7 +27,13 @@
 			<div id="images" class="thumbnail" pid="<%=pid%>" title="<%=title%>">
 				<ul>
 					<li pid="<%=pid%>" title="<%=title%>">
-						<a href="<%=ref%>"><img src="<%=img%>"/></a>
+						<a href="<%=ref%>">
+							<% if mods.search('type').text=='image' %>
+								<%= image_tag(Riiif::Engine.routes.url_helpers.image_path("#{pid}".gsub!(/:/, '-'), size: ',120')) %>
+							<% else %>
+								<img src="/assets/folder.jpg"/>
+							<% end %>
+						</a>
 					</li>
 				</ul>
 				<a href="<%=ref%>">
