@@ -359,6 +359,10 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams["VRA"].content = self.datastreams["VRA"].ng_xml.to_s
   end
 
+  def update_institutional_collection(collection)
+    self.institutional_collection = collection
+  end
+
   def get_work_pid
     self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end

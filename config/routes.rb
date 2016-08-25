@@ -67,6 +67,15 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :institutional_collections do
+    member do
+      get 'add_images'
+      get 'images'
+      get 'confirm_add_images'
+      get 'rights'
+    end
+  end
+
   resources :groups do
     resources :users, :only=>[:create, :edit, :destroy]
   end
