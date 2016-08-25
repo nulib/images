@@ -1,5 +1,4 @@
 module TransformXML
-  include Sidekiq
   #Copied from Menu (github.com/nulib/menu)
 
   def self.prepare_vra_xml( xml )

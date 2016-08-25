@@ -33,14 +33,10 @@ describe Multiresimage do
 
       @img = Multiresimage.new( from_menu: true, vra_xml: @xml_from_menu )
       @img.save
-
-      path = "invalid_path"
-      all_good = @img.create_datastreams_and_persist_image_files(path)
-
+      
+      expect{@img.create_datastreams_and_persist_image_files("invalid_path")}.to raise_error(RuntimeError, "Error when running JHOVE against invalid_path")
       expect(image_count).to eql(Multiresimage.all.count)
       expect(vra_count).to eql(Vrawork.all.count)
-      expect(all_good).to_not be true
-
     end
 
     it "can add the location display element that holds the pid to vra xml if it's missing" do
