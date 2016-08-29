@@ -40,7 +40,6 @@
     :is_description_of: isDescriptionOf
     :is_member_of: isMemberOf
     :is_member_of_collection: isMemberOfCollection
-    :has_representative_member: hasRepresentativeMember
     :is_metadata_for: isMetadataFor
     :is_part_of: isPartOf
     :is_subset_of: isSubsetOf

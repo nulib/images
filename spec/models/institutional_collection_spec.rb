@@ -22,21 +22,6 @@ describe InstitutionalCollection do
     expect(@public_collection.descMetadata.title) == @public_collection.title
   end
 
-  it "can create a representative image association" do
-    @img = Multiresimage.last
-    @public_collection.set_representative_image(@img)
-
-    expect(@public_collection.relationships(:has_representative_member).first).not_to be_nil
-    @public_collection.remove_relationship(:has_representative_member, @img)
-  end
-
-  it "can provide a pid for serving its representative image" do
-    @img = Multiresimage.last
-    @public_collection.set_representative_image(@img)
-
-    expect(@public_collection.representative_image_pid).to eq(@img.pid)
-  end
-
   describe "to_solr" do
     subject { @public_collection.to_solr }
     it "should have title_tesim" do
