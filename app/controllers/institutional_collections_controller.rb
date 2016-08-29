@@ -96,9 +96,9 @@ class InstitutionalCollectionsController < CatalogController
 
     if ( params[:institutional_collection][:rights_description] or params[:institutional_collection][:description] )
       attr_hash = { :rights_description=> params[:institutional_collection][:rights_description],
-                    :description=>params[:institutional_collection][:description]}
+                    :description=>params[:institutional_collection][:description], :thumbnail_url=> params[:institutional_collection][:thumbnail_url] }
       if @institutional_collection.update_attributes(attr_hash)
-        flash[:success]="Collection info successfully updated"
+        flash[:notice]="Collection info successfully updated"
         redirect_to institutional_collections_path
       else
         render :action => :edit

@@ -11,7 +11,6 @@ class InstitutionalCollection < ActiveFedora::Base
   include Hydra::ModelMethods
 
   has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_collection_member
-  has_many :multiresimages, :class_name=> "Multiresimage", :property=> :has_representative_member
 
   has_metadata 'descMetadata', type: ActiveFedora::QualifiedDublinCoreDatastream do |m|
     m.title :type=> :text, :index_as=>[:searchable]
@@ -25,16 +24,16 @@ class InstitutionalCollection < ActiveFedora::Base
         # ex: Unit|Title
         # redundant to store them but not sure we want to mess with the existing title setup...
         m.field "title_part", :string
-        m.field "unit_part"
+        m.field "unit_part", :string
         m.field "rights_description", :string
+        m.field "thumbnail_url", :string
   end
 
-  has_attributes :title_part, :unit_part, :rights_description, datastream: 'properties', multiple: false
+  has_attributes :title_part, :unit_part, :rights_description, :thumbnail_url, datastream: 'properties', multiple: false
   has_attributes :title, :description, datastream: 'descMetadata', multiple: false
   has_attributes :license_title, datastream: 'rightsMetadata', at: [:license, :title], multiple: false
   has_attributes :license_description, datastream: 'rightsMetadata', at: [:license, :description], multiple: false
   has_attributes :license_url, datastream: 'rightsMetadata', at: [:license, :url], multiple: false
-
 
   def make_public
     #this refers to the rights in the defaultRights datastream, (the rights that are inhertied by images)
@@ -55,20 +54,6 @@ class InstitutionalCollection < ActiveFedora::Base
   end
 
   def collection_unit_formatter
-   title.split("|")[0]
+    title.split("|")[0]
   end
-
-  def set_representative_image(image)
-    unless self.relationships(:has_representative_member).empty?
-      self.remove_relationship(:has_representative_member, self.relationships(:has_representative_member).first)
-    end
-    self.add_relationship(:has_representative_member, image)
-  end
-
-  def representative_image_pid
-    unless self.relationships(:has_representative_member).empty?
-      return self.relationships(:has_representative_member).first.gsub(/info:fedora\//, '')
-    end
-  end
-
 end
