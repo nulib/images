@@ -1,8 +1,6 @@
 class InstitutionalCollectionsController < CatalogController
-  #before_filter :authenticate_user!
-  #load_and_authorize_resource except: [:index]
-  #before_filter :load_and_authorize_collections, only: [:index]
-
+  before_action :authenticate_user!
+  before_action :require_admin
 
   include Blacklight::Configurable
   include Blacklight::SearchHelper
@@ -10,7 +8,6 @@ class InstitutionalCollectionsController < CatalogController
   copy_blacklight_config_from(CatalogController)
 
   respond_to :html
-
 
   # GET /institutional_collections
   def index
@@ -54,9 +51,6 @@ class InstitutionalCollectionsController < CatalogController
     @document_list.each do |document|
       @pid_list << document[:id]
     end
-
-    #puts @pid_list
-    #render json: @document_list
   end
 
   # POST /institutional_collections/1/remove_image/:image_id
@@ -117,8 +111,6 @@ class InstitutionalCollectionsController < CatalogController
     @collection = InstitutionalCollection.find(params[:id])
   end
 
-
-
   # POST /institional_collections/create
   def create
     faceted_title_params = params[:institutional_collection]
@@ -142,15 +134,22 @@ class InstitutionalCollectionsController < CatalogController
   end
 
   def collection_name_ok
-    #TODO placeholder to remeber to check wither the name of the collection is already in use, etc
+    #TODO placeholder to remember to check wither the name of the collection is already in use, etc
     return true
   end
 
 
   def remove
     #TODO delete collection. We will need to change the is_governed_by to default or private and is_representative_of_collection properties on its members first. (They should go back into DIL)
-
   end
 
+  private
+
+  def require_admin
+    unless current_user && current_user.admin?
+      flash[:error] = "You're a jerk"
+      redirect_to root_path
+    end
+  end
 
 end
