@@ -4,6 +4,7 @@ class InstitutionalCollectionsController < CatalogController
 
   include Blacklight::Configurable
   include Blacklight::SearchHelper
+  include Sidekiq::Worker
 
   copy_blacklight_config_from(CatalogController)
 
@@ -139,8 +140,11 @@ class InstitutionalCollectionsController < CatalogController
   end
 
 
-  def remove
-    #TODO delete collection. We will need to change the is_governed_by to default or private and is_representative_of_collection properties on its members first. (They should go back into DIL)
+  def destroy
+    raise "Can't delete DIL Collection" if params[:id] == DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
+    RemoveInstitutionalCollectionWorker.perform_async(params[:id])
+    flash[:notice] = "Institutional Collection removal is happening in the background."
+    redirect_to institutional_collections_path
   end
 
   private
