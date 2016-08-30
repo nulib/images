@@ -63,28 +63,22 @@ class InstitutionalCollectionsController < CatalogController
     image.update_institutional_collection(dil_collection)
     image.save
 
-    flash[:success]="Image was successfully removed from collection"
+    flash[:success] = "Image was successfully removed from collection"
     redirect_to :action => 'images', :id => @collection_id, 'f[institutional_collection_title_facet][]' => collection.collection_title_formatter
   end
 
   def confirm_add_images
-    @collection_id = params[:id]
-    @pid_list = params[:pid_list]
-    @pid_list.each do |pid|
-      image = Multiresimage.find(pid)
-      image.update_institutional_collection(InstitutionalCollection.find(@collection_id))
-      image.save!
-    end
-    flash[:notice]="Your request to add images to the collection has been placed in the queue. You will recieve an email when your job completes"
+    AddInstitutionalCollectionWorker.perform_async(params[:id], params[:pid_list])
+    flash[:notice] = "Your request to add images to the collection has been placed in the queue. Check the sidekiq process to monitor for errors"
     redirect_to institutional_collections_path
   end
 
-  # GET /institional_collections/new
+  # GET /institutional_collections/new
   def new
     @institutional_collection = InstitutionalCollection.new
   end
 
-  # GET /institional_collections/1/edit
+  # GET /institutional_collections/1/edit
   def edit
     @institutional_collection = InstitutionalCollection.find(params[:id])
   end
@@ -99,8 +93,8 @@ class InstitutionalCollectionsController < CatalogController
       attr_hash = { :rights_description=> params[:institutional_collection][:rights_description],
                     :description=>params[:institutional_collection][:description], :thumbnail_url=> params[:institutional_collection][:thumbnail_url] }
       if @institutional_collection.update_attributes(attr_hash)
-        flash[:notice]="Collection info successfully updated"
-        redirect_to institutional_collections_path
+        flash[:notice] = "Collection info successfully updated"
+        redirect_to institutional_collection_path(@institutional_collection)
       else
         render :action => :edit
       end
@@ -112,7 +106,7 @@ class InstitutionalCollectionsController < CatalogController
     @collection = InstitutionalCollection.find(params[:id])
   end
 
-  # POST /institional_collections/create
+  # POST /institutional_collections/create
   def create
     faceted_title_params = params[:institutional_collection]
     faceted_title_params[:title] = "#{params[:institutional_collection][:unit_part]}|#{params[:institutional_collection][:title_part]}"
@@ -126,7 +120,7 @@ class InstitutionalCollectionsController < CatalogController
     @collection.save!
 
     if @collection.persisted?
-      flash[:success]="Collection was successfully created"
+      flash[:success] = "Collection was successfully created"
       redirect_to @collection
     else
       logger.warn "Failed to create collection: #{@collection.errors.full_messages}"
@@ -143,7 +137,7 @@ class InstitutionalCollectionsController < CatalogController
   def destroy
     raise "Can't delete DIL Collection" if params[:id] == DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]
     RemoveInstitutionalCollectionWorker.perform_async(params[:id])
-    flash[:notice] = "Institutional Collection removal is happening in the background."
+    flash[:notice] = "Institutional Collection removal has been placed in the queue. Check the sidekiq process to monitor for errors"
     redirect_to institutional_collections_path
   end
 
