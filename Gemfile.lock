@@ -23,6 +23,7 @@ GIT
 
 GEM
   remote: http://rubygems.org/
+  remote: https://gems.contribsys.com/
   specs:
     actionmailer (4.1.16)
       actionpack (= 4.1.16)
@@ -448,6 +449,8 @@ GEM
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
       redis (~> 3.2, >= 3.2.1)
+    sidekiq-pro (3.3.3)
+      sidekiq (>= 4.0.0)
     simplecov (0.11.2)
       docile (~> 1.1.0)
       json (~> 1.8)
@@ -517,62 +520,62 @@ PLATFORMS
 
 DEPENDENCIES
   about_page!
-  better_errors
-  binding_of_caller
-  blacklight (= 5.16.3)
-  blacklight-marc
-  byebug
-  cancan
-  capistrano (~> 3.2)
-  capistrano-bundler
-  capistrano-passenger
-  capistrano-rails (~> 1.1.3)
-  capistrano-rbenv
-  capistrano-sidekiq
-  capybara
-  coffee-rails (>= 4)
-  daemons
-  database_cleaner
-  devise
+  better_errors!
+  binding_of_caller!
+  blacklight (= 5.16.3)!
+  blacklight-marc!
+  byebug!
+  cancan!
+  capistrano (~> 3.2)!
+  capistrano-bundler!
+  capistrano-passenger!
+  capistrano-rails (~> 1.1.3)!
+  capistrano-rbenv!
+  capistrano-sidekiq!
+  capybara!
+  coffee-rails (>= 4)!
+  daemons!
+  database_cleaner!
+  devise!
   equivalent-xml!
-  factory_girl_rails
-  google-analytics-rails
-  high_voltage
-  hydra-head (~> 8.0.0)
-  hydra-ldap
-  jbuilder (~> 2.0)
-  jettywrapper
-  jhove-service
-  jquery-rails
-  jquery-ui-rails
-  launchy
-  lograge
-  mini_exiftool
-  omniauth-ldap
-  openseadragon
-  pg
+  factory_girl_rails!
+  google-analytics-rails!
+  high_voltage!
+  hydra-head (~> 8.0.0)!
+  hydra-ldap!
+  jbuilder (~> 2.0)!
+  jettywrapper!
+  jhove-service!
+  jquery-rails!
+  jquery-ui-rails!
+  launchy!
+  lograge!
+  mini_exiftool!
+  omniauth-ldap!
+  openseadragon!
+  pg!
   powerpoint!
-  protected_attributes
-  pry
-  rails (~> 4.1.0)
-  rb-readline
-  riiif
-  rsolr
-  rspec-rails
-  rspec-steps
-  rubocop (~> 0.42.0)
-  rubyntlm (~> 0.1.1)
-  rufus-scheduler
-  sass-rails (>= 4)
-  selenium-webdriver
-  sextant
-  sidekiq
-  simplecov
-  sinatra
-  sqlite3
-  uglifier (>= 1.0.3)
-  uuid
-  whenever
+  protected_attributes!
+  pry!
+  rails (~> 4.1.0)!
+  rb-readline!
+  riiif!
+  rsolr!
+  rspec-rails!
+  rspec-steps!
+  rubocop (~> 0.42.0)!
+  rubyntlm (~> 0.1.1)!
+  rufus-scheduler!
+  sass-rails (>= 4)!
+  selenium-webdriver!
+  sextant!
+  sidekiq-pro!
+  simplecov!
+  sinatra!
+  sqlite3!
+  uglifier (>= 1.0.3)!
+  uuid!
+  whenever!
 
 BUNDLED WITH
    1.12.5
