@@ -31,7 +31,7 @@ class RemoveInstitutionalCollectionWorker
       current_collection.delete
     else
       logger.error("Skipping collection delete, images remain in #{current_collection.pid}")
-      raise
+      raise "Skipping collection delete, images remain in #{current_collection.pid}"
     end
   end
 
