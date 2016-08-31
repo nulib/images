@@ -43,10 +43,15 @@ class InstitutionalCollectionsController < CatalogController
   def add_images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
+
+    solr_params = { :q => params[:q] }
+
     # Only images from DIL are available to add to the collection. 
-    query_params = { :q => "-is_governed_by_ssim:" + @collection_id + " "+ params[:q],
-                     :f => params[:f]}
-    (@response, @document_list) = get_search_results(query_params)
+    self.solr_search_params_logic += [:dil_collection_filter]
+
+    (@response, @document_list) = get_search_results(solr_params)
+    search_session[:total] = @response.total unless @response.nil?
+
     #extract pids to List
     @pid_list = []
     @document_list.each do |document|
@@ -150,4 +155,9 @@ class InstitutionalCollectionsController < CatalogController
     end
   end
 
+  def dil_collection_filter(solr_params, user_params)
+    solr_params[:fq] ||= []
+    # solr_params[:fq] << "-is_governed_by_ssim:\"inu:dil-00-23655b1f-7029-4fb4-aa10-8ababe0ca63b\""
+    solr_params[:fq] << "+institutional_collection_title_ssim:\"Digital Image Library\""
+  end
 end
