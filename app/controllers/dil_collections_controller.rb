@@ -1,5 +1,4 @@
 require 'dil/pid_minter'
-require 'pry'
 require 'sidekiq'
 
 class DilCollectionsController < ApplicationController
