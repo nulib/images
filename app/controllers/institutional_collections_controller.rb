@@ -36,7 +36,17 @@ class InstitutionalCollectionsController < CatalogController
   def images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
-    (@response, @document_list) = get_search_results
+    
+    page = params.fetch(:page, 1).to_i
+    
+    solr_params = {
+      :page => page,
+      :per_page => 10, 
+      :q => params[:q]
+    }
+
+    (@response, @document_list) = search_results(solr_params, search_params_logic)
+    search_session[:total] = @response.total unless @response.nil?
   end
 
   # GET /institutional_collections/1/add_images
