@@ -1,6 +1,9 @@
 <h4>Add Images to Collection <%=@collection.collection_title_formatter %></h4>
 <form class="search-query-form clearfix" method="get" action="<%=confirm_add_images_institutional_collection_path(@collection_id)%>" accept-charset="UTF-8">
   <div class="input-group search-input-group">
+    <% @pid_list.each do |pid| %>
+      <input type="hidden" name="pid_list[]" value="<%=pid%>" />
+    <% end %>
     <span class="input-group-btn">
       <button id="search" class="btn btn-primary" type="submit">
         <span class="submit-search-text">Confirm Add Images to Collection</span>
