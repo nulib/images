@@ -44,26 +44,15 @@ RSpec.configure do |config|
   config.before(:suite) do
     Rails.cache.clear
     Deprecation.default_deprecation_behavior = :silence
-  end
 
-
-  config.before(:all) do
-    # Clean out Solr and Fedora
-    #
-    # These are optional and can impact performance because they slow down the
-    # test suite. Nevertheless, it is helpful to have them in a clean state
-    # before each test.
     DIL::Application.load_tasks
     ActiveFedora::Base.delete_all
     Blacklight.solr.delete_by_query("*:*")
     Blacklight.solr.commit
 
     #add fixture data to Solr and Fedora
-     Rake::Task["hydra:fixtures:refresh"].invoke
-     stdout, stdeerr, status = Open3.capture3("cp #{Rails.root}/spec/fixtures/images/inu-dil-cffada80-57f3-4d98-a0ee-e73048943f90.jp2 /tmp/inu-dil-cffada80-57f3-4d98-a0ee-e73048943f90.jp2")
-     puts "trying to copy fixture image to tester's /tmp dir: #{stdout}"
+    Rake::Task["hydra:fixtures:refresh"].invoke
   end
-
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -84,4 +73,6 @@ RSpec.configure do |config|
   # The different available types are documented in the features, such as in
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
+
+  Capybara.run_server = true
 end

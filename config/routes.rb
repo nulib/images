@@ -3,7 +3,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
 
   blacklight_for :catalog
-  iiif_for 'riiif/image', at: '/image-service'
+  mount Riiif::Engine => '/image-service', as: 'riiif'
 
   if Rails.env.staging? or Rails.env.remote_dev?
     mount AboutPage::Engine => '/about(.:format)'
@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     match "error", :to => "application#page_not_found", via: [ :get, :post, :patch, :delete ]
   end
 
-  if Rails.env.production? or Rails.env.test?
+  if Rails.env.production?
      get '404', :to => 'application#page_not_found'
      get '422', :to => 'application#server_error'
      get '500', :to => 'application#server_error'
@@ -34,8 +34,6 @@ Rails.application.routes.draw do
 
   resources :multiresimages do
     collection do
-      get 'aware_tile'
-      get 'aware_details'
       post 'add_datastream'
       post 'add_external_datastream'
       post 'menu_publish'
@@ -48,10 +46,7 @@ Rails.application.routes.draw do
     end
     member do
       post 'permissions'
-      # get 'svg'
-      # get 'get_image'
       # get 'archival_image_proxy'
-      # patch 'updatecrop'
     end
   end
 
@@ -76,18 +71,13 @@ Rails.application.routes.draw do
     resources :users, :only=>[:create, :edit, :destroy]
   end
 
-
-
   resources :batches
   # The routes below aren't resourceful, but I'm not sure if anything outside of the application is referring to them
   # so I don't want to refactor them into resourceful routes. I created placeholders for them above though - CS 11-18-2014
 
   get 'technical_metadata/:id/:type' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
-  get "multiresimages/svg/:id" => "multiresimages#get_svg"
-  get "multiresimages/get_image/:id/:image_length" => "multiresimages#proxy_image"
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
-  patch "multiresimages/updatecrop/:id" => "multiresimages#updatecrop"
 
   get "dil_collections/:pid/:id/:index" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
   get "dil_collections/:pid/:id" => "multiresimages#show", :constraints=> { pid: /inu.*/ }

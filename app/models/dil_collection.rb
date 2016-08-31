@@ -1,6 +1,5 @@
 require 'json'
 require 'dil/pid_minter'
-require 'pry'
 
 class DILCollection < ActiveFedora::Base
 
@@ -144,17 +143,14 @@ class DILCollection < ActiveFedora::Base
     tmp_file_list = []
     multiresimages = []
     multiresimages = self.get_all_images(multiresimages)
-
+    
     # Loop through DILCollection and generate pictorial slides for each image
     multiresimages.each do |image|
       # Powerpoint slide title information
       title = image.pref_title
-
+      
       # URL is provided as input to local_resource_from_url method
-      max_size = 1000
-      url = image.image_url(max_size)
-      #this needs to be fixed, image_url is no longer a viable method.
-
+      url = "#{DIL_CONFIG['base_url']}/image-service/#{image.pid.gsub!(/:/, '-')}/full/,1000/0/default.jpg"
 
       # Create a local representation of the remote resource
       local_resource = LocalResource.new(URI.parse(url))
@@ -164,10 +160,10 @@ class DILCollection < ActiveFedora::Base
 
       # Set the image_path for the slide
       image_path = local_copy_of_remote_file.path
-
+      
       # Add the slide to the Presentation
       coords = set_coords(image_path)
-
+      
       @deck.add_pictorial_slide title, image_path, coords
 
       tmp_file_list << local_copy_of_remote_file
