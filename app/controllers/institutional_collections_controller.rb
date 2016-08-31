@@ -44,7 +44,13 @@ class InstitutionalCollectionsController < CatalogController
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
 
-    solr_params = { :q => params[:q] }
+    page = params.fetch(:page, 1).to_i
+
+    solr_params = {
+      :page => page,
+      :per_page => 10, 
+      :q => params[:q]
+    }
 
     # Only images from DIL are available to add to the collection. 
     self.search_params_logic += [:dil_collection_filter]
