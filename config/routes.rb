@@ -1,4 +1,4 @@
-require 'sidekiq/web'
+require 'sidekiq/pro/web'
 
 Rails.application.routes.draw do
 
@@ -73,7 +73,7 @@ Rails.application.routes.draw do
       get 'images'
       get 'confirm_add_images'
       get 'rights'
-      post 'remove_image'      
+      post 'remove_image'
     end
   end
 
