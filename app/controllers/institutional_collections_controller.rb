@@ -47,9 +47,9 @@ class InstitutionalCollectionsController < CatalogController
     solr_params = { :q => params[:q] }
 
     # Only images from DIL are available to add to the collection. 
-    self.solr_search_params_logic += [:dil_collection_filter]
+    self.search_params_logic += [:dil_collection_filter]
 
-    (@response, @document_list) = get_search_results(solr_params)
+    (@response, @document_list) = search_results(solr_params, search_params_logic)
     search_session[:total] = @response.total unless @response.nil?
 
     #extract pids to List
