@@ -20,7 +20,7 @@ Rails.application.routes.draw do
      get '500', :to => 'application#server_error'
   end
 
-  authenticate :user do
+  authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web => '/sidekiq'
   end
 
