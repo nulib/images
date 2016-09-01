@@ -90,7 +90,7 @@ class InstitutionalCollectionsController < CatalogController
   end
 
   def confirm_add_images
-    AddInstitutionalCollectionWorker.perform_async(params[:id], params[:pid_list])
+    AddInstitutionalCollectionWorker.add_to_collection(params[:id], params[:pid_list])
     flash[:notice] = "Your request to add images to the collection has been placed in the queue. Check the sidekiq process to monitor for errors"
     redirect_to institutional_collections_path
   end
