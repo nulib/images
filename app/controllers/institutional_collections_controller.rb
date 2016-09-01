@@ -42,7 +42,8 @@ class InstitutionalCollectionsController < CatalogController
     solr_params = {
       :page => page,
       :per_page => 10, 
-      :q => params[:q]
+      :q => params[:q],
+      :f => params[:f]
     }
 
     (@response, @document_list) = search_results(solr_params, search_params_logic)
