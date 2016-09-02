@@ -1,3 +1,5 @@
+require 'dil/pid_minter'
+
 class InstitutionalCollectionsController < CatalogController
   before_action :authenticate_user!
   before_action :require_admin
@@ -6,6 +8,7 @@ class InstitutionalCollectionsController < CatalogController
   include Blacklight::SearchHelper
   include Blacklight::UrlHelperBehavior
   include Sidekiq::Worker
+  include DIL::PidMinter
 
   copy_blacklight_config_from(CatalogController)
 
@@ -45,7 +48,7 @@ class InstitutionalCollectionsController < CatalogController
   def add_images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
-
+    
     page = params.fetch(:page, 1).to_i
     solr_params = {
       :page => page,
@@ -118,12 +121,12 @@ class InstitutionalCollectionsController < CatalogController
   def create
     faceted_title_params = params[:institutional_collection]
     faceted_title_params[:title] = "#{params[:institutional_collection][:unit_part]}|#{params[:institutional_collection][:title_part]}"
+    faceted_title_params[:pid] = mint_pid('dil')
 
     @collection = InstitutionalCollection.create(faceted_title_params)
     @collection.rightsMetadata
     @collection.default_permissions
     #default to public collection, DIL is the only private collection
-    #@collection.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]
     @collection.make_public
     @collection.save!
 
