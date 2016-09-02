@@ -4,6 +4,7 @@ class InstitutionalCollectionsController < CatalogController
 
   include Blacklight::Configurable
   include Blacklight::SearchHelper
+  include Blacklight::UrlHelperBehavior
   include Sidekiq::Worker
 
   copy_blacklight_config_from(CatalogController)
@@ -15,21 +16,11 @@ class InstitutionalCollectionsController < CatalogController
     @institutional_collections = InstitutionalCollection.all
     #Dont show DIL since it's not a public collection
     @institutional_collections.delete(InstitutionalCollection.find(DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"]))
-    respond_to do |format|
-      format.html
-      format.json { paginate json: @institutional_collections }
-    end
   end
 
   # GET /institutional_collections/1
   def show
     @collection = InstitutionalCollection.find(params[:id])
-    respond_to do |format|
-      format.json { render json: @collection.to_json }
-      format.html {
-
-      }
-    end
   end
 
   # GET /institutional_collections/1/images
@@ -56,24 +47,18 @@ class InstitutionalCollectionsController < CatalogController
     @collection = InstitutionalCollection.find(params[:id])
 
     page = params.fetch(:page, 1).to_i
-
     solr_params = {
       :page => page,
       :per_page => 10, 
       :q => params[:q]
     }
-
     # Only images from DIL are available to add to the collection. 
     self.search_params_logic += [:dil_collection_filter]
-
     (@response, @document_list) = search_results(solr_params, search_params_logic)
     search_session[:total] = @response.total unless @response.nil?
 
-    #extract pids to List
-    @pid_list = []
-    @document_list.each do |document|
-      @pid_list << document[:id]
-    end
+    (@all_id_response, @all_id_docs) = search_results({ q: params[:q] }, search_params_logic+[:all_ids_filter])
+    @pid_list = @all_id_docs.collect { |d| d['id'] }
   end
 
   # POST /institutional_collections/1/remove_image/:image_id
@@ -167,9 +152,14 @@ class InstitutionalCollectionsController < CatalogController
 
   def require_admin
     unless current_user && current_user.admin?
-      flash[:error] = "You're a jerk"
+      flash[:error] = "You do not have the necessary permissions to view this page"
       redirect_to root_path
     end
+  end
+
+  def all_ids_filter(solr_params, user_params)
+    solr_params[:rows] = @response.total
+    solr_params[:fl] = 'id'
   end
 
   def dil_collection_filter(solr_params, user_params)
