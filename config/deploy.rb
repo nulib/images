@@ -18,10 +18,7 @@ set :format, :pretty
 
 # Default value for :log_level is :debug
 set :log_level, :debug
-set :passenger_restart_with_touch, true
 # Default value for :pty is false
-# set :pty, true
-#sidekiq
 set :pty,  false
 
 
@@ -40,8 +37,6 @@ set :bundle_binstubs, -> { shared_path.join('bin') }
 # rbenv setup
 set :rbenv_type, :user
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-#set :rbenv_map_bins, %w{rake gem bundle ruby rails}
-#set :rbenv_map_bins, fetch(:rbenv_map_bins).to_a.concat(%w({rake gem bundle ruby rails}))
 set :rbenv_roles, :all # default value
 
 
@@ -50,12 +45,18 @@ set :keep_releases, 5
 
 namespace :deploy do
 
+  desc 'Enable sidekiq pro install'
+  task :bundle_config_sidekiq do
+    execute "bundle config gems.contribsys.com #{DIL_CONFIG['sidekiq_pro']}"
+  end
+
+  before 'bundler:install', :bundle_config_sidekiq
+
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
       execute :touch, release_path.join('tmp/restart.txt')
-    #  invoke 'delayed_job:restart'
     end
   end
 
