@@ -29,6 +29,7 @@ source 'http://rubygems.org' do
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
   gem 'capistrano-sidekiq'
+  gem 'dotenv'
 
   gem 'jquery-ui-rails'
   gem "cancan"

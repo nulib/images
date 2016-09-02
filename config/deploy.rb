@@ -1,6 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.4.0'
 
+Dotenv.load
+
 set :application, 'dil_hydra'
 set :repo_url, 'git@github.com:nulib/images.git'
 
@@ -37,7 +39,7 @@ set :bundle_binstubs, -> { shared_path.join('bin') }
 # rbenv setup
 set :rbenv_type, :user
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_roles, :all # default value
+
 
 
 # Default value for keep_releases is 5
@@ -47,10 +49,12 @@ namespace :deploy do
 
   desc 'Enable sidekiq pro install'
   task :bundle_config_sidekiq do
-    execute "bundle config gems.contribsys.com #{DIL_CONFIG['sidekiq_pro']}"
+    on roles(:web) do
+      execute :bundle, "config gems.contribsys.com #{ENV['sidekiq_pro']}"
+    end
   end
 
-  before 'bundler:install', :bundle_config_sidekiq
+  after 'bundler:install', :bundle_config_sidekiq
 
   desc 'Restart application'
   task :restart do
