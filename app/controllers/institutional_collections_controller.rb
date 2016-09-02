@@ -151,7 +151,7 @@ class InstitutionalCollectionsController < CatalogController
     current_collection = InstitutionalCollection.find(current_collection_id)
 
     if get_member_images(current_collection).empty?
-      # Delete the empty collection
+      current_collection.delete
       flash[:success] = "Institutional Collection removal has been placed in the queue. Check the sidekiq process to monitor for errors"
       redirect_to institutional_collections_path
     else
