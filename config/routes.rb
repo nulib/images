@@ -74,6 +74,7 @@ Rails.application.routes.draw do
       get 'confirm_add_images'
       get 'rights'
       post 'remove_image'
+      post 'remove_collection_items_to_dil'
     end
   end
 

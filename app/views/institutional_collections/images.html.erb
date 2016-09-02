@@ -1,4 +1,8 @@
 <h4>Images in <%=@collection.collection_title_formatter %></h4>
+
+<p><%= "Total search results: #{search_session[:total]}" %></p>
+<%= render :partial => "paginate_compact", :object => @response if show_pagination? %>
+
 <table class='table table-striped'>
   <tbody>
     <tr>

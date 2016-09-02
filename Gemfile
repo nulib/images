@@ -40,6 +40,7 @@ source 'http://rubygems.org' do
   gem 'riiif'
   gem 'openseadragon'
   gem 'whenever', :require => false
+  gem 'activerecord-session_store'
 
   group :test do
     gem 'rspec-rails'
