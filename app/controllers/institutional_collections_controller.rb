@@ -115,7 +115,7 @@ class InstitutionalCollectionsController < CatalogController
     faceted_title_params[:title] = "#{params[:institutional_collection][:unit_part]}|#{params[:institutional_collection][:title_part]}"
     faceted_title_params[:pid] = mint_pid('dil')
 
-    @collection = InstitutionalCollection.new(faceted_title_params)
+    @collection = InstitutionalCollection.create(faceted_title_params)
     @collection.rightsMetadata
     @collection.default_permissions
     #default to public collection, DIL is the only private collection
