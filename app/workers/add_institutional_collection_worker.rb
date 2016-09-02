@@ -11,6 +11,9 @@ class AddInstitutionalCollectionWorker
       logger.info("#{m.pid} skipped because it is already governed by #{target_collection.pid}")
       raise "#{m.pid} skipped because it is already governed by #{target_collection.pid}"
     elsif m.institutional_collection_id != dil_collection.pid
+      logger.info("INSTITUTIONAL_COLLECTION_ID: #{m.institutional_collection_id}")
+      logger.info("DIL_COLLECTION_ID: #{dil_collection.id}")
+
       logger.error("#{m.pid} skipped because it is no longer in the DIL Collection")
       raise "#{m.pid} skipped because it is no longer in DIL"
     else
