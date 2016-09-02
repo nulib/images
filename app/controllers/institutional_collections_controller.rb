@@ -1,3 +1,5 @@
+require 'dil/pid_minter'
+
 class InstitutionalCollectionsController < CatalogController
   before_action :authenticate_user!
   before_action :require_admin
@@ -5,6 +7,7 @@ class InstitutionalCollectionsController < CatalogController
   include Blacklight::Configurable
   include Blacklight::SearchHelper
   include Sidekiq::Worker
+  include DIL::PidMinter
 
   copy_blacklight_config_from(CatalogController)
 
@@ -43,7 +46,7 @@ class InstitutionalCollectionsController < CatalogController
   def add_images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
-    # Only images from DIL are available to add to the collection. 
+    # Only images from DIL are available to add to the collection.
     query_params = { :q => "-is_governed_by_ssim:" + @collection_id + " "+ params[:q],
                      :f => params[:f]}
     (@response, @document_list) = get_search_results(query_params)
@@ -110,12 +113,12 @@ class InstitutionalCollectionsController < CatalogController
   def create
     faceted_title_params = params[:institutional_collection]
     faceted_title_params[:title] = "#{params[:institutional_collection][:unit_part]}|#{params[:institutional_collection][:title_part]}"
+    faceted_title_params[:pid] = mint_pid('dil')
 
     @collection = InstitutionalCollection.create(faceted_title_params)
     @collection.rightsMetadata
     @collection.default_permissions
     #default to public collection, DIL is the only private collection
-    #@collection.default_permissions=[{:type=>"group", :access=>"read", :name=>"public"}]
     @collection.make_public
     @collection.save!
 
