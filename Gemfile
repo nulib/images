@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'http://rubygems.org' do
 
   gem 'rails', '~> 4.1.0'
   gem 'sass-rails', '>= 4'
@@ -19,7 +19,6 @@ source 'http://rubygems.org'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'protected_attributes'
-  gem 'sidekiq'
   gem 'sinatra', :require => nil
 
   gem 'daemons'
@@ -30,6 +29,7 @@ source 'http://rubygems.org'
   gem 'capistrano-bundler'
   gem 'capistrano-passenger'
   gem 'capistrano-sidekiq'
+  gem 'dotenv'
 
   gem 'jquery-ui-rails'
   gem "cancan"
@@ -41,39 +41,45 @@ source 'http://rubygems.org'
   gem 'riiif'
   gem 'openseadragon'
   gem 'whenever', :require => false
+  gem 'activerecord-session_store'
 
-group :test do
-  gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'database_cleaner'
-  gem 'capybara'
-  gem 'rspec-steps'
-  gem 'selenium-webdriver'
-  gem 'launchy'
-  gem 'simplecov', :require => false
-  gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
+  group :test do
+    gem 'rspec-rails'
+    gem 'factory_girl_rails'
+    gem 'database_cleaner'
+    gem 'capybara'
+    gem 'rspec-steps'
+    gem 'selenium-webdriver'
+    gem 'launchy'
+    gem 'simplecov', :require => false
+    gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'
+  end
+
+  group :development do
+    gem 'jettywrapper'
+    gem 'sqlite3'
+    gem 'better_errors'
+    gem 'binding_of_caller'
+    gem 'sextant'
+    gem 'rubocop', '~> 0.42.0', require: false
+  end
+
+  group :development, :test, :staging do
+    gem 'byebug'
+    gem 'pry'
+    gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
+  end
+
+  group :staging, :production do
+    gem 'pg'
+    gem 'lograge'
+  end
+
+  group :production do
+    gem 'google-analytics-rails'
+  end
 end
 
-group :development do
-  gem 'jettywrapper'
-  gem 'sqlite3'
-  gem 'better_errors'
-  gem 'binding_of_caller'
-  gem 'sextant'
-  gem 'rubocop', '~> 0.42.0', require: false
-end
-
-group :development, :test, :staging do
-  gem 'byebug'
-  gem 'pry'
-  gem 'about_page', :git => 'https://github.com/sul-dlss/about_page.git'
-end
-
-group :staging, :production do
-  gem 'pg'
-  gem 'lograge'
-end
-
-group :production do
-  gem 'google-analytics-rails'
+source "https://gems.contribsys.com/" do
+  gem 'sidekiq-pro'
 end

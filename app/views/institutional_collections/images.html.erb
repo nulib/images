@@ -1,0 +1,31 @@
+<h4>Images in <%=@collection.collection_title_formatter %></h4>
+
+<p><%= "Total search results: #{search_session[:total]}" %></p>
+<%= render :partial => "paginate_compact", :object => @response if show_pagination? %>
+
+<table class='table table-striped'>
+  <tbody>
+    <tr>
+      <th>Thumbnail</th>
+      <th>pid<br />Title</th>
+      <th>Location</th>
+      <th></th>
+    </tr>
+    <% @document_list.each do |document| %>
+      <% if !document[:id].nil? %>
+        <tr>
+          <tr>
+          <td><a href="/multiresimages/<%=document[:id]%>">
+          <%= image_tag(Riiif::Engine.routes.url_helpers.image_path("#{document[:id]}".gsub!(/:/, '-'), size: ',50')) %></td>
+          <td><%=document[:id] %><br /><%=document[:title_display_tesim].first%></td>
+          <td><small><%=document[:location_display_tesim].first%></small></td>
+          <td>
+            <%= button_to "Remove", remove_image_institutional_collection_path(@collection_id, image_id: document[:id]), method: :post, data: { confirm: "Are you sure? By clicking confirm the image will be removed from this collection and placed back in DIL"}, class: 'btn btn-xs btn-danger'%>
+
+
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

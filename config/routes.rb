@@ -1,4 +1,4 @@
-require 'sidekiq/web'
+require 'sidekiq/pro/web'
 
 Rails.application.routes.draw do
 
@@ -64,6 +64,17 @@ Rails.application.routes.draw do
       # post 'remove_from_batch_select'
       # post 'make_private'
       # post 'make_public'
+    end
+  end
+
+  resources :institutional_collections do
+    member do
+      get 'add_images'
+      get 'images'
+      get 'confirm_add_images'
+      get 'rights'
+      post 'remove_image'
+      post 'remove_collection_items_to_dil'
     end
   end
 
