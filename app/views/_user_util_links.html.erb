@@ -7,5 +7,7 @@
  | <%= link_to 'Help', page_path('help') %>
 <% if current_user && current_user.admin? %>
    | <%= link_to "Batch Import", batches_path %>
+   | <%= link_to "Institutional Collections", institutional_collections_path %>
+   | <%= link_to "Sidekiq Dashboard", sidekiq_web_path %>
 <% end %>
 </div>
