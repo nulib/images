@@ -7,6 +7,7 @@ module DIL_Blacklight::SolrHelpers::ObjectTypeFacet
         # External searches need Works and Images (Hydra app just needs Images).
     if (self.class.name != "ExternalSearchController")
       solr_parameters[:fq] << 'object_type_facet:(Multiresimage)'
+      solr_parameters[:fq] << "-has_model_ssim:\"info:fedora/afmodel:Vrawork\""
     end
   end
 
