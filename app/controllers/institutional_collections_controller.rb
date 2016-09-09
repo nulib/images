@@ -1,8 +1,8 @@
 require 'dil/pid_minter'
 
 class InstitutionalCollectionsController < CatalogController
-  before_action :authenticate_user!
-  before_action :require_admin
+  before_action :authenticate_user!, except: :rights
+  before_action :require_admin, except: :rights
 
   include Blacklight::Configurable
   include Blacklight::SearchHelper
