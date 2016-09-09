@@ -3,7 +3,7 @@ class AddInstitutionalCollectionWorker
 
   def perform(pid, target_collection_id)
     target_collection = InstitutionalCollection.find(target_collection_id)
-    dil_collection = InstitutionalCollection.find("inu:dil-00-23655b1f-7029-4fb4-aa10-8ababe0ca63b")
+    dil_collection = InstitutionalCollection.find(DIL_CONFIG["institutional_collection"]["Digital Image Library"]["pid"])
 
     logger.info("#{pid} is being processed.....")
     m = Multiresimage.find(pid)
