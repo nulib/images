@@ -54,7 +54,7 @@ namespace :deploy do
     end
   end
 
-  after 'bundler:install', :bundle_config_sidekiq
+  before 'bundler:install', :bundle_config_sidekiq
 
   desc 'Restart application'
   task :restart do
