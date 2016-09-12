@@ -1,8 +1,8 @@
 module ImageMover
-  def self.move_img_to_repo(source_path)
+  def self.move_img_to_repo(source_path, tiff_name)
     if Rails.env.staging? || Rails.env.production?
       raise "Wrong image format, not tif" unless File.extname(source_path) == ".tif"
-      destination_path = "#{DIL_CONFIG['repo_location']}#{ File.basename(source_path) }"
+      destination_path = "#{DIL_CONFIG['repo_location']}#{ tiff_name }"
       logger.info("repo_location exist? #{File.exist?(DIL_CONFIG['repo_location'])}")
       logger.info("destination_path: #{destination_path}")
 

@@ -45,7 +45,7 @@ class Multiresimage < ActiveFedora::Base
   ###
   # The following datastreams are no longer created for new Multiresimage objects.
   # They remain in "legacy" image records created prior to the riiif migration.
-  has_metadata :name => "DELIV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Image technical metadata'  
+  has_metadata :name => "DELIV-TECHMD", :type => ActiveFedora::Datastream, :label=>'Image technical metadata'
   # Uses the SVG schema to encode jp2 image path, size, crop, and rotation
   has_metadata :name => "DELIV-OPS", :type => SVGDatastream, :label=>'SVG Datastream'
   # External datastream
@@ -94,7 +94,7 @@ class Multiresimage < ActiveFedora::Base
       self.create_archv_exif_datastream(path)
       self.create_jp2(path)
       self.create_archv_img_datastream
-      ImageMover.move_img_to_repo(path)
+      ImageMover.move_img_to_repo(path, tiff_img_name)
       self.edit_groups = [ 'registered' ]
       self.save!
       # Save the multiresimage twice to index correctly
