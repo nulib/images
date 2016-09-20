@@ -4,7 +4,7 @@
       <div class="row homepage_row">
     <% end %>
         <div class="col-md-4">
-          <a href="/catalog?f[institutional_collection_title_facet][]=<%= institutional_collection.collection_title_formatter %>" class="thumbnail home-header">
+          <a href="/catalog?f[institutional_collection_title_facet][]=<%= url_encode(institutional_collection.collection_title_formatter.force_encoding("utf-8")) %>" class="thumbnail home-header">
             <%= image_tag(institutional_collection.thumbnail_url, alt: institutional_collection.collection_title_formatter )%>
           </a>
         <h4><%=institutional_collection.collection_title_formatter %></h4>
