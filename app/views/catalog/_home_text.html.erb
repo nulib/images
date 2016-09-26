@@ -1,3 +1,4 @@
+  <% total_collections = InstitutionalCollection.all.size %>
   <% InstitutionalCollection.all.each_with_index do |institutional_collection, index| %>
 
     <% if index%3==0 %>
@@ -10,7 +11,7 @@
         <h4><%=institutional_collection.collection_title_formatter %></h4>
         <%= link_to("Rights Description", rights_institutional_collection_path(institutional_collection.id), :data => {:ajax_modal => "trigger"}) %>
         </div>
-    <% if index%3==2 or index == InstitutionalCollection.all.size %>
+    <% if index%3==2 or index == total_collections %>
       </div>
     <% end %>
   <% end %>
