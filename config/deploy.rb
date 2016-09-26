@@ -28,7 +28,7 @@ set :pty,  false
 set :linked_files, %w{config/database.yml config/dil-config.yml config/hydra-ldap.yml config/fedora.yml config/secrets.yml config/solr.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{jetty tmp/pids log} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
+set :linked_dirs, %w{jetty tmp/pids log tmp/cache} #bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
