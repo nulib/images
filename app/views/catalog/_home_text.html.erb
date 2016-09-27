@@ -1,5 +1,6 @@
-  <% total_collections = InstitutionalCollection.all.size %>
-  <% InstitutionalCollection.all.each_with_index do |institutional_collection, index| %>
+  <% total_collections = InstitutionalCollection.all %>
+  <% number_of_collections = total_collections.size %>
+  <% total_collections.each_with_index do |institutional_collection, index| %>
 
     <% if index%3==0 %>
       <div class="row homepage_row">
@@ -11,7 +12,7 @@
         <h4><%=institutional_collection.collection_title_formatter %></h4>
         <%= link_to("Rights Description", rights_institutional_collection_path(institutional_collection.id), :data => {:ajax_modal => "trigger"}) %>
         </div>
-    <% if index%3==2 or index == total_collections %>
+    <% if index%3==2 or index == number_of_collections %>
       </div>
     <% end %>
   <% end %>
