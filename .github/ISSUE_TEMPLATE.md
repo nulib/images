@@ -1,3 +1,13 @@
+### Severity
+
+Is the production site running?
+- [ ] yes
+- [ ] no
+
+Are staff blocked from performing their work?
+- [ ] yes
+- [ ] no
+
 ### Descriptive summary
 
  Include any relevant tracebacks if you're reporting a bug.
