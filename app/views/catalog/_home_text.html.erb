@@ -10,7 +10,7 @@
             <%= image_tag(institutional_collection.thumbnail_url, alt: institutional_collection.collection_title_formatter )%>
           </a>
         <h4><%=institutional_collection.collection_title_formatter %></h4>
-        <%= link_to("Rights Description", rights_institutional_collection_path(institutional_collection.id), :data => {:ajax_modal => "trigger"}) %>
+        <%= link_to("About this Collection", rights_institutional_collection_path(institutional_collection.id), :data => {:ajax_modal => "trigger"}) %>
         </div>
     <% if index%3==2 or index == number_of_collections %>
       </div>
