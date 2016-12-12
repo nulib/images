@@ -49,6 +49,9 @@ class MultiresimagesController < ApplicationController
     work.datastreams['VRA'].content = updated_work_xml
     work.save
 
+    fedora_object = ActiveFedora::Base.find(params[:pid], :cast=>:true)
+    fedora_object.update_index
+
     head :ok
   end
 
