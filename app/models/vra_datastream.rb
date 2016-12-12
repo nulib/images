@@ -854,7 +854,9 @@ class VRADatastream < ActiveFedora::OmDatastream
     # Add a facet for each period
     self.find_by_terms('//vra:stylePeriodSet/vra:stylePeriod').each do |stylePeriod|
       insert_solr_field_value(stylePeriodSet_array, "stylePeriod_tesim", stylePeriod.text)
-      insert_solr_field_value(stylePeriodSet_array, "stylePeriod_facet", stylePeriod.text)    
+      insert_solr_field_value(stylePeriodSet_array, "stylePeriod_facet", stylePeriod.text)  
+    end  
+    
     return stylePeriodSet_array
   end
 
