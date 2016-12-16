@@ -131,10 +131,9 @@ class MultiresimagesController < ApplicationController
       begin 
         filename = "download.tif"
         send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
-      rescue Rubydora::FedoraInvalidRequest => e
+      rescue => e
         flash[:error] = "Problem locating tif file for this image: #{e.class}, #{e.message}"
-      rescue 
-        flash[:error] = "An error occured: #{e.class}, #{e.message}"
+        redirect_to multiresimage_path
       end
     else
       render :nothing => true
