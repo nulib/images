@@ -89,6 +89,8 @@ Rails.application.routes.draw do
   get 'technical_metadata/:id/:type' => 'technical_metadata#show', :as => :technical_metadata, :constraints=>{:type => /[\w-]+/, :id=>/[\w:-]+/}
 
   get "multiresimages/archival_image_proxy/:id" => "multiresimages#archival_image_proxy"
+  get "multiresimages/delivery_image_proxy/:id" => "multiresimages#delivery_image_proxy"
+
 
   get "dil_collections/:pid/:id/:index" => "multiresimages#show", :constraints=> { pid: /inu.*/ }
   get "dil_collections/:pid/:id" => "multiresimages#show", :constraints=> { pid: /inu.*/ }

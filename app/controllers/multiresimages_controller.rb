@@ -140,4 +140,19 @@ class MultiresimagesController < ApplicationController
     end
   end
 
+  def delivery_image_proxy
+    multiresimage = Multiresimage.find(params[:id])
+    if current_user.admin?
+      begin 
+        filename = "download.jp2"
+        send_data(multiresimage.DELIV_IMG.content, :type=>'image/jp2', :filename=>filename) unless multiresimage.DELIV_IMG.content.nil?
+      rescue => e
+        flash[:error] = "Problem locating jp2 file for this image: #{e.class}, #{e.message}"
+        redirect_to multiresimage_path
+      end
+    else
+      render :nothing => true
+    end
+  end
+
 end
