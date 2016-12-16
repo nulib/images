@@ -15,7 +15,7 @@
         <% end %>
       </div>
       <div class="col-block col-md-3">
-    <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] || current_user.admin? %>
+    <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] || (user_signed_in? && current_user.admin?) %>
       <%= link_to "/multiresimages/archival_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
         Download Original Image (TIFF) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
       <% end %>
