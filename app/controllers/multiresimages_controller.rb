@@ -143,12 +143,17 @@ class MultiresimagesController < ApplicationController
   def delivery_image_proxy
     multiresimage = Multiresimage.find(params[:id])
     if current_user.admin?
-      begin 
-        filename = "download.jp2"
-        send_data(multiresimage.DELIV_IMG.content, :type=>'image/jp2', :filename=>filename) unless multiresimage.DELIV_IMG.content.nil?
-      rescue => e
-        flash[:error] = "Problem locating jp2 file for this image: #{e.class}, #{e.message}"
+      if m.DELIV_IMG.dsLocation == nil
+        flash[:error] = "No JP2 location path associated with this image."
         redirect_to multiresimage_path
+      else
+        begin 
+          filename = "download.jp2"
+          send_data(multiresimage.DELIV_IMG.content, :type=>'image/jp2', :filename=>filename) unless multiresimage.DELIV_IMG.content.nil? # throws Rubydora::FedoraInvalidRequest
+        rescue => e
+          flash[:error] = "Problem locating jp2 file for this image: #{e.class}, #{e.message}"
+          redirect_to multiresimage_path
+        end
       end
     else
       render :nothing => true
