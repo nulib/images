@@ -143,7 +143,7 @@ class MultiresimagesController < ApplicationController
   def delivery_image_proxy
     multiresimage = Multiresimage.find(params[:id])
     if current_user.admin?
-      if m.DELIV_IMG.dsLocation == nil
+      if multiresimage.DELIV_IMG.dsLocation == nil
         flash[:error] = "No JP2 location path associated with this image."
         redirect_to multiresimage_path
       else
