@@ -22,16 +22,6 @@
         <% end %>
       </div>
     <% end %>
-      
-      
-    <% if (user_signed_in? && current_user.admin?) %>
-    <div class="col-block col-md-3">
-      <%= link_to "/multiresimages/delivery_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
-        Download JP2 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-      <% end %>
-    </div>
-  </div><div class="row" style="padding-top:15px;">
-    <% end %>
      
       <% if user_signed_in? && current_user.admin? %>
       <div class="col-block col-md-3">
