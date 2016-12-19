@@ -14,22 +14,29 @@
           Download Small Image (JPG) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
         <% end %>
       </div>
-      <div class="col-block col-md-3">
+      
     <% if @multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"] || (user_signed_in? && current_user.admin?) %>
-      <%= link_to "/multiresimages/archival_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
+      <div class="col-block col-md-3">  
+        <%= link_to "/multiresimages/archival_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
         Download Original Image (TIFF) <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-      <% end %>
-    <% end %>
+        <% end %>
       </div>
-      <div class="col-block col-md-3">
+    <% end %>
+      
+      
     <% if (user_signed_in? && current_user.admin?) %>
+    <div class="col-block col-md-3">
       <%= link_to "/multiresimages/delivery_image_proxy/#{@multiresimage.pid}", method: :get, class: "btn btn-default btn-block" do %>
         Download JP2 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
       <% end %>
+    </div>
+  </div><div class="row" style="padding-top:15px;">
     <% end %>
-      </div>
+     
       <% if user_signed_in? && current_user.admin? %>
-      <%= link_to( "Delete Image", multiresimage_path(@multiresimage), method: :delete, class: "btn btn-primary btn-danger", data: { confirm: "Are you sure you want to delete this image?" } ) %>
+      <div class="col-block col-md-3">
+        <%= link_to( "Delete Image", multiresimage_path(@multiresimage), method: :delete, class: "btn btn-primary btn-danger btn-block", data: { confirm: "Are you sure you want to delete this image?" } ) %>
+      </div>
       <% end %>
     </div>
   </div>
