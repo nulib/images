@@ -128,12 +128,17 @@ class MultiresimagesController < ApplicationController
   def archival_image_proxy
     multiresimage = Multiresimage.find(params[:id])
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]  || current_user.admin?
-      begin 
-        filename = "download.tif"
-        send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
-      rescue => e
-        flash[:error] = "Problem locating tif file for this image: #{e.class}, #{e.message}"
+      if multiresimage.ARCHV_IMG.dsLocation == nil
+        flash[:error] = "No TIF location (path) associated with this image."
         redirect_to multiresimage_path
+      else
+        begin 
+          filename = "download.tif"
+          send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
+        rescue => e
+          flash[:error] = "Problem retrieving tif file for this image: #{e.class}, #{e.message}"
+          redirect_to multiresimage_path
+        end
       end
     else
       render :nothing => true
@@ -144,14 +149,14 @@ class MultiresimagesController < ApplicationController
     multiresimage = Multiresimage.find(params[:id])
     if current_user.admin?
       if multiresimage.DELIV_IMG.dsLocation == nil
-        flash[:error] = "No JP2 location path associated with this image."
+        flash[:error] = "No JP2 location (path) associated with this image."
         redirect_to multiresimage_path
       else
         begin 
           filename = "download.jp2"
           send_data(multiresimage.DELIV_IMG.content, :type=>'image/jp2', :filename=>filename) unless multiresimage.DELIV_IMG.content.nil? # throws Rubydora::FedoraInvalidRequest
         rescue => e
-          flash[:error] = "Problem locating jp2 file for this image: #{e.class}, #{e.message}"
+          flash[:error] = "Problem retrieving jp2 file for this image: #{e.class}, #{e.message}"
           redirect_to multiresimage_path
         end
       end
