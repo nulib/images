@@ -197,7 +197,11 @@ class Multiresimage < ActiveFedora::Base
         end
 
         #last thing is to validate the vra to ensure it's valid after all the modifications
-        self.validate_vra( vra.to_xml )
+        if self.validate_vra( vra.to_xml ) == false
+          logger.info(vra.to_s)
+          validation_errors = get_validation_errors(vra.to_xml)
+          raise "The resulting VRA image datastream does not validate. #{validation_errors.to_s}"
+        end
         self.datastreams[ 'VRA' ].content = vra.to_xml
         self.datastreams[ 'VRA' ].content
       else
