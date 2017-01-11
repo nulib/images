@@ -30,13 +30,14 @@ class MultiresimagesBatchWorker
       FileUtils.cp(tiff_file, "tmp/#{m.tiff_img_name}")
       m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
     rescue StandardError => e
-      # find and delete any orphaned work from errors during Multiresimage.new
-      remove_orphaned_work(accession_number)
-
+      
       unless m.nil?
         m.vraworks.first.delete if m.vraworks.first
         m.delete
       end
+
+      # find and delete any orphaned work from errors during Multiresimage.new
+      remove_orphaned_work(accession_number)
          
       #check that everything was successfully cleaned up
       if Multiresimage.existing_image?(accession_number)
