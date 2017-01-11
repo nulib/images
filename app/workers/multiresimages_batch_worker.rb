@@ -20,18 +20,31 @@ class MultiresimagesBatchWorker
     raise "Existing image found with this accession number: #{accession_number}" if Multiresimage.existing_image?(accession_number)
     ready_xml = TransformXML.prepare_vra_xml(doc.to_xml)
     pid = mint_pid("dil")
-    m = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
-    m.save
 
     begin
+      logger.info("Batch worker starting - accession: #{accession_number}, pid: #{pid}")
+      m = nil
+      m = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
+      m.save
       # Copy tiff file to tmp directory
       FileUtils.cp(tiff_file, "tmp/#{m.tiff_img_name}")
       m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
     rescue StandardError => e
-      m.vraworks.first.delete if m.vraworks.first
-      m.delete
+      # find and delete any orphaned work from errors during Multiresimage.new
+      remove_orphaned_work(accession_number)
+
+      unless m.nil?
+        m.vraworks.first.delete if m.vraworks.first
+        m.delete
+      end
+         
+      #check that everything was successfully cleaned up
+      if Multiresimage.existing_image?(accession_number)
+        logger.error("Unable to cleanup all records. Existing image or work still found in Images with accession number: #{accession_number}")
+      end
       raise "Had a problem saving #{tiff_file}: #{e.message}"
     end
+    logger.info("Batch worker finished - accession: #{accession_number}, pid: #{pid}")
   end
 
   def success(job)
@@ -43,6 +56,17 @@ class MultiresimagesBatchWorker
   end
 
   private
+
+  def remove_orphaned_work(accession_number)
+    vraworks = Vrawork.find_by_accession_number(accession_number)
+    if vraworks.size == 1
+      logger.info("Deleting one orphaned work found with accession number: #{accession_number}")
+        orphan = Vrawork.find(vraworks.first["id"])
+        orphan.delete
+    elsif vraworks.size > 1
+      logger.error("Unable to delete orphaned work record. Multiple works found in Images with the accession number: #{accession_number}")
+    end      
+  end
 
   def get_accession_number(xml)
     xml.xpath("//vra:refid[@source=\"Accession\"]").text
