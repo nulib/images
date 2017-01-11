@@ -126,8 +126,11 @@ class Multiresimage < ActiveFedora::Base
     work.update_relation_set(self.pid)
 
     # re-validate the newly updated vra
-    #MultiresimageHelper.validate_vra( work.datastreams["VRA"].content )
-    self.validate_vra( work.datastreams["VRA"].content )
+    if self.validate_vra( work.datastreams["VRA"].content ) == false
+      logger.info(work.datastreams["VRA"].content)
+      validation_errors = get_validation_errors(vra.to_xml)
+      raise "The resulting VRA Work datastream does not validate. #{validation_errors.to_s}"
+    end
 
     work.save!
     work
