@@ -62,6 +62,9 @@ Rails.application.configure do
   { "params" => params }
   end
 
+  # Use default logging formatter so that PID and timestamp are not suppressed.
+  config.log_formatter = ::Logger::Formatter.new
+
   # For emailing exceptions that occur in the app
   # config.middleware.use ExceptionNotifier,
   #   :email_prefix => "[DIL-Exception STAGING] ",
