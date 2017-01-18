@@ -127,8 +127,10 @@ class MultiresimagesController < ApplicationController
 
   def archival_image_proxy
     multiresimage = Multiresimage.find(params[:id])
+    logger.info "Request to download tif: #{params[:id]}"
     if multiresimage.relationships(:is_governed_by) == ["info:fedora/inu:dil-932ada6f-5cce-45c8-a6b9-139e1e1f281b"]  || current_user.admin?
       if multiresimage.ARCHV_IMG.dsLocation == nil
+        logger.error "ARCHV-IMG.dsLocation for image is nil: #{params[:id]}"
         flash[:error] = "No TIF location (path) associated with this image."
         redirect_to multiresimage_path
       else
@@ -136,11 +138,13 @@ class MultiresimagesController < ApplicationController
           filename = "download.tif"
           send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
         rescue => e
-          flash[:error] = "Problem retrieving tif file for this image: #{e.class}, #{e.message}"
+          logger.error "Problem retrieving tif file: #{multiresimage.ARCHV_IMG.dsLocation}: #{e.class}, #{e.message}"
+          flash[:error] = "Problem retrieving tif file:  #{multiresimage.ARCHV_IMG.dsLocation}: #{e.class}, #{e.message}"
           redirect_to multiresimage_path
         end
       end
     else
+      logger.error "Not authorized to download tif: #{params[:id]}"
       render :nothing => true
     end
   end
