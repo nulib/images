@@ -17,8 +17,8 @@ h2. Developer Installation and Configuration
 * Replace <code><images app>/jetty</code> with <i>known working jetty directory</i>
 * <code>cd</code> inside the application directory and run <pre>bundle install</pre>
 * Create the database <pre>bundle exec rake db:migrate</pre>
-* Start Jetty <pre>bundle exec rake jetty:start</pre>
 * Configure Jetty <pre>bundle exec rake jetty:config</pre>
+* Start Jetty <pre>bundle exec rake jetty:start</pre>
 * Refresh Hydra Fixture data <pre>bundle exec rake hydra:fixtures:refresh
 * Prepare the test database <pre>bundle exec rake db:test:prepare</pre>
 
