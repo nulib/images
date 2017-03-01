@@ -9,54 +9,42 @@ h2. Developer prereqs
 * install imagemagick to handle the tiff to jp2 conversion <pre>brew install imagemagick --with-libtiff --with-jp2</pre>
 * redis running on port 6379 (default) <pre>brew install redis</pre>
 
-h2. Installation and Configuration
+h2. Developer Installation and Configuration
 
 * Clone the repository to your local computer <code>git clone git@github.com:nulib/images.git</code>
 * Replace the <code>config/*.yml.example</code> configuration files with actual config values and rename to <code>.yml</code>
-* Configure access to Sidekiq Pro <pre>bundle config gems.contribsys.com username:password</pre>
+* Configure access to Sidekiq Pro (must obtain username/password) <pre>bundle config gems.contribsys.com username:password</pre>
 * Replace <code><images app>/jetty</code> with <i>known working jetty directory</i>
-* <code>cd</code> inside the application directory and run <pre>bundle install
-bundle exec rake db:migrate
-bundle exec rake jetty:config
-bundle exec rake hydra:fixtures:refresh
-bundle exec rake db:test:prepare</pre>
+* <code>cd</code> inside the application directory and run <pre>bundle install</pre>
+* Create the database <pre>bundle exec rake db:migrate</pre>
+* Configure Jetty <pre>bundle exec rake jetty:config</pre>
+* Start Jetty <pre>bundle exec rake jetty:start</pre>
+* Refresh Hydra Fixture data <pre>bundle exec rake hydra:fixtures:refresh
+* Prepare the test database <pre>bundle exec rake db:test:prepare</pre>
 
 h2. Running the application
 * <code>cd</code> to the application directory
 * Start redis <pre>redis-server</pre>
 * Start Sidekiq <pre>bundle exec sidekiq</pre>
-* Start Fedora and Solr <pre>rake jetty:start</pre>
-* Start the Rails app <pre>rails server -p 3331</pre>
+* Start Fedora and Solr <pre>rake jetty:start</pre> (if not already running)
+* Confirm Fedora is running on <a href="http://localhost:8983/fedora/">http://localhost:8983/fedora/</a>
+* Confirm Solr is running on <a href="http://localhost:8983/solr/#/"><http://localhost:8983/solr/#//a>
+* Start the Rails app, specifying port 3331 <pre>rails server -p 3331</pre> 
+* Confirm the app is available at <a href="http://localhost:3331/">http://localhost:3331/</a>
 
 h2. Testing the application
 
-To test the main image model, run:
-<pre>
-rspec spec/models/multiresimage_spec.rb
-</pre>
+You'll need to be connected to the VPN.
 
-The selenium tests require Firefox 45.0.2 ( https://ftp.mozilla.org/pub/firefox/releases/45.0.2/mac/en-US/Firefox%2045.0.2.dmg )
+To run all the tests
+<pre>rspec spec</pre>
 
-Also make sure the rails server is running before running them. You'll need to be connected to the VPN.
-
-To integration test the app, run:
-<pre>
-rspec spec/features
-</pre>
-
-You can run rspec spec to test the entire app.
+To run the integration tests
+<pre>rspec spec/features</pre>
 
 h2. Deploying
 
-We've got capistrano set up, so deploying *should* be as easy as 'cap environment deploy'.
-Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy. You'll need to copy them over manually or run cap deploy setup.
+<pre>cap environment deploy</pre>
+Keep in mind that a deploy only copies over whatever files are in the public github repo, so many config files don't get copied during a deploy.
 
-h2. stuff to remember
 
-the dropbox mount isn't managed by puppet
-
-h2. new decisions
-
-We're going to mount shares on images (both staging and prod) and use ImageMover and use FileUtils to move them around. 
-
-refer to the dil-config.yml for exact paths
