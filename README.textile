@@ -3,6 +3,9 @@ h2. Developer prereqs
 Ruby 2.x
 git
 java jre (at least 1.6, but 1.8 will be more future proof when we start to use fedora 4)
+cmake (On mac osx <code>brew install cmake</code>)
+postgresql (On mac osx <code>brew install postgresql</code>)
+
 
 h2. Installation and Configuration
 
