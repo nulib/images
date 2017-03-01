@@ -1,38 +1,32 @@
 h2. Developer prereqs
 
-Ruby 2.x
-git
-java jre (at least 1.6, but 1.8 will be more future proof when we start to use fedora 4)
-cmake (On mac osx <code>brew install cmake</code>)
-postgresql (On mac osx <code>brew install postgresql</code>)
-
+* Ruby 2.x (managed via rbenv)
+* git
+* <a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">JDK</a>
+* <a href="http://bundler.io">Bundler</a>
+* cmake <pre>brew install cmake</pre>
+* postgresql <pre>brew install postgresql</pre>
+* install imagemagick to handle the tiff to jp2 conversion <pre>brew install imagemagick --with-libtiff --with-jp2</pre>
+* redis running on port 6379 (default) <pre>brew install redis</pre>
 
 h2. Installation and Configuration
 
-<pre>
-git clone https://github.com/nulib/images.git
-bundle install
-rake db:migrate
-rake jetty:config
-rake hydra:fixtures:refresh
-rake db:test:prepare
-</pre>
-
-h3. Local development only
-
-You'll need to install imagemagick to handle the tiff to jp2 conversion on your local machine.
-<pre>brew install imagemagick --with-libtiff --with-jp2</pre>
-
-You'll also need redis running on port 6379
-<pre>brew install redis</pre>
-Then you can start sidekiq normally using <code>bundle exec sidekiq</code>
+* Clone the repository to your local computer <code>git clone git@github.com:nulib/images.git</code>
+* Replace the <code>config/*.yml.example</code> configuration files with actual config values and rename to <code>.yml</code>
+* Configure access to Sidekiq Pro <pre>bundle config gems.contribsys.com username:password</pre>
+* Replace <code><images app>/jetty</code> with <i>known working jetty directory</i>
+* <code>cd</code> inside the application directory and run <pre>bundle install
+bundle exec rake db:migrate
+bundle exec rake jetty:config
+bundle exec rake hydra:fixtures:refresh
+bundle exec rake db:test:prepare</pre>
 
 h2. Running the application
-
-<pre>
-rake jetty:start
-rails s
-</pre>
+* <code>cd</code> to the application directory
+* Start redis <pre>redis-server</pre>
+* Start Sidekiq <pre>bundle exec sidekiq</pre>
+* Start Fedora and Solr <pre>rake jetty:start</pre>
+* Start the Rails app <pre>rails server -p 3331</pre>
 
 h2. Testing the application
 
