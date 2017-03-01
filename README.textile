@@ -28,7 +28,7 @@ h2. Running the application
 * Start Sidekiq <pre>bundle exec sidekiq</pre>
 * Start Fedora and Solr <pre>rake jetty:start</pre> (if not already running)
 * Confirm Fedora is running on <a href="http://localhost:8983/fedora/">http://localhost:8983/fedora/</a>
-* Confirm Solr is running on <a href="http://localhost:8983/solr/#/"><http://localhost:8983/solr/#//a>
+* Confirm Solr is running on <a href="http://localhost:8983/solr/#/">http://localhost:8983/solr/</a>
 * Start the Rails app, specifying port 3331 <pre>rails server -p 3331</pre> 
 * Confirm the app is available at <a href="http://localhost:3331/">http://localhost:3331/</a>
 
