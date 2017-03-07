@@ -2,14 +2,7 @@ module VraValidator
 
   # returns false if there are validation errors
   def validate_vra(vra)
-    valid = false
-
-    valid_errors = get_validation_errors(vra)
-
-    if valid_errors.empty?
-      valid = true
-    end
-    valid
+    get_validation_errors(vra).empty?
   end
 
   def valid_vra?(vra)
@@ -18,16 +11,13 @@ module VraValidator
   end
 
   def get_validation_errors(vra)
+    puts "vra: #{vra}"
     doc = Nokogiri::XML(vra)
     errors = []
     XSD.validate(doc).each do |error|
-      errors << "Validation error: #{error.message}\n"
+      errors << "Validation error: #{error.message}\n" unless error.to_s.include?("inu:dil")
     end
 
-    valid_errors = errors.reject do |err|
-      err.to_s.include?("inu:dil")
-    end
-
-    valid_errors
+    errors
   end
 end
