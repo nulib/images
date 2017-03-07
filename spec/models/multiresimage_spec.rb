@@ -18,7 +18,7 @@ describe Multiresimage do
       count = Multiresimage.all.count
 
       @xml_from_menu = File.read(Rails.root.join('spec', 'fixtures', 'vra_image_sample.xml'))
-      @img = Multiresimage.create(from_menu: true, vra_xml: @xml_from_menu)
+      @img = Multiresimage.create(from_menu: true, vra_xml: @xml_from_menu, pid: 'inu:dil-67891234')
       all_good = @img.create_datastreams_and_persist_image_files(path)
 
       expect(all_good).to be true
@@ -30,7 +30,7 @@ describe Multiresimage do
       image_count = Multiresimage.all.count
       vra_count = Vrawork.all.count
 
-      @img = Multiresimage.new(from_menu: true, vra_xml: @xml_from_menu)
+      @img = Multiresimage.new(from_menu: true, vra_xml: @xml_from_menu, pid: 'inu:dil-67894321')
       @img.save
 
       expect{ @img.create_datastreams_and_persist_image_files('invalid_path') }.to raise_error(RuntimeError, 'Error when running JHOVE against invalid_path')
@@ -43,7 +43,7 @@ describe Multiresimage do
       count = Multiresimage.all.count
 
       @xml_from_menu = File.read(Rails.root.join('spec', 'fixtures', 'vra_without_locationset_display.xml'))
-      @img = Multiresimage.create(from_menu: true, vra_xml: @xml_from_menu)
+      @img = Multiresimage.create(from_menu: true, vra_xml: @xml_from_menu, pid: 'inu:dil-43216789')
       all_good = @img.create_datastreams_and_persist_image_files(path)
 
       expect(all_good).to be true
@@ -54,7 +54,7 @@ describe Multiresimage do
   describe '#vra_save' do
     before(:each) do
       @xml_from_menu = File.read(Rails.root.join('spec', 'fixtures', 'vra_image_sample.xml'))
-      @m = Multiresimage.create(from_menu: true, vra_xml: @xml_from_menu)
+      @m = Multiresimage.create(from_menu: true, vra_xml: @xml_from_menu, pid: 'inu:dil-98761234')
     end
 
     it 'creates the appropriate vra:image XML' do
@@ -120,7 +120,7 @@ describe Multiresimage do
     xml = doc.to_s
 
     # this will create a vrawork and associate them with each other
-    img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: 'my:pid')
+    img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: 'inu:dil-12349876')
     img.save
 
     it 'should have related_ids' do
