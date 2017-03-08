@@ -10,7 +10,6 @@ module VraValidator
   end
 
   def get_validation_errors(vra)
-    puts "vra: #{vra}"
     doc = Nokogiri::XML(vra)
     errors = []
     XSD.validate(doc).each do |error|
