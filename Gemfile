@@ -48,7 +48,7 @@ source 'http://rubygems.org' do
     gem 'database_cleaner'
     gem 'capybara'
     gem 'rspec-steps'
-    gem 'selenium-webdriver'
+    gem 'capybara-webkit'
     gem 'launchy'
     gem 'simplecov', :require => false
     gem 'equivalent-xml', :git => 'https://github.com/mbklein/equivalent-xml.git'

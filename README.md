@@ -38,16 +38,28 @@ To test the main image model, run:
 rspec spec/models/multiresimage_spec.rb
 ```
 
-The selenium tests require Firefox 45.0.2 ( https://ftp.mozilla.org/pub/firefox/releases/45.0.2/mac/en-US/Firefox%2045.0.2.dmg )
+The capybara-webkit tests require a WebKit implementation from Qt that can be installed with homebrew. See https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit#homebrew for detailed installation instructions.
 
-Also make sure the rails server is running before running them. You'll need to be connected to the VPN.
+```
+brew install qt@5.5
+brew link --force qt55
+```
+
+After running this command you should get the following output:
+
+```
+$ which qmake
+/usr/local/bin/qmake
+```
+
+Make sure to start jetty with `rake jetty:start` before running the tests.
 
 To integration test the app, run:
 ```
 rspec spec/features
 ```
 
-You can run rspec spec to test the entire app.
+You can run `rspec spec` to test the entire app.
 
 h2. Deploying
 
