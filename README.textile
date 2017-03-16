@@ -6,7 +6,7 @@ h2. Developer prereqs
 * <a href="http://bundler.io">Bundler</a>
 * cmake <pre>brew install cmake</pre>
 * postgresql <pre>brew install postgresql</pre>
-* install imagemagick to handle the tiff to jp2 conversion <pre>brew install imagemagick --with-libtiff --with-jp2</pre>
+* install imagemagick to handle the tiff to jp2 conversion <code>brew install imagemagick --with-ghostscript --with-openjpeg</code>
 * redis running on port 6379 (default) <pre>brew install redis</pre>
 
 h2. Developer Installation and Configuration
