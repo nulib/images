@@ -72,4 +72,9 @@ class Vrawork  < ActiveFedora::Base
     #self.datastreams["VRA"].dirty = true
   end
 
+  def self.find_by_accession_number(accession_nbr)
+    # does not look for "Voyager: ..."
+    ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" AND object_type_facet:Vrawork")
+  end
+
 end

@@ -13,12 +13,17 @@ module TransformXML
   end
 
   def self.add_display_elements( nokogiri_doc )
+    #remove empty display elements
+    nokogiri_doc.xpath('//vra:display//*[not(text())]').remove
+
     sets = nokogiri_doc.xpath( "//*" ).children[ 1 ].xpath( "./*" )
     sets.each do |node|
       next unless node.element?
       next if node.name == 'dateSet'
       next if node.name == 'subjectSet'
       next if node.name == 'locationSet'
+      #skip if display text is supplied
+      next unless node.children.select {| child | child.name == "display" }.size == 0
 
       display = Nokogiri::XML::Node.new 'vra:display', nokogiri_doc
       all_text_nodes = node.xpath( ".//text()" ).to_a
