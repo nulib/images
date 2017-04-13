@@ -8,4 +8,4 @@ def logger
   Rails.logger
 end
 
-Riiif::Engine.config.cache_duration_in_days = 30
+Riiif::Engine.config.cache_duration_in_days = 365
