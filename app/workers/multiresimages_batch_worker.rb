@@ -27,19 +27,25 @@ class MultiresimagesBatchWorker
       m = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
       m.save
       # Copy tiff file to tmp directory
-      FileUtils.cp(tiff_file, "tmp/#{m.tiff_img_name}")
-      m.create_datastreams_and_persist_image_files("tmp/#{m.tiff_img_name}")
+      tmp_tiff_path = "tmp/#{m.tiff_img_name}"
+      FileUtils.cp(tiff_file, tmp_tiff_path)
+      m.create_datastreams_and_persist_image_files(tmp_tiff_path)
     rescue StandardError => e
-      
+
       unless m.nil?
         m.vraworks.first.delete if m.vraworks.first
         m.delete
       end
 
+      if File.exist?(tmp_tiff_path)
+        logger.info("Attempting to cleanup temp tiff file at: #{tmp_tiff_path}")
+        File.unlink(tmp_tiff_path)
+      end
+
       # find and delete any orphaned work from errors during Multiresimage.new
       remove_orphaned_work(accession_number)
-         
-      #check that everything was successfully cleaned up
+
+      # check that everything was successfully cleaned up
       if Multiresimage.existing_image?(accession_number)
         logger.error("Unable to cleanup all records. Existing image or work still found in Images with accession number: #{accession_number}")
       end
@@ -66,7 +72,7 @@ class MultiresimagesBatchWorker
         orphan.delete
     elsif vraworks.size > 1
       logger.error("Unable to delete orphaned work record. Multiple works found in Images with the accession number: #{accession_number}")
-    end      
+    end
   end
 
   def get_accession_number(xml)
