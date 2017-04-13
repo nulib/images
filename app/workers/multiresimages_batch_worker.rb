@@ -31,15 +31,9 @@ class MultiresimagesBatchWorker
       FileUtils.cp(tiff_file, tmp_tiff_path)
       m.create_datastreams_and_persist_image_files(tmp_tiff_path)
     rescue StandardError => e
-
       unless m.nil?
         m.vraworks.first.delete if m.vraworks.first
         m.delete
-      end
-
-      if File.exist?(tmp_tiff_path)
-        logger.info("Attempting to cleanup temp tiff file at: #{tmp_tiff_path}")
-        File.unlink(tmp_tiff_path)
       end
 
       # find and delete any orphaned work from errors during Multiresimage.new
@@ -50,6 +44,11 @@ class MultiresimagesBatchWorker
         logger.error("Unable to cleanup all records. Existing image or work still found in Images with accession number: #{accession_number}")
       end
       raise "Had a problem saving #{tiff_file}: #{e.message}"
+    ensure
+      if File.exist?(tmp_tiff_path)
+        logger.info("Attempting to cleanup temp tiff file at: #{tmp_tiff_path}")
+        File.unlink(tmp_tiff_path)
+      end
     end
     logger.info("Batch worker finished - accession: #{accession_number}, pid: #{pid}")
   end
