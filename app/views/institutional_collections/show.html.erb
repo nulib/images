@@ -14,6 +14,8 @@
 
     <%= link_to("Edit Collection Info", edit_institutional_collection_path(@collection), :data => {:ajax_modal => "trigger"}, class: 'btn btn-default btn-large') %>
 
+    <%= link_to("Image pids for collection", pids_institutional_collection_path(@collection), class: 'btn btn-default btn-large') %>
+
     <br/><br>
 
     <form class="search-query-form clearfix" method="get" action="<%=add_images_institutional_collection_path(@collection.id)%>" accept-charset="UTF-8">
