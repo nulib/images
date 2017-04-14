@@ -30,12 +30,12 @@ class InstitutionalCollectionsController < CatalogController
   def images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
-    
+
     page = params.fetch(:page, 1).to_i
-    
+
     solr_params = {
       :page => page,
-      :per_page => 10, 
+      :per_page => 10,
       :q => params[:q],
       :f => params[:f]
     }
@@ -48,14 +48,14 @@ class InstitutionalCollectionsController < CatalogController
   def add_images
     @collection_id = params[:id]
     @collection = InstitutionalCollection.find(params[:id])
-    
+
     page = params.fetch(:page, 1).to_i
     solr_params = {
       :page => page,
-      :per_page => 10, 
+      :per_page => 10,
       :q => params[:q]
     }
-    # Only images from DIL are available to add to the collection. 
+    # Only images from DIL are available to add to the collection.
     self.search_params_logic += [:dil_collection_filter]
     (@response, @document_list) = search_results(solr_params, search_params_logic)
     search_session[:total] = @response.total unless @response.nil?
@@ -170,6 +170,15 @@ class InstitutionalCollectionsController < CatalogController
     redirect_to institutional_collections_path
   end
 
+  def pids
+    collection_id = params.fetch(:id)
+    member_image_pids = get_member_image_pids(collection_id)
+
+    respond_to do |format|
+      format.text { render text: member_image_pids.join("\n") }
+    end
+  end
+
   private
 
   def require_admin
@@ -192,11 +201,18 @@ class InstitutionalCollectionsController < CatalogController
 
   def get_member_images(collection)
     # Get the current_collection members
-    member_images = []    
+    member_images = []
     Multiresimage.find_in_batches('is_governed_by_ssim'=>"info:fedora/#{collection.pid}") do |group|
-      group.each { |solr_object|
-        member_images << solr_object
-      }
+      group.each { |solr_object| member_images << solr_object }
+    end
+    member_images
+  end
+
+  def get_member_image_pids(collection_pid)
+    # Get the current_collection members
+    member_images = []
+    Multiresimage.find_in_batches('is_governed_by_ssim' => "info:fedora/#{collection_pid}") do |group|
+      group.each { |solr_object| member_images << solr_object['id'] }
     end
     member_images
   end
