@@ -228,7 +228,7 @@ class Multiresimage < ActiveFedora::Base
   end
 
   def tiff_img_name
-    "#{pid}.tif".tr(':', '-')
+    "#{pid}.tiff".tr(':', '-')
   end
 
   def tiff_derivative_path
