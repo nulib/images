@@ -42,7 +42,7 @@ dump.rdb
 
 tags
 
-lib/assets/tiff_derivatives
+lib/assets/tiff_derivatives/*.tiff
 spec/fixtures/images/jhove_output.xml
 dropbox/123/jhove_output.xml
 lib/assets/dropbox/123/jhove_output.xml
