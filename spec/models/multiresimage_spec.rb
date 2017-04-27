@@ -12,8 +12,8 @@ describe Multiresimage do
     its(:admin_policy) { should == @policy }
   end
 
-  describe "#create_datastreams_and_persist_image_files" do
-    it 'takes a tiff and creates a jp2 and datastreams and persists the tif and jp2' do
+  describe '#create_datastreams_and_persist_image_files' do
+    it 'creates and persists datastreams and derivatives from a tiff image and vra xml' do
       path = Rails.root.join('spec', 'fixtures', 'images', 'internet.tiff')
       count = Multiresimage.all.count
 
@@ -73,7 +73,6 @@ describe Multiresimage do
     before(:each) do
       @m = Multiresimage.create
       @sample_tiff = Rails.root.join('spec', 'fixtures', 'images', 'internet.tiff')
-      @sample_jp2  = Rails.root.join('spec', 'fixtures', 'images', 'internet.jp2')
     end
 
     describe '#create_archv_img_datastream' do

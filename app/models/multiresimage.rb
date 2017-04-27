@@ -1,7 +1,5 @@
-# This model represents the images in the application. Images can be a part of user groups and institutional collections.
-# It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
-# The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
-# the institutional collection's permissions.
+# This model represents the images in the application. Images can be a part of user groups and institutional collections.# It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
+# The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at# the institutional collection's permissions.
 require 'dil/pid_minter'
 require 'open3'
 
@@ -31,9 +29,7 @@ class Multiresimage < ActiveFedora::Base
 
   # External datastream
   has_metadata :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
-
-  # External datastream
-  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+  # External datastream  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
 
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => ActiveFedora::QualifiedDublinCoreDatastream do |m|
@@ -51,7 +47,6 @@ class Multiresimage < ActiveFedora::Base
   # External datastream
   has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   ###
-
   attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
@@ -92,7 +87,7 @@ class Multiresimage < ActiveFedora::Base
     begin
       self.create_archv_techmd_datastream(path)
       self.create_archv_exif_datastream(path)
-      self.create_jp2(path)
+      self.create_tiff_derivative(path)
       self.create_archv_img_datastream
       ImageMover.move_img_to_repo(path, tiff_img_name)
       self.edit_groups = [ 'registered' ]
@@ -232,50 +227,29 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  def jp2_img_name
-    "#{ self.pid }.jp2".gsub( /:/, '-' )
-  end
-
-  def jp2_img_path
-    "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
-  end
-
   def tiff_img_name
-    "#{ self.pid }.tif".gsub( /:/, '-' )
+    "#{pid}.tif".tr(':', '-')
   end
 
-  def create_jp2( img_location )
-    return jp2_img_path if File.exist?( jp2_img_path )
-
-    if Rails.env.development? || Rails.env.test?
-      create_jp2_local( img_location )
-    else
-      create_jp2_remote( img_location )
-    end
-
-    if File.file?( jp2_img_path )
-      jp2_img_path
-    else
-      raise "Failed to create jp2 image"
-    end
+  def tiff_derivative_path
+    "#{DIL_CONFIG['tiff_derivative_location']}#{tiff_img_name}"
   end
 
-  def create_jp2_local( img_location )
-    `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
+  def create_tiff_derivative(img_location)
+    return tiff_derivative_path if File.exist?(tiff_derivative_path)
+    `#{DIL_CONFIG['imagemagick_convert_path']} #{img_location} -resize 10000x10000\\> #{tiff_derivative_path}`
+    raise 'Failed to create tiff derivative' unless File.exist?(tiff_derivative_path)
+    tiff_derivative_path
   end
 
-  def create_jp2_remote( img_location )
-    Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-  end
-
-  def create_jhove_xml( img_location )
+  def create_jhove_xml(img_location)
     require 'jhove_service'
 
-    j = JhoveService.new( File.dirname( img_location ))
-    j.run_jhove( img_location )
+    j = JhoveService.new(File.dirname(img_location))
+    j.run_jhove(img_location)
   end
 
-  def create_archv_img_datastream( ds_location = nil )
+  def create_archv_img_datastream(ds_location = nil)
     ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
 
     unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
