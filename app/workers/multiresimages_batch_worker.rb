@@ -28,6 +28,7 @@ class MultiresimagesBatchWorker
       m.save
       # Copy tiff file to tmp directory
       tmp_tiff_path = "tmp/#{m.tiff_img_name}"
+      tiff_derivative_path = m.tiff_derivative_path
       FileUtils.cp(tiff_file, tmp_tiff_path)
       m.create_datastreams_and_persist_image_files(tmp_tiff_path)
     rescue StandardError => e
@@ -49,6 +50,7 @@ class MultiresimagesBatchWorker
         logger.info("Attempting to cleanup temp tiff file at: #{tmp_tiff_path}")
         File.unlink(tmp_tiff_path)
       end
+      File.unlink(tiff_derivative_path) if File.exist?(tiff_derivative_path)
     end
     logger.info("Batch worker finished - accession: #{accession_number}, pid: #{pid}")
   end
