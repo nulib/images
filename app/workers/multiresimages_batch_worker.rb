@@ -32,8 +32,7 @@ class MultiresimagesBatchWorker
       FileUtils.cp(tiff_file, tmp_tiff_path)
       m.create_datastreams_and_persist_image_files(tmp_tiff_path)
     rescue StandardError => e
-      unless m.nil?
-        m.vraworks.first.delete if m.vraworks.first
+      unless m.nil? || m.destroyed?
         m.delete
       end
 
