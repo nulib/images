@@ -15,14 +15,13 @@ source 'http://rubygems.org' do
 
   gem 'rufus-scheduler'
   gem 'devise'
-  gem 'omniauth-ldap'
+  gem 'omniauth-ldap', '~> 1.0.5'
   gem 'mini_exiftool'
   gem 'jhove-service'
   gem 'protected_attributes'
   gem 'sinatra', :require => nil
 
   gem 'daemons'
-  gem 'rubyntlm', '~> 0.1.1'
   gem 'capistrano', '~> 3.2'
   gem 'capistrano-rails', '~> 1.1.3'
   gem 'capistrano-rbenv'
