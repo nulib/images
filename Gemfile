@@ -1,6 +1,6 @@
 source 'http://rubygems.org' do
 
-  gem 'rails', '~> 4.1.0'
+  gem 'rails', '~> 4.2'
   gem 'sass-rails', '>= 4'
   gem 'coffee-rails', '>= 4'
   gem 'uglifier', '>= 1.0.3'
@@ -17,7 +17,7 @@ source 'http://rubygems.org' do
   gem 'devise'
   gem 'omniauth-ldap', '~> 1.0.5'
   gem 'mini_exiftool'
-  gem 'jhove-service'
+  gem 'jhove-service', '1.0.3'
   gem 'protected_attributes'
   gem 'sinatra', :require => nil
 
@@ -36,7 +36,7 @@ source 'http://rubygems.org' do
   gem 'hydra-ldap'
   gem 'high_voltage'
   gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
-  gem 'riiif'
+  gem 'riiif', '~> 1.4'
   gem 'openseadragon'
   gem 'whenever', :require => false
   gem 'activerecord-session_store'
