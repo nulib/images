@@ -93,7 +93,6 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find(self.pid)
       j.save!
     rescue StandardError => e
-      #self.vraworks.first.delete if self.vraworks.first
       self.delete
       raise e
     end
@@ -132,20 +131,14 @@ class Multiresimage < ActiveFedora::Base
         #create the vrawork that is related to this vraimage/multiresimage
 
         # Update work reference PID
-        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = "butt"
-        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = "ref id i guess"
-
-        #update vra xml to point to the new, associated work
-        # vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'pref' ]   = 'true'
-        # vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = "lolpid"
-        # vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = "fakeid"
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = "fakerefid"
 
         self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
         self.add_relationship(:is_image_of, "info:fedora/00")
-        # TODO: figure out what to do above. just make up a pid? leave it blank?
 
         #TODO: parse the vra record for the collection record
         collection = nil
