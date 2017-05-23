@@ -36,9 +36,6 @@ class MultiresimagesBatchWorker
         m.delete
       end
 
-      # find and delete any orphaned work from errors during Multiresimage.new
-      remove_orphaned_work(accession_number)
-
       # check that everything was successfully cleaned up
       if Multiresimage.existing_image?(accession_number)
         logger.error("Unable to cleanup all records. Existing image or work still found in Images with accession number: #{accession_number}")
@@ -63,17 +60,6 @@ class MultiresimagesBatchWorker
   end
 
   private
-
-  def remove_orphaned_work(accession_number)
-    vraworks = Vrawork.find_by_accession_number(accession_number)
-    if vraworks.size == 1
-      logger.info("Deleting one orphaned work found with accession number: #{accession_number}")
-        orphan = Vrawork.find(vraworks.first["id"])
-        orphan.delete
-    elsif vraworks.size > 1
-      logger.error("Unable to delete orphaned work record. Multiple works found in Images with the accession number: #{accession_number}")
-    end
-  end
 
   def get_accession_number(xml)
     xml.xpath("//vra:refid[@source=\"Accession\"]").text

@@ -28,14 +28,12 @@ describe Multiresimage do
     it 'will delete images and vra works if an error is raised in their creation' do
       @xml_from_menu = File.read(Rails.root.join('spec', 'fixtures', 'vra_image_sample.xml'))
       image_count = Multiresimage.all.count
-      vra_count = Vrawork.all.count
 
       @img = Multiresimage.new(from_menu: true, vra_xml: @xml_from_menu, pid: 'inu:dil-67894321')
       @img.save
 
       expect{ @img.create_datastreams_and_persist_image_files('invalid_path') }.to raise_error(RuntimeError, 'Error when running JHOVE against invalid_path')
       expect(image_count).to eql(Multiresimage.all.count)
-      expect(vra_count).to eql(Vrawork.all.count)
     end
 
     it 'can add the location display element that holds the pid to vra xml if it is missing' do
