@@ -112,20 +112,6 @@ describe Multiresimage do
     its(:collections) { should == [@collection1, @collection2] }
   end
 
-  context 'with an associated work' do
-    xml = File.read(Rails.root.join('spec', 'fixtures', 'vra_minimal.xml'))
-    doc = Nokogiri::XML(xml)
-    doc.xpath('//vra:earliestDate')[0].content = '0000'
-    xml = doc.to_s
-
-    # this will create a vrawork and associate them with each other
-    img = Multiresimage.create(vra_xml: xml, from_menu: true, pid: 'inu:dil-12349876')
-    img.save
-
-    it 'should have related_ids' do
-      expect(img.related_ids).to eq img.vraworks.first.pid
-    end
-  end
 
   context 'to_solr' do
     before do
@@ -161,55 +147,6 @@ describe Multiresimage do
       # 'group-7' is not eligible to be revoked
       expect(subject.rightsMetadata.groups).to eq('group-2' => 'read', 'group-3' => 'read', 'group-7' => 'read', 'group-8' => 'edit')
       expect(subject.rightsMetadata.users).to eq('person1' => 'read', 'person2' => 'discover')
-    end
-  end
-
-  describe 'update with an attached vrawork' do
-    before do
-      @img = Multiresimage.create
-      @work = Vrawork.create
-      @img.vraworks = [@work]
-    end
-
-    it 'should update the work' do
-      @img.update_attributes(titleSet_display: 'Woah cowboy')
-      expect(@img.vraworks.first.titleSet_display_work).to eq 'Woah cowboy'
-    end
-  end
-
-  describe 'with related works' do
-    before do
-      @img = Multiresimage.new
-      @work1 = Vrawork.create
-      @work2 = Vrawork.create
-      @work3 = Vrawork.create
-      vra_xml = <<-eos
-      <vra:vra xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:vra="http://www.vraweb.org/vracore4.htm" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.vraweb.org/vracore4.htm http://www.vraweb.org/projects/vracore4/vra-4.0-restricted.xsd">
-        <vra:image id="inu-dil-77334_w" refid="inu:dil-d42f25cc-deb2-4fdc-b41b-616291578c26">
-
-          <vra:relationSet>
-            <vra:display>Evanston Public Library. Exterior: facade</vra:display>
-            <vra:relation pref="true" relids="#{@work1.pid}" type="imageOf">Evanston Public Library. Exterior: facade</vra:relation>
-            <vra:relation relids="#{@work2.pid}" type="imageOf">Evanston Public Library. Exterior: facade</vra:relation>
-            <vra:relation relids="#{@work3.pid}" type="imageOf">Evanston Public Library. Exterior: facade</vra:relation>
-          </vra:relationSet>
-        </vra:image>
-      </vra:vra>
-      eos
-      @img.datastreams['VRA'] = VRADatastream.from_xml(vra_xml)
-    end
-
-    it 'preferred_related_work should return the preferred work' do
-      expect(@img.preferred_related_work).to eq @work1
-    end
-
-    it 'other_related_works should be the others' do
-      expect(@img.other_related_works).to eq([@work2, @work3])
-    end
-
-    it 'should return nil if preferred_related_work_pid is empty' do
-      @img.preferred_related_work_pid = ""
-      expect(@img.preferred_related_work.nil?) == true
     end
   end
 end
