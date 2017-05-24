@@ -1,62 +1,19 @@
- 	<%# Make sure VRA datastream isn't empty %>
- 	<% unless @multiresimage.VRA.vra.empty? %>
+  <% unless @multiresimage.VRA.vra.empty? %>
 
- 	    <%#
- 	      The names of the sets we will output from the VRA xml are stored in this array.  Since we only display data from
- 	      the 'display' node for each set, there's a loop that uses this array to figure out which
- 	      set to look for.  This ends up saving a bunch of space because we don't need to repeat Ruby and HTML for
- 	      each set.
- 	     %>
+      <%#
+        The names of the sets we will output from the VRA xml are stored in this array.  Since we only display data from
+        the 'display' node for each set, there's a loop that uses this array to figure out which
+        set to look for.  This ends up saving a bunch of space because we don't need to repeat Ruby and HTML for
+        each set.
+       %>
 
       <% vraSetNameArray = ["creator", "title", "alternate Title", "cultural Context", "date", "style Period", "technique", "material", "measurements", "subject", "description", "inscription", "edition", "location", "source", "relation", "rights", "work type", "textref"] %>
 
- 	    <% vraSetArray = ["agent", "title", "title_alt", "culturalContext", "date", "stylePeriod", "technique", "material", "measurements", "subject", "description", "inscription", "edition", "location", "source", "relation", "rights", "worktype", "textref"] %>
+      <% vraSetArray = ["agent", "title", "title_alt", "culturalContext", "date", "stylePeriod", "technique", "material", "measurements", "subject", "description", "inscription", "edition", "location", "source", "relation", "rights", "worktype", "textref"] %>
 
-		<%# if preferred work exists %>
-		<% if @multiresimage.preferred_related_work %>
-	      <br/><br/>
+        <br/><br/>
         <%= render :partial=>'description_metadata', :locals=>{:vraSetArray=>vraSetArray, :vraSetNameArray=>vraSetNameArray} %>
          <br/><br/>
-    <% end %>
 
     <br/><br/>
-
-		<%# Check for other related works (not preferred) %>
-		<% if @multiresimage.other_related_works.present? %>
-
-			<ul class="listexpander">
-			  <li>Related Works
-			  <ul>
-			  <li>
-			  <% @multiresimage.other_related_works.each do |related_work| %>
-			  <table style="margin-left:0px;margin-right:0px;margin-bottom:0px;">
-			   <tbody>
-
-			   		<%# Display sets for non-pref work and image %>
-					  <% vraSetArray.each.with_index do |setName, index| %>
-					    <% related_work_display_value = related_work.VRA.title_altSet_display #find_by_terms(:work, (setName + "Set").to_sym, (setName + "Set_display").to_sym).text %>
-						  <% unless related_work_display_value.empty? %>
-							  <tr>
-								 <td class="Elements"><%=setName%></td>
-								 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30">
-								 <!-- from preferred work -->
-								 	<%= related_work_display_value %>
-								 </td>
-							  </tr>
-							<%end%>
-					  <%end%>
-
-					  <%# Include its identifier %>
-					  <tr>
-						 <td class="Elements">Identifier:</td>
-						 <td style="FONT-FAMILY: Verdana" width="100%" bgColor="#cccccc" height="30"><%= related_work.pid %> ; <%= @multiresimage.pid %></td>
-					  </tr>
-			   </tbody>
-			</table>
-			</li>
-			</ul>
-			</li>
-	<%end%>
-	</ul>
-  <%end%>
-<%end%>
+  <% end %>

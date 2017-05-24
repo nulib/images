@@ -668,13 +668,6 @@ class VRADatastream < ActiveFedora::OmDatastream
       # Set its object_type_facet
       insert_solr_field_value(solr_doc, "object_type_facet", "Multiresimage")
 
-      # Get any associated Works and fold their descriptions into this record
-      self.find_by_terms(:image,:relationSet,:imageOf, :relation_relids).each do |imageOf_pid|
-        imageOf_work = Vrawork.find(imageOf_pid.text)
-        imageOf_work_vra = imageOf_work.datastreams["VRA"]
-        solr_doc = imageOf_work_vra.add_vra_description_to_solrdoc(solr_doc)
-      end
-
       solr_doc['title_display'] = titleSet_display
       #solr_doc['title_alternate'] = title_altSet_display
     end
@@ -854,9 +847,9 @@ class VRADatastream < ActiveFedora::OmDatastream
     # Add a facet for each period
     self.find_by_terms('//vra:stylePeriodSet/vra:stylePeriod').each do |stylePeriod|
       insert_solr_field_value(stylePeriodSet_array, "stylePeriod_tesim", stylePeriod.text)
-      insert_solr_field_value(stylePeriodSet_array, "stylePeriod_facet", stylePeriod.text)  
-    end  
-    
+      insert_solr_field_value(stylePeriodSet_array, "stylePeriod_facet", stylePeriod.text)
+    end
+
     return stylePeriodSet_array
   end
 

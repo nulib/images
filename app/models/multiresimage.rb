@@ -13,7 +13,7 @@ class Multiresimage < ActiveFedora::Base
   belongs_to :institutional_collection, :property=> :is_governed_by
 
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
-  has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
+  #has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
@@ -59,15 +59,12 @@ class Multiresimage < ActiveFedora::Base
 
   has_attributes :file_name, datastream: :properties, multiple: false
   has_attributes :related_ids, datastream: :VRA, at: [:image, :relationSet, :imageOf, :relation_relids]
-  has_attributes :preferred_related_work_pid, datastream: :VRA, at: [:image, :relationSet, :imageOf_preferred, :relation_relids], multiple: false
-  has_attributes :other_related_works_pids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids], multiple: true
   has_attributes :pref_title, datastream: :VRA, at: [:image, :titleSet, :title_pref], multiple: false
   has_attributes :pref_relation, datastream: :VRA, at: [:image, :relationSet, :relation_preferred], multiple: false
 
   attr_accessor :vra_xml,
                 :from_menu
 
-  before_save :update_associated_work
   before_create :vra_save
   after_create :update_relation_set_titles
 
@@ -79,7 +76,7 @@ class Multiresimage < ActiveFedora::Base
   def self.existing_image?(accession_nbr)
     if accession_nbr.present?
       logger.info "Checking for existing image..."
-      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+      ActiveFedora::SolrService.query("active_fedora_model_ssi:\"Multiresimage\" AND (location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\")").any?
     end
   end
 
@@ -96,40 +93,11 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find(self.pid)
       j.save!
     rescue StandardError => e
-      self.vraworks.first.delete if self.vraworks.first
       self.delete
       raise e
     end
   end
 
-  def create_vra_work(vra, current_user=nil)
-    work = Vrawork.new(pid: mint_pid("dil"))
-
-    work.edit_users = DIL_CONFIG['admin_staff']
-    if current_user
-      work.edit_users << current_user
-      work.apply_depositor_metadata(current_user.user_key)
-    end
-
-    work.datastreams["properties"].delete
-    work.datastreams["VRA"].content = vra.to_s
-    work.save
-
-    #These have to be called after a save otherwise they'll try to reference a bunch of null objects
-    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
-    work.update_ref_id(work.pid)
-    work.update_relation_set(self.pid)
-
-    # re-validate the newly updated vra
-    if vra_errors?(work.datastreams["VRA"].content)
-      logger.info(work.datastreams["VRA"].content)
-      validation_errors = get_validation_errors(work.datastreams["VRA"].content)
-      raise "The resulting VRA Work datastream does not validate. #{validation_errors.to_s}"
-    end
-
-    work.save!
-    work
-  end
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
@@ -161,23 +129,16 @@ class Multiresimage < ActiveFedora::Base
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
         #create the vrawork that is related to this vraimage/multiresimage
-        work = create_vra_work(vra)
-        vraworks << work
 
         # Update work reference PID
-        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
-        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = work.pid
-
-        #update vra xml to point to the new, associated work
-        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'pref' ]   = 'true'
-        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
-        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = "fakeid"
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = "fakerefid"
 
         self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        self.add_relationship(:is_image_of, "info:fedora/00")
 
         #TODO: parse the vra record for the collection record
         collection = nil
@@ -270,37 +231,6 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams[ds_name].dsLocation = ds_location
   end
 
-  def update_associated_work
-    #Update the image's work (only for 1-1 mapping, no need to update work when it's not 1-1)
-    if vraworks.first.present?
-      vra_work = vraworks.first
-      vra_work.agentSet_display_work = agentSet_display
-      vra_work.dateSet_display_work = dateSet_display
-      vra_work.descriptionSet_display_work = descriptionSet_display
-      vra_work.subjectSet_display_work = subjectSet_display
-      vra_work.relationSet_display_work = relationSet_display
-      vra_work.titleSet_display_work = titleSet_display
-      vra_work.textrefSet_display_work = textrefSet_display
-      vra_work.save!
-    end
-  end
-
-  def preferred_related_work
-    return @preferred_related_work if @preferred_related_work
-    return nil unless preferred_related_work_pid.present?
-		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
-  end
-
-  def other_related_works
-    return @other_related_works if @other_related_works
-    return nil unless other_related_works_pids
-		@other_related_works = []
-    other_related_works_pids.each do |rel_pid|
-      @other_related_works << Vrawork.find(rel_pid)
-    end
-    @other_related_works
-  end
-
   #update the VRA ref id value
   def update_ref_id(ref_id)
     node_set = self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image[@refid]')
@@ -343,10 +273,6 @@ class Multiresimage < ActiveFedora::Base
   def update_institutional_collection(collection)
     self.institutional_collection = collection
     self.save
-  end
-
-  def get_work_pid
-    self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end
 
   def to_solr(solr_doc = Hash.new, opts={})
