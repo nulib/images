@@ -76,7 +76,7 @@ class Multiresimage < ActiveFedora::Base
   def self.existing_image?(accession_nbr)
     if accession_nbr.present?
       logger.info "Checking for existing image..."
-      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+      ActiveFedora::SolrService.query("active_fedora_model_ssi:\"Multiresimage\" AND (location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\")").any?
     end
   end
 
