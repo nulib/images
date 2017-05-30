@@ -8,7 +8,7 @@ GIT
 
 GIT
   remote: https://github.com/mbklein/equivalent-xml.git
-  revision: 62c1d871931f2f03510b387b7ad9cccdd9dda78a
+  revision: 47de39c006636eaeea2eb153e0a346470e0ec693
   specs:
     equivalent-xml (1.0.0)
 

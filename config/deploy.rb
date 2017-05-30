@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.4.0'
+lock '3.8.1'
 
 set :application, 'dil_hydra'
 set :repo_url, 'git@github.com:nulib/images.git'
