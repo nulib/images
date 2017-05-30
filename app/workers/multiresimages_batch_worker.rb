@@ -1,4 +1,5 @@
 require 'dil/pid_minter'
+require 'rake'
 
 #Important note! Be sure to only pass primitives or simple objects as arguements to the worker, e.g. .perform_async(@project.id).
 #These arguements must be serialized and placed #into the Redis queue, and attempting to serialize an entire ActiveRecord object is inefficient and not likely to work.
@@ -9,8 +10,8 @@ class MultiresimagesBatchWorker
 
   def perform(tiff_file)
     # Regular expression swapping out file extension for .xml
-    xml = tiff_file.sub /\.[^.]+\z/, ".xml"
-    raise "XML file does not exist" if !File.exist?(xml)
+    xml = tiff_file.ext('xml')
+    raise 'XML file does not exist' unless File.exist?(xml)
 
     doc = Nokogiri::XML(File.read( xml ))
     accession_number = get_accession_number(doc)
