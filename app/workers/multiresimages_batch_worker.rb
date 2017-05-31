@@ -8,47 +8,37 @@ class MultiresimagesBatchWorker
   include DIL::PidMinter
   include Sidekiq::Worker
 
+  # Take the tiff's file path and find it's associated XML file and convert it into a nokogiri doc
+  def get_xml_doc(tiff)
+    Nokogiri::XML(File.read(tiff.ext('xml')))
+  end
+
+
   def perform(tiff_file)
-    # Regular expression swapping out file extension for .xml
-    xml = tiff_file.ext('xml')
-    raise 'XML file does not exist' unless File.exist?(xml)
+    raise 'XML file does not exist' unless File.exist?(tiff_file.ext('xml'))
 
-    doc = Nokogiri::XML(File.read( xml ))
-    accession_number = get_accession_number(doc)
+    nokogiri_doc = get_xml_doc(tiff_file)
+    accession_number = get_accession_number(nokogiri_doc)
 
-    raise "Invalid VRA" unless XSD.valid?(doc)
+    raise "Invalid VRA" unless XSD.valid?(nokogiri_doc)
     raise "No accession" if accession_number.empty?
     raise "Existing image found with this accession number: #{accession_number}" if Multiresimage.existing_image?(accession_number)
-    ready_xml = TransformXML.prepare_vra_xml(doc.to_xml)
+    ready_xml = TransformXML.prepare_vra_xml(nokogiri_doc.to_xml)
     pid = mint_pid("dil")
 
     begin
       logger.info("Batch worker starting - accession: #{accession_number}, pid: #{pid}")
-      m = nil
-      m = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
-      m.save
-      # Copy tiff file to tmp directory
-      tmp_tiff_path = "tmp/#{m.tiff_img_name}"
-      tiff_derivative_path = m.tiff_derivative_path
-      FileUtils.cp(tiff_file, tmp_tiff_path)
-      m.create_datastreams_and_persist_image_files(tmp_tiff_path)
+      m = Multiresimage.create(pid: pid, vra_xml: ready_xml, from_menu: true)
+      m.create_datastreams_and_persist_image_files(tiff_file)
     rescue StandardError => e
       unless m.nil? || m.destroyed?
+        File.unlink(m.tiff_derivative_path) if File.exist?(m.tiff_derivative_path)
         m.delete
       end
-
-      # check that everything was successfully cleaned up
-      if Multiresimage.existing_image?(accession_number)
-        logger.error("Unable to cleanup all records. Existing image or work still found in Images with accession number: #{accession_number}")
-      end
+      # raise the exception so this particular job fails
       raise "Had a problem saving #{tiff_file}: #{e.message}"
-    ensure
-      if File.exist?(tmp_tiff_path)
-        logger.info("Attempting to cleanup temp tiff file at: #{tmp_tiff_path}")
-        File.unlink(tmp_tiff_path)
-      end
-      File.unlink(tiff_derivative_path) if File.exist?(tiff_derivative_path)
     end
+
     logger.info("Batch worker finished - accession: #{accession_number}, pid: #{pid}")
   end
 
@@ -66,11 +56,4 @@ class MultiresimagesBatchWorker
     xml.xpath("//vra:refid[@source=\"Accession\"]").text
   end
 
-  def tiff_file_name(accession_number)
-    if File.exist?(accession_number + ".tiff")
-      accession_number + ".tiff"
-    else
-      accession_number + ".tif"
-    end
-  end
 end
