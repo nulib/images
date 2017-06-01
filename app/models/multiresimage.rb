@@ -93,6 +93,7 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find(self.pid)
       j.save!
     rescue StandardError => e
+      File.unlink(self.tiff_derivative_path) if File.exist?(self.tiff_derivative_path)
       self.delete
       raise e
     end
