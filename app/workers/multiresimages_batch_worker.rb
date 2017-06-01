@@ -8,12 +8,6 @@ class MultiresimagesBatchWorker
   include DIL::PidMinter
   include Sidekiq::Worker
 
-  # Take the tiff's file path and find it's associated XML file and convert it into a nokogiri doc
-  def get_xml_doc(tiff)
-    Nokogiri::XML(File.read(tiff.ext('xml')))
-  end
-
-
   def perform(tiff_file)
     raise 'XML file does not exist' unless File.exist?(tiff_file.ext('xml'))
 
@@ -31,10 +25,9 @@ class MultiresimagesBatchWorker
       m = Multiresimage.create(pid: pid, vra_xml: ready_xml, from_menu: true)
       m.create_datastreams_and_persist_image_files(tiff_file)
     rescue StandardError => e
-      unless m.nil? || m.destroyed?
-        File.unlink(m.tiff_derivative_path) if File.exist?(m.tiff_derivative_path)
-        m.delete
-      end
+      m.delete unless m.nil? || m.destroyed
+      File.unlink(m.tiff_derivative_path) if File.exist?(m.tiff_derivative_path)
+
       # raise the exception so this particular job fails
       raise "Had a problem saving #{tiff_file}: #{e.message}"
     end
@@ -51,6 +44,12 @@ class MultiresimagesBatchWorker
   end
 
   private
+
+  # Take the tiff's file path and find it's associated XML file and convert it into a nokogiri doc
+  def get_xml_doc(tiff)
+    Nokogiri::XML(File.read(tiff.ext('xml')))
+  end
+
 
   def get_accession_number(xml)
     xml.xpath("//vra:refid[@source=\"Accession\"]").text
