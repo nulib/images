@@ -20,17 +20,9 @@ class MultiresimagesBatchWorker
     ready_xml = TransformXML.prepare_vra_xml(nokogiri_doc.to_xml)
     pid = mint_pid("dil")
 
-    begin
-      logger.info("Batch worker starting - accession: #{accession_number}, pid: #{pid}")
-      m = Multiresimage.create(pid: pid, vra_xml: ready_xml, from_menu: true)
-      m.create_datastreams_and_persist_image_files(tiff_file)
-    rescue StandardError => e
-      m.delete unless m.nil? || m.destroyed
-      File.unlink(m.tiff_derivative_path) if File.exist?(m.tiff_derivative_path)
-
-      # raise the exception so this particular job fails
-      raise "Had a problem saving #{tiff_file}: #{e.message}"
-    end
+    logger.info("Batch worker starting - accession: #{accession_number}, pid: #{pid}")
+    m = Multiresimage.create(pid: pid, vra_xml: ready_xml, from_menu: true)
+    m.create_datastreams_and_persist_image_files(tiff_file)
 
     logger.info("Batch worker finished - accession: #{accession_number}, pid: #{pid}")
   end
