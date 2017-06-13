@@ -22,7 +22,7 @@ server 'images-p.library.northwestern.edu', user: 'deploy', roles: %w{web app db
 # ==================
 set :rbenv_ruby, '2.3.4'
 
-
+set :sidekiq_config, "#{current_path}/config/sidekiq.yml"
 
 #bundle install only production gems
 set :bundle_without, %w{development test staging}.join(' ')
