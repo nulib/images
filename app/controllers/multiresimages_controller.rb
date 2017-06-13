@@ -11,43 +11,19 @@ class MultiresimagesController < ApplicationController
     authorize! :destroy, obj
     # First remove from all dil collections
     obj.remove_from_all_dil_collections
-    # Clean up any associated VRAWork objects
-    if obj.vraworks[0].present?
-      obj.vraworks[0].delete
-    end
+
     # Delete the Multiresimage itself finally
     obj.delete
     redirect_to catalog_index_path, :notice=>"Image has been deleted"
   end
 
   def update_vra
-    #this method updates both image and work vra.
-    #it replaces the content of the work with the updated image xml,
-    #with two exceptions: the DIL refid node and the nodeSet for the relation set.
     image = Multiresimage.find(params[:pid])
-    work_pid = image.preferred_related_work_pid
-
-    work = Multiresimage.find(work_pid)
-    work_xml = work.datastreams['VRA'].content
 
     image_metadata = Nokogiri::XML(params[:xml])
-    work_metadata = Nokogiri::XML(work_xml)
-
-    work_node = work_metadata.at_xpath("//vra:work")
-
-    image_metadata.at_xpath("//vra:refid[@source='DIL']").swap(work_metadata.at_xpath("//vra:refid[@source='DIL']"))
-    image_metadata.at_xpath("//vra:relationSet").swap(work_metadata.at_xpath("//vra:relationSet"))
-
-    work_metadata.xpath("//vra:work").children.remove
-    work_node.children = image_metadata.xpath("//vra:image").children
-
-    updated_work_xml = work_metadata.to_xml
 
     image.datastreams['VRA'].content = params[:xml]
     image.save
-
-    work.datastreams['VRA'].content = updated_work_xml
-    work.save
 
     fedora_object = ActiveFedora::Base.find(params[:pid], :cast=>:true)
     fedora_object.update_index
@@ -70,10 +46,9 @@ class MultiresimagesController < ApplicationController
       rescue StandardError => msg
         returnXml = "<response><returnCode>Error</returnCode><description>#{msg}</description></response>"
         # Should we wrap everything in a transaction? Or try to delete the fedora object if the creation fails?
-        # Delete the work and image if creation fails
+        # Delete the image if creation fails
         if i
-          logger.info "Deleting work and image because #{msg}"
-          i.vraworks.first.delete if i.vraworks.first
+          logger.info "Deleting image because #{msg}"
           i.delete
         end
         logger.debug returnXml
@@ -134,7 +109,7 @@ class MultiresimagesController < ApplicationController
         flash[:error] = "No TIF location (path) associated with this image."
         redirect_to multiresimage_path
       else
-        begin 
+        begin
           filename = "download.tif"
           send_data(multiresimage.ARCHV_IMG.content, :type=>'image/tiff', :filename=>filename) unless multiresimage.ARCHV_IMG.content.nil?
         rescue => e

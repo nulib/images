@@ -1,4 +1,5 @@
 require 'dil/pid_minter'
+require 'rake'
 
 #Important note! Be sure to only pass primitives or simple objects as arguements to the worker, e.g. .perform_async(@project.id).
 #These arguements must be serialized and placed #into the Redis queue, and attempting to serialize an entire ActiveRecord object is inefficient and not likely to work.
@@ -8,48 +9,21 @@ class MultiresimagesBatchWorker
   include Sidekiq::Worker
 
   def perform(tiff_file)
-    # Regular expression swapping out file extension for .xml
-    xml = tiff_file.sub /\.[^.]+\z/, ".xml"
-    raise "XML file does not exist" if !File.exist?(xml)
+    raise 'XML file does not exist' unless File.exist?(tiff_file.ext('xml'))
 
-    doc = Nokogiri::XML(File.read( xml ))
-    accession_number = get_accession_number(doc)
+    nokogiri_doc = get_xml_doc(tiff_file)
+    accession_number = get_accession_number(nokogiri_doc)
 
-    raise "Invalid VRA" unless XSD.valid?(doc)
+    raise "Invalid VRA" unless XSD.valid?(nokogiri_doc)
     raise "No accession" if accession_number.empty?
     raise "Existing image found with this accession number: #{accession_number}" if Multiresimage.existing_image?(accession_number)
-    ready_xml = TransformXML.prepare_vra_xml(doc.to_xml)
+    ready_xml = TransformXML.prepare_vra_xml(nokogiri_doc.to_xml)
     pid = mint_pid("dil")
 
-    begin
-      logger.info("Batch worker starting - accession: #{accession_number}, pid: #{pid}")
-      m = nil
-      m = Multiresimage.new(pid: pid, vra_xml: ready_xml, from_menu: true)
-      m.save
-      # Copy tiff file to tmp directory
-      tmp_tiff_path = "tmp/#{m.tiff_img_name}"
-      FileUtils.cp(tiff_file, tmp_tiff_path)
-      m.create_datastreams_and_persist_image_files(tmp_tiff_path)
-    rescue StandardError => e
-      unless m.nil?
-        m.vraworks.first.delete if m.vraworks.first
-        m.delete
-      end
+    logger.info("Batch worker starting - accession: #{accession_number}, pid: #{pid}")
+    m = Multiresimage.create(pid: pid, vra_xml: ready_xml, from_menu: true)
+    m.create_datastreams_and_persist_image_files(tiff_file)
 
-      # find and delete any orphaned work from errors during Multiresimage.new
-      remove_orphaned_work(accession_number)
-
-      # check that everything was successfully cleaned up
-      if Multiresimage.existing_image?(accession_number)
-        logger.error("Unable to cleanup all records. Existing image or work still found in Images with accession number: #{accession_number}")
-      end
-      raise "Had a problem saving #{tiff_file}: #{e.message}"
-    ensure
-      if File.exist?(tmp_tiff_path)
-        logger.info("Attempting to cleanup temp tiff file at: #{tmp_tiff_path}")
-        File.unlink(tmp_tiff_path)
-      end
-    end
     logger.info("Batch worker finished - accession: #{accession_number}, pid: #{pid}")
   end
 
@@ -63,26 +37,14 @@ class MultiresimagesBatchWorker
 
   private
 
-  def remove_orphaned_work(accession_number)
-    vraworks = Vrawork.find_by_accession_number(accession_number)
-    if vraworks.size == 1
-      logger.info("Deleting one orphaned work found with accession number: #{accession_number}")
-        orphan = Vrawork.find(vraworks.first["id"])
-        orphan.delete
-    elsif vraworks.size > 1
-      logger.error("Unable to delete orphaned work record. Multiple works found in Images with the accession number: #{accession_number}")
-    end
+  # Take the tiff's file path and find it's associated XML file and convert it into a nokogiri doc
+  def get_xml_doc(tiff)
+    Nokogiri::XML(File.read(tiff.ext('xml')))
   end
+
 
   def get_accession_number(xml)
     xml.xpath("//vra:refid[@source=\"Accession\"]").text
   end
 
-  def tiff_file_name(accession_number)
-    if File.exist?(accession_number + ".tiff")
-      accession_number + ".tiff"
-    else
-      accession_number + ".tif"
-    end
-  end
 end

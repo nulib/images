@@ -1,7 +1,5 @@
-# This model represents the images in the application. Images can be a part of user groups and institutional collections.
-# It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
-# The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at
-# the institutional collection's permissions.
+# This model represents the images in the application. Images can be a part of user groups and institutional collections.# It also has a relationship with vraworks. There are many technical metadata datatreams. VRA is used for descriptive metadata.
+# The ":is_governed_by" is important for the institutional_collection relationship. Hydra uses that to know when to look at# the institutional collection's permissions.
 require 'dil/pid_minter'
 require 'open3'
 
@@ -15,7 +13,7 @@ class Multiresimage < ActiveFedora::Base
   belongs_to :institutional_collection, :property=> :is_governed_by
 
   has_and_belongs_to_many :collections, :class_name=> "DILCollection", :property=> :is_member_of
-  has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
+  #has_and_belongs_to_many :vraworks, :class_name => "Vrawork", :property => :is_image_of
 
   # Uses the Hydra Rights Metadata Schema for tracking access permissions & copyright
   has_metadata :name => "rightsMetadata", :type => Hydra::Datastream::RightsMetadata
@@ -31,9 +29,7 @@ class Multiresimage < ActiveFedora::Base
 
   # External datastream
   has_metadata :name => "ARCHV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
-
-  # External datastream
-  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
+  # External datastream  has_metadata :name => "POLICY", :type => ActiveFedora::Datastream, :controlGroup=>'E'
 
   # A place to put extra metadata values
   has_metadata :name => "properties", :type => ActiveFedora::QualifiedDublinCoreDatastream do |m|
@@ -51,7 +47,6 @@ class Multiresimage < ActiveFedora::Base
   # External datastream
   has_metadata :name => "DELIV-IMG", :type => ActiveFedora::Datastream, :controlGroup=>'E'
   ###
-
   attributes = [:titleSet_display, :title_altSet_display, :agentSet_display, :dateSet_display,
       :descriptionSet_display, :subjectSet_display, :culturalContextSet_display,
       :techniqueSet_display, :locationSet_display, :materialSet_display,
@@ -64,15 +59,12 @@ class Multiresimage < ActiveFedora::Base
 
   has_attributes :file_name, datastream: :properties, multiple: false
   has_attributes :related_ids, datastream: :VRA, at: [:image, :relationSet, :imageOf, :relation_relids]
-  has_attributes :preferred_related_work_pid, datastream: :VRA, at: [:image, :relationSet, :imageOf_preferred, :relation_relids], multiple: false
-  has_attributes :other_related_works_pids, datastream: :VRA, at: [:image, :relationSet, :imageOf_others, :relation_relids], multiple: true
   has_attributes :pref_title, datastream: :VRA, at: [:image, :titleSet, :title_pref], multiple: false
   has_attributes :pref_relation, datastream: :VRA, at: [:image, :relationSet, :relation_preferred], multiple: false
 
   attr_accessor :vra_xml,
                 :from_menu
 
-  before_save :update_associated_work
   before_create :vra_save
   after_create :update_relation_set_titles
 
@@ -84,7 +76,7 @@ class Multiresimage < ActiveFedora::Base
   def self.existing_image?(accession_nbr)
     if accession_nbr.present?
       logger.info "Checking for existing image..."
-      ActiveFedora::SolrService.query("location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\"").any?
+      ActiveFedora::SolrService.query("active_fedora_model_ssi:\"Multiresimage\" AND (location_display_tesim:\"*Accession:#{accession_nbr}*\" OR location_display_tesim:\"*Voyager:#{accession_nbr}*\")").any?
     end
   end
 
@@ -92,7 +84,7 @@ class Multiresimage < ActiveFedora::Base
     begin
       self.create_archv_techmd_datastream(path)
       self.create_archv_exif_datastream(path)
-      self.create_jp2(path)
+      self.create_tiff_derivative(path)
       self.create_archv_img_datastream
       ImageMover.move_img_to_repo(path, tiff_img_name)
       self.edit_groups = [ 'registered' ]
@@ -101,40 +93,12 @@ class Multiresimage < ActiveFedora::Base
       j = Multiresimage.find(self.pid)
       j.save!
     rescue StandardError => e
-      self.vraworks.first.delete if self.vraworks.first
+      File.unlink(self.tiff_derivative_path) if File.exist?(self.tiff_derivative_path)
       self.delete
       raise e
     end
   end
 
-  def create_vra_work(vra, current_user=nil)
-    work = Vrawork.new(pid: mint_pid("dil"))
-
-    work.edit_users = DIL_CONFIG['admin_staff']
-    if current_user
-      work.edit_users << current_user
-      work.apply_depositor_metadata(current_user.user_key)
-    end
-
-    work.datastreams["properties"].delete
-    work.datastreams["VRA"].content = vra.to_s
-    work.save
-
-    #These have to be called after a save otherwise they'll try to reference a bunch of null objects
-    work.add_relationship(:has_image, "info:fedora/#{self.pid}")
-    work.update_ref_id(work.pid)
-    work.update_relation_set(self.pid)
-
-    # re-validate the newly updated vra
-    if vra_errors?(work.datastreams["VRA"].content)
-      logger.info(work.datastreams["VRA"].content)
-      validation_errors = get_validation_errors(work.datastreams["VRA"].content)
-      raise "The resulting VRA Work datastream does not validate. #{validation_errors.to_s}"
-    end
-
-    work.save!
-    work
-  end
 
   #This callback gets run on create. It'll create and associate a VraWork based on the image Vra that was given to this object
   def vra_save
@@ -166,23 +130,16 @@ class Multiresimage < ActiveFedora::Base
         #todo: make groups be a param to the API (maybe)
         read_groups = ["registered"]
         #create the vrawork that is related to this vraimage/multiresimage
-        work = create_vra_work(vra)
-        vraworks << work
 
         # Update work reference PID
-        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = work.pid
-        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = work.pid
-
-        #update vra xml to point to the new, associated work
-        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'pref' ]   = 'true'
-        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'relids' ] = work.pid
-        vra.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation')[ 0 ][ 'type' ]   = 'imageOf'
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "id" ]    = "fakeid"
+        vra.xpath( "/vra:vra/vra:work" )[ 0 ][ "refid" ] = "fakerefid"
 
         self.add_relationship(:has_model, "info:fedora/afmodel:Multiresimage")
         self.add_relationship(:has_model, "info:fedora/inu:imageCModel")
 
         #add rels-ext has_image relationship (VRAItem isImageOf VRAWork)
-        self.add_relationship(:is_image_of, "info:fedora/#{work.pid}")
+        self.add_relationship(:is_image_of, "info:fedora/00")
 
         #TODO: parse the vra record for the collection record
         collection = nil
@@ -232,50 +189,29 @@ class Multiresimage < ActiveFedora::Base
     end
   end
 
-  def jp2_img_name
-    "#{ self.pid }.jp2".gsub( /:/, '-' )
-  end
-
-  def jp2_img_path
-    "#{DIL_CONFIG['jp2_location']}#{jp2_img_name}"
-  end
-
   def tiff_img_name
-    "#{ self.pid }.tif".gsub( /:/, '-' )
+    "#{pid}.tiff".tr(':', '-')
   end
 
-  def create_jp2( img_location )
-    return jp2_img_path if File.exist?( jp2_img_path )
-
-    if Rails.env.development? || Rails.env.test?
-      create_jp2_local( img_location )
-    else
-      create_jp2_remote( img_location )
-    end
-
-    if File.file?( jp2_img_path )
-      jp2_img_path
-    else
-      raise "Failed to create jp2 image"
-    end
+  def tiff_derivative_path
+    "#{DIL_CONFIG['tiff_derivative_location']}#{tiff_img_name}"
   end
 
-  def create_jp2_local( img_location )
-    `convert #{img_location} -define jp2:rate=30 #{jp2_img_path}[1024x1024]`
+  def create_tiff_derivative(img_location)
+    return tiff_derivative_path if File.exist?(tiff_derivative_path)
+    `#{DIL_CONFIG['imagemagick_convert_path']} #{img_location} -resize 10000x10000\\> #{tiff_derivative_path}`
+    raise 'Failed to create tiff derivative' unless File.exist?(tiff_derivative_path)
+    tiff_derivative_path
   end
 
-  def create_jp2_remote( img_location )
-    Open3.capture3("#{DIL_CONFIG['openjpeg2_location']}bin/opj_compress -i #{img_location} -o #{jp2_img_path} -t 1024,1024 -r 15")
-  end
-
-  def create_jhove_xml( img_location )
+  def create_jhove_xml(img_location)
     require 'jhove_service'
 
-    j = JhoveService.new( File.dirname( img_location ))
-    j.run_jhove( img_location )
+    j = JhoveService.new(File.dirname(img_location))
+    j.run_jhove(img_location)
   end
 
-  def create_archv_img_datastream( ds_location = nil )
+  def create_archv_img_datastream(ds_location = nil)
     ds_location ||= "#{ DIL_CONFIG[ 'repo_url' ]}#{tiff_img_name}"
 
     unless populate_external_datastream( 'ARCHV-IMG', 'Original Image File', 'image/tiff', ds_location )
@@ -294,37 +230,6 @@ class Multiresimage < ActiveFedora::Base
     self.datastreams[ds_name].dsLabel = ds_label
     self.datastreams[ds_name].mimeType = mime_type
     self.datastreams[ds_name].dsLocation = ds_location
-  end
-
-  def update_associated_work
-    #Update the image's work (only for 1-1 mapping, no need to update work when it's not 1-1)
-    if vraworks.first.present?
-      vra_work = vraworks.first
-      vra_work.agentSet_display_work = agentSet_display
-      vra_work.dateSet_display_work = dateSet_display
-      vra_work.descriptionSet_display_work = descriptionSet_display
-      vra_work.subjectSet_display_work = subjectSet_display
-      vra_work.relationSet_display_work = relationSet_display
-      vra_work.titleSet_display_work = titleSet_display
-      vra_work.textrefSet_display_work = textrefSet_display
-      vra_work.save!
-    end
-  end
-
-  def preferred_related_work
-    return @preferred_related_work if @preferred_related_work
-    return nil unless preferred_related_work_pid.present?
-		@preferred_related_work = Vrawork.find(preferred_related_work_pid)
-  end
-
-  def other_related_works
-    return @other_related_works if @other_related_works
-    return nil unless other_related_works_pids
-		@other_related_works = []
-    other_related_works_pids.each do |rel_pid|
-      @other_related_works << Vrawork.find(rel_pid)
-    end
-    @other_related_works
   end
 
   #update the VRA ref id value
@@ -369,10 +274,6 @@ class Multiresimage < ActiveFedora::Base
   def update_institutional_collection(collection)
     self.institutional_collection = collection
     self.save
-  end
-
-  def get_work_pid
-    self.datastreams["VRA"].ng_xml.xpath('/vra:vra/vra:image/vra:relationSet/vra:relation/@relids')
   end
 
   def to_solr(solr_doc = Hash.new, opts={})
