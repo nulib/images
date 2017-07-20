@@ -36,7 +36,7 @@ source 'http://rubygems.org' do
   gem 'hydra-ldap'
   gem 'high_voltage'
   gem 'powerpoint', :git => 'https://github.com/benjaminwood/powerpoint.git'
-  gem 'riiif', '~> 1.4'
+  gem 'riiif', '~> 1.5'
   gem 'openseadragon'
   gem 'whenever', :require => false
   gem 'activerecord-session_store'
